@@ -10,8 +10,8 @@ namespace Tabang_Hub.Repository
     public class BaseRepository<T> : IBaseRepository<T>
         where T : class
     {
-        private DbContext _db;
-        private DbSet<T> _table;
+        public DbContext _db;
+        public DbSet<T> _table;
         public BaseRepository() 
         {
             _db = new TabangHubEntities();
@@ -28,17 +28,19 @@ namespace Tabang_Hub.Repository
             return _table.ToList();
         }
 
-        public ErrorCode Create(T t)
+        public ErrorCode Create(T t, out string errorMsg)
         {
             try
             {
                 _table.Add(t);
                 _db.SaveChanges();
+                errorMsg = "Success";
 
                 return ErrorCode.Success;
             }
             catch (Exception ex)
             {
+                errorMsg = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
                 return ErrorCode.Error;
             }
         }
@@ -74,6 +76,16 @@ namespace Tabang_Hub.Repository
             {
                 return ErrorCode.Error;
             }
+        }
+
+        public ErrorCode Update(object id, T t, out string errorMsg)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ErrorCode Delete(object id, out string errorMsg)
+        {
+            throw new NotImplementedException();
         }
     }
 }
