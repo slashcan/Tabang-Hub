@@ -6,15 +6,22 @@ using System.Web.Mvc;
 
 namespace Tabang_Hub.Controllers
 {
-    public class PageController : Controller
+    public class PageController : BaseController
     {
         // GET: Page
-        public ActionResult Index()
+        public ActionResult Register()
         {
             return View();
         }
-        public ActionResult Register()
+        [HttpPost]
+        public ActionResult Register(UserAccount u)
         {
+            u.status = 0;
+            u.roleId = 1;
+
+            _userAcc.Create(u);
+            TempData["Msg"] = $"User {u.email} added!";
+
             return View();
         }
     }

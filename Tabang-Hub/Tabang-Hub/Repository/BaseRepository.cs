@@ -1,37 +1,79 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
-using Tabang_Hub.Contract;
-using Tabang_Hub.Utils;
+using Tabang_Hub.Contracts;
 
 namespace Tabang_Hub.Repository
 {
     public class BaseRepository<T> : IBaseRepository<T>
+        where T : class
     {
-        public ErrorCode Create(T t, out string errorMsg)
+        private DbContext _db;
+        private DbSet<T> _table;
+        public BaseRepository() 
         {
-            throw new NotImplementedException();
-        }
-
-        public ErrorCode Delete(object id, out string errorMsg)
-        {
-            throw new NotImplementedException();
+            _db = new TabangHubEntities();
+            _table = _db.Set<T>();
         }
 
         public T Get(object id)
         {
-            throw new NotImplementedException();
+            return _table.Find(id);
         }
 
         public List<T> GetAll()
         {
-            throw new NotImplementedException();
+            return _table.ToList();
         }
 
-        public ErrorCode Update(object id, T t, out string errorMsg)
+        public ErrorCode Create(T t)
         {
-            throw new NotImplementedException();
+            try
+            {
+                _table.Add(t);
+                _db.SaveChanges();
+
+                return ErrorCode.Success;
+            }
+            catch (Exception ex)
+            {
+                return ErrorCode.Error;
+            }
+        }
+
+        public ErrorCode Delete(object id)
+        {
+            try
+            {
+                var obj = Get(id);
+                _table.Remove(obj);
+                _db.SaveChanges();
+
+                return ErrorCode.Success;
+            }
+            catch (Exception ex)
+            {
+                return ErrorCode.Error;
+            }
+        }    
+
+    
+        public ErrorCode Update(object id, T t)
+        {
+            try
+            {
+                var oldObj = Get(id);
+                _db.Entry(oldObj).CurrentValues.SetValues(t);
+                _db.SaveChanges();
+
+                return ErrorCode.Success;
+            }
+            catch (Exception ex)
+            {
+                return ErrorCode.Error;
+            }
         }
     }
 }
