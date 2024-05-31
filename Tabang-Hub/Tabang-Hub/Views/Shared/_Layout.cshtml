@@ -1,57 +1,51 @@
 ﻿<!DOCTYPE html>
-    <html>
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>@ViewBag.Title - My ASP.NET Application</title>
-        <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
-        <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
-        <script src="~/Scripts/modernizr-2.6.2.js"></script>
-        <link href="~/Content/css/font-awesome.min.css" rel="stylesheet" />
-        <link href="~/Content/css/style.css" rel="stylesheet" />
-        <a href="~/Content/fonts/fontawesome-webfont.eot"></a>
-        <a href="~/Content/fonts/fontawesome-webfont.ttf"></a>
-        <a href="~/Content/fonts/fontawesome-webfont.woff"></a>
-        <a href="~/Content/fonts/fontawesome-webfont.woff2"></a>
-        <a href="~/Content/fonts/FontAwesome.otf"></a>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-    </head>
-    <body>
-        <div class="navbar navbar-inverse navbar-fixed-top">
-            <div class="container">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-                </div>
-                <div class="navbar-collapse collapse">
-                    <ul class="nav navbar-nav">
-                    </ul>
-                </div>
+    <title>Responsive Navbar</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-md navbar-light">
+        <div class="container-xxl">
+            <a href="/" class="navbar-brand">
+                <span class="fw-bold text-secondary">
+                    E-Commerce
+                </span>
+            </a>
+            <!-- toggle button for mobile nav -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#main-nav" aria-controls="main-nav" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse justify-content-md-end align-items-start overlay" id="main-nav">
+                <ul class="navbar-nav">
+                    <li class="nav-item d-md-none">
+                        <a href="~/Page/Login" class="nav-link">Login</a>
+                    </li>
+                    <li class="nav-item d-md-none">
+                        <a href="~/Page/Register" class="nav-link">Register</a>
+                    </li>
+                    <li class="nav-item d-none d-md-inline me-1">
+                        <a href="~/Page/Login" class="btn btn-primary">Login</a>
+                    </li>
+                    <li class="nav-item d-none d-md-inline">
+                        <a href="~/Page/Register" class="btn btn-primary">Register</a>
+                    </li>
+                </ul>
             </div>
         </div>
+    </nav>
 
-        <div class="container body-content">
-            @RenderBody()
-            <hr />
-            <footer>
-                <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
-            </footer>
-        </div>
+    @RenderBody()
 
-        <script src="~/Scripts/jquery-1.10.2.min.js"></script>
-        <script src="~/Scripts/bootstrap.min.js"></script>
-        <script>
-            addEventListener("load", function () {
-                setTimeout(hideURLbar, 0);
-            }, false);
-
-            function hideURLbar() {
-                window.scrollTo(0, 1);
-            }
-        </script>
-    </body>
-    </html>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+</body>
+</html>

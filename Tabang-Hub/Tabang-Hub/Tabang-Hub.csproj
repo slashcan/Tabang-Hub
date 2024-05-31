@@ -95,12 +95,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\images\tabanghub3.png" />
-    <Content Include="Content\Site.css" />
-    <Content Include="Content\css\font-awesome.min.css" />
-    <Content Include="Content\css\style.css" />
     <Content Include="Global.asax" />
-    <Content Include="Content\images\image.jpg" />
-    <Content Include="Content\images\tick.png" />
     <Content Include="ModelTabangHub.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>ModelTabangHub.Context.cs</LastGenOutput>
@@ -156,11 +151,6 @@
     <Content Include="ModelTabangHub.edmx.diagram">
       <DependentUpon>ModelTabangHub.edmx</DependentUpon>
     </Content>
-    <Content Include="Content\fonts\fontawesome-webfont.eot" />
-    <Content Include="Content\fonts\fontawesome-webfont.ttf" />
-    <Content Include="Content\fonts\fontawesome-webfont.woff" />
-    <Content Include="Content\fonts\fontawesome-webfont.woff2" />
-    <Content Include="Content\fonts\FontAwesome.otf" />
     <None Include="packages.config" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Page\Register.cshtml" />
