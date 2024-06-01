@@ -14,10 +14,26 @@ namespace Tabang_Hub
     
     public partial class UserAccount
     {
+        public UserAccount()
+        {
+            this.OrgInfo = new HashSet<OrgInfo>();
+            this.OrgValidation = new HashSet<OrgValidation>();
+            this.Skills = new HashSet<Skills>();
+            this.UserRoles = new HashSet<UserRoles>();
+            this.VolunteerInfo = new HashSet<VolunteerInfo>();
+        }
+    
         public int userId { get; set; }
         public string email { get; set; }
         public string password { get; set; }
+        public Nullable<int> userInfo { get; set; }
         public short status { get; set; }
         public int roleId { get; set; }
+    
+        public virtual ICollection<OrgInfo> OrgInfo { get; set; }
+        public virtual ICollection<OrgValidation> OrgValidation { get; set; }
+        public virtual ICollection<Skills> Skills { get; set; }
+        public virtual ICollection<UserRoles> UserRoles { get; set; }
+        public virtual ICollection<VolunteerInfo> VolunteerInfo { get; set; }
     }
 }

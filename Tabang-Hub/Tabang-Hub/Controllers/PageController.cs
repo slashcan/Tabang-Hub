@@ -30,7 +30,7 @@ namespace Tabang_Hub.Controllers
         }
         [AllowAnonymous]
         [HttpPost]
-        public ActionResult RegisterOrg(OrgAccount u, OrgId o, UserRoles r, HttpPostedFileBase picture1, HttpPostedFileBase picture2)
+        public ActionResult RegisterOrg(UserAccount u, OrgInfo o, OrgValidation ov, UserRoles r, HttpPostedFileBase picture1, HttpPostedFileBase picture2)
         {
             if (picture1 != null && picture1.ContentLength > 0)
             {
@@ -42,7 +42,7 @@ namespace Tabang_Hub.Controllers
 
                 picture1.SaveAs(serverSavePath);
 
-                o.idPicture1 = inputFileName;
+                ov.idPicture1 = inputFileName;
             }
             if (picture2 != null && picture2.ContentLength > 0)
             {
@@ -54,15 +54,15 @@ namespace Tabang_Hub.Controllers
 
                 picture2.SaveAs(serverSavePath);
 
-                o.idPicture2 = inputFileName;
-            }           
-            if (_userManager.OrgRegister(u, o, r, ref ErrorMessage) != ErrorCode.Success)
+                ov.idPicture2 = inputFileName;
+            }
+            if (_userManager.OrgRegister(u, o, ov, r, ref ErrorMessage) != ErrorCode.Success)
             {
-                ModelState.AddModelError(String.Empty, ErrorMessage);                   
+                ModelState.AddModelError(String.Empty, ErrorMessage);
             }
 
             return RedirectToAction("Login");
-        }      
+        }
         [AllowAnonymous]
         public ActionResult Register()
         {
@@ -70,7 +70,7 @@ namespace Tabang_Hub.Controllers
         }
         [AllowAnonymous]
         [HttpPost]
-        public ActionResult Register(UserAccount u, UserRoles r, String ConfirmPass)
+        public ActionResult Register(UserAccount u,VolunteerInfo v, UserRoles r, String ConfirmPass)
         {
             u.status = 0;
             u.roleId = 1;
@@ -83,7 +83,7 @@ namespace Tabang_Hub.Controllers
                     return View(u);
                 }
 
-                if (_userManager.Register(u, r, ref ErrorMessage) != ErrorCode.Success)
+                if (_userManager.Register(u, v, r, ref ErrorMessage) != ErrorCode.Success)
                 {
                     ModelState.AddModelError(String.Empty, ErrorMessage);
 

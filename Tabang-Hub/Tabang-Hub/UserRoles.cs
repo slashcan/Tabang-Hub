@@ -17,5 +17,7 @@ namespace Tabang_Hub
         public int userRoleId { get; set; }
         public int userId { get; set; }
         public int userRole { get; set; }
+    
+        public virtual UserAccount UserAccount { get; set; }
     }
 }

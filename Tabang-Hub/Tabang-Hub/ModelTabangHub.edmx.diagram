@@ -4,13 +4,22 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="4151205e1e5c42968a7923390d254953" Name="Diagram1">
-        <EntityTypeShape EntityType="TabangHubModel.OrgAccount" Width="1.5" PointX="3" PointY="1" />
-        <EntityTypeShape EntityType="TabangHubModel.OrgId" Width="1.5" PointX="0.75" PointY="1.125" />
-        <EntityTypeShape EntityType="TabangHubModel.Role" Width="1.5" PointX="0.75" PointY="4.75" />
-        <EntityTypeShape EntityType="TabangHubModel.UserAccount" Width="1.5" PointX="2.75" PointY="4.75" />
-        <EntityTypeShape EntityType="TabangHubModel.UserRoles" Width="1.5" PointX="4.75" PointY="4.75" />
-        <AssociationConnector Association="TabangHubModel.FK_OrgAccount_OrgId" />
+      <Diagram DiagramId="4151205e1e5c42968a7923390d254953" Name="Diagram1" ZoomLevel="64">
+        <EntityTypeShape EntityType="TabangHubModel.OrgInfo" Width="1.5" PointX="14.875" PointY="6.625" />
+        <EntityTypeShape EntityType="TabangHubModel.OrgValidation" Width="1.5" PointX="7.875" PointY="10.625" />
+        <EntityTypeShape EntityType="TabangHubModel.ProfilePicture" Width="1.5" PointX="8.875" PointY="4.625" />
+        <EntityTypeShape EntityType="TabangHubModel.Role" Width="1.5" PointX="8.875" PointY="0.5" />
+        <EntityTypeShape EntityType="TabangHubModel.Skills" Width="1.5" PointX="11.375" PointY="11.75" />
+        <EntityTypeShape EntityType="TabangHubModel.UserAccount" Width="1.5" PointX="10.875" PointY="6.625" />
+        <EntityTypeShape EntityType="TabangHubModel.UserRoles" Width="1.5" PointX="14" PointY="11.625" />
+        <EntityTypeShape EntityType="TabangHubModel.VolunteerInfo" Width="1.5" PointX="4.5" PointY="7.25" />
+        <AssociationConnector Association="TabangHubModel.FK_OrgInfo_ProfilePicture" />
+        <AssociationConnector Association="TabangHubModel.FK_OrgInfo_UserAccount" />
+        <AssociationConnector Association="TabangHubModel.FK_OrgValidation_UserAccount" />
+        <AssociationConnector Association="TabangHubModel.FK_VolunteerInfo_ProfilePicture" />
+        <AssociationConnector Association="TabangHubModel.FK_Skills_UserAccount" />
+        <AssociationConnector Association="TabangHubModel.FK_UserRoles_UserAccount" />
+        <AssociationConnector Association="TabangHubModel.FK_VolunteerInfo_UserAccount" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -12,15 +12,22 @@ namespace Tabang_Hub.Repository
     public class UserManager
     {
         private BaseRepository<UserAccount> _userAcc;
-        private BaseRepository<OrgAccount> _orgAcc;
-        private BaseRepository<OrgId> _orgId;
+        private BaseRepository<VolunteerInfo> _volunteerInfo;
+        private BaseRepository<OrgInfo> _orgInfo;
+        private BaseRepository<OrgValidation> _orgValid;
+        private BaseRepository<Skills> _volunteerSkills;
+        private BaseRepository<ProfilePicture> _profilePic;
         private BaseRepository<UserRoles> _userRoles;
         public UserManager() 
         {
             _userAcc = new BaseRepository<UserAccount>();
-            _orgAcc = new BaseRepository<OrgAccount>();
-            _orgId = new BaseRepository<OrgId>();
+            _volunteerInfo = new BaseRepository<VolunteerInfo>();
+            _orgInfo = new BaseRepository<OrgInfo>();
+            _orgValid = new BaseRepository<OrgValidation>();
+            _volunteerSkills = new BaseRepository<Skills>();
+            _profilePic = new BaseRepository<ProfilePicture>();
             _userRoles = new BaseRepository<UserRoles>();
+
         }
 
         public UserAccount GetUserByEmail(String email)
@@ -48,7 +55,7 @@ namespace Tabang_Hub.Repository
             return ErrorCode.Success;
         }
 
-        public ErrorCode Register(UserAccount u, UserRoles r, ref String errMsg)
+        public ErrorCode Register(UserAccount u, VolunteerInfo v, UserRoles r, ref String errMsg)
         {
             u.roleId = 1;
             u.status = 0;
@@ -63,6 +70,11 @@ namespace Tabang_Hub.Repository
             {
                 return ErrorCode.Error;
             }
+            v.userId = u.userId;          
+            if (_volunteerInfo.Create(v, out errMsg) != Contracts.ErrorCode.Success)
+            {
+                return ErrorCode.Error;
+            }
             r.userId = u.userId;
             r.userRole = u.roleId;
             if (_userRoles.Create(r, out errMsg) != Contracts.ErrorCode.Success)
@@ -72,34 +84,37 @@ namespace Tabang_Hub.Repository
             return ErrorCode.Success;
         }
 
-        public ErrorCode OrgRegister(OrgAccount u, OrgId o, UserRoles r, ref String errMsg)
+        public ErrorCode OrgRegister(UserAccount u, OrgInfo o, OrgValidation ov, UserRoles r, ref String errMsg)
         {
             u.roleId = 2;
             u.status = 0;
 
-            if (GetUserByEmail(u.orgEmail) != null)
+            if (GetUserByEmail(u.email) != null)
             {
                 errMsg = "Email Already Exist";
                 return ErrorCode.Error;
             }
 
-            if (_orgId.Create(o, out errMsg) != Contracts.ErrorCode.Success)
+            if (_userAcc.Create(u, out errMsg) != Contracts.ErrorCode.Success)
             {
                 return ErrorCode.Error;
             }
-
-            u.orgImageId = o.imageId;
-
-            if (_orgAcc.Create(u, out errMsg) != Contracts.ErrorCode.Success)
+            ov.userId = u.userId;
+            if (_orgValid.Create(ov, out errMsg) != Contracts.ErrorCode.Success)
             {
                 return ErrorCode.Error;
             }
-            r.userId = u.orgId;
+            r.userId = u.userId;
             r.userRole = u.roleId;
             if (_userRoles.Create(r, out errMsg) != Contracts.ErrorCode.Success)
             {
                 return ErrorCode.Error;
             }
+            o.userId = u.userId;
+            if (_orgInfo.Create(o, out errMsg) != Contracts.ErrorCode.Success)
+            {
+                return ErrorCode.Error;
+            }          
             return ErrorCode.Success;
         }
     }

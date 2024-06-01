@@ -25,10 +25,13 @@ namespace Tabang_Hub
             throw new UnintentionalCodeFirstException();
         }
     
-        public DbSet<OrgAccount> OrgAccount { get; set; }
-        public DbSet<OrgId> OrgId { get; set; }
+        public DbSet<OrgInfo> OrgInfo { get; set; }
+        public DbSet<OrgValidation> OrgValidation { get; set; }
+        public DbSet<ProfilePicture> ProfilePicture { get; set; }
         public DbSet<Role> Role { get; set; }
+        public DbSet<Skills> Skills { get; set; }
         public DbSet<UserAccount> UserAccount { get; set; }
         public DbSet<UserRoles> UserRoles { get; set; }
+        public DbSet<VolunteerInfo> VolunteerInfo { get; set; }
     }
 }
