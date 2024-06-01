@@ -9,6 +9,7 @@ namespace Tabang_Hub.Controllers
 {
     public class BaseController : Controller
     {
+        public TabangHubEntities db;
         public UserManager _userManager;
         public String ErrorMessage;
 
@@ -17,6 +18,7 @@ namespace Tabang_Hub.Controllers
         public String UserEmail { get { return _userManager.GetUserByEmail(Email).email; } }
         public BaseController()
         {
+            db = new TabangHubEntities();
            _userManager = new UserManager();
             ErrorMessage = String.Empty;
         }

@@ -7,6 +7,10 @@
       <Diagram DiagramId="933d0c9733ec4741abfc11fa19133e59" Name="Diagram1">
         <EntityTypeShape EntityType="TabangHubModel.Role" Width="1.5" PointX="0.75" PointY="0.75" />
         <EntityTypeShape EntityType="TabangHubModel.UserAccount" Width="1.5" PointX="2.75" PointY="0.75" />
+        <EntityTypeShape EntityType="TabangHubModel.UserRoles" Width="1.5" PointX="5.375" PointY="0.875" />
+        <EntityTypeShape EntityType="TabangHubModel.vw_UserRoles" Width="1.5" PointX="0.75" PointY="3.75" />
+        <AssociationConnector Association="TabangHubModel.FK_UserRoles_UserRoles" />
+        <AssociationConnector Association="TabangHubModel.FK_UserRoles_UserAccount" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

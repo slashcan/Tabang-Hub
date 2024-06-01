@@ -9,6 +9,7 @@ using Tabang_Hub.Utils;
 
 namespace Tabang_Hub.Controllers
 {
+    [Authorize(Roles = "Volunteer,Organization,Admin")]
     public class PageController : BaseController
     {
         // GET: Page
@@ -16,10 +17,12 @@ namespace Tabang_Hub.Controllers
         {
             return View();
         }
+        [AllowAnonymous]
         public ActionResult Register()
         {
             return View();
         }
+        [AllowAnonymous]
         [HttpPost]
         public ActionResult Register(UserAccount u, String ConfirmPass)
         {
@@ -49,21 +52,41 @@ namespace Tabang_Hub.Controllers
 
             return RedirectToAction("Login");
         }
+        [AllowAnonymous]
         public ActionResult Login()
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index");
+            }
             return View();
         }
+        [AllowAnonymous]
         [HttpPost]
         public ActionResult Login(String email, String password)
         {
             if (_userManager.Login(email, password, ref ErrorMessage) == ErrorCode.Success)
             {
                 var user = _userManager.GetUserByEmail(email);
+
+                FormsAuthentication.SetAuthCookie(email, false);
+
+                if (user.roleId == 1)
+                {
+                    return RedirectToAction("Index");
+                }
+                else if (user.roleId == 2)
+                {
+                    //Redirect to Organization
+                }
+                else if (user.roleId == 3)
+                {
+                    //Redirect to Admin
+                }
+                return View();
             }
 
-            FormsAuthentication.SetAuthCookie(email, false);
-
-            return RedirectToAction("Index");
+            return View();
         }
     }
 }

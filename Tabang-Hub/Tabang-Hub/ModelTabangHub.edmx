@@ -22,9 +22,74 @@
           <Property Name="status" Type="smallint" Nullable="false" />
           <Property Name="roleId" Type="int" Nullable="false" />
         </EntityType>
+        <EntityType Name="UserRoles">
+          <Key>
+            <PropertyRef Name="UserRoles_ID" />
+          </Key>
+          <Property Name="UserRoles_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="roleId" Type="int" />
+          <Property Name="userId" Type="int" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'TabangHub.dbo.vw_UserRoles' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="vw_UserRoles">
+          <Key>
+            <PropertyRef Name="UserRoles_ID" />
+            <PropertyRef Name="userId" />
+            <PropertyRef Name="email" />
+            <PropertyRef Name="roleId" />
+          </Key>
+          <Property Name="UserRoles_ID" Type="int" Nullable="false" />
+          <Property Name="userId" Type="int" Nullable="false" />
+          <Property Name="email" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="roleId" Type="int" Nullable="false" />
+          <Property Name="roleName" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <Association Name="FK_UserRoles_UserAccount">
+          <End Role="UserAccount" Type="Self.UserAccount" Multiplicity="0..1" />
+          <End Role="UserRoles" Type="Self.UserRoles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserAccount">
+              <PropertyRef Name="userId" />
+            </Principal>
+            <Dependent Role="UserRoles">
+              <PropertyRef Name="userId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserRoles_UserRoles">
+          <End Role="Role" Type="Self.Role" Multiplicity="0..1" />
+          <End Role="UserRoles" Type="Self.UserRoles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Role">
+              <PropertyRef Name="roleId" />
+            </Principal>
+            <Dependent Role="UserRoles">
+              <PropertyRef Name="roleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="TabangHubModelStoreContainer">
           <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserAccount" EntityType="Self.UserAccount" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserRoles" EntityType="Self.UserRoles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="vw_UserRoles" EntityType="Self.vw_UserRoles" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+[vw_UserRoles].[UserRoles_ID] AS [UserRoles_ID], 
+[vw_UserRoles].[userId] AS [userId], 
+[vw_UserRoles].[email] AS [email], 
+[vw_UserRoles].[roleId] AS [roleId], 
+[vw_UserRoles].[roleName] AS [roleName]
+FROM [dbo].[vw_UserRoles] AS [vw_UserRoles]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_UserRoles_UserAccount" Association="Self.FK_UserRoles_UserAccount">
+            <End Role="UserAccount" EntitySet="UserAccount" />
+            <End Role="UserRoles" EntitySet="UserRoles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserRoles_UserRoles" Association="Self.FK_UserRoles_UserRoles">
+            <End Role="Role" EntitySet="Role" />
+            <End Role="UserRoles" EntitySet="UserRoles" />
+          </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -33,6 +98,16 @@
         <EntityContainer Name="TabangHubEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Role" EntityType="TabangHubModel.Role" />
           <EntitySet Name="UserAccount" EntityType="TabangHubModel.UserAccount" />
+          <EntitySet Name="UserRoles" EntityType="TabangHubModel.UserRoles" />
+          <EntitySet Name="vw_UserRoles" EntityType="TabangHubModel.vw_UserRoles" />
+          <AssociationSet Name="FK_UserRoles_UserRoles" Association="TabangHubModel.FK_UserRoles_UserRoles">
+            <End Role="Role" EntitySet="Role" />
+            <End Role="UserRoles" EntitySet="UserRoles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserRoles_UserAccount" Association="TabangHubModel.FK_UserRoles_UserAccount">
+            <End Role="UserAccount" EntitySet="UserAccount" />
+            <End Role="UserRoles" EntitySet="UserRoles" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="Role">
           <Key>
@@ -40,6 +115,7 @@
           </Key>
           <Property Name="roleId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="roleName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="UserRoles" Relationship="TabangHubModel.FK_UserRoles_UserRoles" FromRole="Role" ToRole="UserRoles" />
         </EntityType>
         <EntityType Name="UserAccount">
           <Key>
@@ -50,7 +126,55 @@
           <Property Name="password" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="status" Type="Int16" Nullable="false" />
           <Property Name="roleId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="UserRoles" Relationship="TabangHubModel.FK_UserRoles_UserAccount" FromRole="UserAccount" ToRole="UserRoles" />
         </EntityType>
+        <EntityType Name="UserRoles">
+          <Key>
+            <PropertyRef Name="UserRoles_ID" />
+          </Key>
+          <Property Name="UserRoles_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="roleId" Type="Int32" />
+          <Property Name="userId" Type="Int32" />
+          <NavigationProperty Name="Role" Relationship="TabangHubModel.FK_UserRoles_UserRoles" FromRole="UserRoles" ToRole="Role" />
+          <NavigationProperty Name="UserAccount" Relationship="TabangHubModel.FK_UserRoles_UserAccount" FromRole="UserRoles" ToRole="UserAccount" />
+        </EntityType>
+        <EntityType Name="vw_UserRoles">
+          <Key>
+            <PropertyRef Name="UserRoles_ID" />
+            <PropertyRef Name="userId" />
+            <PropertyRef Name="roleId" />
+            <PropertyRef Name="email" />
+          </Key>
+          <Property Name="UserRoles_ID" Type="Int32" Nullable="false" />
+          <Property Name="userId" Type="Int32" Nullable="false" />
+          <Property Name="roleId" Type="Int32" Nullable="false" />
+          <Property Name="roleName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="email" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <Association Name="FK_UserRoles_UserRoles">
+          <End Type="TabangHubModel.Role" Role="Role" Multiplicity="0..1" />
+          <End Type="TabangHubModel.UserRoles" Role="UserRoles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Role">
+              <PropertyRef Name="roleId" />
+            </Principal>
+            <Dependent Role="UserRoles">
+              <PropertyRef Name="roleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserRoles_UserAccount">
+          <End Type="TabangHubModel.UserAccount" Role="UserAccount" Multiplicity="0..1" />
+          <End Type="TabangHubModel.UserRoles" Role="UserRoles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserAccount">
+              <PropertyRef Name="userId" />
+            </Principal>
+            <Dependent Role="UserRoles">
+              <PropertyRef Name="userId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -73,6 +197,26 @@
                 <ScalarProperty Name="password" ColumnName="password" />
                 <ScalarProperty Name="email" ColumnName="email" />
                 <ScalarProperty Name="userId" ColumnName="userId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserRoles">
+            <EntityTypeMapping TypeName="TabangHubModel.UserRoles">
+              <MappingFragment StoreEntitySet="UserRoles">
+                <ScalarProperty Name="userId" ColumnName="userId" />
+                <ScalarProperty Name="roleId" ColumnName="roleId" />
+                <ScalarProperty Name="UserRoles_ID" ColumnName="UserRoles_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="vw_UserRoles">
+            <EntityTypeMapping TypeName="TabangHubModel.vw_UserRoles">
+              <MappingFragment StoreEntitySet="vw_UserRoles">
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="roleName" ColumnName="roleName" />
+                <ScalarProperty Name="roleId" ColumnName="roleId" />
+                <ScalarProperty Name="userId" ColumnName="userId" />
+                <ScalarProperty Name="UserRoles_ID" ColumnName="UserRoles_ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
