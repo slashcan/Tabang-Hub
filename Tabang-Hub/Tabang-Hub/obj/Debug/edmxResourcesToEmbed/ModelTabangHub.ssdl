@@ -1,5 +1,25 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Schema Namespace="TabangHubModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="OrgAccount">
+    <Key>
+      <PropertyRef Name="orgId" />
+    </Key>
+    <Property Name="orgId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="orgEmail" Type="nvarchar" MaxLength="255" Nullable="false" />
+    <Property Name="orgPassword" Type="nvarchar" MaxLength="255" />
+    <Property Name="orgImageId" Type="int" />
+    <Property Name="status" Type="smallint" Nullable="false" />
+    <Property Name="roleId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="OrgId">
+    <Key>
+      <PropertyRef Name="imageId" />
+    </Key>
+    <Property Name="imageId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="idPicture1" Type="nvarchar" MaxLength="255" Nullable="false" />
+    <Property Name="idPicture2" Type="nvarchar" MaxLength="255" Nullable="false" />
+    <Property Name="idNumber" Type="nvarchar" MaxLength="255" />
+  </EntityType>
   <EntityType Name="Role">
     <Key>
       <PropertyRef Name="roleId" />
@@ -19,71 +39,33 @@
   </EntityType>
   <EntityType Name="UserRoles">
     <Key>
-      <PropertyRef Name="UserRoles_ID" />
+      <PropertyRef Name="userRoleId" />
     </Key>
-    <Property Name="UserRoles_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="roleId" Type="int" />
-    <Property Name="userId" Type="int" />
-  </EntityType>
-  <!--Errors Found During Generation:
-warning 6002: The table/view 'TabangHub.dbo.vw_UserRoles' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
-  <EntityType Name="vw_UserRoles">
-    <Key>
-      <PropertyRef Name="UserRoles_ID" />
-      <PropertyRef Name="userId" />
-      <PropertyRef Name="email" />
-      <PropertyRef Name="roleId" />
-    </Key>
-    <Property Name="UserRoles_ID" Type="int" Nullable="false" />
+    <Property Name="userRoleId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="userId" Type="int" Nullable="false" />
-    <Property Name="email" Type="nvarchar" MaxLength="255" Nullable="false" />
-    <Property Name="roleId" Type="int" Nullable="false" />
-    <Property Name="roleName" Type="nvarchar" MaxLength="50" />
+    <Property Name="userRole" Type="int" Nullable="false" />
   </EntityType>
-  <Association Name="FK_UserRoles_UserAccount">
-    <End Role="UserAccount" Type="Self.UserAccount" Multiplicity="0..1" />
-    <End Role="UserRoles" Type="Self.UserRoles" Multiplicity="*" />
+  <Association Name="FK_OrgAccount_OrgId">
+    <End Role="OrgId" Type="Self.OrgId" Multiplicity="0..1" />
+    <End Role="OrgAccount" Type="Self.OrgAccount" Multiplicity="*" />
     <ReferentialConstraint>
-      <Principal Role="UserAccount">
-        <PropertyRef Name="userId" />
+      <Principal Role="OrgId">
+        <PropertyRef Name="imageId" />
       </Principal>
-      <Dependent Role="UserRoles">
-        <PropertyRef Name="userId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_UserRoles_UserRoles">
-    <End Role="Role" Type="Self.Role" Multiplicity="0..1" />
-    <End Role="UserRoles" Type="Self.UserRoles" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Role">
-        <PropertyRef Name="roleId" />
-      </Principal>
-      <Dependent Role="UserRoles">
-        <PropertyRef Name="roleId" />
+      <Dependent Role="OrgAccount">
+        <PropertyRef Name="orgImageId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
   <EntityContainer Name="TabangHubModelStoreContainer">
+    <EntitySet Name="OrgAccount" EntityType="Self.OrgAccount" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="OrgId" EntityType="Self.OrgId" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="UserAccount" EntityType="Self.UserAccount" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="UserRoles" EntityType="Self.UserRoles" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="vw_UserRoles" EntityType="Self.vw_UserRoles" store:Type="Views" store:Schema="dbo">
-      <DefiningQuery>SELECT 
-[vw_UserRoles].[UserRoles_ID] AS [UserRoles_ID], 
-[vw_UserRoles].[userId] AS [userId], 
-[vw_UserRoles].[email] AS [email], 
-[vw_UserRoles].[roleId] AS [roleId], 
-[vw_UserRoles].[roleName] AS [roleName]
-FROM [dbo].[vw_UserRoles] AS [vw_UserRoles]</DefiningQuery>
-    </EntitySet>
-    <AssociationSet Name="FK_UserRoles_UserAccount" Association="Self.FK_UserRoles_UserAccount">
-      <End Role="UserAccount" EntitySet="UserAccount" />
-      <End Role="UserRoles" EntitySet="UserRoles" />
-    </AssociationSet>
-    <AssociationSet Name="FK_UserRoles_UserRoles" Association="Self.FK_UserRoles_UserRoles">
-      <End Role="Role" EntitySet="Role" />
-      <End Role="UserRoles" EntitySet="UserRoles" />
+    <AssociationSet Name="FK_OrgAccount_OrgId" Association="Self.FK_OrgAccount_OrgId">
+      <End Role="OrgId" EntitySet="OrgId" />
+      <End Role="OrgAccount" EntitySet="OrgAccount" />
     </AssociationSet>
   </EntityContainer>
 </Schema>

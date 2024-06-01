@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Web;
@@ -18,13 +19,58 @@ namespace Tabang_Hub.Controllers
             return View();
         }
         [AllowAnonymous]
+        public ActionResult ChooseRegister()
+        {
+            return View();
+        }
+        [AllowAnonymous]
+        public ActionResult RegisterOrg()
+        {
+            return View();
+        }
+        [AllowAnonymous]
+        [HttpPost]
+        public ActionResult RegisterOrg(OrgAccount u, OrgId o, UserRoles r, HttpPostedFileBase picture1, HttpPostedFileBase picture2)
+        {
+            if (picture1 != null && picture1.ContentLength > 0)
+            {
+                var inputFileName = Path.GetFileName(picture1.FileName);
+                var serverSavePath = Path.Combine(Server.MapPath("~/Content/IdPicture/"), inputFileName);
+
+                if (!Directory.Exists(Server.MapPath("~/UploadedFiles/")))
+                    Directory.CreateDirectory(Server.MapPath("~/Content/IdPicture/"));
+
+                picture1.SaveAs(serverSavePath);
+
+                o.idPicture1 = inputFileName;
+            }
+            if (picture2 != null && picture2.ContentLength > 0)
+            {
+                var inputFileName = Path.GetFileName(picture2.FileName);
+                var serverSavePath = Path.Combine(Server.MapPath("~/Content/IdPicture/"), inputFileName);
+
+                if (!Directory.Exists(Server.MapPath("~/UploadedFiles/")))
+                    Directory.CreateDirectory(Server.MapPath("~/Content/IdPicture/"));
+
+                picture2.SaveAs(serverSavePath);
+
+                o.idPicture2 = inputFileName;
+            }           
+            if (_userManager.OrgRegister(u, o, r, ref ErrorMessage) != ErrorCode.Success)
+            {
+                ModelState.AddModelError(String.Empty, ErrorMessage);                   
+            }
+
+            return RedirectToAction("Login");
+        }      
+        [AllowAnonymous]
         public ActionResult Register()
         {
             return View();
         }
         [AllowAnonymous]
         [HttpPost]
-        public ActionResult Register(UserAccount u, String ConfirmPass)
+        public ActionResult Register(UserAccount u, UserRoles r, String ConfirmPass)
         {
             u.status = 0;
             u.roleId = 1;
@@ -37,7 +83,7 @@ namespace Tabang_Hub.Controllers
                     return View(u);
                 }
 
-                if (_userManager.Register(u, ref ErrorMessage) != ErrorCode.Success)
+                if (_userManager.Register(u, r, ref ErrorMessage) != ErrorCode.Success)
                 {
                     ModelState.AddModelError(String.Empty, ErrorMessage);
 
@@ -71,19 +117,20 @@ namespace Tabang_Hub.Controllers
 
                 FormsAuthentication.SetAuthCookie(email, false);
 
-                if (user.roleId == 1)
-                {
-                    return RedirectToAction("Index");
-                }
-                else if (user.roleId == 2)
-                {
-                    //Redirect to Organization
-                }
-                else if (user.roleId == 3)
-                {
-                    //Redirect to Admin
-                }
-                return View();
+                //if (user.roleId == 1)
+                //{
+                //    return RedirectToAction("Index");
+                //}
+                //else if (user.roleId == 2)
+                //{
+                //    //Redirect to Organization
+                //}
+                //else if (user.roleId == 3)
+                //{
+                //    //Redirect to Admin
+                //}
+                //return View();
+                return RedirectToAction("Index");
             }
 
             return View();

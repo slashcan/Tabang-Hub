@@ -1,6 +1,28 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
   <EntityContainerMapping StorageEntityContainer="TabangHubModelStoreContainer" CdmEntityContainer="TabangHubEntities">
+    <EntitySetMapping Name="OrgAccount">
+      <EntityTypeMapping TypeName="TabangHubModel.OrgAccount">
+        <MappingFragment StoreEntitySet="OrgAccount">
+          <ScalarProperty Name="roleId" ColumnName="roleId" />
+          <ScalarProperty Name="status" ColumnName="status" />
+          <ScalarProperty Name="orgImageId" ColumnName="orgImageId" />
+          <ScalarProperty Name="orgPassword" ColumnName="orgPassword" />
+          <ScalarProperty Name="orgEmail" ColumnName="orgEmail" />
+          <ScalarProperty Name="orgId" ColumnName="orgId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="OrgId">
+      <EntityTypeMapping TypeName="TabangHubModel.OrgId">
+        <MappingFragment StoreEntitySet="OrgId">
+          <ScalarProperty Name="idNumber" ColumnName="idNumber" />
+          <ScalarProperty Name="idPicture2" ColumnName="idPicture2" />
+          <ScalarProperty Name="idPicture1" ColumnName="idPicture1" />
+          <ScalarProperty Name="imageId" ColumnName="imageId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="Role">
       <EntityTypeMapping TypeName="TabangHubModel.Role">
         <MappingFragment StoreEntitySet="Role">
@@ -23,20 +45,9 @@
     <EntitySetMapping Name="UserRoles">
       <EntityTypeMapping TypeName="TabangHubModel.UserRoles">
         <MappingFragment StoreEntitySet="UserRoles">
+          <ScalarProperty Name="userRole" ColumnName="userRole" />
           <ScalarProperty Name="userId" ColumnName="userId" />
-          <ScalarProperty Name="roleId" ColumnName="roleId" />
-          <ScalarProperty Name="UserRoles_ID" ColumnName="UserRoles_ID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="vw_UserRoles">
-      <EntityTypeMapping TypeName="TabangHubModel.vw_UserRoles">
-        <MappingFragment StoreEntitySet="vw_UserRoles">
-          <ScalarProperty Name="email" ColumnName="email" />
-          <ScalarProperty Name="roleName" ColumnName="roleName" />
-          <ScalarProperty Name="roleId" ColumnName="roleId" />
-          <ScalarProperty Name="userId" ColumnName="userId" />
-          <ScalarProperty Name="UserRoles_ID" ColumnName="UserRoles_ID" />
+          <ScalarProperty Name="userRoleId" ColumnName="userRoleId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

@@ -1,26 +1,44 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Schema Namespace="TabangHubModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
   <EntityContainer Name="TabangHubEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="OrgAccount" EntityType="TabangHubModel.OrgAccount" />
+    <EntitySet Name="OrgId" EntityType="TabangHubModel.OrgId" />
     <EntitySet Name="Role" EntityType="TabangHubModel.Role" />
     <EntitySet Name="UserAccount" EntityType="TabangHubModel.UserAccount" />
     <EntitySet Name="UserRoles" EntityType="TabangHubModel.UserRoles" />
-    <EntitySet Name="vw_UserRoles" EntityType="TabangHubModel.vw_UserRoles" />
-    <AssociationSet Name="FK_UserRoles_UserRoles" Association="TabangHubModel.FK_UserRoles_UserRoles">
-      <End Role="Role" EntitySet="Role" />
-      <End Role="UserRoles" EntitySet="UserRoles" />
-    </AssociationSet>
-    <AssociationSet Name="FK_UserRoles_UserAccount" Association="TabangHubModel.FK_UserRoles_UserAccount">
-      <End Role="UserAccount" EntitySet="UserAccount" />
-      <End Role="UserRoles" EntitySet="UserRoles" />
+    <AssociationSet Name="FK_OrgAccount_OrgId" Association="TabangHubModel.FK_OrgAccount_OrgId">
+      <End Role="OrgId" EntitySet="OrgId" />
+      <End Role="OrgAccount" EntitySet="OrgAccount" />
     </AssociationSet>
   </EntityContainer>
+  <EntityType Name="OrgAccount">
+    <Key>
+      <PropertyRef Name="orgId" />
+    </Key>
+    <Property Name="orgId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="orgEmail" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="orgPassword" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="orgImageId" Type="Int32" />
+    <Property Name="status" Type="Int16" Nullable="false" />
+    <Property Name="roleId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="OrgId1" Relationship="TabangHubModel.FK_OrgAccount_OrgId" FromRole="OrgAccount" ToRole="OrgId" />
+  </EntityType>
+  <EntityType Name="OrgId">
+    <Key>
+      <PropertyRef Name="imageId" />
+    </Key>
+    <Property Name="imageId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="idPicture1" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="idPicture2" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="idNumber" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="OrgAccount" Relationship="TabangHubModel.FK_OrgAccount_OrgId" FromRole="OrgId" ToRole="OrgAccount" />
+  </EntityType>
   <EntityType Name="Role">
     <Key>
       <PropertyRef Name="roleId" />
     </Key>
     <Property Name="roleId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="roleName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <NavigationProperty Name="UserRoles" Relationship="TabangHubModel.FK_UserRoles_UserRoles" FromRole="Role" ToRole="UserRoles" />
   </EntityType>
   <EntityType Name="UserAccount">
     <Key>
@@ -31,52 +49,24 @@
     <Property Name="password" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
     <Property Name="status" Type="Int16" Nullable="false" />
     <Property Name="roleId" Type="Int32" Nullable="false" />
-    <NavigationProperty Name="UserRoles" Relationship="TabangHubModel.FK_UserRoles_UserAccount" FromRole="UserAccount" ToRole="UserRoles" />
   </EntityType>
   <EntityType Name="UserRoles">
     <Key>
-      <PropertyRef Name="UserRoles_ID" />
+      <PropertyRef Name="userRoleId" />
     </Key>
-    <Property Name="UserRoles_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="roleId" Type="Int32" />
-    <Property Name="userId" Type="Int32" />
-    <NavigationProperty Name="Role" Relationship="TabangHubModel.FK_UserRoles_UserRoles" FromRole="UserRoles" ToRole="Role" />
-    <NavigationProperty Name="UserAccount" Relationship="TabangHubModel.FK_UserRoles_UserAccount" FromRole="UserRoles" ToRole="UserAccount" />
-  </EntityType>
-  <EntityType Name="vw_UserRoles">
-    <Key>
-      <PropertyRef Name="UserRoles_ID" />
-      <PropertyRef Name="userId" />
-      <PropertyRef Name="roleId" />
-      <PropertyRef Name="email" />
-    </Key>
-    <Property Name="UserRoles_ID" Type="Int32" Nullable="false" />
+    <Property Name="userRoleId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="userId" Type="Int32" Nullable="false" />
-    <Property Name="roleId" Type="Int32" Nullable="false" />
-    <Property Name="roleName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="email" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="userRole" Type="Int32" Nullable="false" />
   </EntityType>
-  <Association Name="FK_UserRoles_UserRoles">
-    <End Type="TabangHubModel.Role" Role="Role" Multiplicity="0..1" />
-    <End Type="TabangHubModel.UserRoles" Role="UserRoles" Multiplicity="*" />
+  <Association Name="FK_OrgAccount_OrgId">
+    <End Type="TabangHubModel.OrgId" Role="OrgId" Multiplicity="0..1" />
+    <End Type="TabangHubModel.OrgAccount" Role="OrgAccount" Multiplicity="*" />
     <ReferentialConstraint>
-      <Principal Role="Role">
-        <PropertyRef Name="roleId" />
+      <Principal Role="OrgId">
+        <PropertyRef Name="imageId" />
       </Principal>
-      <Dependent Role="UserRoles">
-        <PropertyRef Name="roleId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_UserRoles_UserAccount">
-    <End Type="TabangHubModel.UserAccount" Role="UserAccount" Multiplicity="0..1" />
-    <End Type="TabangHubModel.UserRoles" Role="UserRoles" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="UserAccount">
-        <PropertyRef Name="userId" />
-      </Principal>
-      <Dependent Role="UserRoles">
-        <PropertyRef Name="userId" />
+      <Dependent Role="OrgAccount">
+        <PropertyRef Name="orgImageId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>

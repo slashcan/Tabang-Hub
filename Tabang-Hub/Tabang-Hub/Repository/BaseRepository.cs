@@ -43,8 +43,7 @@ namespace Tabang_Hub.Repository
                 errorMsg = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
                 return ErrorCode.Error;
             }
-        }
-
+        }       
         public ErrorCode Delete(object id)
         {
             try

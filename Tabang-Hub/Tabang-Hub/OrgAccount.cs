@@ -12,12 +12,15 @@ namespace Tabang_Hub
     using System;
     using System.Collections.Generic;
     
-    public partial class UserAccount
+    public partial class OrgAccount
     {
-        public int userId { get; set; }
-        public string email { get; set; }
-        public string password { get; set; }
+        public int orgId { get; set; }
+        public string orgEmail { get; set; }
+        public string orgPassword { get; set; }
+        public Nullable<int> orgImageId { get; set; }
         public short status { get; set; }
         public int roleId { get; set; }
+    
+        public virtual OrgId OrgId1 { get; set; }
     }
 }
