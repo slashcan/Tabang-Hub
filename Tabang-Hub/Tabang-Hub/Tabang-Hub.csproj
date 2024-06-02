@@ -164,6 +164,9 @@
     <Compile Include="VolunteerInfo.cs">
       <DependentUpon>ModelTabangHub.tt</DependentUpon>
     </Compile>
+    <Compile Include="vw_UserRoles.cs">
+      <DependentUpon>ModelTabangHub.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\web.config" />

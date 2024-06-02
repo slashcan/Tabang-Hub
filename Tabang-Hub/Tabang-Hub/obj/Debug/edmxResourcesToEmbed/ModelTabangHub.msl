@@ -96,5 +96,16 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="vw_UserRoles">
+      <EntityTypeMapping TypeName="TabangHubModel.vw_UserRoles">
+        <MappingFragment StoreEntitySet="vw_UserRoles">
+          <ScalarProperty Name="email" ColumnName="email" />
+          <ScalarProperty Name="userId" ColumnName="userId" />
+          <ScalarProperty Name="roleName" ColumnName="roleName" />
+          <ScalarProperty Name="roleId" ColumnName="roleId" />
+          <ScalarProperty Name="userRoleId" ColumnName="userRoleId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
   </EntityContainerMapping>
 </Mapping>

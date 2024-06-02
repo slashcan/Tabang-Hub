@@ -51,11 +51,10 @@ namespace Tabang_Hub
 
         public override string[] GetRolesForUser(string username)
         {
-            //using (var db = new TabangHubEntities())
-            //{
-            //    return db.vw_UserRoles.Where(m => m.email == username).Select(m => m.roleName).ToArray();
-            //}
-            throw new NotImplementedException();
+            using (var db = new TabangHubEntities())
+            {
+                return db.vw_UserRoles.Where(m => m.email == username).Select(m => m.roleName).ToArray();
+            }
         }
 
         public override string[] GetUsersInRole(string roleName)

@@ -87,6 +87,21 @@
     <Property Name="zipCode" Type="nvarchar" MaxLength="255" />
     <Property Name="profileId" Type="int" />
   </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'TabangHub.dbo.vw_UserRoles' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="vw_UserRoles">
+    <Key>
+      <PropertyRef Name="userRoleId" />
+      <PropertyRef Name="roleId" />
+      <PropertyRef Name="userId" />
+      <PropertyRef Name="email" />
+    </Key>
+    <Property Name="userRoleId" Type="int" Nullable="false" />
+    <Property Name="roleId" Type="int" Nullable="false" />
+    <Property Name="roleName" Type="nvarchar" MaxLength="50" />
+    <Property Name="userId" Type="int" Nullable="false" />
+    <Property Name="email" Type="nvarchar" MaxLength="255" Nullable="false" />
+  </EntityType>
   <Association Name="FK_OrgInfo_ProfilePicture">
     <End Role="ProfilePicture" Type="Self.ProfilePicture" Multiplicity="0..1" />
     <End Role="OrgInfo" Type="Self.OrgInfo" Multiplicity="*" />
@@ -180,6 +195,15 @@
     <EntitySet Name="UserAccount" EntityType="Self.UserAccount" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="UserRoles" EntityType="Self.UserRoles" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="VolunteerInfo" EntityType="Self.VolunteerInfo" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="vw_UserRoles" EntityType="Self.vw_UserRoles" store:Type="Views" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+[vw_UserRoles].[userRoleId] AS [userRoleId], 
+[vw_UserRoles].[roleId] AS [roleId], 
+[vw_UserRoles].[roleName] AS [roleName], 
+[vw_UserRoles].[userId] AS [userId], 
+[vw_UserRoles].[email] AS [email]
+FROM [dbo].[vw_UserRoles] AS [vw_UserRoles]</DefiningQuery>
+    </EntitySet>
     <AssociationSet Name="FK_OrgInfo_ProfilePicture" Association="Self.FK_OrgInfo_ProfilePicture">
       <End Role="ProfilePicture" EntitySet="ProfilePicture" />
       <End Role="OrgInfo" EntitySet="OrgInfo" />

@@ -9,6 +9,7 @@
     <EntitySet Name="UserAccount" EntityType="TabangHubModel.UserAccount" />
     <EntitySet Name="UserRoles" EntityType="TabangHubModel.UserRoles" />
     <EntitySet Name="VolunteerInfo" EntityType="TabangHubModel.VolunteerInfo" />
+    <EntitySet Name="vw_UserRoles" EntityType="TabangHubModel.vw_UserRoles" />
     <AssociationSet Name="FK_OrgInfo_ProfilePicture" Association="TabangHubModel.FK_OrgInfo_ProfilePicture">
       <End Role="ProfilePicture" EntitySet="ProfilePicture" />
       <End Role="OrgInfo" EntitySet="OrgInfo" />
@@ -138,6 +139,19 @@
     <Property Name="profileId" Type="Int32" />
     <NavigationProperty Name="ProfilePicture" Relationship="TabangHubModel.FK_VolunteerInfo_ProfilePicture" FromRole="VolunteerInfo" ToRole="ProfilePicture" />
     <NavigationProperty Name="UserAccount" Relationship="TabangHubModel.FK_VolunteerInfo_UserAccount" FromRole="VolunteerInfo" ToRole="UserAccount" />
+  </EntityType>
+  <EntityType Name="vw_UserRoles">
+    <Key>
+      <PropertyRef Name="userRoleId" />
+      <PropertyRef Name="roleId" />
+      <PropertyRef Name="userId" />
+      <PropertyRef Name="email" />
+    </Key>
+    <Property Name="userRoleId" Type="Int32" Nullable="false" />
+    <Property Name="roleId" Type="Int32" Nullable="false" />
+    <Property Name="roleName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="userId" Type="Int32" Nullable="false" />
+    <Property Name="email" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
   </EntityType>
   <Association Name="FK_OrgInfo_ProfilePicture">
     <End Type="TabangHubModel.ProfilePicture" Role="ProfilePicture" Multiplicity="0..1" />

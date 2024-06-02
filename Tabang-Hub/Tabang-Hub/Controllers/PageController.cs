@@ -111,29 +111,34 @@ namespace Tabang_Hub.Controllers
         [HttpPost]
         public ActionResult Login(String email, String password)
         {
+
             if (_userManager.Login(email, password, ref ErrorMessage) == ErrorCode.Success)
             {
                 var user = _userManager.GetUserByEmail(email);
 
+                if (user.status != (Int32)Status.Active)
+                {
+                    TempData["email"] = email;
+                    return RedirectToAction("Index");
+                }
+
                 FormsAuthentication.SetAuthCookie(email, false);
 
-                //if (user.roleId == 1)
-                //{
-                //    return RedirectToAction("Index");
-                //}
-                //else if (user.roleId == 2)
-                //{
-                //    //Redirect to Organization
-                //}
-                //else if (user.roleId == 3)
-                //{
-                //    //Redirect to Admin
-                //}
-                //return View();
-                return RedirectToAction("Index");
+                if (user.roleId == 1)
+                {
+                    return RedirectToAction("Index");
+                }
+                else if (user.roleId == 2)
+                {
+                    //Redirect to Organization
+                }
+                else if (user.roleId == 3)
+                {
+                    //Redirect to Admin
+                }
             }
-
+            ViewBag.Error = ErrorMessage;
             return View();
-        }
+        }      
     }
 }
