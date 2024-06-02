@@ -117,5 +117,24 @@ namespace Tabang_Hub.Repository
             }          
             return ErrorCode.Success;
         }
+        public ErrorCode UpdateUserStatus(int userId, short newStatus, ref string errMsg)
+        {
+            // First, retrieve the user account by its ID
+            var user = _userAcc.Get(userId);
+
+            if (user != null)
+            {
+                // Update the status field
+                user.status = newStatus;
+
+                // Now, call the Update method to save the changes
+                return (ErrorCode)_userAcc.Update(userId, user, out errMsg);
+            }
+            else
+            {
+                errMsg = "User not found";
+                return ErrorCode.Error;
+            }
+        }
     }
 }

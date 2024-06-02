@@ -6,6 +6,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
+using Tabang_Hub.Repository;
 using Tabang_Hub.Utils;
 
 namespace Tabang_Hub.Controllers
@@ -61,7 +62,27 @@ namespace Tabang_Hub.Controllers
                 ModelState.AddModelError(String.Empty, ErrorMessage);
             }
 
-            return RedirectToAction("Login");
+            TempData["email"] = u.email;
+            Session["email"] = u.email;
+            Session["NewAccountId"] = u.userId;
+
+            Random random = new Random();
+            int randomOTP = random.Next(1000, 10000);
+            Session["randomOTP"] = randomOTP;
+
+            MailManager sendOTP = new MailManager();
+            string subject = "Welcome to our website!";
+            string userEmail = u.email;
+            string body = $"Welcome to Mobile Legend {randomOTP}";
+
+            string errorResponse = "";
+
+            bool isOTPSent = sendOTP.SendEmail(userEmail, subject, body, ref errorResponse);
+            if (isOTPSent)
+            {
+                return RedirectToAction("Verify");
+            }
+            return View();
         }
         [AllowAnonymous]
         public ActionResult Register()
@@ -88,6 +109,26 @@ namespace Tabang_Hub.Controllers
                     ModelState.AddModelError(String.Empty, ErrorMessage);
 
                     return View(u);
+                }
+                TempData["email"] = u.email;
+                Session["email"] = u.email;
+                Session["NewAccountId"] = u.userId;
+
+                Random random = new Random();
+                int randomOTP = random.Next(1000, 10000);
+                Session["randomOTP"] = randomOTP;
+
+                MailManager sendOTP = new MailManager();
+                string subject = "Welcome to our website!";
+                string userEmail = u.email;
+                string body = $"Welcome to Mobile Legend {randomOTP}";
+
+                string errorResponse = "";
+
+                bool isOTPSent = sendOTP.SendEmail(userEmail, subject, body, ref errorResponse);
+                if (isOTPSent)
+                {
+                    return RedirectToAction("Verify");
                 }
             }
             catch (Exception ex)
@@ -139,6 +180,38 @@ namespace Tabang_Hub.Controllers
             }
             ViewBag.Error = ErrorMessage;
             return View();
-        }      
+        }
+        [AllowAnonymous]
+        public ActionResult Verify()
+        {
+            if (String.IsNullOrEmpty(TempData["email"] as String))
+                return RedirectToAction("Login");
+
+            return View();
+        }
+        [AllowAnonymous]
+        [HttpPost]
+        public ActionResult Verify(int otp1, int otp2, int otp3, int otp4)
+        {
+            var user = _userManager.GetUserByEmail((String)Session["email"]);
+
+            string enteredOTP = $"{otp1}{otp2}{otp3}{otp4}";
+
+            string expectedOTP = Session["randomOTP"].ToString();
+
+            if (enteredOTP == expectedOTP)
+            {
+                var newAccId = Session["NewAccountID"];
+                TempData["SuccessMessage"] = "Email has been verified!";
+                _userManager.UpdateUserStatus(user.userId, (Int32)Status.Active, ref ErrorMessage);
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Incorrect OTP. Please try again!";
+                return RedirectToAction("Verify");
+            }
+
+        }
     }
 }

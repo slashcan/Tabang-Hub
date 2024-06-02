@@ -61,25 +61,22 @@ namespace Tabang_Hub.Repository
         }    
 
     
-        public ErrorCode Update(object id, T t)
+        public ErrorCode Update(object id, T t, out string errorMsg)
         {
             try
             {
                 var oldObj = Get(id);
                 _db.Entry(oldObj).CurrentValues.SetValues(t);
                 _db.SaveChanges();
+                errorMsg = "Updated";
 
                 return ErrorCode.Success;
             }
             catch (Exception ex)
             {
+                errorMsg = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
                 return ErrorCode.Error;
             }
-        }
-
-        public ErrorCode Update(object id, T t, out string errorMsg)
-        {
-            throw new NotImplementedException();
         }
 
         public ErrorCode Delete(object id, out string errorMsg)
