@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -17,6 +18,20 @@ namespace Tabang_Hub.Controllers
         // GET: Page
         public ActionResult Index()
         {
+            var user = _userManager.GetUserByEmail(User.Identity.Name);
+            if (user != null)
+            {
+                switch (user.roleId)
+                {
+                    case 1:
+                        return View();
+                    case 2:
+                        return RedirectToAction("Index", "Organization");
+                    case 3:
+                        return RedirectToAction("Index", "Admin");
+                }
+            }
+
             return View();
         }
         [AllowAnonymous]
@@ -171,7 +186,7 @@ namespace Tabang_Hub.Controllers
                 }
                 else if (user.roleId == 2)
                 {
-                    //Redirect to Organization
+                    return RedirectToAction("Index", "Organization");
                 }
                 else if (user.roleId == 3)
                 {
@@ -212,6 +227,13 @@ namespace Tabang_Hub.Controllers
                 return RedirectToAction("Verify");
             }
 
+        }
+        [AllowAnonymous]
+        public ActionResult Logout()
+        {
+            Session.Clear();
+            FormsAuthentication.SignOut();
+            return RedirectToAction("Login");
         }
     }
 }

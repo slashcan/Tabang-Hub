@@ -19,8 +19,8 @@ namespace Tabang_Hub.Utils
 
     public enum RoleType
     {
-        Customer,
-        Staff
+        Volunteer,
+        Organization
     }
 
     public enum ProductStatus
@@ -40,8 +40,8 @@ namespace Tabang_Hub.Utils
 
     public class Constant
     {
-        public const string Role_Customer = "Customer";
-        public const string Role_Admin = "Admin";
+        public const string Role_Customer = "Volunteer";
+        public const string Role_Admin = "Organization";
 
         public const int ERROR = 1;
         public const int SUCCESS = 0;

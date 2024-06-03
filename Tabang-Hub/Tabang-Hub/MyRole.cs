@@ -76,5 +76,20 @@ namespace Tabang_Hub
         {
             throw new NotImplementedException();
         }
+
+        public string GetRoleName(int roleId)
+        {
+            switch (roleId)
+            {
+                case 1:
+                    return "Volunteer";
+                case 2:
+                    return "Organization";
+                case 3:
+                    return "Admin";
+                default:
+                    return "Unknown";
+            }
+        }
     }
 }
