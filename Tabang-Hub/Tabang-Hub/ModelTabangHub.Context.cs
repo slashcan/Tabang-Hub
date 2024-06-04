@@ -25,7 +25,10 @@ namespace Tabang_Hub
             throw new UnintentionalCodeFirstException();
         }
     
+        public DbSet<OrgEventImage> OrgEventImage { get; set; }
+        public DbSet<OrgEvents> OrgEvents { get; set; }
         public DbSet<OrgInfo> OrgInfo { get; set; }
+        public DbSet<OrgSkillRequirement> OrgSkillRequirement { get; set; }
         public DbSet<OrgValidation> OrgValidation { get; set; }
         public DbSet<ProfilePicture> ProfilePicture { get; set; }
         public DbSet<Role> Role { get; set; }

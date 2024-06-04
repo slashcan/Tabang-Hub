@@ -1,5 +1,25 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Schema Namespace="TabangHubModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="OrgEventImage">
+    <Key>
+      <PropertyRef Name="eventImageId" />
+    </Key>
+    <Property Name="eventImageId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="eventId" Type="int" />
+    <Property Name="eventImage" Type="nvarchar" MaxLength="255" />
+  </EntityType>
+  <EntityType Name="OrgEvents">
+    <Key>
+      <PropertyRef Name="eventId" />
+    </Key>
+    <Property Name="eventId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="eventTitle" Type="nvarchar" MaxLength="255" />
+    <Property Name="eventDescription" Type="text" />
+    <Property Name="maxVolunteer" Type="int" />
+    <Property Name="dateStart" Type="datetime" />
+    <Property Name="dateEnd" Type="datetime" />
+    <Property Name="location" Type="nvarchar" MaxLength="255" />
+  </EntityType>
   <EntityType Name="OrgInfo">
     <Key>
       <PropertyRef Name="orgInfoId" />
@@ -16,6 +36,14 @@
     <Property Name="province" Type="nvarchar" MaxLength="255" />
     <Property Name="zipCode" Type="nvarchar" MaxLength="255" />
     <Property Name="profileId" Type="int" />
+  </EntityType>
+  <EntityType Name="OrgSkillRequirement">
+    <Key>
+      <PropertyRef Name="skillRequirementId" />
+    </Key>
+    <Property Name="skillRequirementId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="eventId" Type="int" />
+    <Property Name="skillName" Type="nvarchar" MaxLength="255" />
   </EntityType>
   <EntityType Name="OrgValidation">
     <Key>
@@ -102,6 +130,18 @@ warning 6002: The table/view 'TabangHub.dbo.vw_UserRoles' does not have a primar
     <Property Name="userId" Type="int" Nullable="false" />
     <Property Name="email" Type="nvarchar" MaxLength="255" Nullable="false" />
   </EntityType>
+  <Association Name="FK_OrgEventImage_OrgEvents">
+    <End Role="OrgEvents" Type="Self.OrgEvents" Multiplicity="0..1" />
+    <End Role="OrgEventImage" Type="Self.OrgEventImage" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="OrgEvents">
+        <PropertyRef Name="eventId" />
+      </Principal>
+      <Dependent Role="OrgEventImage">
+        <PropertyRef Name="eventId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_OrgInfo_ProfilePicture">
     <End Role="ProfilePicture" Type="Self.ProfilePicture" Multiplicity="0..1" />
     <End Role="OrgInfo" Type="Self.OrgInfo" Multiplicity="*" />
@@ -123,6 +163,18 @@ warning 6002: The table/view 'TabangHub.dbo.vw_UserRoles' does not have a primar
       </Principal>
       <Dependent Role="OrgInfo">
         <PropertyRef Name="userId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_OrgSkillRequirement_OrgEvents">
+    <End Role="OrgEvents" Type="Self.OrgEvents" Multiplicity="0..1" />
+    <End Role="OrgSkillRequirement" Type="Self.OrgSkillRequirement" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="OrgEvents">
+        <PropertyRef Name="eventId" />
+      </Principal>
+      <Dependent Role="OrgSkillRequirement">
+        <PropertyRef Name="eventId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -187,7 +239,10 @@ warning 6002: The table/view 'TabangHub.dbo.vw_UserRoles' does not have a primar
     </ReferentialConstraint>
   </Association>
   <EntityContainer Name="TabangHubModelStoreContainer">
+    <EntitySet Name="OrgEventImage" EntityType="Self.OrgEventImage" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="OrgEvents" EntityType="Self.OrgEvents" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="OrgInfo" EntityType="Self.OrgInfo" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="OrgSkillRequirement" EntityType="Self.OrgSkillRequirement" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="OrgValidation" EntityType="Self.OrgValidation" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ProfilePicture" EntityType="Self.ProfilePicture" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
@@ -204,6 +259,10 @@ warning 6002: The table/view 'TabangHub.dbo.vw_UserRoles' does not have a primar
 [vw_UserRoles].[email] AS [email]
 FROM [dbo].[vw_UserRoles] AS [vw_UserRoles]</DefiningQuery>
     </EntitySet>
+    <AssociationSet Name="FK_OrgEventImage_OrgEvents" Association="Self.FK_OrgEventImage_OrgEvents">
+      <End Role="OrgEvents" EntitySet="OrgEvents" />
+      <End Role="OrgEventImage" EntitySet="OrgEventImage" />
+    </AssociationSet>
     <AssociationSet Name="FK_OrgInfo_ProfilePicture" Association="Self.FK_OrgInfo_ProfilePicture">
       <End Role="ProfilePicture" EntitySet="ProfilePicture" />
       <End Role="OrgInfo" EntitySet="OrgInfo" />
@@ -211,6 +270,10 @@ FROM [dbo].[vw_UserRoles] AS [vw_UserRoles]</DefiningQuery>
     <AssociationSet Name="FK_OrgInfo_UserAccount" Association="Self.FK_OrgInfo_UserAccount">
       <End Role="UserAccount" EntitySet="UserAccount" />
       <End Role="OrgInfo" EntitySet="OrgInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_OrgSkillRequirement_OrgEvents" Association="Self.FK_OrgSkillRequirement_OrgEvents">
+      <End Role="OrgEvents" EntitySet="OrgEvents" />
+      <End Role="OrgSkillRequirement" EntitySet="OrgSkillRequirement" />
     </AssociationSet>
     <AssociationSet Name="FK_OrgValidation_UserAccount" Association="Self.FK_OrgValidation_UserAccount">
       <End Role="UserAccount" EntitySet="UserAccount" />

@@ -11,6 +11,7 @@ namespace Tabang_Hub.Controllers
     {
         public TabangHubEntities db;
         public UserManager _userManager;
+        public OrganizationManager _organizationManager;
         public String ErrorMessage;
 
         public String Email { get { return User.Identity.Name;  } }
@@ -20,6 +21,7 @@ namespace Tabang_Hub.Controllers
         {
             db = new TabangHubEntities();
            _userManager = new UserManager();
+            _organizationManager = new OrganizationManager();
             ErrorMessage = String.Empty;
         }
     }

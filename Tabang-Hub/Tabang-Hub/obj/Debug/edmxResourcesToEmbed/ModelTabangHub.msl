@@ -1,6 +1,28 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
   <EntityContainerMapping StorageEntityContainer="TabangHubModelStoreContainer" CdmEntityContainer="TabangHubEntities">
+    <EntitySetMapping Name="OrgEventImage">
+      <EntityTypeMapping TypeName="TabangHubModel.OrgEventImage">
+        <MappingFragment StoreEntitySet="OrgEventImage">
+          <ScalarProperty Name="eventImage" ColumnName="eventImage" />
+          <ScalarProperty Name="eventId" ColumnName="eventId" />
+          <ScalarProperty Name="eventImageId" ColumnName="eventImageId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="OrgEvents">
+      <EntityTypeMapping TypeName="TabangHubModel.OrgEvents">
+        <MappingFragment StoreEntitySet="OrgEvents">
+          <ScalarProperty Name="location" ColumnName="location" />
+          <ScalarProperty Name="dateEnd" ColumnName="dateEnd" />
+          <ScalarProperty Name="dateStart" ColumnName="dateStart" />
+          <ScalarProperty Name="maxVolunteer" ColumnName="maxVolunteer" />
+          <ScalarProperty Name="eventDescription" ColumnName="eventDescription" />
+          <ScalarProperty Name="eventTitle" ColumnName="eventTitle" />
+          <ScalarProperty Name="eventId" ColumnName="eventId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="OrgInfo">
       <EntityTypeMapping TypeName="TabangHubModel.OrgInfo">
         <MappingFragment StoreEntitySet="OrgInfo">
@@ -16,6 +38,15 @@
           <ScalarProperty Name="orgName" ColumnName="orgName" />
           <ScalarProperty Name="userId" ColumnName="userId" />
           <ScalarProperty Name="orgInfoId" ColumnName="orgInfoId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="OrgSkillRequirement">
+      <EntityTypeMapping TypeName="TabangHubModel.OrgSkillRequirement">
+        <MappingFragment StoreEntitySet="OrgSkillRequirement">
+          <ScalarProperty Name="skillName" ColumnName="skillName" />
+          <ScalarProperty Name="eventId" ColumnName="eventId" />
+          <ScalarProperty Name="skillRequirementId" ColumnName="skillRequirementId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

@@ -5,15 +5,20 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="4151205e1e5c42968a7923390d254953" Name="Diagram1" ZoomLevel="64">
-        <EntityTypeShape EntityType="TabangHubModel.OrgInfo" Width="1.5" PointX="6" PointY="8" />
-        <EntityTypeShape EntityType="TabangHubModel.OrgValidation" Width="1.5" PointX="3" PointY="8.625" />
+        <EntityTypeShape EntityType="TabangHubModel.OrgEventImage" Width="1.5" PointX="8" PointY="1" />
+        <EntityTypeShape EntityType="TabangHubModel.OrgEvents" Width="1.5" PointX="5.75" PointY="1.875" />
+        <EntityTypeShape EntityType="TabangHubModel.OrgInfo" Width="1.5" PointX="3" PointY="10" />
+        <EntityTypeShape EntityType="TabangHubModel.OrgSkillRequirement" Width="1.5" PointX="8" PointY="3.625" />
+        <EntityTypeShape EntityType="TabangHubModel.OrgValidation" Width="1.5" PointX="3" PointY="6.125" />
         <EntityTypeShape EntityType="TabangHubModel.ProfilePicture" Width="1.5" PointX="3.75" PointY="2.875" />
         <EntityTypeShape EntityType="TabangHubModel.Role" Width="1.5" PointX="0.75" PointY="0.75" />
-        <EntityTypeShape EntityType="TabangHubModel.Skills" Width="1.5" PointX="3" PointY="6.125" />
+        <EntityTypeShape EntityType="TabangHubModel.Skills" Width="1.5" PointX="3" PointY="18.125" />
         <EntityTypeShape EntityType="TabangHubModel.UserAccount" Width="1.5" PointX="0.75" PointY="8.25" />
-        <EntityTypeShape EntityType="TabangHubModel.UserRoles" Width="1.5" PointX="1.25" PointY="17.75" />
-        <EntityTypeShape EntityType="TabangHubModel.VolunteerInfo" Width="1.5" PointX="3" PointY="12" />
-        <EntityTypeShape EntityType="TabangHubModel.vw_UserRoles" Width="1.5" PointX="8.375" PointY="1" />
+        <EntityTypeShape EntityType="TabangHubModel.UserRoles" Width="1.5" PointX="3" PointY="20.625" />
+        <EntityTypeShape EntityType="TabangHubModel.VolunteerInfo" Width="1.5" PointX="6" PointY="8" />
+        <EntityTypeShape EntityType="TabangHubModel.vw_UserRoles" Width="1.5" PointX="8.75" PointY="6.75" />
+        <AssociationConnector Association="TabangHubModel.FK_OrgEventImage_OrgEvents" />
+        <AssociationConnector Association="TabangHubModel.FK_OrgSkillRequirement_OrgEvents" />
         <AssociationConnector Association="TabangHubModel.FK_OrgInfo_ProfilePicture" />
         <AssociationConnector Association="TabangHubModel.FK_OrgInfo_UserAccount" />
         <AssociationConnector Association="TabangHubModel.FK_OrgValidation_UserAccount" />

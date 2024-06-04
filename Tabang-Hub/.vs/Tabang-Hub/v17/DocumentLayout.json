@@ -3,6 +3,50 @@
   "WorkspaceRootPath": "D:\\Tabang-Hub\\Tabang-Hub\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|D:\\Tabang-Hub\\Tabang-Hub\\tabang-hub\\controllers\\organizationcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|solutionrelative:tabang-hub\\controllers\\organizationcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|d:\\tabang-hub\\tabang-hub\\tabang-hub\\repository\\organizationmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|solutionrelative:tabang-hub\\repository\\organizationmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|D:\\Tabang-Hub\\Tabang-Hub\\tabang-hub\\views\\organization\\eventsmanagement.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|solutionrelative:tabang-hub\\views\\organization\\eventsmanagement.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|D:\\Tabang-Hub\\Tabang-Hub\\tabang-hub\\controllers\\pagecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|solutionrelative:tabang-hub\\controllers\\pagecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|D:\\Tabang-Hub\\Tabang-Hub\\tabang-hub\\repository\\usermanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|solutionrelative:tabang-hub\\repository\\usermanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|d:\\tabang-hub\\tabang-hub\\tabang-hub\\utils\\lists.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|solutionrelative:tabang-hub\\utils\\lists.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|d:\\tabang-hub\\tabang-hub\\tabang-hub\\controllers\\basecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|solutionrelative:tabang-hub\\controllers\\basecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|D:\\Tabang-Hub\\Tabang-Hub\\tabang-hub\\repository\\baserepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|solutionrelative:tabang-hub\\repository\\baserepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|D:\\Tabang-Hub\\Tabang-Hub\\tabang-hub\\modeltabanghub.edmx||{C99AEA30-8E36-4515-B76F-496F5A48A6AA}|",
+      "RelativeMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|solutionrelative:tabang-hub\\modeltabanghub.edmx||{C99AEA30-8E36-4515-B76F-496F5A48A6AA}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|D:\\Tabang-Hub\\Tabang-Hub\\tabang-hub\\views\\shared\\_organization.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|solutionrelative:tabang-hub\\views\\shared\\_organization.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|D:\\Tabang-Hub\\Tabang-Hub\\tabang-hub\\utils\\utilities.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|solutionrelative:tabang-hub\\utils\\utilities.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|d:\\tabang-hub\\tabang-hub\\tabang-hub\\views\\organization\\volunteermanagement.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|solutionrelative:tabang-hub\\views\\organization\\volunteermanagement.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
@@ -11,28 +55,12 @@
       "RelativeMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|solutionrelative:tabang-hub\\views\\organization\\donationsmanagement.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|D:\\Tabang-Hub\\Tabang-Hub\\tabang-hub\\views\\organization\\eventsmanagement.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|solutionrelative:tabang-hub\\views\\organization\\eventsmanagement.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|D:\\Tabang-Hub\\Tabang-Hub\\tabang-hub\\views\\organization\\reportsmanagement.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|solutionrelative:tabang-hub\\views\\organization\\reportsmanagement.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|D:\\Tabang-Hub\\Tabang-Hub\\tabang-hub\\views\\shared\\_organization.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|solutionrelative:tabang-hub\\views\\shared\\_organization.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|D:\\Tabang-Hub\\Tabang-Hub\\tabang-hub\\controllers\\organizationcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|solutionrelative:tabang-hub\\controllers\\organizationcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|D:\\Tabang-Hub\\Tabang-Hub\\tabang-hub\\views\\_viewstart.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|solutionrelative:tabang-hub\\views\\_viewstart.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|D:\\Tabang-Hub\\Tabang-Hub\\tabang-hub\\controllers\\pagecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|solutionrelative:tabang-hub\\controllers\\pagecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|D:\\Tabang-Hub\\Tabang-Hub\\tabang-hub\\app_start\\routeconfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -55,18 +83,6 @@
       "RelativeMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|solutionrelative:tabang-hub\\myrole.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|D:\\Tabang-Hub\\Tabang-Hub\\tabang-hub\\utils\\utilities.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|solutionrelative:tabang-hub\\utils\\utilities.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|D:\\Tabang-Hub\\Tabang-Hub\\tabang-hub\\repository\\baserepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|solutionrelative:tabang-hub\\repository\\baserepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|D:\\Tabang-Hub\\Tabang-Hub\\tabang-hub\\repository\\usermanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|solutionrelative:tabang-hub\\repository\\usermanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|D:\\Tabang-Hub\\Tabang-Hub\\tabang-hub\\web.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
       "RelativeMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|solutionrelative:tabang-hub\\web.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
     },
@@ -77,10 +93,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|D:\\Tabang-Hub\\Tabang-Hub\\tabang-hub\\views\\page\\verify.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|solutionrelative:tabang-hub\\views\\page\\verify.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|D:\\Tabang-Hub\\Tabang-Hub\\tabang-hub\\modeltabanghub.edmx||{C99AEA30-8E36-4515-B76F-496F5A48A6AA}|",
-      "RelativeMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|solutionrelative:tabang-hub\\modeltabanghub.edmx||{C99AEA30-8E36-4515-B76F-496F5A48A6AA}|"
     }
   ],
   "DocumentGroupContainers": [
@@ -90,31 +102,97 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "ReportsManagement.cshtml",
-              "DocumentMoniker": "D:\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Views\\Organization\\ReportsManagement.cshtml",
-              "RelativeDocumentMoniker": "Tabang-Hub\\Views\\Organization\\ReportsManagement.cshtml",
-              "ToolTip": "D:\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Views\\Organization\\ReportsManagement.cshtml",
-              "RelativeToolTip": "Tabang-Hub\\Views\\Organization\\ReportsManagement.cshtml",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAACoAAAAfAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-06-04T08:12:55.579Z"
+              "DocumentIndex": 0,
+              "Title": "OrganizationController.cs",
+              "DocumentMoniker": "D:\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Controllers\\OrganizationController.cs",
+              "RelativeDocumentMoniker": "Tabang-Hub\\Controllers\\OrganizationController.cs",
+              "ToolTip": "D:\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Controllers\\OrganizationController.cs",
+              "RelativeToolTip": "Tabang-Hub\\Controllers\\OrganizationController.cs",
+              "ViewState": "AQIAAAsAAAAAAAAAAAAxwB0AAAApAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-03T11:01:45.033Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "DonationsManagement.cshtml",
-              "DocumentMoniker": "D:\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Views\\Organization\\DonationsManagement.cshtml",
-              "RelativeDocumentMoniker": "Tabang-Hub\\Views\\Organization\\DonationsManagement.cshtml",
-              "ToolTip": "D:\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Views\\Organization\\DonationsManagement.cshtml",
-              "RelativeToolTip": "Tabang-Hub\\Views\\Organization\\DonationsManagement.cshtml",
-              "ViewState": "AQIAABIAAAAAAAAAAAAAAE4AAAAGAAAA",
+              "DocumentIndex": 3,
+              "Title": "PageController.cs",
+              "DocumentMoniker": "D:\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Controllers\\PageController.cs",
+              "RelativeDocumentMoniker": "Tabang-Hub\\Controllers\\PageController.cs",
+              "ToolTip": "D:\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Controllers\\PageController.cs",
+              "RelativeToolTip": "Tabang-Hub\\Controllers\\PageController.cs",
+              "ViewState": "AQIAACcAAAAAAAAAAAAowDIAAAAMAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-02T13:20:04.287Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "_Organization.cshtml",
+              "DocumentMoniker": "D:\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Views\\Shared\\_Organization.cshtml",
+              "RelativeDocumentMoniker": "Tabang-Hub\\Views\\Shared\\_Organization.cshtml",
+              "ToolTip": "D:\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Views\\Shared\\_Organization.cshtml",
+              "RelativeToolTip": "Tabang-Hub\\Views\\Shared\\_Organization.cshtml",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAYAAABKAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-06-04T08:12:36.026Z"
+              "WhenOpened": "2024-06-03T10:33:21.25Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "ModelTabangHub.edmx [Diagram1]",
+              "DocumentMoniker": "D:\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\ModelTabangHub.edmx",
+              "RelativeDocumentMoniker": "Tabang-Hub\\ModelTabangHub.edmx",
+              "ToolTip": "D:\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\ModelTabangHub.edmx [Diagram1]",
+              "RelativeToolTip": "Tabang-Hub\\ModelTabangHub.edmx [Diagram1]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001116|",
+              "WhenOpened": "2024-06-01T16:04:28.668Z",
+              "EditorCaption": " [Diagram1]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "Utilities.cs",
+              "DocumentMoniker": "D:\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Utils\\Utilities.cs",
+              "RelativeDocumentMoniker": "Tabang-Hub\\Utils\\Utilities.cs",
+              "ToolTip": "D:\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Utils\\Utilities.cs",
+              "RelativeToolTip": "Tabang-Hub\\Utils\\Utilities.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAADUAAAAaAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-03T10:53:33.579Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Lists.cs",
+              "DocumentMoniker": "D:\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Utils\\Lists.cs",
+              "RelativeDocumentMoniker": "Tabang-Hub\\Utils\\Lists.cs",
+              "ToolTip": "D:\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Utils\\Lists.cs",
+              "RelativeToolTip": "Tabang-Hub\\Utils\\Lists.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAoAAAAbAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-04T12:42:47.503Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "UserManager.cs",
+              "DocumentMoniker": "D:\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Repository\\UserManager.cs",
+              "RelativeDocumentMoniker": "Tabang-Hub\\Repository\\UserManager.cs",
+              "ToolTip": "D:\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Repository\\UserManager.cs",
+              "RelativeToolTip": "Tabang-Hub\\Repository\\UserManager.cs",
+              "ViewState": "AQIAAFAAAAAAAAAAAAAIwHUAAAAlAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-02T13:46:36.852Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -124,38 +202,27 @@
               "RelativeDocumentMoniker": "Tabang-Hub\\Views\\Organization\\EventsManagement.cshtml",
               "ToolTip": "D:\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Views\\Organization\\EventsManagement.cshtml",
               "RelativeToolTip": "Tabang-Hub\\Views\\Organization\\EventsManagement.cshtml",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAUAAAAAAAAA",
+              "ViewState": "AQIAAGAAAAAAAAAAAADwv4UAAABpAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-06-04T08:12:18.46Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "VolunteerManagement.cshtml",
-              "DocumentMoniker": "D:\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Views\\Organization\\VolunteerManagement.cshtml",
-              "RelativeDocumentMoniker": "Tabang-Hub\\Views\\Organization\\VolunteerManagement.cshtml",
-              "ToolTip": "D:\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Views\\Organization\\VolunteerManagement.cshtml",
-              "RelativeToolTip": "Tabang-Hub\\Views\\Organization\\VolunteerManagement.cshtml",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAADgAAAAKAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-06-04T08:11:51.583Z",
+              "WhenOpened": "2024-06-04T08:12:18.46Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
-              "Title": "_Layout.cshtml",
-              "DocumentMoniker": "D:\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Views\\Shared\\_Layout.cshtml",
-              "RelativeDocumentMoniker": "Tabang-Hub\\Views\\Shared\\_Layout.cshtml",
-              "ToolTip": "D:\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Views\\Shared\\_Layout.cshtml",
-              "RelativeToolTip": "Tabang-Hub\\Views\\Shared\\_Layout.cshtml",
-              "ViewState": "AQIAABIAAAAAAAAAAAAAAB0AAAAQAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-06-03T10:33:49.238Z"
+              "DocumentIndex": 1,
+              "Title": "OrganizationManager.cs",
+              "DocumentMoniker": "D:\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Repository\\OrganizationManager.cs",
+              "RelativeDocumentMoniker": "Tabang-Hub\\Repository\\OrganizationManager.cs",
+              "ToolTip": "D:\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Repository\\OrganizationManager.cs",
+              "RelativeToolTip": "Tabang-Hub\\Repository\\OrganizationManager.cs",
+              "ViewState": "AQIAAAgAAAAAAAAAAAAxwDYAAAAIAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-04T12:40:14.572Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 19,
               "Title": "MyRole.cs",
               "DocumentMoniker": "D:\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\MyRole.cs",
               "RelativeDocumentMoniker": "Tabang-Hub\\MyRole.cs",
@@ -167,55 +234,82 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "OrganizationController.cs",
-              "DocumentMoniker": "D:\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Controllers\\OrganizationController.cs",
-              "RelativeDocumentMoniker": "Tabang-Hub\\Controllers\\OrganizationController.cs",
-              "ToolTip": "D:\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Controllers\\OrganizationController.cs",
-              "RelativeToolTip": "Tabang-Hub\\Controllers\\OrganizationController.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAABMAAAAsAAAA",
+              "DocumentIndex": 6,
+              "Title": "BaseController.cs",
+              "DocumentMoniker": "D:\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Controllers\\BaseController.cs",
+              "RelativeDocumentMoniker": "Tabang-Hub\\Controllers\\BaseController.cs",
+              "ToolTip": "D:\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Controllers\\BaseController.cs",
+              "RelativeToolTip": "Tabang-Hub\\Controllers\\BaseController.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABUAAAApAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-03T11:01:45.033Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "_Organization.cshtml",
-              "DocumentMoniker": "D:\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Views\\Shared\\_Organization.cshtml",
-              "RelativeDocumentMoniker": "Tabang-Hub\\Views\\Shared\\_Organization.cshtml",
-              "ToolTip": "D:\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Views\\Shared\\_Organization.cshtml",
-              "RelativeToolTip": "Tabang-Hub\\Views\\Shared\\_Organization.cshtml",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAACIAAAApAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-06-03T10:33:21.25Z"
+              "WhenOpened": "2024-06-04T14:15:25.612Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 7,
-              "Title": "PageController.cs",
-              "DocumentMoniker": "D:\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Controllers\\PageController.cs",
-              "RelativeDocumentMoniker": "Tabang-Hub\\Controllers\\PageController.cs",
-              "ToolTip": "D:\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Controllers\\PageController.cs",
-              "RelativeToolTip": "Tabang-Hub\\Controllers\\PageController.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAACQAAAAYAAAA",
+              "Title": "BaseRepository.cs",
+              "DocumentMoniker": "D:\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Repository\\BaseRepository.cs",
+              "RelativeDocumentMoniker": "Tabang-Hub\\Repository\\BaseRepository.cs",
+              "ToolTip": "D:\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Repository\\BaseRepository.cs",
+              "RelativeToolTip": "Tabang-Hub\\Repository\\BaseRepository.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAEgAAAApAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-02T13:20:04.287Z"
+              "WhenOpened": "2024-06-02T13:48:10.995Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "_Layout.cshtml",
+              "DocumentMoniker": "D:\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Views\\Shared\\_Layout.cshtml",
+              "RelativeDocumentMoniker": "Tabang-Hub\\Views\\Shared\\_Layout.cshtml",
+              "ToolTip": "D:\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Views\\Shared\\_Layout.cshtml",
+              "RelativeToolTip": "Tabang-Hub\\Views\\Shared\\_Layout.cshtml",
+              "ViewState": "AQIAABIAAAAAAAAAAAAAAB0AAAAQAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-06-03T10:33:49.238Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "VolunteerManagement.cshtml",
+              "DocumentMoniker": "D:\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Views\\Organization\\VolunteerManagement.cshtml",
+              "RelativeDocumentMoniker": "Tabang-Hub\\Views\\Organization\\VolunteerManagement.cshtml",
+              "ToolTip": "D:\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Views\\Organization\\VolunteerManagement.cshtml",
+              "RelativeToolTip": "Tabang-Hub\\Views\\Organization\\VolunteerManagement.cshtml",
+              "ViewState": "AQIAABMAAAAAAAAAAAAswB8AAABIAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-06-04T08:11:51.583Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "DonationsManagement.cshtml",
+              "DocumentMoniker": "D:\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Views\\Organization\\DonationsManagement.cshtml",
+              "RelativeDocumentMoniker": "Tabang-Hub\\Views\\Organization\\DonationsManagement.cshtml",
+              "ToolTip": "D:\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Views\\Organization\\DonationsManagement.cshtml",
+              "RelativeToolTip": "Tabang-Hub\\Views\\Organization\\DonationsManagement.cshtml",
+              "ViewState": "AQIAABIAAAAAAAAAAAAAAE4AAAAGAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-06-04T08:12:36.026Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "ReportsManagement.cshtml",
+              "DocumentMoniker": "D:\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Views\\Organization\\ReportsManagement.cshtml",
+              "RelativeDocumentMoniker": "Tabang-Hub\\Views\\Organization\\ReportsManagement.cshtml",
+              "ToolTip": "D:\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Views\\Organization\\ReportsManagement.cshtml",
+              "RelativeToolTip": "Tabang-Hub\\Views\\Organization\\ReportsManagement.cshtml",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAACoAAAAfAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-06-04T08:12:55.579Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 15,
-              "Title": "UserManager.cs",
-              "DocumentMoniker": "D:\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Repository\\UserManager.cs",
-              "RelativeDocumentMoniker": "Tabang-Hub\\Repository\\UserManager.cs",
-              "ToolTip": "D:\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Repository\\UserManager.cs",
-              "RelativeToolTip": "Tabang-Hub\\Repository\\UserManager.cs",
-              "ViewState": "AQIAAGEAAAAAAAAAAAAcwHoAAAAsAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-02T13:46:36.852Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 8,
               "Title": "RouteConfig.cs",
               "DocumentMoniker": "D:\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\App_Start\\RouteConfig.cs",
               "RelativeDocumentMoniker": "Tabang-Hub\\App_Start\\RouteConfig.cs",
@@ -227,7 +321,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 18,
+              "DocumentIndex": 22,
               "Title": "Verify.cshtml",
               "DocumentMoniker": "D:\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Views\\Page\\Verify.cshtml",
               "RelativeDocumentMoniker": "Tabang-Hub\\Views\\Page\\Verify.cshtml",
@@ -239,19 +333,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
-              "Title": "Utilities.cs",
-              "DocumentMoniker": "D:\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Utils\\Utilities.cs",
-              "RelativeDocumentMoniker": "Tabang-Hub\\Utils\\Utilities.cs",
-              "ToolTip": "D:\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Utils\\Utilities.cs",
-              "RelativeToolTip": "Tabang-Hub\\Utils\\Utilities.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAADUAAAAaAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-03T10:53:33.579Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 16,
               "Title": "Index.cshtml",
               "DocumentMoniker": "D:\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Views\\Organization\\Index.cshtml",
               "RelativeDocumentMoniker": "Tabang-Hub\\Views\\Organization\\Index.cshtml",
@@ -263,7 +345,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 14,
               "Title": "_ViewStart.cshtml",
               "DocumentMoniker": "D:\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Views\\_ViewStart.cshtml",
               "RelativeDocumentMoniker": "Tabang-Hub\\Views\\_ViewStart.cshtml",
@@ -275,19 +357,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
-              "Title": "BaseRepository.cs",
-              "DocumentMoniker": "D:\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Repository\\BaseRepository.cs",
-              "RelativeDocumentMoniker": "Tabang-Hub\\Repository\\BaseRepository.cs",
-              "ToolTip": "D:\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Repository\\BaseRepository.cs",
-              "RelativeToolTip": "Tabang-Hub\\Repository\\BaseRepository.cs",
-              "ViewState": "AQIAACgAAAAAAAAAAAAUwEgAAAApAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-02T13:48:10.995Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 16,
+              "DocumentIndex": 20,
               "Title": "Web.config",
               "DocumentMoniker": "D:\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Web.config",
               "RelativeDocumentMoniker": "Tabang-Hub\\Web.config",
@@ -300,7 +370,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 17,
               "Title": "Index.cshtml",
               "DocumentMoniker": "D:\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Views\\Page\\Index.cshtml",
               "RelativeDocumentMoniker": "Tabang-Hub\\Views\\Page\\Index.cshtml",
@@ -312,7 +382,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 17,
+              "DocumentIndex": 21,
               "Title": "MailManager.cs",
               "DocumentMoniker": "D:\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Repository\\MailManager.cs",
               "RelativeDocumentMoniker": "Tabang-Hub\\Repository\\MailManager.cs",
@@ -321,17 +391,6 @@
               "ViewState": "AQIAAA8AAAAAAAAAAAAQwBsAAABBAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-06-02T13:42:24.466Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 19,
-              "Title": "ModelTabangHub.edmx [Diagram1]",
-              "DocumentMoniker": "D:\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\ModelTabangHub.edmx",
-              "RelativeDocumentMoniker": "Tabang-Hub\\ModelTabangHub.edmx",
-              "ToolTip": "D:\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\ModelTabangHub.edmx [Diagram1]",
-              "RelativeToolTip": "Tabang-Hub\\ModelTabangHub.edmx [Diagram1]",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001116|",
-              "WhenOpened": "2024-06-01T16:04:28.668Z"
             }
           ]
         }

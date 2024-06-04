@@ -1,7 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Schema Namespace="TabangHubModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
   <EntityContainer Name="TabangHubEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="OrgEventImage" EntityType="TabangHubModel.OrgEventImage" />
+    <EntitySet Name="OrgEvents" EntityType="TabangHubModel.OrgEvents" />
     <EntitySet Name="OrgInfo" EntityType="TabangHubModel.OrgInfo" />
+    <EntitySet Name="OrgSkillRequirement" EntityType="TabangHubModel.OrgSkillRequirement" />
     <EntitySet Name="OrgValidation" EntityType="TabangHubModel.OrgValidation" />
     <EntitySet Name="ProfilePicture" EntityType="TabangHubModel.ProfilePicture" />
     <EntitySet Name="Role" EntityType="TabangHubModel.Role" />
@@ -10,6 +13,14 @@
     <EntitySet Name="UserRoles" EntityType="TabangHubModel.UserRoles" />
     <EntitySet Name="VolunteerInfo" EntityType="TabangHubModel.VolunteerInfo" />
     <EntitySet Name="vw_UserRoles" EntityType="TabangHubModel.vw_UserRoles" />
+    <AssociationSet Name="FK_OrgEventImage_OrgEvents" Association="TabangHubModel.FK_OrgEventImage_OrgEvents">
+      <End Role="OrgEvents" EntitySet="OrgEvents" />
+      <End Role="OrgEventImage" EntitySet="OrgEventImage" />
+    </AssociationSet>
+    <AssociationSet Name="FK_OrgSkillRequirement_OrgEvents" Association="TabangHubModel.FK_OrgSkillRequirement_OrgEvents">
+      <End Role="OrgEvents" EntitySet="OrgEvents" />
+      <End Role="OrgSkillRequirement" EntitySet="OrgSkillRequirement" />
+    </AssociationSet>
     <AssociationSet Name="FK_OrgInfo_ProfilePicture" Association="TabangHubModel.FK_OrgInfo_ProfilePicture">
       <End Role="ProfilePicture" EntitySet="ProfilePicture" />
       <End Role="OrgInfo" EntitySet="OrgInfo" />
@@ -39,6 +50,29 @@
       <End Role="VolunteerInfo" EntitySet="VolunteerInfo" />
     </AssociationSet>
   </EntityContainer>
+  <EntityType Name="OrgEventImage">
+    <Key>
+      <PropertyRef Name="eventImageId" />
+    </Key>
+    <Property Name="eventImageId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="eventId" Type="Int32" />
+    <Property Name="eventImage" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="OrgEvents" Relationship="TabangHubModel.FK_OrgEventImage_OrgEvents" FromRole="OrgEventImage" ToRole="OrgEvents" />
+  </EntityType>
+  <EntityType Name="OrgEvents">
+    <Key>
+      <PropertyRef Name="eventId" />
+    </Key>
+    <Property Name="eventId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="eventTitle" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="eventDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="maxVolunteer" Type="Int32" />
+    <Property Name="dateStart" Type="DateTime" Precision="3" />
+    <Property Name="dateEnd" Type="DateTime" Precision="3" />
+    <Property Name="location" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="OrgEventImage" Relationship="TabangHubModel.FK_OrgEventImage_OrgEvents" FromRole="OrgEvents" ToRole="OrgEventImage" />
+    <NavigationProperty Name="OrgSkillRequirement" Relationship="TabangHubModel.FK_OrgSkillRequirement_OrgEvents" FromRole="OrgEvents" ToRole="OrgSkillRequirement" />
+  </EntityType>
   <EntityType Name="OrgInfo">
     <Key>
       <PropertyRef Name="orgInfoId" />
@@ -57,6 +91,15 @@
     <Property Name="profileId" Type="Int32" />
     <NavigationProperty Name="ProfilePicture" Relationship="TabangHubModel.FK_OrgInfo_ProfilePicture" FromRole="OrgInfo" ToRole="ProfilePicture" />
     <NavigationProperty Name="UserAccount" Relationship="TabangHubModel.FK_OrgInfo_UserAccount" FromRole="OrgInfo" ToRole="UserAccount" />
+  </EntityType>
+  <EntityType Name="OrgSkillRequirement">
+    <Key>
+      <PropertyRef Name="skillRequirementId" />
+    </Key>
+    <Property Name="skillRequirementId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="eventId" Type="Int32" />
+    <Property Name="skillName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="OrgEvents" Relationship="TabangHubModel.FK_OrgSkillRequirement_OrgEvents" FromRole="OrgSkillRequirement" ToRole="OrgEvents" />
   </EntityType>
   <EntityType Name="OrgValidation">
     <Key>
@@ -153,6 +196,30 @@
     <Property Name="userId" Type="Int32" Nullable="false" />
     <Property Name="email" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
   </EntityType>
+  <Association Name="FK_OrgEventImage_OrgEvents">
+    <End Type="TabangHubModel.OrgEvents" Role="OrgEvents" Multiplicity="0..1" />
+    <End Type="TabangHubModel.OrgEventImage" Role="OrgEventImage" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="OrgEvents">
+        <PropertyRef Name="eventId" />
+      </Principal>
+      <Dependent Role="OrgEventImage">
+        <PropertyRef Name="eventId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_OrgSkillRequirement_OrgEvents">
+    <End Type="TabangHubModel.OrgEvents" Role="OrgEvents" Multiplicity="0..1" />
+    <End Type="TabangHubModel.OrgSkillRequirement" Role="OrgSkillRequirement" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="OrgEvents">
+        <PropertyRef Name="eventId" />
+      </Principal>
+      <Dependent Role="OrgSkillRequirement">
+        <PropertyRef Name="eventId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_OrgInfo_ProfilePicture">
     <End Type="TabangHubModel.ProfilePicture" Role="ProfilePicture" Multiplicity="0..1" />
     <End Type="TabangHubModel.OrgInfo" Role="OrgInfo" Multiplicity="*" />
