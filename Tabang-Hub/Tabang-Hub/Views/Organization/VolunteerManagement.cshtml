@@ -1,0 +1,132 @@
+﻿
+@{
+    ViewBag.Title = "VolunteerManagement";
+    Layout = "~/Views/Shared/_Organization.cshtml";
+}
+
+<style>
+    .navbar-nav .nav-link {
+        padding-left: 10px;
+        padding-right: 10px;
+        white-space: nowrap;
+        font-size: 14px;
+    }
+
+    .content-section {
+        display: none;
+    }
+
+        .content-section.active {
+            display: block;
+        }
+</style>
+
+    <div class="container mt-5">
+        <!-- Sub Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
+            <div class="container-fluid">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav">
+                        <li class="nav-item"><a class="nav-link" href="#dashboard" onclick="showSection('dashboard')">Dashboard</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#volunteer-list" onclick="showSection('volunteer-list')">Volunteer List</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#volunteer-profiles" onclick="showSection('volunteer-profiles')">Volunteer Profiles</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#recruitment-and-onboarding" onclick="showSection('recruitment-and-onboarding')">Recruitment and Onboarding</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#scheduling" onclick="showSection('scheduling')">Scheduling</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#communication-tools" onclick="showSection('communication-tools')">Communication Tools</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#training-and-resources" onclick="showSection('training-and-resources')">Training and Resources</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#reports-and-analytics" onclick="showSection('reports-and-analytics')">Reports and Analytics</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#feedback-and-reviews" onclick="showSection('feedback-and-reviews')">Feedback and Reviews</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Overview/Dashboard -->
+        <div id="dashboard" class="card mb-4 content-section active">
+            <div class="card-header">Dashboard</div>
+            <div class="card-body">
+                <p>Overview of volunteer activities, participation statistics, and upcoming events.</p>
+            </div>
+        </div>
+
+        <!-- Volunteer List -->
+        <div id="volunteer-list" class="card mb-4 content-section">
+            <div class="card-header">Volunteer List</div>
+            <div class="card-body">
+                <p>Search and filter volunteers, view profiles, and manage volunteer information.</p>
+            </div>
+        </div>
+
+        <!-- Volunteer Profiles -->
+        <div id="volunteer-profiles" class="card mb-4 content-section">
+            <div class="card-header">Volunteer Profiles</div>
+            <div class="card-body">
+                <p>Access detailed profiles for each volunteer, including skills, availability, and participation history.</p>
+            </div>
+        </div>
+
+        <!-- Recruitment and Onboarding -->
+        <div id="recruitment-and-onboarding" class="card mb-4 content-section">
+            <div class="card-header">Recruitment and Onboarding</div>
+            <div class="card-body">
+                <p>Post new volunteer opportunities, review applications, and manage the onboarding process.</p>
+            </div>
+        </div>
+
+        <!-- Scheduling -->
+        <div id="scheduling" class="card mb-4 content-section">
+            <div class="card-header">Scheduling</div>
+            <div class="card-body">
+                <p>Manage volunteer shifts and activities, view availability, and send notifications.</p>
+            </div>
+        </div>
+
+        <!-- Communication Tools -->
+        <div id="communication-tools" class="card mb-4 content-section">
+            <div class="card-header">Communication Tools</div>
+            <div class="card-body">
+                <p>Facilitate communication between volunteers and organizers through messaging and email notifications.</p>
+            </div>
+        </div>
+
+        <!-- Training and Resources -->
+        <div id="training-and-resources" class="card mb-4 content-section">
+            <div class="card-header">Training and Resources</div>
+            <div class="card-body">
+                <p>Access training materials, guides, and FAQs for volunteers.</p>
+            </div>
+        </div>
+
+        <!-- Reports and Analytics -->
+        <div id="reports-and-analytics" class="card mb-4 content-section">
+            <div class="card-header">Reports and Analytics</div>
+            <div class="card-body">
+                <p>Generate reports and analyze volunteer data, participation rates, and impact assessments.</p>
+            </div>
+        </div>
+
+        <!-- Feedback and Reviews -->
+        <div id="feedback-and-reviews" class="card mb-4 content-section">
+            <div class="card-header">Feedback and Reviews</div>
+            <div class="card-body">
+                <p>Collect feedback and reviews from volunteers and organizations, and view ratings and testimonials.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+    <script>
+    function showSection(sectionId) {
+        // Hide all sections
+        document.querySelectorAll('.content-section').forEach(section => {
+            section.classList.remove('active');
+        });
+
+        // Show the selected section
+        document.getElementById(sectionId).classList.add('active');
+    }
+    </script>

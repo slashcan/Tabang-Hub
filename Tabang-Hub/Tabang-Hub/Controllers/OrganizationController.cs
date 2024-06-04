@@ -13,5 +13,21 @@ namespace Tabang_Hub.Controllers
         {
             return View();
         }
+        public ActionResult VolunteerManagement()
+        {
+            return View();
+        }
+        public ActionResult EventsManagement()
+        {
+            return View();
+        }
+        public ActionResult DonationsManagement()
+        {
+            return View();
+        }
+        public ActionResult ReportsManagement()
+        {
+            return View();
+        }
     }
 }

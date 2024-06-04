@@ -190,6 +190,10 @@
     <Content Include="Views\Page\Verify.cshtml" />
     <Content Include="Views\Shared\_Organization.cshtml" />
     <Content Include="Views\Organization\Index.cshtml" />
+    <Content Include="Views\Organization\VolunteerManagement.cshtml" />
+    <Content Include="Views\Organization\EventsManagement.cshtml" />
+    <Content Include="Views\Organization\DonationsManagement.cshtml" />
+    <Content Include="Views\Organization\ReportsManagement.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
