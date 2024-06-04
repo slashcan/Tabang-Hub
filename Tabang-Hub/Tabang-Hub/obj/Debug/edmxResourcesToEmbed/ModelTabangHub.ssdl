@@ -1,5 +1,44 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Schema Namespace="TabangHubModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+<<<<<<< Updated upstream
+=======
+  <EntityType Name="OrgInfo">
+    <Key>
+      <PropertyRef Name="orgInfoId" />
+    </Key>
+    <Property Name="orgInfoId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="userId" Type="int" />
+    <Property Name="orgName" Type="nvarchar" MaxLength="255" />
+    <Property Name="orgEmail" Type="nvarchar" MaxLength="255" />
+    <Property Name="orgType" Type="nvarchar" MaxLength="255" />
+    <Property Name="orgDescription" Type="nvarchar" MaxLength="255" />
+    <Property Name="phoneNum" Type="nvarchar" MaxLength="255" />
+    <Property Name="street" Type="nvarchar" MaxLength="255" />
+    <Property Name="city" Type="nvarchar" MaxLength="255" />
+    <Property Name="province" Type="nvarchar" MaxLength="255" />
+    <Property Name="zipCode" Type="nvarchar" MaxLength="255" />
+    <Property Name="profileId" Type="int" />
+  </EntityType>
+  <EntityType Name="OrgValidation">
+    <Key>
+      <PropertyRef Name="orgValidationId" />
+    </Key>
+    <Property Name="orgValidationId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="userId" Type="int" />
+    <Property Name="idPicture1" Type="nvarchar" MaxLength="255" />
+    <Property Name="idNumber1" Type="nvarchar" MaxLength="255" />
+    <Property Name="idPicture2" Type="nvarchar" MaxLength="255" />
+    <Property Name="idNumber2" Type="nvarchar" MaxLength="255" />
+  </EntityType>
+  <EntityType Name="ProfilePicture">
+    <Key>
+      <PropertyRef Name="profileId" />
+    </Key>
+    <Property Name="profileId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="userId" Type="int" />
+    <Property Name="profilePath" Type="nvarchar" MaxLength="255" />
+  </EntityType>
+>>>>>>> Stashed changes
   <EntityType Name="Role">
     <Key>
       <PropertyRef Name="roleId" />
@@ -7,6 +46,17 @@
     <Property Name="roleId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="roleName" Type="nvarchar" MaxLength="50" />
   </EntityType>
+<<<<<<< Updated upstream
+=======
+  <EntityType Name="Skills">
+    <Key>
+      <PropertyRef Name="skillId" />
+    </Key>
+    <Property Name="skillId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="userId" Type="int" />
+    <Property Name="skillName" Type="nvarchar" MaxLength="255" />
+  </EntityType>
+>>>>>>> Stashed changes
   <EntityType Name="UserAccount">
     <Key>
       <PropertyRef Name="userId" />
@@ -14,21 +64,51 @@
     <Property Name="userId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="email" Type="nvarchar" MaxLength="255" Nullable="false" />
     <Property Name="password" Type="nvarchar" MaxLength="255" Nullable="false" />
+<<<<<<< Updated upstream
+=======
+    <Property Name="userInfo" Type="int" />
+>>>>>>> Stashed changes
     <Property Name="status" Type="smallint" Nullable="false" />
     <Property Name="roleId" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="UserRoles">
     <Key>
+<<<<<<< Updated upstream
       <PropertyRef Name="UserRoles_ID" />
     </Key>
     <Property Name="UserRoles_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="roleId" Type="int" />
     <Property Name="userId" Type="int" />
+=======
+      <PropertyRef Name="userRoleId" />
+    </Key>
+    <Property Name="userRoleId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="userId" Type="int" Nullable="false" />
+    <Property Name="userRole" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="VolunteerInfo">
+    <Key>
+      <PropertyRef Name="volunteerId" />
+    </Key>
+    <Property Name="volunteerId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="userId" Type="int" />
+    <Property Name="fName" Type="nvarchar" MaxLength="255" />
+    <Property Name="lName" Type="nvarchar" MaxLength="255" />
+    <Property Name="bDay" Type="date" />
+    <Property Name="gender" Type="nvarchar" MaxLength="255" />
+    <Property Name="phoneNum" Type="nvarchar" MaxLength="255" />
+    <Property Name="street" Type="nvarchar" MaxLength="255" />
+    <Property Name="city" Type="nvarchar" MaxLength="255" />
+    <Property Name="province" Type="nvarchar" MaxLength="255" />
+    <Property Name="zipCode" Type="nvarchar" MaxLength="255" />
+    <Property Name="profileId" Type="int" />
+>>>>>>> Stashed changes
   </EntityType>
   <!--Errors Found During Generation:
 warning 6002: The table/view 'TabangHub.dbo.vw_UserRoles' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="vw_UserRoles">
     <Key>
+<<<<<<< Updated upstream
       <PropertyRef Name="UserRoles_ID" />
       <PropertyRef Name="userId" />
       <PropertyRef Name="email" />
@@ -42,6 +122,69 @@ warning 6002: The table/view 'TabangHub.dbo.vw_UserRoles' does not have a primar
   </EntityType>
   <Association Name="FK_UserRoles_UserAccount">
     <End Role="UserAccount" Type="Self.UserAccount" Multiplicity="0..1" />
+=======
+      <PropertyRef Name="userRoleId" />
+      <PropertyRef Name="roleId" />
+      <PropertyRef Name="userId" />
+      <PropertyRef Name="email" />
+    </Key>
+    <Property Name="userRoleId" Type="int" Nullable="false" />
+    <Property Name="roleId" Type="int" Nullable="false" />
+    <Property Name="roleName" Type="nvarchar" MaxLength="50" />
+    <Property Name="userId" Type="int" Nullable="false" />
+    <Property Name="email" Type="nvarchar" MaxLength="255" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_OrgInfo_ProfilePicture">
+    <End Role="ProfilePicture" Type="Self.ProfilePicture" Multiplicity="0..1" />
+    <End Role="OrgInfo" Type="Self.OrgInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ProfilePicture">
+        <PropertyRef Name="profileId" />
+      </Principal>
+      <Dependent Role="OrgInfo">
+        <PropertyRef Name="profileId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_OrgInfo_UserAccount">
+    <End Role="UserAccount" Type="Self.UserAccount" Multiplicity="0..1" />
+    <End Role="OrgInfo" Type="Self.OrgInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserAccount">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="OrgInfo">
+        <PropertyRef Name="userId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_OrgValidation_UserAccount">
+    <End Role="UserAccount" Type="Self.UserAccount" Multiplicity="0..1" />
+    <End Role="OrgValidation" Type="Self.OrgValidation" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserAccount">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="OrgValidation">
+        <PropertyRef Name="userId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Skills_UserAccount">
+    <End Role="UserAccount" Type="Self.UserAccount" Multiplicity="0..1" />
+    <End Role="Skills" Type="Self.Skills" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserAccount">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="Skills">
+        <PropertyRef Name="userId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UserRoles_UserAccount">
+    <End Role="UserAccount" Type="Self.UserAccount" Multiplicity="1" />
+>>>>>>> Stashed changes
     <End Role="UserRoles" Type="Self.UserRoles" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="UserAccount">
@@ -52,6 +195,7 @@ warning 6002: The table/view 'TabangHub.dbo.vw_UserRoles' does not have a primar
       </Dependent>
     </ReferentialConstraint>
   </Association>
+<<<<<<< Updated upstream
   <Association Name="FK_UserRoles_UserRoles">
     <End Role="Role" Type="Self.Role" Multiplicity="0..1" />
     <End Role="UserRoles" Type="Self.UserRoles" Multiplicity="*" />
@@ -61,10 +205,34 @@ warning 6002: The table/view 'TabangHub.dbo.vw_UserRoles' does not have a primar
       </Principal>
       <Dependent Role="UserRoles">
         <PropertyRef Name="roleId" />
+=======
+  <Association Name="FK_VolunteerInfo_ProfilePicture">
+    <End Role="ProfilePicture" Type="Self.ProfilePicture" Multiplicity="0..1" />
+    <End Role="VolunteerInfo" Type="Self.VolunteerInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ProfilePicture">
+        <PropertyRef Name="profileId" />
+      </Principal>
+      <Dependent Role="VolunteerInfo">
+        <PropertyRef Name="profileId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_VolunteerInfo_UserAccount">
+    <End Role="UserAccount" Type="Self.UserAccount" Multiplicity="0..1" />
+    <End Role="VolunteerInfo" Type="Self.VolunteerInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserAccount">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="VolunteerInfo">
+        <PropertyRef Name="userId" />
+>>>>>>> Stashed changes
       </Dependent>
     </ReferentialConstraint>
   </Association>
   <EntityContainer Name="TabangHubModelStoreContainer">
+<<<<<<< Updated upstream
     <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="UserAccount" EntityType="Self.UserAccount" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="UserRoles" EntityType="Self.UserRoles" Schema="dbo" store:Type="Tables" />
@@ -77,13 +245,58 @@ warning 6002: The table/view 'TabangHub.dbo.vw_UserRoles' does not have a primar
 [vw_UserRoles].[roleName] AS [roleName]
 FROM [dbo].[vw_UserRoles] AS [vw_UserRoles]</DefiningQuery>
     </EntitySet>
+=======
+    <EntitySet Name="OrgInfo" EntityType="Self.OrgInfo" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="OrgValidation" EntityType="Self.OrgValidation" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ProfilePicture" EntityType="Self.ProfilePicture" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Skills" EntityType="Self.Skills" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="UserAccount" EntityType="Self.UserAccount" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="UserRoles" EntityType="Self.UserRoles" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="VolunteerInfo" EntityType="Self.VolunteerInfo" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="vw_UserRoles" EntityType="Self.vw_UserRoles" store:Type="Views" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+[vw_UserRoles].[userRoleId] AS [userRoleId], 
+[vw_UserRoles].[roleId] AS [roleId], 
+[vw_UserRoles].[roleName] AS [roleName], 
+[vw_UserRoles].[userId] AS [userId], 
+[vw_UserRoles].[email] AS [email]
+FROM [dbo].[vw_UserRoles] AS [vw_UserRoles]</DefiningQuery>
+    </EntitySet>
+    <AssociationSet Name="FK_OrgInfo_ProfilePicture" Association="Self.FK_OrgInfo_ProfilePicture">
+      <End Role="ProfilePicture" EntitySet="ProfilePicture" />
+      <End Role="OrgInfo" EntitySet="OrgInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_OrgInfo_UserAccount" Association="Self.FK_OrgInfo_UserAccount">
+      <End Role="UserAccount" EntitySet="UserAccount" />
+      <End Role="OrgInfo" EntitySet="OrgInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_OrgValidation_UserAccount" Association="Self.FK_OrgValidation_UserAccount">
+      <End Role="UserAccount" EntitySet="UserAccount" />
+      <End Role="OrgValidation" EntitySet="OrgValidation" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Skills_UserAccount" Association="Self.FK_Skills_UserAccount">
+      <End Role="UserAccount" EntitySet="UserAccount" />
+      <End Role="Skills" EntitySet="Skills" />
+    </AssociationSet>
+>>>>>>> Stashed changes
     <AssociationSet Name="FK_UserRoles_UserAccount" Association="Self.FK_UserRoles_UserAccount">
       <End Role="UserAccount" EntitySet="UserAccount" />
       <End Role="UserRoles" EntitySet="UserRoles" />
     </AssociationSet>
+<<<<<<< Updated upstream
     <AssociationSet Name="FK_UserRoles_UserRoles" Association="Self.FK_UserRoles_UserRoles">
       <End Role="Role" EntitySet="Role" />
       <End Role="UserRoles" EntitySet="UserRoles" />
+=======
+    <AssociationSet Name="FK_VolunteerInfo_ProfilePicture" Association="Self.FK_VolunteerInfo_ProfilePicture">
+      <End Role="ProfilePicture" EntitySet="ProfilePicture" />
+      <End Role="VolunteerInfo" EntitySet="VolunteerInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_VolunteerInfo_UserAccount" Association="Self.FK_VolunteerInfo_UserAccount">
+      <End Role="UserAccount" EntitySet="UserAccount" />
+      <End Role="VolunteerInfo" EntitySet="VolunteerInfo" />
+>>>>>>> Stashed changes
     </AssociationSet>
   </EntityContainer>
 </Schema>

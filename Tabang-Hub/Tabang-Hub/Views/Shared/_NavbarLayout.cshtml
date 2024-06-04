@@ -1,0 +1,84 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>@Page.Title</title>
+    @RenderSection("head", required: false)
+    <link href="~/Content/Css/Navbar.css" rel="stylesheet" />
+</head>
+<body>
+    <nav>
+        <div class="logo">
+            <img src="~/Content/images/tabanghub3.png" alt="logo" />
+            <h1>Tabang Hub</h1>
+        </div>
+        <ul>
+            <li>
+                <a href="#">Skill base</a>
+            </li>
+            <li>
+                <a href="#">General</a>
+            </li>
+            <li>
+                <a href="#">About Us</a>
+            </li>
+            <li>
+                <div class="profile-menu">
+                    <img src="~/Content/images/duck2.png" alt="Profile" class="profile-picture" onclick="toggleDropdown('myDropdown1')">
+                    <div id="myDropdown1" class="dropdown-content">
+                        <a href="#">Account</a>
+                        <a href="#">Settings</a>
+                        <a href="~/Navbar/Logout">Log Out</a>
+                    </div>
+                </div>
+            </li>
+        </ul>
+        <div class="hamburger">
+            <span class="line"></span>
+            <span class="line"></span>
+            <span class="line"></span>
+        </div>
+    </nav>
+    <div class="menubar">
+        <ul>
+            <li>
+                <a href="#">Skill base</a>
+            </li>
+            <li>
+                <a href="#">General</a>
+            </li>
+            <li>
+                <a href="#">About Us</a>
+            </li>
+            <li>
+                <div class="profile-menu">
+                    <img src="~/Content/images/duck2.png" alt="Profile" class="profile-picture" onclick="toggleDropdown('myDropdown2')">
+                    <div id="myDropdown2" class="dropdown-content">
+                        <a href="#">Account</a>
+                        <a href="#">Settings</a>
+                        <a href="#">Log Out</a>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    <script src="~/Content/Js/Navbar.js"></script>
+    <script>
+        function toggleDropdown(dropdownId) {
+            document.getElementById(dropdownId).classList.toggle("show");
+        }
+        window.onclick = function (event) {
+            if (!event.target.matches('.profile-picture')) {
+                var dropdowns = document.getElementsByClassName("dropdown-content");
+                for (var i = 0; i < dropdowns.length; i++) {
+                    var openDropdown = dropdowns[i];
+                    if (openDropdown.classList.contains('show')) {
+                        openDropdown.classList.remove('show');
+                    }
+                }
+            }
+        }
+    </script>
+    @RenderBody()
+</body>
+</html>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Web;
@@ -18,13 +19,65 @@ namespace Tabang_Hub.Controllers
             return View();
         }
         [AllowAnonymous]
+<<<<<<< Updated upstream
+=======
+        public ActionResult ChooseRegister()
+        {
+            return View();
+        }
+        [AllowAnonymous]
+        public ActionResult RegisterOrg()
+        {
+            return View();
+        }
+        [AllowAnonymous]
+        [HttpPost]
+        public ActionResult RegisterOrg(UserAccount u, OrgInfo o, OrgValidation ov, UserRoles r, HttpPostedFileBase picture1, HttpPostedFileBase picture2)
+        {
+            if (picture1 != null && picture1.ContentLength > 0)
+            {
+                var inputFileName = Path.GetFileName(picture1.FileName);
+                var serverSavePath = Path.Combine(Server.MapPath("~/Content/IdPicture/"), inputFileName);
+
+                if (!Directory.Exists(Server.MapPath("~/UploadedFiles/")))
+                    Directory.CreateDirectory(Server.MapPath("~/Content/IdPicture/"));
+
+                picture1.SaveAs(serverSavePath);
+
+                ov.idPicture1 = inputFileName;
+            }
+            if (picture2 != null && picture2.ContentLength > 0)
+            {
+                var inputFileName = Path.GetFileName(picture2.FileName);
+                var serverSavePath = Path.Combine(Server.MapPath("~/Content/IdPicture/"), inputFileName);
+
+                if (!Directory.Exists(Server.MapPath("~/UploadedFiles/")))
+                    Directory.CreateDirectory(Server.MapPath("~/Content/IdPicture/"));
+
+                picture2.SaveAs(serverSavePath);
+
+                ov.idPicture2 = inputFileName;
+            }
+            if (_userManager.OrgRegister(u, o, ov, r, ref ErrorMessage) != ErrorCode.Success)
+            {
+                ModelState.AddModelError(String.Empty, ErrorMessage);
+            }
+
+            return RedirectToAction("Login");
+        }
+        [AllowAnonymous]
+>>>>>>> Stashed changes
         public ActionResult Register()
         {
             return View();
         }
         [AllowAnonymous]
         [HttpPost]
+<<<<<<< Updated upstream
         public ActionResult Register(UserAccount u, String ConfirmPass)
+=======
+        public ActionResult Register(UserAccount u,VolunteerInfo v, UserRoles r, String ConfirmPass)
+>>>>>>> Stashed changes
         {
             u.status = 0;
             u.roleId = 1;
@@ -37,7 +90,11 @@ namespace Tabang_Hub.Controllers
                     return View(u);
                 }
 
+<<<<<<< Updated upstream
                 if (_userManager.Register(u, ref ErrorMessage) != ErrorCode.Success)
+=======
+                if (_userManager.Register(u, v, r, ref ErrorMessage) != ErrorCode.Success)
+>>>>>>> Stashed changes
                 {
                     ModelState.AddModelError(String.Empty, ErrorMessage);
 
@@ -65,10 +122,23 @@ namespace Tabang_Hub.Controllers
         [HttpPost]
         public ActionResult Login(String email, String password)
         {
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
             if (_userManager.Login(email, password, ref ErrorMessage) == ErrorCode.Success)
             {
                 var user = _userManager.GetUserByEmail(email);
 
+<<<<<<< Updated upstream
+=======
+                //if (user.status != (Int32)Status.Active)
+                //{
+                //    TempData["email"] = email;
+                //    return RedirectToAction("Index");
+                //}
+
+>>>>>>> Stashed changes
                 FormsAuthentication.SetAuthCookie(email, false);
 
                 if (user.roleId == 1)
@@ -83,9 +153,14 @@ namespace Tabang_Hub.Controllers
                 {
                     //Redirect to Admin
                 }
+<<<<<<< Updated upstream
                 return View();
             }
 
+=======
+            }
+            ViewBag.Error = ErrorMessage;
+>>>>>>> Stashed changes
             return View();
         }
     }

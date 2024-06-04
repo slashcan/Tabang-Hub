@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Schema Namespace="TabangHubModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
   <EntityContainer Name="TabangHubEntities" annotation:LazyLoadingEnabled="true">
+<<<<<<< Updated upstream
     <EntitySet Name="Role" EntityType="TabangHubModel.Role" />
     <EntitySet Name="UserAccount" EntityType="TabangHubModel.UserAccount" />
     <EntitySet Name="UserRoles" EntityType="TabangHubModel.UserRoles" />
@@ -8,19 +9,110 @@
     <AssociationSet Name="FK_UserRoles_UserRoles" Association="TabangHubModel.FK_UserRoles_UserRoles">
       <End Role="Role" EntitySet="Role" />
       <End Role="UserRoles" EntitySet="UserRoles" />
+=======
+    <EntitySet Name="OrgInfo" EntityType="TabangHubModel.OrgInfo" />
+    <EntitySet Name="OrgValidation" EntityType="TabangHubModel.OrgValidation" />
+    <EntitySet Name="ProfilePicture" EntityType="TabangHubModel.ProfilePicture" />
+    <EntitySet Name="Role" EntityType="TabangHubModel.Role" />
+    <EntitySet Name="Skills" EntityType="TabangHubModel.Skills" />
+    <EntitySet Name="UserAccount" EntityType="TabangHubModel.UserAccount" />
+    <EntitySet Name="UserRoles" EntityType="TabangHubModel.UserRoles" />
+    <EntitySet Name="VolunteerInfo" EntityType="TabangHubModel.VolunteerInfo" />
+    <EntitySet Name="vw_UserRoles" EntityType="TabangHubModel.vw_UserRoles" />
+    <AssociationSet Name="FK_OrgInfo_ProfilePicture" Association="TabangHubModel.FK_OrgInfo_ProfilePicture">
+      <End Role="ProfilePicture" EntitySet="ProfilePicture" />
+      <End Role="OrgInfo" EntitySet="OrgInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_OrgInfo_UserAccount" Association="TabangHubModel.FK_OrgInfo_UserAccount">
+      <End Role="UserAccount" EntitySet="UserAccount" />
+      <End Role="OrgInfo" EntitySet="OrgInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_OrgValidation_UserAccount" Association="TabangHubModel.FK_OrgValidation_UserAccount">
+      <End Role="UserAccount" EntitySet="UserAccount" />
+      <End Role="OrgValidation" EntitySet="OrgValidation" />
+    </AssociationSet>
+    <AssociationSet Name="FK_VolunteerInfo_ProfilePicture" Association="TabangHubModel.FK_VolunteerInfo_ProfilePicture">
+      <End Role="ProfilePicture" EntitySet="ProfilePicture" />
+      <End Role="VolunteerInfo" EntitySet="VolunteerInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Skills_UserAccount" Association="TabangHubModel.FK_Skills_UserAccount">
+      <End Role="UserAccount" EntitySet="UserAccount" />
+      <End Role="Skills" EntitySet="Skills" />
+>>>>>>> Stashed changes
     </AssociationSet>
     <AssociationSet Name="FK_UserRoles_UserAccount" Association="TabangHubModel.FK_UserRoles_UserAccount">
       <End Role="UserAccount" EntitySet="UserAccount" />
       <End Role="UserRoles" EntitySet="UserRoles" />
     </AssociationSet>
+<<<<<<< Updated upstream
   </EntityContainer>
+=======
+    <AssociationSet Name="FK_VolunteerInfo_UserAccount" Association="TabangHubModel.FK_VolunteerInfo_UserAccount">
+      <End Role="UserAccount" EntitySet="UserAccount" />
+      <End Role="VolunteerInfo" EntitySet="VolunteerInfo" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="OrgInfo">
+    <Key>
+      <PropertyRef Name="orgInfoId" />
+    </Key>
+    <Property Name="orgInfoId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="userId" Type="Int32" />
+    <Property Name="orgName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="orgEmail" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="orgType" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="orgDescription" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="phoneNum" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="street" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="city" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="province" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="zipCode" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="profileId" Type="Int32" />
+    <NavigationProperty Name="ProfilePicture" Relationship="TabangHubModel.FK_OrgInfo_ProfilePicture" FromRole="OrgInfo" ToRole="ProfilePicture" />
+    <NavigationProperty Name="UserAccount" Relationship="TabangHubModel.FK_OrgInfo_UserAccount" FromRole="OrgInfo" ToRole="UserAccount" />
+  </EntityType>
+  <EntityType Name="OrgValidation">
+    <Key>
+      <PropertyRef Name="orgValidationId" />
+    </Key>
+    <Property Name="orgValidationId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="userId" Type="Int32" />
+    <Property Name="idPicture1" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="idNumber1" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="idPicture2" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="idNumber2" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="UserAccount" Relationship="TabangHubModel.FK_OrgValidation_UserAccount" FromRole="OrgValidation" ToRole="UserAccount" />
+  </EntityType>
+  <EntityType Name="ProfilePicture">
+    <Key>
+      <PropertyRef Name="profileId" />
+    </Key>
+    <Property Name="profileId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="userId" Type="Int32" />
+    <Property Name="profilePath" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="OrgInfo" Relationship="TabangHubModel.FK_OrgInfo_ProfilePicture" FromRole="ProfilePicture" ToRole="OrgInfo" />
+    <NavigationProperty Name="VolunteerInfo" Relationship="TabangHubModel.FK_VolunteerInfo_ProfilePicture" FromRole="ProfilePicture" ToRole="VolunteerInfo" />
+  </EntityType>
+>>>>>>> Stashed changes
   <EntityType Name="Role">
     <Key>
       <PropertyRef Name="roleId" />
     </Key>
     <Property Name="roleId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="roleName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+<<<<<<< Updated upstream
     <NavigationProperty Name="UserRoles" Relationship="TabangHubModel.FK_UserRoles_UserRoles" FromRole="Role" ToRole="UserRoles" />
+=======
+  </EntityType>
+  <EntityType Name="Skills">
+    <Key>
+      <PropertyRef Name="skillId" />
+    </Key>
+    <Property Name="skillId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="userId" Type="Int32" />
+    <Property Name="skillName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="UserAccount" Relationship="TabangHubModel.FK_Skills_UserAccount" FromRole="Skills" ToRole="UserAccount" />
+>>>>>>> Stashed changes
   </EntityType>
   <EntityType Name="UserAccount">
     <Key>
@@ -29,6 +121,7 @@
     <Property Name="userId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="email" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
     <Property Name="password" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+<<<<<<< Updated upstream
     <Property Name="status" Type="Int16" Nullable="false" />
     <Property Name="roleId" Type="Int32" Nullable="false" />
     <NavigationProperty Name="UserRoles" Relationship="TabangHubModel.FK_UserRoles_UserAccount" FromRole="UserAccount" ToRole="UserRoles" />
@@ -65,11 +158,124 @@
       </Principal>
       <Dependent Role="UserRoles">
         <PropertyRef Name="roleId" />
+=======
+    <Property Name="userInfo" Type="Int32" />
+    <Property Name="status" Type="Int16" Nullable="false" />
+    <Property Name="roleId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="OrgInfo" Relationship="TabangHubModel.FK_OrgInfo_UserAccount" FromRole="UserAccount" ToRole="OrgInfo" />
+    <NavigationProperty Name="OrgValidation" Relationship="TabangHubModel.FK_OrgValidation_UserAccount" FromRole="UserAccount" ToRole="OrgValidation" />
+    <NavigationProperty Name="Skills" Relationship="TabangHubModel.FK_Skills_UserAccount" FromRole="UserAccount" ToRole="Skills" />
+    <NavigationProperty Name="UserRoles" Relationship="TabangHubModel.FK_UserRoles_UserAccount" FromRole="UserAccount" ToRole="UserRoles" />
+    <NavigationProperty Name="VolunteerInfo" Relationship="TabangHubModel.FK_VolunteerInfo_UserAccount" FromRole="UserAccount" ToRole="VolunteerInfo" />
+  </EntityType>
+  <EntityType Name="UserRoles">
+    <Key>
+      <PropertyRef Name="userRoleId" />
+    </Key>
+    <Property Name="userRoleId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="userId" Type="Int32" Nullable="false" />
+    <Property Name="userRole" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="UserAccount" Relationship="TabangHubModel.FK_UserRoles_UserAccount" FromRole="UserRoles" ToRole="UserAccount" />
+  </EntityType>
+  <EntityType Name="VolunteerInfo">
+    <Key>
+      <PropertyRef Name="volunteerId" />
+    </Key>
+    <Property Name="volunteerId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="userId" Type="Int32" />
+    <Property Name="fName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="lName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="bDay" Type="DateTime" Precision="0" />
+    <Property Name="gender" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="phoneNum" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="street" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="city" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="province" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="zipCode" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="profileId" Type="Int32" />
+    <NavigationProperty Name="ProfilePicture" Relationship="TabangHubModel.FK_VolunteerInfo_ProfilePicture" FromRole="VolunteerInfo" ToRole="ProfilePicture" />
+    <NavigationProperty Name="UserAccount" Relationship="TabangHubModel.FK_VolunteerInfo_UserAccount" FromRole="VolunteerInfo" ToRole="UserAccount" />
+  </EntityType>
+  <EntityType Name="vw_UserRoles">
+    <Key>
+      <PropertyRef Name="userRoleId" />
+      <PropertyRef Name="roleId" />
+      <PropertyRef Name="userId" />
+      <PropertyRef Name="email" />
+    </Key>
+    <Property Name="userRoleId" Type="Int32" Nullable="false" />
+    <Property Name="roleId" Type="Int32" Nullable="false" />
+    <Property Name="roleName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="userId" Type="Int32" Nullable="false" />
+    <Property Name="email" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <Association Name="FK_OrgInfo_ProfilePicture">
+    <End Type="TabangHubModel.ProfilePicture" Role="ProfilePicture" Multiplicity="0..1" />
+    <End Type="TabangHubModel.OrgInfo" Role="OrgInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ProfilePicture">
+        <PropertyRef Name="profileId" />
+      </Principal>
+      <Dependent Role="OrgInfo">
+        <PropertyRef Name="profileId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_OrgInfo_UserAccount">
+    <End Type="TabangHubModel.UserAccount" Role="UserAccount" Multiplicity="0..1" />
+    <End Type="TabangHubModel.OrgInfo" Role="OrgInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserAccount">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="OrgInfo">
+        <PropertyRef Name="userId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_OrgValidation_UserAccount">
+    <End Type="TabangHubModel.UserAccount" Role="UserAccount" Multiplicity="0..1" />
+    <End Type="TabangHubModel.OrgValidation" Role="OrgValidation" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserAccount">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="OrgValidation">
+        <PropertyRef Name="userId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_VolunteerInfo_ProfilePicture">
+    <End Type="TabangHubModel.ProfilePicture" Role="ProfilePicture" Multiplicity="0..1" />
+    <End Type="TabangHubModel.VolunteerInfo" Role="VolunteerInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ProfilePicture">
+        <PropertyRef Name="profileId" />
+      </Principal>
+      <Dependent Role="VolunteerInfo">
+        <PropertyRef Name="profileId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Skills_UserAccount">
+    <End Type="TabangHubModel.UserAccount" Role="UserAccount" Multiplicity="0..1" />
+    <End Type="TabangHubModel.Skills" Role="Skills" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserAccount">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="Skills">
+        <PropertyRef Name="userId" />
+>>>>>>> Stashed changes
       </Dependent>
     </ReferentialConstraint>
   </Association>
   <Association Name="FK_UserRoles_UserAccount">
+<<<<<<< Updated upstream
     <End Type="TabangHubModel.UserAccount" Role="UserAccount" Multiplicity="0..1" />
+=======
+    <End Type="TabangHubModel.UserAccount" Role="UserAccount" Multiplicity="1" />
+>>>>>>> Stashed changes
     <End Type="TabangHubModel.UserRoles" Role="UserRoles" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="UserAccount">
@@ -80,4 +286,19 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+<<<<<<< Updated upstream
+=======
+  <Association Name="FK_VolunteerInfo_UserAccount">
+    <End Type="TabangHubModel.UserAccount" Role="UserAccount" Multiplicity="0..1" />
+    <End Type="TabangHubModel.VolunteerInfo" Role="VolunteerInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserAccount">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="VolunteerInfo">
+        <PropertyRef Name="userId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+>>>>>>> Stashed changes
 </Schema>

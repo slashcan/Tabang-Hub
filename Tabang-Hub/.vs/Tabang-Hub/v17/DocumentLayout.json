@@ -3,6 +3,7 @@
   "WorkspaceRootPath": "C:\\Users\\arvie\\Desktop\\Tabang-Hub\\Tabang-Hub\\",
   "Documents": [
     {
+<<<<<<< Updated upstream
       "AbsoluteMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|c:\\users\\arvie\\desktop\\tabang-hub\\tabang-hub\\tabang-hub\\controllers\\pagecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|solutionrelative:tabang-hub\\controllers\\pagecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -17,6 +18,34 @@
     {
       "AbsoluteMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|C:\\Users\\arvie\\Desktop\\Tabang-Hub\\Tabang-Hub\\tabang-hub\\views\\page\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|solutionrelative:tabang-hub\\views\\page\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+=======
+      "AbsoluteMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|c:\\users\\arvie\\desktop\\tabang-hub\\tabang-hub\\tabang-hub\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|solutionrelative:tabang-hub\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|C:\\Users\\arvie\\Desktop\\Tabang-Hub\\Tabang-Hub\\tabang-hub\\controllers\\pagecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|solutionrelative:tabang-hub\\controllers\\pagecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|C:\\Users\\arvie\\Desktop\\Tabang-Hub\\Tabang-Hub\\tabang-hub\\views\\page\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|solutionrelative:tabang-hub\\views\\page\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|C:\\Users\\arvie\\Desktop\\Tabang-Hub\\Tabang-Hub\\tabang-hub\\controllers\\navbarcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|solutionrelative:tabang-hub\\controllers\\navbarcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|c:\\users\\arvie\\desktop\\tabang-hub\\tabang-hub\\tabang-hub\\controllers\\basecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|solutionrelative:tabang-hub\\controllers\\basecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|c:\\users\\arvie\\desktop\\tabang-hub\\tabang-hub\\tabang-hub\\content\\css\\navbar.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|solutionrelative:tabang-hub\\content\\css\\navbar.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|C:\\Users\\arvie\\Desktop\\Tabang-Hub\\Tabang-Hub\\tabang-hub\\views\\shared\\_navbarlayout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|solutionrelative:tabang-hub\\views\\shared\\_navbarlayout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+>>>>>>> Stashed changes
     }
   ],
   "DocumentGroupContainers": [
@@ -26,6 +55,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
+<<<<<<< Updated upstream
           "SelectedChildIndex": 3,
           "Children": [
             {
@@ -39,10 +69,26 @@
               "ViewState": "AQIAACoAAAAAAAAAAAAnwDYAAAANAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-06-01T05:16:56.614Z",
+=======
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "_Layout.cshtml",
+              "DocumentMoniker": "C:\\Users\\arvie\\Desktop\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Views\\Shared\\_Layout.cshtml",
+              "RelativeDocumentMoniker": "Tabang-Hub\\Views\\Shared\\_Layout.cshtml",
+              "ToolTip": "C:\\Users\\arvie\\Desktop\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Views\\Shared\\_Layout.cshtml",
+              "RelativeToolTip": "Tabang-Hub\\Views\\Shared\\_Layout.cshtml",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-06-04T06:48:52.834Z",
+>>>>>>> Stashed changes
               "EditorCaption": ""
             },
             {
               "$type": "Document",
+<<<<<<< Updated upstream
               "DocumentIndex": 2,
               "Title": "UserManager.cs",
               "DocumentMoniker": "C:\\Users\\arvie\\Desktop\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Repository\\UserManager.cs",
@@ -52,32 +98,100 @@
               "ViewState": "AQIAABAAAAAAAAAAAAAQwAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-06-01T04:59:24.124Z",
+=======
+              "DocumentIndex": 4,
+              "Title": "BaseController.cs",
+              "DocumentMoniker": "C:\\Users\\arvie\\Desktop\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Controllers\\BaseController.cs",
+              "RelativeDocumentMoniker": "Tabang-Hub\\Controllers\\BaseController.cs",
+              "ToolTip": "C:\\Users\\arvie\\Desktop\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Controllers\\BaseController.cs",
+              "RelativeToolTip": "Tabang-Hub\\Controllers\\BaseController.cs",
+              "ViewState": "AQIAAAkAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-04T06:47:24.028Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Navbar.css",
+              "DocumentMoniker": "C:\\Users\\arvie\\Desktop\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Content\\Css\\Navbar.css",
+              "RelativeDocumentMoniker": "Tabang-Hub\\Content\\Css\\Navbar.css",
+              "ToolTip": "C:\\Users\\arvie\\Desktop\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Content\\Css\\Navbar.css",
+              "RelativeToolTip": "Tabang-Hub\\Content\\Css\\Navbar.css",
+              "ViewState": "AQIAAJAAAAAAAAAAAAAAABMAAABdAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2024-06-03T23:13:54.887Z",
+>>>>>>> Stashed changes
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 3,
+<<<<<<< Updated upstream
+=======
+              "Title": "NavbarController.cs",
+              "DocumentMoniker": "C:\\Users\\arvie\\Desktop\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Controllers\\NavbarController.cs",
+              "RelativeDocumentMoniker": "Tabang-Hub\\Controllers\\NavbarController.cs",
+              "ToolTip": "C:\\Users\\arvie\\Desktop\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Controllers\\NavbarController.cs",
+              "RelativeToolTip": "Tabang-Hub\\Controllers\\NavbarController.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABAAAAAJAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-03T21:42:57.027Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+>>>>>>> Stashed changes
               "Title": "Index.cshtml",
               "DocumentMoniker": "C:\\Users\\arvie\\Desktop\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Views\\Page\\Index.cshtml",
               "RelativeDocumentMoniker": "Tabang-Hub\\Views\\Page\\Index.cshtml",
               "ToolTip": "C:\\Users\\arvie\\Desktop\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Views\\Page\\Index.cshtml",
               "RelativeToolTip": "Tabang-Hub\\Views\\Page\\Index.cshtml",
+<<<<<<< Updated upstream
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAcAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2024-05-31T13:07:37.615Z",
+=======
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAgAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-06-03T12:11:57.61Z",
+>>>>>>> Stashed changes
               "EditorCaption": ""
             },
             {
               "$type": "Document",
+<<<<<<< Updated upstream
               "DocumentIndex": 0,
+=======
+              "DocumentIndex": 6,
+              "Title": "_NavbarLayout.cshtml",
+              "DocumentMoniker": "C:\\Users\\arvie\\Desktop\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Views\\Shared\\_NavbarLayout.cshtml",
+              "RelativeDocumentMoniker": "Tabang-Hub\\Views\\Shared\\_NavbarLayout.cshtml",
+              "ToolTip": "C:\\Users\\arvie\\Desktop\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Views\\Shared\\_NavbarLayout.cshtml",
+              "RelativeToolTip": "Tabang-Hub\\Views\\Shared\\_NavbarLayout.cshtml",
+              "ViewState": "AQIAAAkAAAAAAAAAAAAAAB0AAAA9AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-06-03T12:08:14.098Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+>>>>>>> Stashed changes
               "Title": "PageController.cs",
               "DocumentMoniker": "C:\\Users\\arvie\\Desktop\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Controllers\\PageController.cs",
               "RelativeDocumentMoniker": "Tabang-Hub\\Controllers\\PageController.cs",
               "ToolTip": "C:\\Users\\arvie\\Desktop\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Controllers\\PageController.cs",
               "RelativeToolTip": "Tabang-Hub\\Controllers\\PageController.cs",
+<<<<<<< Updated upstream
               "ViewState": "AQIAAEAAAAAAAAAAAAAkwE4AAAARAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-05-31T12:21:52.683Z",
+=======
+              "ViewState": "AQIAAGIAAAAAAAAAAAAswBAAAAAdAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-02T13:20:04.287Z",
+>>>>>>> Stashed changes
               "EditorCaption": ""
             }
           ]

@@ -32,12 +32,30 @@ public partial class TabangHubEntities : DbContext
     }
 
 
+<<<<<<< Updated upstream
     public DbSet<Role> Role { get; set; }
 
+=======
+    public DbSet<OrgInfo> OrgInfo { get; set; }
+
+    public DbSet<OrgValidation> OrgValidation { get; set; }
+
+    public DbSet<ProfilePicture> ProfilePicture { get; set; }
+
+    public DbSet<Role> Role { get; set; }
+
+    public DbSet<Skills> Skills { get; set; }
+
+>>>>>>> Stashed changes
     public DbSet<UserAccount> UserAccount { get; set; }
 
     public DbSet<UserRoles> UserRoles { get; set; }
 
+<<<<<<< Updated upstream
+=======
+    public DbSet<VolunteerInfo> VolunteerInfo { get; set; }
+
+>>>>>>> Stashed changes
     public DbSet<vw_UserRoles> vw_UserRoles { get; set; }
 
 }

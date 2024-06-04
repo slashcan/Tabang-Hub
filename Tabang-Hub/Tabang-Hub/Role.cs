@@ -18,6 +18,7 @@ using System;
 public partial class Role
 {
 
+<<<<<<< Updated upstream
     public Role()
     {
 
@@ -26,14 +27,19 @@ public partial class Role
     }
 
 
+=======
+>>>>>>> Stashed changes
     public int roleId { get; set; }
 
     public string roleName { get; set; }
 
+<<<<<<< Updated upstream
 
 
     public virtual ICollection<UserRoles> UserRoles { get; set; }
 
+=======
+>>>>>>> Stashed changes
 }
 
 }

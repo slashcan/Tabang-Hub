@@ -15,30 +15,37 @@ namespace Tabang_Hub
 using System;
     using System.Collections.Generic;
     
-public partial class UserRoles
+public partial class VolunteerInfo
 {
 
-<<<<<<< Updated upstream
-    public int UserRoles_ID { get; set; }
-
-    public Nullable<int> roleId { get; set; }
+    public int volunteerId { get; set; }
 
     public Nullable<int> userId { get; set; }
 
+    public string fName { get; set; }
+
+    public string lName { get; set; }
+
+    public Nullable<System.DateTime> bDay { get; set; }
+
+    public string gender { get; set; }
+
+    public string phoneNum { get; set; }
+
+    public string street { get; set; }
+
+    public string city { get; set; }
+
+    public string province { get; set; }
+
+    public string zipCode { get; set; }
+
+    public Nullable<int> profileId { get; set; }
 
 
-    public virtual Role Role { get; set; }
 
-=======
-    public int userRoleId { get; set; }
+    public virtual ProfilePicture ProfilePicture { get; set; }
 
-    public int userId { get; set; }
-
-    public int userRole { get; set; }
-
-
-
->>>>>>> Stashed changes
     public virtual UserAccount UserAccount { get; set; }
 
 }

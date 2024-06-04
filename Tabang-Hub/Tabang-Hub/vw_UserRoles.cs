@@ -18,14 +18,23 @@ using System;
 public partial class vw_UserRoles
 {
 
+<<<<<<< Updated upstream
     public int UserRoles_ID { get; set; }
 
     public int userId { get; set; }
+=======
+    public int userRoleId { get; set; }
+>>>>>>> Stashed changes
 
     public int roleId { get; set; }
 
     public string roleName { get; set; }
 
+<<<<<<< Updated upstream
+=======
+    public int userId { get; set; }
+
+>>>>>>> Stashed changes
     public string email { get; set; }
 
 }

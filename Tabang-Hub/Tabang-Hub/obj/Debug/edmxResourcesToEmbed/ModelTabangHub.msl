@@ -1,6 +1,48 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
   <EntityContainerMapping StorageEntityContainer="TabangHubModelStoreContainer" CdmEntityContainer="TabangHubEntities">
+<<<<<<< Updated upstream
+=======
+    <EntitySetMapping Name="OrgInfo">
+      <EntityTypeMapping TypeName="TabangHubModel.OrgInfo">
+        <MappingFragment StoreEntitySet="OrgInfo">
+          <ScalarProperty Name="profileId" ColumnName="profileId" />
+          <ScalarProperty Name="zipCode" ColumnName="zipCode" />
+          <ScalarProperty Name="province" ColumnName="province" />
+          <ScalarProperty Name="city" ColumnName="city" />
+          <ScalarProperty Name="street" ColumnName="street" />
+          <ScalarProperty Name="phoneNum" ColumnName="phoneNum" />
+          <ScalarProperty Name="orgDescription" ColumnName="orgDescription" />
+          <ScalarProperty Name="orgType" ColumnName="orgType" />
+          <ScalarProperty Name="orgEmail" ColumnName="orgEmail" />
+          <ScalarProperty Name="orgName" ColumnName="orgName" />
+          <ScalarProperty Name="userId" ColumnName="userId" />
+          <ScalarProperty Name="orgInfoId" ColumnName="orgInfoId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="OrgValidation">
+      <EntityTypeMapping TypeName="TabangHubModel.OrgValidation">
+        <MappingFragment StoreEntitySet="OrgValidation">
+          <ScalarProperty Name="idNumber2" ColumnName="idNumber2" />
+          <ScalarProperty Name="idPicture2" ColumnName="idPicture2" />
+          <ScalarProperty Name="idNumber1" ColumnName="idNumber1" />
+          <ScalarProperty Name="idPicture1" ColumnName="idPicture1" />
+          <ScalarProperty Name="userId" ColumnName="userId" />
+          <ScalarProperty Name="orgValidationId" ColumnName="orgValidationId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ProfilePicture">
+      <EntityTypeMapping TypeName="TabangHubModel.ProfilePicture">
+        <MappingFragment StoreEntitySet="ProfilePicture">
+          <ScalarProperty Name="profilePath" ColumnName="profilePath" />
+          <ScalarProperty Name="userId" ColumnName="userId" />
+          <ScalarProperty Name="profileId" ColumnName="profileId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+>>>>>>> Stashed changes
     <EntitySetMapping Name="Role">
       <EntityTypeMapping TypeName="TabangHubModel.Role">
         <MappingFragment StoreEntitySet="Role">
@@ -9,11 +51,27 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+<<<<<<< Updated upstream
+=======
+    <EntitySetMapping Name="Skills">
+      <EntityTypeMapping TypeName="TabangHubModel.Skills">
+        <MappingFragment StoreEntitySet="Skills">
+          <ScalarProperty Name="skillName" ColumnName="skillName" />
+          <ScalarProperty Name="userId" ColumnName="userId" />
+          <ScalarProperty Name="skillId" ColumnName="skillId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+>>>>>>> Stashed changes
     <EntitySetMapping Name="UserAccount">
       <EntityTypeMapping TypeName="TabangHubModel.UserAccount">
         <MappingFragment StoreEntitySet="UserAccount">
           <ScalarProperty Name="roleId" ColumnName="roleId" />
           <ScalarProperty Name="status" ColumnName="status" />
+<<<<<<< Updated upstream
+=======
+          <ScalarProperty Name="userInfo" ColumnName="userInfo" />
+>>>>>>> Stashed changes
           <ScalarProperty Name="password" ColumnName="password" />
           <ScalarProperty Name="email" ColumnName="email" />
           <ScalarProperty Name="userId" ColumnName="userId" />
@@ -23,9 +81,33 @@
     <EntitySetMapping Name="UserRoles">
       <EntityTypeMapping TypeName="TabangHubModel.UserRoles">
         <MappingFragment StoreEntitySet="UserRoles">
+<<<<<<< Updated upstream
           <ScalarProperty Name="userId" ColumnName="userId" />
           <ScalarProperty Name="roleId" ColumnName="roleId" />
           <ScalarProperty Name="UserRoles_ID" ColumnName="UserRoles_ID" />
+=======
+          <ScalarProperty Name="userRole" ColumnName="userRole" />
+          <ScalarProperty Name="userId" ColumnName="userId" />
+          <ScalarProperty Name="userRoleId" ColumnName="userRoleId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="VolunteerInfo">
+      <EntityTypeMapping TypeName="TabangHubModel.VolunteerInfo">
+        <MappingFragment StoreEntitySet="VolunteerInfo">
+          <ScalarProperty Name="profileId" ColumnName="profileId" />
+          <ScalarProperty Name="zipCode" ColumnName="zipCode" />
+          <ScalarProperty Name="province" ColumnName="province" />
+          <ScalarProperty Name="city" ColumnName="city" />
+          <ScalarProperty Name="street" ColumnName="street" />
+          <ScalarProperty Name="phoneNum" ColumnName="phoneNum" />
+          <ScalarProperty Name="gender" ColumnName="gender" />
+          <ScalarProperty Name="bDay" ColumnName="bDay" />
+          <ScalarProperty Name="lName" ColumnName="lName" />
+          <ScalarProperty Name="fName" ColumnName="fName" />
+          <ScalarProperty Name="userId" ColumnName="userId" />
+          <ScalarProperty Name="volunteerId" ColumnName="volunteerId" />
+>>>>>>> Stashed changes
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -33,10 +115,17 @@
       <EntityTypeMapping TypeName="TabangHubModel.vw_UserRoles">
         <MappingFragment StoreEntitySet="vw_UserRoles">
           <ScalarProperty Name="email" ColumnName="email" />
+<<<<<<< Updated upstream
           <ScalarProperty Name="roleName" ColumnName="roleName" />
           <ScalarProperty Name="roleId" ColumnName="roleId" />
           <ScalarProperty Name="userId" ColumnName="userId" />
           <ScalarProperty Name="UserRoles_ID" ColumnName="UserRoles_ID" />
+=======
+          <ScalarProperty Name="userId" ColumnName="userId" />
+          <ScalarProperty Name="roleName" ColumnName="roleName" />
+          <ScalarProperty Name="roleId" ColumnName="roleId" />
+          <ScalarProperty Name="userRoleId" ColumnName="userRoleId" />
+>>>>>>> Stashed changes
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

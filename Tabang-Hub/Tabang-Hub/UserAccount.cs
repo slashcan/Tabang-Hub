@@ -21,8 +21,21 @@ public partial class UserAccount
     public UserAccount()
     {
 
+<<<<<<< Updated upstream
         this.UserRoles = new HashSet<UserRoles>();
 
+=======
+        this.OrgInfo = new HashSet<OrgInfo>();
+
+        this.OrgValidation = new HashSet<OrgValidation>();
+
+        this.Skills = new HashSet<Skills>();
+
+        this.UserRoles = new HashSet<UserRoles>();
+
+        this.VolunteerInfo = new HashSet<VolunteerInfo>();
+
+>>>>>>> Stashed changes
     }
 
 
@@ -32,14 +45,32 @@ public partial class UserAccount
 
     public string password { get; set; }
 
+<<<<<<< Updated upstream
+=======
+    public Nullable<int> userInfo { get; set; }
+
+>>>>>>> Stashed changes
     public short status { get; set; }
 
     public int roleId { get; set; }
 
 
 
+<<<<<<< Updated upstream
     public virtual ICollection<UserRoles> UserRoles { get; set; }
 
+=======
+    public virtual ICollection<OrgInfo> OrgInfo { get; set; }
+
+    public virtual ICollection<OrgValidation> OrgValidation { get; set; }
+
+    public virtual ICollection<Skills> Skills { get; set; }
+
+    public virtual ICollection<UserRoles> UserRoles { get; set; }
+
+    public virtual ICollection<VolunteerInfo> VolunteerInfo { get; set; }
+
+>>>>>>> Stashed changes
 }
 
 }
