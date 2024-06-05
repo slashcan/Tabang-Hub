@@ -19,7 +19,7 @@ namespace Tabang_Hub.Repository
             _orgEventsImage = new BaseRepository<OrgEventImage>();
         }
 
-        public ErrorCode CreateEvents(OrgEvents orgEvents, OrgEventImage orgEventImage, string[] skills, ref String errMsg)
+        public ErrorCode CreateEvents(OrgEvents orgEvents, List<string> imageFileNames, string[] skills, ref string errMsg)
         {
             // Create the event
             if (_orgEvents.Create(orgEvents, out errMsg) != Contracts.ErrorCode.Success)
@@ -29,7 +29,6 @@ namespace Tabang_Hub.Repository
 
             // Get the eventId of the newly created event
             int eventId = orgEvents.eventId;
-            orgEventImage.eventId = eventId;
 
             // Add each skill associated with the eventId
             foreach (var skill in skills)
@@ -46,12 +45,23 @@ namespace Tabang_Hub.Repository
                 }
             }
 
-            if (_orgEventsImage.Create(orgEventImage, out errMsg) != Contracts.ErrorCode.Success)
+            // Add each image associated with the eventId
+            foreach (var fileName in imageFileNames)
             {
-                return ErrorCode.Error;
+                var orgEventImage = new OrgEventImage
+                {
+                    eventId = eventId,
+                    eventImage = fileName
+                };
+
+                if (_orgEventsImage.Create(orgEventImage, out errMsg) != Contracts.ErrorCode.Success)
+                {
+                    return ErrorCode.Error;
+                }
             }
 
             return ErrorCode.Success;
         }
+
     }
 }

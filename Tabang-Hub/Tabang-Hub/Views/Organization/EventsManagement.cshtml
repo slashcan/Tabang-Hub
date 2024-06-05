@@ -57,6 +57,18 @@
             font-weight: bold;
             cursor: pointer;
         }
+
+    .preview-container {
+        display: flex;
+        flex-wrap: wrap;
+        margin-top: 10px;
+    }
+
+    .preview-image {
+        margin: 5px;
+        max-width: 100px;
+        max-height: 100px;
+    }
 </style>
 
 <div class="container mt-5">
@@ -130,8 +142,9 @@
                         <button type="button" class="btn btn-outline-primary skill-button" onclick="addSkill('Matcho Dancer')">Matcho Dancer</button>
                     </div>
                     <div class="mb-3">
-                        <label for="CreateEvents_uploadImage" class="form-label">Upload Image</label>
-                        <input type="file" class="form-control" id="CreateEvents_uploadImage" name="image">
+                        <label for="CreateEvents_uploadImage" class="form-label">Upload Images</label>
+                        <input type="file" class="form-control" id="CreateEvents_uploadImage" name="images" multiple onchange="previewImages()">
+                        <div class="preview-container" id="image-preview"></div>
                     </div>
                     <button type="submit" class="btn btn-primary">Create Event</button>
                 </form>
@@ -204,5 +217,22 @@
     function removeSkill(skillTag) {
         const addedSkillsContainer = document.getElementById('added-skills');
         addedSkillsContainer.removeChild(skillTag);
+    }
+
+    function previewImages() {
+        const previewContainer = document.getElementById('image-preview');
+        previewContainer.innerHTML = ''; // Clear previous previews
+        const files = document.getElementById('CreateEvents_uploadImage').files;
+
+        Array.from(files).forEach(file => {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.className = 'preview-image';
+                previewContainer.appendChild(img);
+            };
+            reader.readAsDataURL(file);
+        });
     }
 </script>

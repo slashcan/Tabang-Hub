@@ -25,30 +25,37 @@ namespace Tabang_Hub.Controllers
             return View();
         }
         [HttpPost]
-        public ActionResult CreateEvents(Utils.Lists events, OrgEventImage orgEvenImage, string[] skills, HttpPostedFileBase image)
+        public ActionResult CreateEvents(Utils.Lists events, string[] skills, HttpPostedFileBase[] images)
         {
             string errMsg = string.Empty;
+            List<string> uploadedFiles = new List<string>();
 
-            if (image != null && image.ContentLength > 0)
+            if (images != null && images.Length > 0)
             {
-                var inputFileName = Path.GetFileName(image.FileName);
-                var serverSavePath = Path.Combine(Server.MapPath("~/Content/IdPicture/"), inputFileName);
+                foreach (var image in images)
+                {
+                    if (image != null && image.ContentLength > 0)
+                    {
+                        var inputFileName = Path.GetFileName(image.FileName);
+                        var serverSavePath = Path.Combine(Server.MapPath("~/Content/IdPicture/"), inputFileName);
 
-                if (!Directory.Exists(Server.MapPath("~/UploadedFiles/")))
-                    Directory.CreateDirectory(Server.MapPath("~/Content/IdPicture/"));
+                        if (!Directory.Exists(Server.MapPath("~/Content/IdPicture/")))
+                            Directory.CreateDirectory(Server.MapPath("~/Content/IdPicture/"));
 
-                image.SaveAs(serverSavePath);
-
-                orgEvenImage.eventImage = inputFileName;
+                        image.SaveAs(serverSavePath);
+                        uploadedFiles.Add(inputFileName);
+                    }
+                }
             }
 
-            if (_organizationManager.CreateEvents(events.CreateEvents, orgEvenImage, skills, ref ErrorMessage) != ErrorCode.Success)
+            if (_organizationManager.CreateEvents(events.CreateEvents, uploadedFiles, skills, ref errMsg) != ErrorCode.Success)
             {
-                ModelState.AddModelError(String.Empty, ErrorMessage);
+                ModelState.AddModelError(String.Empty, errMsg);
                 return View();
             }
-            return RedirectToAction("VolunteerManagement");                  
+            return RedirectToAction("VolunteerManagement");
         }
+
 
         public ActionResult DonationsManagement()
         {
