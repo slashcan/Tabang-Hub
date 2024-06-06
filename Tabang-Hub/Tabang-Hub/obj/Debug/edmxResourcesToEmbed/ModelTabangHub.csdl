@@ -12,10 +12,15 @@
     <EntitySet Name="UserAccount" EntityType="TabangHubModel.UserAccount" />
     <EntitySet Name="UserRoles" EntityType="TabangHubModel.UserRoles" />
     <EntitySet Name="VolunteerInfo" EntityType="TabangHubModel.VolunteerInfo" />
+    <EntitySet Name="vw_ListOfEvent" EntityType="TabangHubModel.vw_ListOfEvent" />
     <EntitySet Name="vw_UserRoles" EntityType="TabangHubModel.vw_UserRoles" />
     <AssociationSet Name="FK_OrgEventImage_OrgEvents" Association="TabangHubModel.FK_OrgEventImage_OrgEvents">
       <End Role="OrgEvents" EntitySet="OrgEvents" />
       <End Role="OrgEventImage" EntitySet="OrgEventImage" />
+    </AssociationSet>
+    <AssociationSet Name="FK_OrgEvents_UserAccount" Association="TabangHubModel.FK_OrgEvents_UserAccount">
+      <End Role="UserAccount" EntitySet="UserAccount" />
+      <End Role="OrgEvents" EntitySet="OrgEvents" />
     </AssociationSet>
     <AssociationSet Name="FK_OrgSkillRequirement_OrgEvents" Association="TabangHubModel.FK_OrgSkillRequirement_OrgEvents">
       <End Role="OrgEvents" EntitySet="OrgEvents" />
@@ -64,6 +69,7 @@
       <PropertyRef Name="eventId" />
     </Key>
     <Property Name="eventId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="userId" Type="Int32" />
     <Property Name="eventTitle" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
     <Property Name="eventDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
     <Property Name="maxVolunteer" Type="Int32" />
@@ -71,6 +77,7 @@
     <Property Name="dateEnd" Type="DateTime" Precision="3" />
     <Property Name="location" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
     <NavigationProperty Name="OrgEventImage" Relationship="TabangHubModel.FK_OrgEventImage_OrgEvents" FromRole="OrgEvents" ToRole="OrgEventImage" />
+    <NavigationProperty Name="UserAccount" Relationship="TabangHubModel.FK_OrgEvents_UserAccount" FromRole="OrgEvents" ToRole="UserAccount" />
     <NavigationProperty Name="OrgSkillRequirement" Relationship="TabangHubModel.FK_OrgSkillRequirement_OrgEvents" FromRole="OrgEvents" ToRole="OrgSkillRequirement" />
   </EntityType>
   <EntityType Name="OrgInfo">
@@ -149,6 +156,7 @@
     <Property Name="userInfo" Type="Int32" />
     <Property Name="status" Type="Int16" Nullable="false" />
     <Property Name="roleId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="OrgEvents" Relationship="TabangHubModel.FK_OrgEvents_UserAccount" FromRole="UserAccount" ToRole="OrgEvents" />
     <NavigationProperty Name="OrgInfo" Relationship="TabangHubModel.FK_OrgInfo_UserAccount" FromRole="UserAccount" ToRole="OrgInfo" />
     <NavigationProperty Name="OrgValidation" Relationship="TabangHubModel.FK_OrgValidation_UserAccount" FromRole="UserAccount" ToRole="OrgValidation" />
     <NavigationProperty Name="Skills" Relationship="TabangHubModel.FK_Skills_UserAccount" FromRole="UserAccount" ToRole="Skills" />
@@ -183,6 +191,20 @@
     <NavigationProperty Name="ProfilePicture" Relationship="TabangHubModel.FK_VolunteerInfo_ProfilePicture" FromRole="VolunteerInfo" ToRole="ProfilePicture" />
     <NavigationProperty Name="UserAccount" Relationship="TabangHubModel.FK_VolunteerInfo_UserAccount" FromRole="VolunteerInfo" ToRole="UserAccount" />
   </EntityType>
+  <EntityType Name="vw_ListOfEvent">
+    <Key>
+      <PropertyRef Name="Event_Id" />
+    </Key>
+    <Property Name="Event_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Title" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="Maximum_Volunteer" Type="Int32" />
+    <Property Name="Date_Started" Type="DateTime" Precision="3" />
+    <Property Name="Date_Ended" Type="DateTime" Precision="3" />
+    <Property Name="Location" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="Image_Id" Type="Int32" />
+    <Property Name="Skill_Id" Type="Int32" />
+  </EntityType>
   <EntityType Name="vw_UserRoles">
     <Key>
       <PropertyRef Name="userRoleId" />
@@ -205,6 +227,18 @@
       </Principal>
       <Dependent Role="OrgEventImage">
         <PropertyRef Name="eventId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_OrgEvents_UserAccount">
+    <End Type="TabangHubModel.UserAccount" Role="UserAccount" Multiplicity="0..1" />
+    <End Type="TabangHubModel.OrgEvents" Role="OrgEvents" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserAccount">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="OrgEvents">
+        <PropertyRef Name="userId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>

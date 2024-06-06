@@ -19,6 +19,7 @@
           <ScalarProperty Name="maxVolunteer" ColumnName="maxVolunteer" />
           <ScalarProperty Name="eventDescription" ColumnName="eventDescription" />
           <ScalarProperty Name="eventTitle" ColumnName="eventTitle" />
+          <ScalarProperty Name="userId" ColumnName="userId" />
           <ScalarProperty Name="eventId" ColumnName="eventId" />
         </MappingFragment>
       </EntityTypeMapping>
@@ -124,6 +125,21 @@
           <ScalarProperty Name="fName" ColumnName="fName" />
           <ScalarProperty Name="userId" ColumnName="userId" />
           <ScalarProperty Name="volunteerId" ColumnName="volunteerId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="vw_ListOfEvent">
+      <EntityTypeMapping TypeName="TabangHubModel.vw_ListOfEvent">
+        <MappingFragment StoreEntitySet="vw_ListOfEvent">
+          <ScalarProperty Name="Skill_Id" ColumnName="Skill_Id" />
+          <ScalarProperty Name="Image_Id" ColumnName="Image_Id" />
+          <ScalarProperty Name="Location" ColumnName="Location" />
+          <ScalarProperty Name="Date_Ended" ColumnName="Date_Ended" />
+          <ScalarProperty Name="Date_Started" ColumnName="Date_Started" />
+          <ScalarProperty Name="Maximum_Volunteer" ColumnName="Maximum_Volunteer" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="Title" ColumnName="Title" />
+          <ScalarProperty Name="Event_Id" ColumnName="Event_Id" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

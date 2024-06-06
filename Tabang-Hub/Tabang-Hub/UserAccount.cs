@@ -16,6 +16,7 @@ namespace Tabang_Hub
     {
         public UserAccount()
         {
+            this.OrgEvents = new HashSet<OrgEvents>();
             this.OrgInfo = new HashSet<OrgInfo>();
             this.OrgValidation = new HashSet<OrgValidation>();
             this.Skills = new HashSet<Skills>();
@@ -30,6 +31,7 @@ namespace Tabang_Hub
         public short status { get; set; }
         public int roleId { get; set; }
     
+        public virtual ICollection<OrgEvents> OrgEvents { get; set; }
         public virtual ICollection<OrgInfo> OrgInfo { get; set; }
         public virtual ICollection<OrgValidation> OrgValidation { get; set; }
         public virtual ICollection<Skills> Skills { get; set; }

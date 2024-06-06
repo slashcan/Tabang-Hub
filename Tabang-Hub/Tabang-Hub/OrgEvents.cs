@@ -21,6 +21,7 @@ namespace Tabang_Hub
         }
     
         public int eventId { get; set; }
+        public Nullable<int> userId { get; set; }
         public string eventTitle { get; set; }
         public string eventDescription { get; set; }
         public Nullable<int> maxVolunteer { get; set; }
@@ -29,6 +30,7 @@ namespace Tabang_Hub
         public string location { get; set; }
     
         public virtual ICollection<OrgEventImage> OrgEventImage { get; set; }
+        public virtual UserAccount UserAccount { get; set; }
         public virtual ICollection<OrgSkillRequirement> OrgSkillRequirement { get; set; }
     }
 }

@@ -11,13 +11,16 @@ namespace Tabang_Hub.Repository
         private BaseRepository<OrgEvents> _orgEvents;
         private BaseRepository<OrgSkillRequirement> _orgSkillRequirements;
         private BaseRepository<OrgEventImage> _orgEventsImage;
+        public BaseRepository<vw_ListOfEvent> _listOfEvents;
 
         public OrganizationManager()
         {
             _orgEvents = new BaseRepository<OrgEvents>();
             _orgSkillRequirements = new BaseRepository<OrgSkillRequirement>();
             _orgEventsImage = new BaseRepository<OrgEventImage>();
+            _listOfEvents = new BaseRepository<vw_ListOfEvent>();
         }
+
 
         public ErrorCode CreateEvents(OrgEvents orgEvents, List<string> imageFileNames, string[] skills, ref string errMsg)
         {
@@ -63,5 +66,24 @@ namespace Tabang_Hub.Repository
             return ErrorCode.Success;
         }
 
+        public List<vw_ListOfEvent> ListOfEvents()
+        { 
+            return _listOfEvents.GetAll();
+        }
+
+        public vw_ListOfEvent GetEventById(int id)
+        { 
+            return _listOfEvents._table.Where(m => m.Event_Id == id).FirstOrDefault();
+        }
+
+        public List<OrgEventImage> listOfEventImage(int id)
+        {
+            return _orgEventsImage.GetAll().Where(m => m.eventId == id).ToList();
+        }
+
+        public List<OrgSkillRequirement> listOfSkillRequirement(int id)
+        { 
+            return _orgSkillRequirements.GetAll().Where(m => m.eventId == id).ToList();
+        }
     }
 }

@@ -71,7 +71,7 @@
     }
 </style>
 
-<div class="container mt-5">
+<div class="container">
     <!-- Sub Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
         <div class="container">
@@ -92,7 +92,7 @@
     <!-- Content Sections -->
     <div class="container">
         <!-- Overview/Dashboard -->
-        <div id="dashboard" class="card mb-4 content-section active">
+        <div id="dashboard" class="mb-4 content-section active">
             <div class="card-header">Dashboard</div>
             <div class="card-body">
                 <p>Overview of all programs and events, including key metrics and upcoming events.</p>
@@ -100,7 +100,7 @@
         </div>
 
         <!-- Event Creation -->
-        <div id="event-creation" class="card mb-4 content-section">
+        <div id="event-creation" class="mb-4 content-section">
             <div class="card-header">Event Creation</div>
             <div class="card-body">
                 <form action="/Organization/CreateEvents" method="post" enctype="multipart/form-data">
@@ -152,15 +152,66 @@
         </div>
 
         <!-- Event List -->
-        <div id="event-list" class="card mb-4 content-section">
+        <div id="event-list" class="mb-4 content-section">
             <div class="card-header">Event List</div>
             <div class="card-body">
-                <p>Search, filter, and manage all programs and events, including viewing details and editing information.</p>
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                        <thead class="table-dark">
+                            <tr class="text-nowrap text-center">
+                                <th class="small">Event Name</th>
+                                <th class="small">Description</th>
+                                <th class="small">Maximum Volunteers</th>
+                                <th class="small">Date Started</th>
+                                <th class="small">Date Ended</th>
+                                <th class="small">Location</th>
+                                <th class="small">Total Image</th>
+                                <th class="small">Total Skills</th>
+                                <th class="small">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var list in Model.listOfEvents)
+                            {
+                                <tr class="text-center" data-href="@Url.Action("Details", "Organization", new { id = list.Event_Id })" style="cursor: pointer;">
+                                    <td>@list.Title</td>
+                                    <td>@list.Description</td>
+                                    <td>@list.Maximum_Volunteer</td>
+                                    <td>@list.Date_Started</td>
+                                    <td>@list.Date_Ended</td>
+                                    <td>@list.Location</td>
+                                    <td>@list.Image_Id</td>
+                                    <td>@list.Skill_Id</td>
+                                    <td>
+                                        <a href="@Url.Action("Delete", "Event", new { id = list.Event_Id })" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this event?');">Delete</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
 
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                var rows = document.querySelectorAll('tr[data-href]');
+                rows.forEach(row => {
+                    row.addEventListener('click', function () {
+                        window.location.href = this.getAttribute('data-href');
+                    });
+                });
+            });
+        </script>
+
+
+
+
+
+
+
         <!-- Scheduling and Calendar -->
-        <div id="scheduling-calendar" class="card mb-4 content-section">
+        <div id="scheduling-calendar" class="mb-4 content-section">
             <div class="card-header">Scheduling and Calendar</div>
             <div class="card-body">
                 <p>Manage the timeline of programs and events with a calendar view, conflict detection, and reminders.</p>

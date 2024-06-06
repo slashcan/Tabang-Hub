@@ -36,6 +36,7 @@ namespace Tabang_Hub
         public DbSet<UserAccount> UserAccount { get; set; }
         public DbSet<UserRoles> UserRoles { get; set; }
         public DbSet<VolunteerInfo> VolunteerInfo { get; set; }
+        public DbSet<vw_ListOfEvent> vw_ListOfEvent { get; set; }
         public DbSet<vw_UserRoles> vw_UserRoles { get; set; }
     }
 }
