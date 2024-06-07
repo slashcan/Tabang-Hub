@@ -1,0 +1,699 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="TabangHubModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="OrgInfo">
+          <Key>
+            <PropertyRef Name="orgInfoId" />
+          </Key>
+          <Property Name="orgInfoId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="userId" Type="int" />
+          <Property Name="orgName" Type="nvarchar" MaxLength="255" />
+          <Property Name="orgEmail" Type="nvarchar" MaxLength="255" />
+          <Property Name="orgType" Type="nvarchar" MaxLength="255" />
+          <Property Name="orgDescription" Type="nvarchar" MaxLength="255" />
+          <Property Name="phoneNum" Type="nvarchar" MaxLength="255" />
+          <Property Name="street" Type="nvarchar" MaxLength="255" />
+          <Property Name="city" Type="nvarchar" MaxLength="255" />
+          <Property Name="province" Type="nvarchar" MaxLength="255" />
+          <Property Name="zipCode" Type="nvarchar" MaxLength="255" />
+          <Property Name="profileId" Type="int" />
+        </EntityType>
+        <EntityType Name="OrgValidation">
+          <Key>
+            <PropertyRef Name="orgValidationId" />
+          </Key>
+          <Property Name="orgValidationId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="userId" Type="int" />
+          <Property Name="idPicture1" Type="nvarchar" MaxLength="255" />
+          <Property Name="idNumber1" Type="nvarchar" MaxLength="255" />
+          <Property Name="idPicture2" Type="nvarchar" MaxLength="255" />
+          <Property Name="idNumber2" Type="nvarchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="ProfilePicture">
+          <Key>
+            <PropertyRef Name="profileId" />
+          </Key>
+          <Property Name="profileId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="userId" Type="int" />
+          <Property Name="profilePath" Type="nvarchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="Role">
+          <Key>
+            <PropertyRef Name="roleId" />
+          </Key>
+          <Property Name="roleId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="roleName" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Skills">
+          <Key>
+            <PropertyRef Name="skillId" />
+          </Key>
+          <Property Name="skillId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SkillName" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="UserAccount">
+          <Key>
+            <PropertyRef Name="userId" />
+          </Key>
+          <Property Name="userId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="email" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="password" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="userInfo" Type="int" />
+          <Property Name="status" Type="smallint" Nullable="false" />
+          <Property Name="roleId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="UserRoles">
+          <Key>
+            <PropertyRef Name="userRoleId" />
+          </Key>
+          <Property Name="userRoleId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="userId" Type="int" Nullable="false" />
+          <Property Name="userRole" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="VolunteerInfo">
+          <Key>
+            <PropertyRef Name="volunteerId" />
+          </Key>
+          <Property Name="volunteerId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="userId" Type="int" />
+          <Property Name="fName" Type="nvarchar" MaxLength="255" />
+          <Property Name="lName" Type="nvarchar" MaxLength="255" />
+          <Property Name="bDay" Type="date" />
+          <Property Name="gender" Type="nvarchar" MaxLength="255" />
+          <Property Name="phoneNum" Type="nvarchar" MaxLength="255" />
+          <Property Name="street" Type="nvarchar" MaxLength="255" />
+          <Property Name="city" Type="nvarchar" MaxLength="255" />
+          <Property Name="province" Type="nvarchar" MaxLength="255" />
+          <Property Name="zipCode" Type="nvarchar" MaxLength="255" />
+          <Property Name="profileId" Type="int" />
+          <Property Name="aboutMe" Type="text" />
+        </EntityType>
+        <EntityType Name="VolunteerSkill">
+          <Key>
+            <PropertyRef Name="volunteerSkillId" />
+          </Key>
+          <Property Name="volunteerSkillId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="userId" Type="int" />
+          <Property Name="skillId" Type="int" />
+          <Property Name="skillName" Type="nvarchar" MaxLength="255" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'TabangHub.dbo.vw_UserRoles' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="vw_UserRoles">
+          <Key>
+            <PropertyRef Name="userRoleId" />
+            <PropertyRef Name="roleId" />
+            <PropertyRef Name="userId" />
+            <PropertyRef Name="email" />
+          </Key>
+          <Property Name="userRoleId" Type="int" Nullable="false" />
+          <Property Name="roleId" Type="int" Nullable="false" />
+          <Property Name="roleName" Type="nvarchar" MaxLength="50" />
+          <Property Name="userId" Type="int" Nullable="false" />
+          <Property Name="email" Type="nvarchar" MaxLength="255" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_OrgInfo_ProfilePicture">
+          <End Role="ProfilePicture" Type="Self.ProfilePicture" Multiplicity="0..1" />
+          <End Role="OrgInfo" Type="Self.OrgInfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProfilePicture">
+              <PropertyRef Name="profileId" />
+            </Principal>
+            <Dependent Role="OrgInfo">
+              <PropertyRef Name="profileId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrgInfo_UserAccount">
+          <End Role="UserAccount" Type="Self.UserAccount" Multiplicity="0..1" />
+          <End Role="OrgInfo" Type="Self.OrgInfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserAccount">
+              <PropertyRef Name="userId" />
+            </Principal>
+            <Dependent Role="OrgInfo">
+              <PropertyRef Name="userId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrgValidation_UserAccount">
+          <End Role="UserAccount" Type="Self.UserAccount" Multiplicity="0..1" />
+          <End Role="OrgValidation" Type="Self.OrgValidation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserAccount">
+              <PropertyRef Name="userId" />
+            </Principal>
+            <Dependent Role="OrgValidation">
+              <PropertyRef Name="userId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserRoles_UserAccount">
+          <End Role="UserAccount" Type="Self.UserAccount" Multiplicity="1" />
+          <End Role="UserRoles" Type="Self.UserRoles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserAccount">
+              <PropertyRef Name="userId" />
+            </Principal>
+            <Dependent Role="UserRoles">
+              <PropertyRef Name="userId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_VolunteerInfo_ProfilePicture">
+          <End Role="ProfilePicture" Type="Self.ProfilePicture" Multiplicity="0..1" />
+          <End Role="VolunteerInfo" Type="Self.VolunteerInfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProfilePicture">
+              <PropertyRef Name="profileId" />
+            </Principal>
+            <Dependent Role="VolunteerInfo">
+              <PropertyRef Name="profileId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_VolunteerInfo_UserAccount">
+          <End Role="UserAccount" Type="Self.UserAccount" Multiplicity="0..1" />
+          <End Role="VolunteerInfo" Type="Self.VolunteerInfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserAccount">
+              <PropertyRef Name="userId" />
+            </Principal>
+            <Dependent Role="VolunteerInfo">
+              <PropertyRef Name="userId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_VolunteerSkill_UserAccount">
+          <End Role="UserAccount" Type="Self.UserAccount" Multiplicity="0..1" />
+          <End Role="VolunteerSkill" Type="Self.VolunteerSkill" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserAccount">
+              <PropertyRef Name="userId" />
+            </Principal>
+            <Dependent Role="VolunteerSkill">
+              <PropertyRef Name="userId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_VolunteerSkills_Skills">
+          <End Role="Skills" Type="Self.Skills" Multiplicity="0..1" />
+          <End Role="VolunteerSkill" Type="Self.VolunteerSkill" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Skills">
+              <PropertyRef Name="skillId" />
+            </Principal>
+            <Dependent Role="VolunteerSkill">
+              <PropertyRef Name="skillId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="sp_GetSkills" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="userId" Type="int" Mode="In" />
+        </Function>
+        <EntityContainer Name="TabangHubModelStoreContainer">
+          <EntitySet Name="OrgInfo" EntityType="Self.OrgInfo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OrgValidation" EntityType="Self.OrgValidation" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ProfilePicture" EntityType="Self.ProfilePicture" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Skills" EntityType="Self.Skills" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserAccount" EntityType="Self.UserAccount" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserRoles" EntityType="Self.UserRoles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="VolunteerInfo" EntityType="Self.VolunteerInfo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="VolunteerSkill" EntityType="Self.VolunteerSkill" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="vw_UserRoles" EntityType="Self.vw_UserRoles" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+[vw_UserRoles].[userRoleId] AS [userRoleId], 
+[vw_UserRoles].[roleId] AS [roleId], 
+[vw_UserRoles].[roleName] AS [roleName], 
+[vw_UserRoles].[userId] AS [userId], 
+[vw_UserRoles].[email] AS [email]
+FROM [dbo].[vw_UserRoles] AS [vw_UserRoles]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_OrgInfo_ProfilePicture" Association="Self.FK_OrgInfo_ProfilePicture">
+            <End Role="ProfilePicture" EntitySet="ProfilePicture" />
+            <End Role="OrgInfo" EntitySet="OrgInfo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrgInfo_UserAccount" Association="Self.FK_OrgInfo_UserAccount">
+            <End Role="UserAccount" EntitySet="UserAccount" />
+            <End Role="OrgInfo" EntitySet="OrgInfo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrgValidation_UserAccount" Association="Self.FK_OrgValidation_UserAccount">
+            <End Role="UserAccount" EntitySet="UserAccount" />
+            <End Role="OrgValidation" EntitySet="OrgValidation" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserRoles_UserAccount" Association="Self.FK_UserRoles_UserAccount">
+            <End Role="UserAccount" EntitySet="UserAccount" />
+            <End Role="UserRoles" EntitySet="UserRoles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_VolunteerInfo_ProfilePicture" Association="Self.FK_VolunteerInfo_ProfilePicture">
+            <End Role="ProfilePicture" EntitySet="ProfilePicture" />
+            <End Role="VolunteerInfo" EntitySet="VolunteerInfo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_VolunteerInfo_UserAccount" Association="Self.FK_VolunteerInfo_UserAccount">
+            <End Role="UserAccount" EntitySet="UserAccount" />
+            <End Role="VolunteerInfo" EntitySet="VolunteerInfo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_VolunteerSkill_UserAccount" Association="Self.FK_VolunteerSkill_UserAccount">
+            <End Role="UserAccount" EntitySet="UserAccount" />
+            <End Role="VolunteerSkill" EntitySet="VolunteerSkill" />
+          </AssociationSet>
+          <AssociationSet Name="FK_VolunteerSkills_Skills" Association="Self.FK_VolunteerSkills_Skills">
+            <End Role="Skills" EntitySet="Skills" />
+            <End Role="VolunteerSkill" EntitySet="VolunteerSkill" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="TabangHubModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="OrgInfo">
+          <Key>
+            <PropertyRef Name="orgInfoId" />
+          </Key>
+          <Property Name="orgInfoId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="userId" Type="Int32" />
+          <Property Name="orgName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="orgEmail" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="orgType" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="orgDescription" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="phoneNum" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="street" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="city" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="province" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="zipCode" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="profileId" Type="Int32" />
+          <NavigationProperty Name="ProfilePicture" Relationship="Self.FK_OrgInfo_ProfilePicture" FromRole="OrgInfo" ToRole="ProfilePicture" />
+          <NavigationProperty Name="UserAccount" Relationship="Self.FK_OrgInfo_UserAccount" FromRole="OrgInfo" ToRole="UserAccount" />
+        </EntityType>
+        <EntityType Name="OrgValidation">
+          <Key>
+            <PropertyRef Name="orgValidationId" />
+          </Key>
+          <Property Name="orgValidationId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="userId" Type="Int32" />
+          <Property Name="idPicture1" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="idNumber1" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="idPicture2" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="idNumber2" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="UserAccount" Relationship="Self.FK_OrgValidation_UserAccount" FromRole="OrgValidation" ToRole="UserAccount" />
+        </EntityType>
+        <EntityType Name="ProfilePicture">
+          <Key>
+            <PropertyRef Name="profileId" />
+          </Key>
+          <Property Name="profileId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="userId" Type="Int32" />
+          <Property Name="profilePath" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="OrgInfoes" Relationship="Self.FK_OrgInfo_ProfilePicture" FromRole="ProfilePicture" ToRole="OrgInfo" />
+          <NavigationProperty Name="VolunteerInfoes" Relationship="Self.FK_VolunteerInfo_ProfilePicture" FromRole="ProfilePicture" ToRole="VolunteerInfo" />
+        </EntityType>
+        <EntityType Name="Role">
+          <Key>
+            <PropertyRef Name="roleId" />
+          </Key>
+          <Property Name="roleId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="roleName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="UserAccount">
+          <Key>
+            <PropertyRef Name="userId" />
+          </Key>
+          <Property Name="userId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="email" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="password" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="userInfo" Type="Int32" />
+          <Property Name="status" Type="Int16" Nullable="false" />
+          <Property Name="roleId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="OrgInfoes" Relationship="Self.FK_OrgInfo_UserAccount" FromRole="UserAccount" ToRole="OrgInfo" />
+          <NavigationProperty Name="OrgValidations" Relationship="Self.FK_OrgValidation_UserAccount" FromRole="UserAccount" ToRole="OrgValidation" />
+          <NavigationProperty Name="UserRoles" Relationship="Self.FK_UserRoles_UserAccount" FromRole="UserAccount" ToRole="UserRoles" />
+          <NavigationProperty Name="VolunteerInfoes" Relationship="Self.FK_VolunteerInfo_UserAccount" FromRole="UserAccount" ToRole="VolunteerInfo" />
+          <NavigationProperty Name="VolunteerSkill" Relationship="TabangHubModel.FK_VolunteerSkill_UserAccount" FromRole="UserAccount" ToRole="VolunteerSkill" />
+        </EntityType>
+        <EntityType Name="UserRole">
+          <Key>
+            <PropertyRef Name="userRoleId" />
+          </Key>
+          <Property Name="userRoleId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="userId" Type="Int32" Nullable="false" />
+          <Property Name="userRole1" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="UserAccount" Relationship="Self.FK_UserRoles_UserAccount" FromRole="UserRoles" ToRole="UserAccount" />
+        </EntityType>
+        <EntityType Name="VolunteerInfo">
+          <Key>
+            <PropertyRef Name="volunteerId" />
+          </Key>
+          <Property Name="volunteerId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="userId" Type="Int32" />
+          <Property Name="fName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="lName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="bDay" Type="DateTime" Precision="0" />
+          <Property Name="gender" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="phoneNum" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="street" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="city" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="province" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="zipCode" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="profileId" Type="Int32" />
+          <NavigationProperty Name="ProfilePicture" Relationship="Self.FK_VolunteerInfo_ProfilePicture" FromRole="VolunteerInfo" ToRole="ProfilePicture" />
+          <NavigationProperty Name="UserAccount" Relationship="Self.FK_VolunteerInfo_UserAccount" FromRole="VolunteerInfo" ToRole="UserAccount" />
+          <Property Name="aboutMe" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="vw_UserRoles">
+          <Key>
+            <PropertyRef Name="userRoleId" />
+            <PropertyRef Name="roleId" />
+            <PropertyRef Name="userId" />
+            <PropertyRef Name="email" />
+          </Key>
+          <Property Name="userRoleId" Type="Int32" Nullable="false" />
+          <Property Name="roleId" Type="Int32" Nullable="false" />
+          <Property Name="roleName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="userId" Type="Int32" Nullable="false" />
+          <Property Name="email" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_OrgInfo_ProfilePicture">
+          <End Role="ProfilePicture" Type="Self.ProfilePicture" Multiplicity="0..1" />
+          <End Role="OrgInfo" Type="Self.OrgInfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProfilePicture">
+              <PropertyRef Name="profileId" />
+            </Principal>
+            <Dependent Role="OrgInfo">
+              <PropertyRef Name="profileId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrgInfo_UserAccount">
+          <End Role="UserAccount" Type="Self.UserAccount" Multiplicity="0..1" />
+          <End Role="OrgInfo" Type="Self.OrgInfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserAccount">
+              <PropertyRef Name="userId" />
+            </Principal>
+            <Dependent Role="OrgInfo">
+              <PropertyRef Name="userId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrgValidation_UserAccount">
+          <End Role="UserAccount" Type="Self.UserAccount" Multiplicity="0..1" />
+          <End Role="OrgValidation" Type="Self.OrgValidation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserAccount">
+              <PropertyRef Name="userId" />
+            </Principal>
+            <Dependent Role="OrgValidation">
+              <PropertyRef Name="userId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_VolunteerInfo_ProfilePicture">
+          <End Role="ProfilePicture" Type="Self.ProfilePicture" Multiplicity="0..1" />
+          <End Role="VolunteerInfo" Type="Self.VolunteerInfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProfilePicture">
+              <PropertyRef Name="profileId" />
+            </Principal>
+            <Dependent Role="VolunteerInfo">
+              <PropertyRef Name="profileId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UserRoles_UserAccount">
+          <End Role="UserAccount" Type="Self.UserAccount" Multiplicity="1" />
+          <End Role="UserRoles" Type="Self.UserRole" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserAccount">
+              <PropertyRef Name="userId" />
+            </Principal>
+            <Dependent Role="UserRoles">
+              <PropertyRef Name="userId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_VolunteerInfo_UserAccount">
+          <End Role="UserAccount" Type="Self.UserAccount" Multiplicity="0..1" />
+          <End Role="VolunteerInfo" Type="Self.VolunteerInfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserAccount">
+              <PropertyRef Name="userId" />
+            </Principal>
+            <Dependent Role="VolunteerInfo">
+              <PropertyRef Name="userId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="TabangHubEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="OrgInfoes" EntityType="Self.OrgInfo" />
+          <EntitySet Name="OrgValidations" EntityType="Self.OrgValidation" />
+          <EntitySet Name="ProfilePictures" EntityType="Self.ProfilePicture" />
+          <EntitySet Name="Roles" EntityType="Self.Role" />
+          <EntitySet Name="UserAccounts" EntityType="Self.UserAccount" />
+          <EntitySet Name="UserRoles" EntityType="Self.UserRole" />
+          <EntitySet Name="VolunteerInfoes" EntityType="Self.VolunteerInfo" />
+          <EntitySet Name="vw_UserRoles" EntityType="Self.vw_UserRoles" />
+          <AssociationSet Name="FK_OrgInfo_ProfilePicture" Association="Self.FK_OrgInfo_ProfilePicture">
+            <End Role="ProfilePicture" EntitySet="ProfilePictures" />
+            <End Role="OrgInfo" EntitySet="OrgInfoes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrgInfo_UserAccount" Association="Self.FK_OrgInfo_UserAccount">
+            <End Role="UserAccount" EntitySet="UserAccounts" />
+            <End Role="OrgInfo" EntitySet="OrgInfoes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrgValidation_UserAccount" Association="Self.FK_OrgValidation_UserAccount">
+            <End Role="UserAccount" EntitySet="UserAccounts" />
+            <End Role="OrgValidation" EntitySet="OrgValidations" />
+          </AssociationSet>
+          <AssociationSet Name="FK_VolunteerInfo_ProfilePicture" Association="Self.FK_VolunteerInfo_ProfilePicture">
+            <End Role="ProfilePicture" EntitySet="ProfilePictures" />
+            <End Role="VolunteerInfo" EntitySet="VolunteerInfoes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UserRoles_UserAccount" Association="Self.FK_UserRoles_UserAccount">
+            <End Role="UserAccount" EntitySet="UserAccounts" />
+            <End Role="UserRoles" EntitySet="UserRoles" />
+          </AssociationSet>
+          <AssociationSet Name="FK_VolunteerInfo_UserAccount" Association="Self.FK_VolunteerInfo_UserAccount">
+            <End Role="UserAccount" EntitySet="UserAccounts" />
+            <End Role="VolunteerInfo" EntitySet="VolunteerInfoes" />
+          </AssociationSet>
+          <EntitySet Name="Skills" EntityType="TabangHubModel.Skills" />
+          <EntitySet Name="VolunteerSkill" EntityType="TabangHubModel.VolunteerSkill" />
+          <AssociationSet Name="FK_VolunteerSkills_Skills" Association="TabangHubModel.FK_VolunteerSkills_Skills">
+            <End Role="Skills" EntitySet="Skills" />
+            <End Role="VolunteerSkill" EntitySet="VolunteerSkill" />
+          </AssociationSet>
+          <AssociationSet Name="FK_VolunteerSkill_UserAccount" Association="TabangHubModel.FK_VolunteerSkill_UserAccount">
+            <End Role="UserAccount" EntitySet="UserAccounts" />
+            <End Role="VolunteerSkill" EntitySet="VolunteerSkill" />
+          </AssociationSet>
+          <FunctionImport Name="sp_GetSkills" ReturnType="Collection(TabangHubModel.sp_GetSkills_Result)">
+            <Parameter Name="userId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          </EntityContainer>
+        <EntityType Name="Skills">
+          <Key>
+            <PropertyRef Name="skillId" />
+          </Key>
+          <Property Name="skillId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SkillName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="VolunteerSkill" Relationship="TabangHubModel.FK_VolunteerSkills_Skills" FromRole="Skills" ToRole="VolunteerSkill" />
+        </EntityType>
+        <EntityType Name="VolunteerSkill">
+          <Key>
+            <PropertyRef Name="volunteerSkillId" />
+          </Key>
+          <Property Name="volunteerSkillId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="userId" Type="Int32" />
+          <Property Name="skillId" Type="Int32" />
+          <Property Name="skillName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Skills" Relationship="TabangHubModel.FK_VolunteerSkills_Skills" FromRole="VolunteerSkill" ToRole="Skills" />
+          <NavigationProperty Name="UserAccount" Relationship="TabangHubModel.FK_VolunteerSkill_UserAccount" FromRole="VolunteerSkill" ToRole="UserAccount" />
+        </EntityType>
+        <Association Name="FK_VolunteerSkills_Skills">
+          <End Type="TabangHubModel.Skills" Role="Skills" Multiplicity="0..1" />
+          <End Type="TabangHubModel.VolunteerSkill" Role="VolunteerSkill" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Skills">
+              <PropertyRef Name="skillId" />
+            </Principal>
+            <Dependent Role="VolunteerSkill">
+              <PropertyRef Name="skillId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_VolunteerSkill_UserAccount">
+          <End Type="TabangHubModel.UserAccount" Role="UserAccount" Multiplicity="0..1" />
+          <End Type="TabangHubModel.VolunteerSkill" Role="VolunteerSkill" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserAccount">
+              <PropertyRef Name="userId" />
+            </Principal>
+            <Dependent Role="VolunteerSkill">
+              <PropertyRef Name="userId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <ComplexType Name="sp_GetSkills_Result">
+          <Property Type="Int32" Name="skillId" Nullable="false" />
+          <Property Type="String" Name="SkillName" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="TabangHubModelStoreContainer" CdmEntityContainer="TabangHubEntities">
+          <EntitySetMapping Name="OrgInfoes">
+            <EntityTypeMapping TypeName="TabangHubModel.OrgInfo">
+              <MappingFragment StoreEntitySet="OrgInfo">
+                <ScalarProperty Name="orgInfoId" ColumnName="orgInfoId" />
+                <ScalarProperty Name="userId" ColumnName="userId" />
+                <ScalarProperty Name="orgName" ColumnName="orgName" />
+                <ScalarProperty Name="orgEmail" ColumnName="orgEmail" />
+                <ScalarProperty Name="orgType" ColumnName="orgType" />
+                <ScalarProperty Name="orgDescription" ColumnName="orgDescription" />
+                <ScalarProperty Name="phoneNum" ColumnName="phoneNum" />
+                <ScalarProperty Name="street" ColumnName="street" />
+                <ScalarProperty Name="city" ColumnName="city" />
+                <ScalarProperty Name="province" ColumnName="province" />
+                <ScalarProperty Name="zipCode" ColumnName="zipCode" />
+                <ScalarProperty Name="profileId" ColumnName="profileId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OrgValidations">
+            <EntityTypeMapping TypeName="TabangHubModel.OrgValidation">
+              <MappingFragment StoreEntitySet="OrgValidation">
+                <ScalarProperty Name="orgValidationId" ColumnName="orgValidationId" />
+                <ScalarProperty Name="userId" ColumnName="userId" />
+                <ScalarProperty Name="idPicture1" ColumnName="idPicture1" />
+                <ScalarProperty Name="idNumber1" ColumnName="idNumber1" />
+                <ScalarProperty Name="idPicture2" ColumnName="idPicture2" />
+                <ScalarProperty Name="idNumber2" ColumnName="idNumber2" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ProfilePictures">
+            <EntityTypeMapping TypeName="TabangHubModel.ProfilePicture">
+              <MappingFragment StoreEntitySet="ProfilePicture">
+                <ScalarProperty Name="profileId" ColumnName="profileId" />
+                <ScalarProperty Name="userId" ColumnName="userId" />
+                <ScalarProperty Name="profilePath" ColumnName="profilePath" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Roles">
+            <EntityTypeMapping TypeName="TabangHubModel.Role">
+              <MappingFragment StoreEntitySet="Role">
+                <ScalarProperty Name="roleId" ColumnName="roleId" />
+                <ScalarProperty Name="roleName" ColumnName="roleName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserAccounts">
+            <EntityTypeMapping TypeName="TabangHubModel.UserAccount">
+              <MappingFragment StoreEntitySet="UserAccount">
+                <ScalarProperty Name="userId" ColumnName="userId" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="userInfo" ColumnName="userInfo" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="roleId" ColumnName="roleId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserRoles">
+            <EntityTypeMapping TypeName="TabangHubModel.UserRole">
+              <MappingFragment StoreEntitySet="UserRoles">
+                <ScalarProperty Name="userRoleId" ColumnName="userRoleId" />
+                <ScalarProperty Name="userId" ColumnName="userId" />
+                <ScalarProperty Name="userRole1" ColumnName="userRole" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VolunteerInfoes">
+            <EntityTypeMapping TypeName="TabangHubModel.VolunteerInfo">
+              <MappingFragment StoreEntitySet="VolunteerInfo">
+                <ScalarProperty Name="aboutMe" ColumnName="aboutMe" />
+                <ScalarProperty Name="volunteerId" ColumnName="volunteerId" />
+                <ScalarProperty Name="userId" ColumnName="userId" />
+                <ScalarProperty Name="fName" ColumnName="fName" />
+                <ScalarProperty Name="lName" ColumnName="lName" />
+                <ScalarProperty Name="bDay" ColumnName="bDay" />
+                <ScalarProperty Name="gender" ColumnName="gender" />
+                <ScalarProperty Name="phoneNum" ColumnName="phoneNum" />
+                <ScalarProperty Name="street" ColumnName="street" />
+                <ScalarProperty Name="city" ColumnName="city" />
+                <ScalarProperty Name="province" ColumnName="province" />
+                <ScalarProperty Name="zipCode" ColumnName="zipCode" />
+                <ScalarProperty Name="profileId" ColumnName="profileId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="vw_UserRoles">
+            <EntityTypeMapping TypeName="TabangHubModel.vw_UserRoles">
+              <MappingFragment StoreEntitySet="vw_UserRoles">
+                <ScalarProperty Name="userRoleId" ColumnName="userRoleId" />
+                <ScalarProperty Name="roleId" ColumnName="roleId" />
+                <ScalarProperty Name="roleName" ColumnName="roleName" />
+                <ScalarProperty Name="userId" ColumnName="userId" />
+                <ScalarProperty Name="email" ColumnName="email" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Skills">
+            <EntityTypeMapping TypeName="TabangHubModel.Skills">
+              <MappingFragment StoreEntitySet="Skills">
+                <ScalarProperty Name="SkillName" ColumnName="SkillName" />
+                <ScalarProperty Name="skillId" ColumnName="skillId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VolunteerSkill">
+            <EntityTypeMapping TypeName="TabangHubModel.VolunteerSkill">
+              <MappingFragment StoreEntitySet="VolunteerSkill">
+                <ScalarProperty Name="skillName" ColumnName="skillName" />
+                <ScalarProperty Name="skillId" ColumnName="skillId" />
+                <ScalarProperty Name="userId" ColumnName="userId" />
+                <ScalarProperty Name="volunteerSkillId" ColumnName="volunteerSkillId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="sp_GetSkills" FunctionName="TabangHubModel.Store.sp_GetSkills">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="TabangHubModel.sp_GetSkills_Result">
+                <ScalarProperty Name="skillId" ColumnName="skillId" />
+                <ScalarProperty Name="SkillName" ColumnName="SkillName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="False" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="true" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

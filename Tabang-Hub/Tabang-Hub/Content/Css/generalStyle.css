@@ -1,0 +1,55 @@
+﻿.input_text {
+    margin-bottom: 15px;
+}
+
+.gender-inputs {
+    display: flex;
+    align-items: center;
+}
+
+    .gender-inputs label {
+        margin-right: 10px;
+    }
+
+.scrollable-container {
+    max-height: 500px; /* Adjust this value as needed */
+    overflow-y: auto;
+}
+
+.skills-container {
+    margin-top: 5%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
+}
+
+    .skills-container img {
+        flex: 1 1 calc(33.33% - 15px); /* Three images per row with 15px gap */
+        max-width: calc(33.33% - 15px); /* Adjust the width accordingly */
+        border-radius: 5%;
+        cursor: pointer;
+    }
+
+        .skills-container img.selected {
+            box-shadow: 0 0 10px 5px rgb(62, 180, 244);
+        }
+
+.button button:disabled {
+    background-color: grey;
+    cursor: not-allowed;
+}
+
+
+
+@media (max-width: 480px) {
+    .main {
+        padding: 10px;
+    }
+    input[type="text"], input[type="password"] {
+        font-size: 12px;
+    }
+    .button button {
+        width: 100px;
+    }
+}

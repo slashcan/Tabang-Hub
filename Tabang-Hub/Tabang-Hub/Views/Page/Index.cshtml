@@ -1,0 +1,159 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+
+    <!-- CSS Files -->
+    <link href="~/Content/Css/popup.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/air-datepicker/2.2.3/css/datepicker.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="~/Content/Css/generalStyle.css" rel="stylesheet" />
+    <link href="~/Content/Css/progress.css" rel="stylesheet" />
+</head>
+<body>
+    <h2>Volunteer Page</h2>
+
+    <div id="modal-overlay">
+        <div style="margin-top: 7%" id="modal-content">
+            
+            <ul class="progress_bar">
+                <li class="active">User details</li>
+                <li>Skill(s)</li>
+                <li>Done</li>
+            </ul>
+            <div class="container">
+                <div class="card">
+
+                    <!-- User information -->
+                    <div class="main active">
+                        <div class="scrollable-container">
+                            <div class="logo">
+                                <img src="https://imgur.com/H8Yg6Sk.png">
+                                <p>Registration Process</p>
+                                <h3>Your Decision Awaits</h3>
+                                <span><img src="../duck1.png" alt=""></span>
+                                <h4>User details</h4>
+                            </div>
+                            <div class="input_text">
+                                <input type="text" placeholder="Firstname" required>
+                            </div>
+                            <div class="input_text">
+                                <input type="text" placeholder="Lastname" required>
+                            </div>
+                            <div class="input_text">
+                                <label>Birthday</label>
+                                <input type="date" id="datepicker" placeholder="MM/DD/YYYY" required>
+                            </div>
+
+                            <div class="input_text">
+                                <input type="text" placeholder="Phone number" required>
+                            </div>
+                            <div class="input_text">
+                                <input type="text" placeholder="Street" required>
+                            </div>
+                            <div class="input_text">
+                                <input type="text" placeholder="City" required>
+                            </div>
+                            <div class="input_text">
+                                <input type="text" placeholder="Province" required>
+                            </div>
+                            <div class="input_text">
+                                <input type="text" placeholder="Zip Code" required>
+                            </div>
+
+                            <div class="input_text gender-inputs">
+                                <label for="gender">Gender: </label>
+                                <input type="radio" id="male" name="gender" value="male">
+                                <label for="male">Male</label>
+                                <input type="radio" id="female" name="gender" value="female">
+                                <label for="female">Female</label>
+                            </div>
+
+                            <div class="button">
+                                <button class="next" style="background-color: #fb4552; color: white;" onmouseover="this.style.backgroundColor='#fb4552'" onmouseout="this.style.backgroundColor='#fb4552'">Next</button>
+                                <i class="fa fa-angle-right"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Skills -->
+                    <div class="main">
+                        <div class="scrollable-container">
+                            <div class="logo">
+                                <img src="https://imgur.com/H8Yg6Sk.png">
+                                <p>Registration Process</p>
+                                <h3>Your Decision Awaits</h3>
+                                <span><img src="https://imgur.com/LcjrXas.jpg"></span>
+                                <h4>Choose at least 1 or more skills</h4>
+                            </div>
+                            <div class="skills-container">
+                                <img src="https://imgur.com/LcjrXas.jpg" class="selectable" data-skill="Skill 1">
+                                <img src="https://imgur.com/LcjrXas.jpg" class="selectable" data-skill="Skill 2">
+                                <img src="https://imgur.com/LcjrXas.jpg" class="selectable" data-skill="Skill 3">
+                                <img src="https://imgur.com/LcjrXas.jpg" class="selectable" data-skill="Skill 4">
+                                <img src="https://imgur.com/LcjrXas.jpg" class="selectable" data-skill="Skill 5">
+                            </div>
+                            <div class="button">
+                                <button class="submit" disabled>Next</button>
+                                <i class="fa fa-angle-right"></i>
+                            </div>
+                            <i class="fa fa-arrow-left back_page"></i>
+                        </div>
+                    </div>
+
+                    <!-- Done -->
+                    <div class="main">
+                        <div class="logo">
+                            <img src="https://imgur.com/H8Yg6Sk.png">
+                        </div>
+                        <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+                            <circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none" />
+                            <path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
+                        </svg>
+                        <div class="m_top">
+                            <h3>Thank you <span class="shown_name"></span></h3>
+                            <p>Thank you for filling up the needed information.</p>
+
+                            <div class="button">
+                                <button class="next" style="background-color: #fb4552; color: white;" onmouseover="this.style.backgroundColor='#fb4552'" onmouseout="this.style.backgroundColor='#fb4552'">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Files -->
+    <script src="~/Content/Js/progress.js"></script>
+    <script src="~/Content/Js/selectImage.js"></script>
+    <script src="~/Content/Js/popup.js"></script>
+
+    <script>
+        // Add event listener to the Submit button in the Done section
+        document.querySelector('.main:last-child .next').addEventListener('click', function () {
+            // Hide the popup
+            document.getElementById('modal-overlay').style.display = 'none';
+            // Set a flag in local storage to indicate that the popup has been shown
+            localStorage.setItem('popupShown', true);
+        });
+
+        // Call onNewUserLogin when a new user logs in
+        function onNewUserLogin() {
+            resetProgressBar();
+            document.getElementById('modal-overlay').style.display = 'block';
+        }
+
+        // Example usage: Call this function when a new user logs in
+        onNewUserLogin();
+    </script>
+
+
+</body>
+</html>
