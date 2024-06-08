@@ -43,7 +43,7 @@ namespace Tabang_Hub.Repository
                 errorMsg = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
                 return ErrorCode.Error;
             }
-        }       
+        }
         public ErrorCode Delete(object id)
         {
             try
@@ -82,6 +82,37 @@ namespace Tabang_Hub.Repository
         public ErrorCode Delete(object id, out string errorMsg)
         {
             throw new NotImplementedException();
+        }
+
+
+        //Arvie's way
+        public ErrorCode Create(T t)
+        {
+            try
+            {
+                _table.Add(t);
+                _db.SaveChanges();
+
+                return ErrorCode.Success;
+            }
+            catch (Exception ex)
+            {
+                return ErrorCode.Error;
+            }
+        }
+        public ErrorCode Update(object id, T t)
+        {
+            try
+            {
+                var obj = Get(id);
+                _db.Entry(obj).CurrentValues.SetValues(t);
+                _db.SaveChanges();
+                return ErrorCode.Success;
+            }
+            catch (Exception ex)
+            {
+                return ErrorCode.Error;
+            }
         }
     }
 }

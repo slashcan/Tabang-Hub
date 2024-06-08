@@ -3,7 +3,8 @@ $(document).ready(function () {
     $('.skills-container img').click(function () {
         $(this).toggleClass('selected');
         toggleButtonState();
-        logSelectedSkills();
+        var store = logSelectedSkills();
+        console.log("my skills: ", store);
     });
 });
 
@@ -49,5 +50,6 @@ function logSelectedSkills() {
             storeSkill.push(skillAttribute);
         }
     });
-    console.log("Skills: ", storeSkill);
+    return storeSkill;
+    //console.log("Log Selected Skills: ", storeSkill);
 }

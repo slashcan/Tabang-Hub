@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Web;
+using System.Web.Helpers;
 using System.Web.Mvc;
 using Tabang_Hub.ListModel;
 using Tabang_Hub.Repository;
@@ -77,7 +78,7 @@ namespace Tabang_Hub.Controllers
                         var existSkill = db.VolunteerSkill.Where(m => m.userId == UserId && m.skillId == skillId).FirstOrDefault();
                         var getSkillName = db.Skills.Where(m => m.skillId == skillId).Select(m => m.SkillName).FirstOrDefault();
 
-                        if(existSkill == null)
+                        if (existSkill == null)
                         {
                             var newVolSkill = new VolunteerSkill
                             {
@@ -108,34 +109,35 @@ namespace Tabang_Hub.Controllers
             }
         }
         [HttpPost]
-        public ActionResult SaveInformation(VolunteerInfo model)
+        public ActionResult SaveInformation(VolunteerInfo model, List<string> volunteerSkill)
         {
             try
             {
-                string fname = model.fName;
+                var volInfo = db.VolunteerInfoes.Where(m => m.userId == UserId).FirstOrDefault();
+                volInfo.fName = model.fName;
+                volInfo.lName = model.lName;
+                volInfo.bDay = model.bDay;
+                volInfo.gender = model.gender;
+                volInfo.street = model.street;
+                volInfo.city = model.city;
+                volInfo.province = model.province;
+                volInfo.zipCode = model.zipCode;
+                volInfo.phoneNum = model.phoneNum;
 
-                //var volunteerInfo = new VolunteerInfo()
-                //{
-                //    userId= UserId,
-                //    fName = model.fName,
-                //    lName = model.lName,
-                //    bDay = model.bDay,
-                //    gender = model.gender,
-                //    //phoneNum = model.phoneNum,
-                //    street = model.street,
-                //    city = model.city,
-                //    province = model.province,
-                //    zipCode = model.zipCode
-                //};
-
-                if(_userManager.VolInfoUpdate(UserId, model, ref ErrorMessage) != ErrorCode.Success)
+                foreach (var vSkill in volunteerSkill)
                 {
-                    ModelState.AddModelError(String.Empty, ErrorMessage);
+                    var getSkill = _skills.GetAll().Where(m => m.SkillName == vSkill).FirstOrDefault();
+                    var skll = new VolunteerSkill
+                    {
+                        userId = UserId,
+                        skillId = getSkill.skillId,
+                        skillName = getSkill.SkillName
+                    };
 
-                    return View();
+                    _volunteerSkills.Create(skll);
                 }
 
-                Console.WriteLine(fname);
+                db.SaveChanges();
 
                 return Json(new { success = true, message = "Success" });
             }
@@ -143,6 +145,6 @@ namespace Tabang_Hub.Controllers
             {
                 return Json(new { success = false, message = "Error" });
             }
-        } 
+        }
     }
 }

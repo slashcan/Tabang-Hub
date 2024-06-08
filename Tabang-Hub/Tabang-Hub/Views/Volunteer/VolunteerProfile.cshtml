@@ -14,6 +14,10 @@
             <div class="row">
                 <div class="col-md-2 text-center">
                     <img src="~/Content/images/tabanghub3.png" class="rounded-circle img-fluid" alt="Profile Picture">
+                    <div id="profile" class="d-none">
+                        <label for="profilePic">Profile Picture</label>
+                        <input type="file" class="form-control-file d-none" id="profilePic" accept="image/*" />
+                    </div>
                 </div>
                 @foreach (var VolInfo in Model.volunteersInfo)
                 {
@@ -146,8 +150,13 @@
         document.getElementById('email').classList.toggle('d-none', isEditing);
         document.getElementById('emailInput').classList.toggle('d-none', !isEditing);
 
+        document.getElementById('profile').classList.toggle('d-none', !isEditing);
+        document.getElementById('profilePic').classList.toggle('d-none', isEditing);
+
         document.getElementById('editButton').innerText = isEditing ? 'Save' : 'Edit';
         document.getElementById('cancelButton').classList.toggle('d-none', !isEditing);
+
+
 
         if (!isEditing) {
             var street = document.getElementById('streetInput').value;
@@ -155,6 +164,8 @@
             var province = document.getElementById('provinceInput').value;
             var phone = document.getElementById('phoneInput').value;
             var email = document.getElementById('emailInput').value;
+
+            var profilePic = document.getElementById('profilePic').files[0];
 
             SaveChanges(street, city, province, phone, email);
         }

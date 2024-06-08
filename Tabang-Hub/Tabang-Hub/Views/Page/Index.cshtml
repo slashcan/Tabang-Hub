@@ -96,11 +96,6 @@
                                     <h4>Choose at least 1 or more skills</h4>
                                 </div>
                                 <div class="skills-container">
-                                    @*<img src="https://imgur.com/LcjrXas.jpg" class="selectable" data-skill="Skill 1">
-                                    <img src="https://imgur.com/LcjrXas.jpg" class="selectable" data-skill="Skill 2">
-                                    <img src="https://imgur.com/LcjrXas.jpg" class="selectable" data-skill="Skill 3">
-                                    <img src="https://imgur.com/LcjrXas.jpg" class="selectable" data-skill="Skill 4">
-                                    <img src="https://imgur.com/LcjrXas.jpg" class="selectable" data-skill="Skill 5">*@
                                     @foreach (var skillImage in Model.skills)
                                     {
                                         <img src="~/SkillsImages/@skillImage.SkillImage" class="selectable" data-skill="@skillImage.SkillName" >
@@ -147,25 +142,6 @@
     <script src="~/Content/Js/progress.js"></script>
     <script src="~/Content/Js/selectImage.js"></script>
     <script src="~/Content/Js/popup.js"></script>
-    @*<script>
-        // JavaScript for image selection
-        $(document).ready(function () {
-            $('.skills-container img').click(function () {
-                $(this).toggleClass('selected');
-                toggleButtonState();
-            });
-        });
-
-        // Function to toggle button state based on image selection
-        function toggleButtonState() {
-            var selectedImages = $('.skills-container img.selected').length;
-            if (selectedImages > 0) {
-                $('.button button').prop('disabled', false);
-            } else {
-                $('.button button').prop('disabled', true);
-            }
-        }
-    </script>*@
 
     <script>
         // Add event listener to the Submit button in the Done section
@@ -192,7 +168,7 @@
             var fname = document.getElementById('fname').value;
             var lname = document.getElementById('lname').value;
             var bday = document.getElementById('datepicker').value;
-            var phoneNumber = document.getElementById('phoneNumber').value;
+            var phoneNum = document.getElementById('phoneNumber').value;
             var street = document.getElementById('street').value;
             var city = document.getElementById('city').value;
             var province = document.getElementById('province').value;
@@ -203,14 +179,16 @@
                 fname: fname,
                 lname: lname,
                 bday: bday,
-                phoneNumber: phoneNumber,
+                phoneNum: phoneNum,
                 street: street,
                 city: city,
                 province: province,
                 zipCode: zipCode,
                 gender: gender
             };
-            SaveDatas(informationData);
+            
+            var volunteerSkill = logSelectedSkills();
+            SaveDatas(informationData, volunteerSkill);
         }
 
         function getSelectedGender() {
@@ -226,15 +204,22 @@
             return selectedGender;
         }
 
-        function SaveDatas(informationData) {
+        function SaveDatas(informationData, volunteerSkill) {
+            console.log("Save informations Function: ", informationData);
+            console.log("Log Selected Skills: ", volunteerSkill);
+
             console.log("Save datas");
             $.ajax({
                 type: 'POST',
                 url: '/Volunteer/SaveInformation',
                 contentType: 'application/json',
-                data: JSON.stringify(informationData),
+                data: JSON.stringify({
+                    model: informationData,
+                    volunteerSkill: volunteerSkill
+                }),
                 success: function (response) {
                     console.log("Response is: ", response);
+                    location.reload();
                 },
                 error: function (xhr, status, error) {
                     console.log("Error response is: ", error)
