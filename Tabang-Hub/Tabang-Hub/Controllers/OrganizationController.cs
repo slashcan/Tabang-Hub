@@ -19,6 +19,46 @@ namespace Tabang_Hub.Controllers
         {
             return View();
         }
+        public ActionResult OrgProfile()
+        {
+            var orgInfo = _organizationManager.GetOrgInfoByUserId(UserId);
+
+            var indexModdel = new Utils.Lists()
+            {
+                OrgInfo = orgInfo,
+            };
+            return View(indexModdel);
+        }
+        [HttpPost]
+        public ActionResult EditOrgProfile(Utils.Lists orgProfile, ProfilePicture profilePicture, HttpPostedFileBase profilePic)
+        {
+            string errMsg = string.Empty;
+            profilePicture.userId = UserId;
+
+            // Assuming you have a method to get the current user ID
+
+            if (profilePic != null && profilePic.ContentLength > 0)
+            {
+                var inputFileName = Path.GetFileName(profilePic.FileName);
+                var serverSavePath = Path.Combine(Server.MapPath("~/Content/IdPicture/"), inputFileName);
+
+                if (!Directory.Exists(Server.MapPath("~/Content/IdPicture/")))
+                    Directory.CreateDirectory(Server.MapPath("~/Content/IdPicture/"));
+
+                profilePic.SaveAs(serverSavePath);
+
+                profilePicture.profilePath = "~/Content/IdPicture/" + inputFileName;
+            }
+
+            if (_organizationManager.EditOrgInfo(orgProfile.OrgInfo, profilePicture, UserId, ref errMsg) != ErrorCode.Success)
+            {
+                ModelState.AddModelError(string.Empty, errMsg);
+                return View("OrgProfile", orgProfile); // Returning the view with the model to display validation errors
+            }         
+
+            return RedirectToAction("OrgProfile");
+        }
+
         public ActionResult VolunteerManagement()
         {
             return View();
@@ -88,9 +128,12 @@ namespace Tabang_Hub.Controllers
             var events = _organizationManager.GetEventById(id);
             var listofImage = _organizationManager.listOfEventImage(id);
             var listOfSkills = _organizationManager.listOfSkillRequirement(id);
+            var orgInfo  = _organizationManager.GetOrgInfoByUserId(UserId);
+
 
             var indexModel = new Utils.Lists()
             {
+                OrgInfo = orgInfo,
                 eventDetails = events,
                 detailsEventImage = listofImage,
                 detailsSkillRequirement = listOfSkills

@@ -4,6 +4,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using Tabang_Hub.Contracts;
+using Tabang_Hub.Utils;
 
 namespace Tabang_Hub.Repository
 {
@@ -80,6 +81,21 @@ namespace Tabang_Hub.Repository
         }
 
         public ErrorCode Delete(object id, out string errorMsg)
+        {
+            throw new NotImplementedException();
+        }
+
+        ErrorCode IBaseRepository<T>.Create(T t, out string errorMsg)
+        {
+            throw new NotImplementedException();
+        }
+
+        ErrorCode IBaseRepository<T>.Update(object id, T t, out string errorMsg)
+        {
+            throw new NotImplementedException();
+        }
+
+        ErrorCode IBaseRepository<T>.Delete(object id, out string errorMsg)
         {
             throw new NotImplementedException();
         }

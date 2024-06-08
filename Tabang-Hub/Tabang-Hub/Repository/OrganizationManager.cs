@@ -12,6 +12,8 @@ namespace Tabang_Hub.Repository
         private BaseRepository<OrgSkillRequirement> _orgSkillRequirements;
         private BaseRepository<OrgEventImage> _orgEventsImage;
         public BaseRepository<vw_ListOfEvent> _listOfEvents;
+        public BaseRepository<OrgInfo> _orgInfo;
+        public BaseRepository<ProfilePicture> _profilePic;
 
         public OrganizationManager()
         {
@@ -19,13 +21,15 @@ namespace Tabang_Hub.Repository
             _orgSkillRequirements = new BaseRepository<OrgSkillRequirement>();
             _orgEventsImage = new BaseRepository<OrgEventImage>();
             _listOfEvents = new BaseRepository<vw_ListOfEvent>();
+            _orgInfo = new BaseRepository<OrgInfo>();
+            _profilePic = new BaseRepository<ProfilePicture>();
         }
 
 
         public ErrorCode CreateEvents(OrgEvents orgEvents, List<string> imageFileNames, string[] skills, ref string errMsg)
         {
             // Create the event
-            if (_orgEvents.Create(orgEvents, out errMsg) != Contracts.ErrorCode.Success)
+            if (_orgEvents.Create(orgEvents, out errMsg) != ErrorCode.Success)
             {
                 return ErrorCode.Error;
             }
@@ -42,7 +46,7 @@ namespace Tabang_Hub.Repository
                     skillName = skill
                 };
 
-                if (_orgSkillRequirements.Create(skillRequirement, out errMsg) != Contracts.ErrorCode.Success)
+                if (_orgSkillRequirements.Create(skillRequirement, out errMsg) != ErrorCode.Success)
                 {
                     return ErrorCode.Error;
                 }
@@ -57,10 +61,52 @@ namespace Tabang_Hub.Repository
                     eventImage = fileName
                 };
 
-                if (_orgEventsImage.Create(orgEventImage, out errMsg) != Contracts.ErrorCode.Success)
+                if (_orgEventsImage.Create(orgEventImage, out errMsg) != ErrorCode.Success)
                 {
                     return ErrorCode.Error;
                 }
+            }
+
+            return ErrorCode.Success;
+        }
+
+        public ErrorCode EditOrgInfo(OrgInfo orgInformation, ProfilePicture profilePic, int id,ref string errMsg)
+        {
+            if (orgInformation == null)
+            {
+                errMsg = "Organization information is required.";
+                return ErrorCode.Error;
+            }
+
+            if (profilePic == null)
+            {
+                errMsg = "Profile picture is required.";
+                return ErrorCode.Error;
+            }
+
+            profilePic.userId = orgInformation.userId;
+            if (_profilePic.Create(profilePic, out errMsg) != ErrorCode.Success)
+            {
+                return ErrorCode.Error;
+            }
+         
+            orgInformation.profileId = profilePic.profileId;
+            var orgId = GetOrgInfoByUserId(id);
+
+            orgId.userId = id;
+            orgId.orgName = orgInformation.orgName;
+            orgId.orgEmail = orgInformation.orgEmail;
+            orgId.orgType = orgInformation.orgType;
+            orgId.orgDescription = orgInformation.orgDescription;
+            orgId.phoneNum = orgInformation.phoneNum;
+            orgId.street = orgInformation.street;
+            orgId.city = orgInformation.city;
+            orgId.province = orgInformation.province;
+            orgId.profileId = profilePic.profileId;
+
+            if (_orgInfo.Update(orgId.orgInfoId, orgId, out errMsg) != ErrorCode.Success)
+            {
+                return ErrorCode.Error;
             }
 
             return ErrorCode.Success;
@@ -70,7 +116,14 @@ namespace Tabang_Hub.Repository
         { 
             return _listOfEvents.GetAll();
         }
-
+        public OrgInfo GetOrgInfoByUserId(int? id)
+        { 
+            return _orgInfo._table.Where(m => m.userId == id).FirstOrDefault();
+        }
+        public OrgInfo GetOrgInfoByUserId(int id)
+        { 
+            return _orgInfo._table.Where(m => m.userId == id).FirstOrDefault();
+        }
         public vw_ListOfEvent GetEventById(int id)
         { 
             return _listOfEvents._table.Where(m => m.Event_Id == id).FirstOrDefault();

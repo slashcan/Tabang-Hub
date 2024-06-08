@@ -34,7 +34,10 @@ namespace Tabang_Hub.Repository
         {
             return _userAcc._table.Where(m => m.email == email).FirstOrDefault();
         }
-
+        public UserAccount GetUserById(int id)
+        { 
+            return _userAcc._table.Where(m => m.userId == id).FirstOrDefault();
+        }
         public ErrorCode Login(String email, String password, ref String errMsg)
         {
             var userLogin = GetUserByEmail(email);
@@ -66,18 +69,18 @@ namespace Tabang_Hub.Repository
                 return ErrorCode.Error;
             }
 
-            if (_userAcc.Create(u, out errMsg) != Contracts.ErrorCode.Success)
+            if (_userAcc.Create(u, out errMsg) != ErrorCode.Success)
             {
                 return ErrorCode.Error;
             }
             v.userId = u.userId;          
-            if (_volunteerInfo.Create(v, out errMsg) != Contracts.ErrorCode.Success)
+            if (_volunteerInfo.Create(v, out errMsg) != ErrorCode.Success)
             {
                 return ErrorCode.Error;
             }
             r.userId = u.userId;
             r.userRole = u.roleId;
-            if (_userRoles.Create(r, out errMsg) != Contracts.ErrorCode.Success)
+            if (_userRoles.Create(r, out errMsg) != ErrorCode.Success)
             {
                 return ErrorCode.Error;
             }
@@ -95,23 +98,23 @@ namespace Tabang_Hub.Repository
                 return ErrorCode.Error;
             }
 
-            if (_userAcc.Create(u, out errMsg) != Contracts.ErrorCode.Success)
+            if (_userAcc.Create(u, out errMsg) != ErrorCode.Success)
             {
                 return ErrorCode.Error;
             }
             ov.userId = u.userId;
-            if (_orgValid.Create(ov, out errMsg) != Contracts.ErrorCode.Success)
+            if (_orgValid.Create(ov, out errMsg) != ErrorCode.Success)
             {
                 return ErrorCode.Error;
             }
             r.userId = u.userId;
             r.userRole = u.roleId;
-            if (_userRoles.Create(r, out errMsg) != Contracts.ErrorCode.Success)
+            if (_userRoles.Create(r, out errMsg) != ErrorCode.Success)
             {
                 return ErrorCode.Error;
             }
             o.userId = u.userId;
-            if (_orgInfo.Create(o, out errMsg) != Contracts.ErrorCode.Success)
+            if (_orgInfo.Create(o, out errMsg) != ErrorCode.Success)
             {
                 return ErrorCode.Error;
             }          

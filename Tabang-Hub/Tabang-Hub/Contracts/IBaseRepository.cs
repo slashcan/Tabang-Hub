@@ -3,14 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Tabang_Hub.Utils;
 
 namespace Tabang_Hub.Contracts
 {
-    public enum ErrorCode
-    { 
-        Success,
-        Error
-    }
     public interface IBaseRepository<T>
     {
         T Get(object id);

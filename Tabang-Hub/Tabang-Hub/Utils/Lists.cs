@@ -13,5 +13,8 @@ namespace Tabang_Hub.Utils
         public vw_ListOfEvent eventDetails { get; set; }
         public List<OrgEventImage> detailsEventImage { get; set; }
         public List<OrgSkillRequirement> detailsSkillRequirement { get; set; }
+        public UserAccount userAccount { get; set; }
+        public OrgInfo OrgInfo { get; set; }
+        public ProfilePicture profilePic { get; set; }
     }
 }
