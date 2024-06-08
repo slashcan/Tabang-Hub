@@ -1,4 +1,5 @@
-﻿@{
+﻿@model Tabang_Hub.ListModel.IndexModel
+@{
     ViewBag.Title = "Index";
 }
 
@@ -18,122 +19,153 @@
 </head>
 <body>
     <h2>Volunteer Page</h2>
+    @if (Model.volunteersSkill.Count == 0)
+    {
 
-    <div id="modal-overlay">
-        <div style="margin-top: 7%" id="modal-content">
-            
-            <ul class="progress_bar">
-                <li class="active">User details</li>
-                <li>Skill(s)</li>
-                <li>Done</li>
-            </ul>
-            <div class="container">
-                <div class="card">
+        <div id="modal-overlay">
+            <div style="margin-top: 7%" id="modal-content">
 
-                    <!-- User information -->
-                    <div class="main active">
-                        <div class="scrollable-container">
+                <ul class="progress_bar">
+                    <li class="active">User details</li>
+                    <li>Skill(s)</li>
+                    <li>Done</li>
+                </ul>
+                <div class="container">
+                    <div class="card">
+
+                        <!-- User information -->
+                        <div class="main active">
+                            <div class="scrollable-container">
+                                <div class="logo">
+                                    <img src="https://imgur.com/H8Yg6Sk.png">
+                                    <p>Registration Process</p>
+                                    <h3>Your Decision Awaits</h3>
+                                    <span><img src="../duck1.png" alt=""></span>
+                                    <h4>User details</h4>
+                                </div>
+                                <div class="input_text">
+                                    <input id="fname" type="text" placeholder="Firstname" required>
+                                </div>
+                                <div class="input_text">
+                                    <input id="lname" type="text" placeholder="Lastname" required>
+                                </div>
+                                <div class="input_text">
+                                    <label>Birthday</label>
+                                    <input type="date" id="datepicker" placeholder="MM/DD/YYYY" required>
+                                </div>
+
+                                <div class="input_text">
+                                    <input id="phoneNumber" type="text" placeholder="Phone number" required>
+                                </div>
+                                <div class="input_text">
+                                    <input id="street" type="text" placeholder="Street" required>
+                                </div>
+                                <div class="input_text">
+                                    <input id="city" type="text" placeholder="City" required>
+                                </div>
+                                <div class="input_text">
+                                    <input id="province" type="text" placeholder="Province" required>
+                                </div>
+                                <div class="input_text">
+                                    <input id="zipCode" type="text" placeholder="Zip Code" required>
+                                </div>
+
+                                <div class="input_text gender-inputs">
+                                    <label for="gender">Gender: </label>
+                                    <input type="radio" id="male" name="gender" value="male">
+                                    <label for="male">Male</label>
+                                    <input type="radio" id="female" name="gender" value="female">
+                                    <label for="female">Female</label>
+                                </div>
+
+                                <div class="button">
+                                    <button class="next" style="background-color: #fb4552; color: white;" onmouseover="this.style.backgroundColor='#fb4552'" onmouseout="this.style.backgroundColor='#fb4552'">Next</button>
+                                    <i class="fa fa-angle-right"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Skills -->
+                        <div class="main">
+                            <div class="scrollable-container">
+                                <div class="logo">
+                                    <img src="https://imgur.com/H8Yg6Sk.png">
+                                    <p>Registration Process</p>
+                                    <h3>Your Decision Awaits</h3>
+                                    <span><img src="https://imgur.com/LcjrXas.jpg"></span>
+                                    <h4>Choose at least 1 or more skills</h4>
+                                </div>
+                                <div class="skills-container">
+                                    @*<img src="https://imgur.com/LcjrXas.jpg" class="selectable" data-skill="Skill 1">
+                                    <img src="https://imgur.com/LcjrXas.jpg" class="selectable" data-skill="Skill 2">
+                                    <img src="https://imgur.com/LcjrXas.jpg" class="selectable" data-skill="Skill 3">
+                                    <img src="https://imgur.com/LcjrXas.jpg" class="selectable" data-skill="Skill 4">
+                                    <img src="https://imgur.com/LcjrXas.jpg" class="selectable" data-skill="Skill 5">*@
+                                    @foreach (var skillImage in Model.skills)
+                                    {
+                                        <img src="~/SkillsImages/@skillImage.SkillImage" class="selectable" data-skill="@skillImage.SkillName" >
+                                    }
+                                </div>
+                            </div>
+                                <div class="button">
+                                    <button class="submit" disabled>Next</button>
+                                    <i class="fa fa-angle-right"></i>
+                                </div>
+                                <i class="fa fa-arrow-left back_page"></i>
+                        </div>
+
+                        <!-- Done -->
+                        <div class="main">
                             <div class="logo">
                                 <img src="https://imgur.com/H8Yg6Sk.png">
-                                <p>Registration Process</p>
-                                <h3>Your Decision Awaits</h3>
-                                <span><img src="../duck1.png" alt=""></span>
-                                <h4>User details</h4>
                             </div>
-                            <div class="input_text">
-                                <input type="text" placeholder="Firstname" required>
-                            </div>
-                            <div class="input_text">
-                                <input type="text" placeholder="Lastname" required>
-                            </div>
-                            <div class="input_text">
-                                <label>Birthday</label>
-                                <input type="date" id="datepicker" placeholder="MM/DD/YYYY" required>
-                            </div>
+                            <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+                                <circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none" />
+                                <path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
+                            </svg>
+                            <div class="m_top">
+                                <h3>Thank you <span class="shown_name"></span></h3>
+                                <p>Thank you for filling up the needed information.</p>
 
-                            <div class="input_text">
-                                <input type="text" placeholder="Phone number" required>
-                            </div>
-                            <div class="input_text">
-                                <input type="text" placeholder="Street" required>
-                            </div>
-                            <div class="input_text">
-                                <input type="text" placeholder="City" required>
-                            </div>
-                            <div class="input_text">
-                                <input type="text" placeholder="Province" required>
-                            </div>
-                            <div class="input_text">
-                                <input type="text" placeholder="Zip Code" required>
-                            </div>
-
-                            <div class="input_text gender-inputs">
-                                <label for="gender">Gender: </label>
-                                <input type="radio" id="male" name="gender" value="male">
-                                <label for="male">Male</label>
-                                <input type="radio" id="female" name="gender" value="female">
-                                <label for="female">Female</label>
-                            </div>
-
-                            <div class="button">
-                                <button class="next" style="background-color: #fb4552; color: white;" onmouseover="this.style.backgroundColor='#fb4552'" onmouseout="this.style.backgroundColor='#fb4552'">Next</button>
-                                <i class="fa fa-angle-right"></i>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Skills -->
-                    <div class="main">
-                        <div class="scrollable-container">
-                            <div class="logo">
-                                <img src="https://imgur.com/H8Yg6Sk.png">
-                                <p>Registration Process</p>
-                                <h3>Your Decision Awaits</h3>
-                                <span><img src="https://imgur.com/LcjrXas.jpg"></span>
-                                <h4>Choose at least 1 or more skills</h4>
-                            </div>
-                            <div class="skills-container">
-                                <img src="https://imgur.com/LcjrXas.jpg" class="selectable" data-skill="Skill 1">
-                                <img src="https://imgur.com/LcjrXas.jpg" class="selectable" data-skill="Skill 2">
-                                <img src="https://imgur.com/LcjrXas.jpg" class="selectable" data-skill="Skill 3">
-                                <img src="https://imgur.com/LcjrXas.jpg" class="selectable" data-skill="Skill 4">
-                                <img src="https://imgur.com/LcjrXas.jpg" class="selectable" data-skill="Skill 5">
-                            </div>
-                            <div class="button">
-                                <button class="submit" disabled>Next</button>
-                                <i class="fa fa-angle-right"></i>
-                            </div>
-                            <i class="fa fa-arrow-left back_page"></i>
-                        </div>
-                    </div>
-
-                    <!-- Done -->
-                    <div class="main">
-                        <div class="logo">
-                            <img src="https://imgur.com/H8Yg6Sk.png">
-                        </div>
-                        <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
-                            <circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none" />
-                            <path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
-                        </svg>
-                        <div class="m_top">
-                            <h3>Thank you <span class="shown_name"></span></h3>
-                            <p>Thank you for filling up the needed information.</p>
-
-                            <div class="button">
-                                <button class="next" style="background-color: #fb4552; color: white;" onmouseover="this.style.backgroundColor='#fb4552'" onmouseout="this.style.backgroundColor='#fb4552'">Submit</button>
+                                <div class="button">
+                                    <button onclick="SaveInformations()" class="next" style="background-color: #fb4552; color: white;" onmouseover="this.style.backgroundColor='#fb4552'" onmouseout="this.style.backgroundColor='#fb4552'">Submit</button>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    }
+    else
+    {
+        <h1>Content sa mga na a nay skills</h1>
+    }
 
     <!-- JavaScript Files -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="~/Content/Js/progress.js"></script>
     <script src="~/Content/Js/selectImage.js"></script>
     <script src="~/Content/Js/popup.js"></script>
+    @*<script>
+        // JavaScript for image selection
+        $(document).ready(function () {
+            $('.skills-container img').click(function () {
+                $(this).toggleClass('selected');
+                toggleButtonState();
+            });
+        });
+
+        // Function to toggle button state based on image selection
+        function toggleButtonState() {
+            var selectedImages = $('.skills-container img.selected').length;
+            if (selectedImages > 0) {
+                $('.button button').prop('disabled', false);
+            } else {
+                $('.button button').prop('disabled', true);
+            }
+        }
+    </script>*@
 
     <script>
         // Add event listener to the Submit button in the Done section
@@ -152,6 +184,63 @@
 
         // Example usage: Call this function when a new user logs in
         onNewUserLogin();
+    </script>
+
+    <script>
+        function SaveInformations() {
+            console.log("Save button click");
+            var fname = document.getElementById('fname').value;
+            var lname = document.getElementById('lname').value;
+            var bday = document.getElementById('datepicker').value;
+            var phoneNumber = document.getElementById('phoneNumber').value;
+            var street = document.getElementById('street').value;
+            var city = document.getElementById('city').value;
+            var province = document.getElementById('province').value;
+            var zipCode = document.getElementById('zipCode').value
+            var gender = getSelectedGender();
+
+            var informationData = {
+                fname: fname,
+                lname: lname,
+                bday: bday,
+                phoneNumber: phoneNumber,
+                street: street,
+                city: city,
+                province: province,
+                zipCode: zipCode,
+                gender: gender
+            };
+            SaveDatas(informationData);
+        }
+
+        function getSelectedGender() {
+            var gender = document.getElementsByName('gender');
+            var selectedGender;
+
+            for (var i = 0; i < gender.length; i++) {
+                if (gender[i].checked) {
+                    selectedGender = gender[i].value;
+                    break;
+                }
+            }
+            return selectedGender;
+        }
+
+        function SaveDatas(informationData) {
+            console.log("Save datas");
+            $.ajax({
+                type: 'POST',
+                url: '/Volunteer/SaveInformation',
+                contentType: 'application/json',
+                data: JSON.stringify(informationData),
+                success: function (response) {
+                    console.log("Response is: ", response);
+                },
+                error: function (xhr, status, error) {
+                    console.log("Error response is: ", error)
+                }
+            });
+        }
     </script>
 
 

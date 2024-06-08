@@ -15,7 +15,7 @@
                 <div class="col-md-2 text-center">
                     <img src="~/Content/images/tabanghub3.png" class="rounded-circle img-fluid" alt="Profile Picture">
                 </div>
-                @foreach (var VolInfo in Model.volunteers)
+                @foreach (var VolInfo in Model.volunteersInfo)
                 {
                     <div class="col-md-8">
                         <h4>@VolInfo.lName.ToUpper(), @VolInfo.fName.ToUpper()</h4>
@@ -54,16 +54,14 @@
             <div class="row">
                 <div class="col-md-5">
                     <h5>About me</h5>
-                    @foreach (var aboutVolunteer in Model.volunteers)
+                    @foreach (var aboutVolunteer in Model.volunteersInfo)
                     {
                         <p class="mb-1">
                             <span id="aboutMe">
                                 @aboutVolunteer.aboutMe
                             </span>
                         </p>
-                        <textarea rows="5" id="aboutMeInput" class="form-control d-none">
-                            @aboutVolunteer.aboutMe
-                        </textarea>
+                        <textarea rows="5" id="aboutMeInput" class="form-control d-none">@aboutVolunteer.aboutMe</textarea>
                     }
                 </div>
                 <div class="col-md-5">

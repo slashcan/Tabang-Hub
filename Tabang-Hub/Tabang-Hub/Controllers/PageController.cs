@@ -7,6 +7,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
+using Tabang_Hub.ListModel;
 using Tabang_Hub.Repository;
 using Tabang_Hub.Utils;
 
@@ -24,7 +25,18 @@ namespace Tabang_Hub.Controllers
                 switch (user.roleId)
                 {
                     case 1:
-                        return View();
+
+                        var getInfo = db.VolunteerInfoes.Where(m => m.userId == UserId).ToList();
+                        var getVolunteerSkills = db.VolunteerSkill.Where(m => m.userId == UserId).ToList();
+                        var getSkills =  _skills.GetAll().ToList();
+
+                        var indexModel = new IndexModel()
+                        {
+                            volunteersInfo = getInfo,
+                            volunteersSkill = getVolunteerSkills,
+                            skills = getSkills
+                        };
+                        return View(indexModel);
                     case 2:
                         return RedirectToAction("Index", "Organization");
                     case 3:

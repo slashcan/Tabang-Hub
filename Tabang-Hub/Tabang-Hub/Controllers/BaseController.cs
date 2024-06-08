@@ -14,6 +14,9 @@ namespace Tabang_Hub.Controllers
         public UserManager _userManager;
         public String ErrorMessage;
 
+        public BaseRepository<Skills> _skills;
+        public BaseRepository<VolunteerInfo> _volunteerInfo;
+
         public String Email { get { return User.Identity.Name;  } }
         public int UserId { get { return _userManager.GetUserByEmail(Email).userId; } }
         public String UserEmail { get { return _userManager.GetUserByEmail(Email).email; } }
@@ -22,6 +25,9 @@ namespace Tabang_Hub.Controllers
             db = new TabangHubEntities();
            _userManager = new UserManager();
             ErrorMessage = String.Empty;
+
+            _skills = new BaseRepository<Skills>();
+            _volunteerInfo = new BaseRepository<VolunteerInfo>();
         }
     }
 }

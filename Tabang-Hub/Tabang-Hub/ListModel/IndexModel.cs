@@ -9,7 +9,7 @@ namespace Tabang_Hub.ListModel
     {
         //Tables
         public List<UserAccount> userAccounts { get; set; }
-        public List<VolunteerInfo> volunteers { get; set; }
+        public List<VolunteerInfo> volunteersInfo { get; set; }
         public List<VolunteerSkill> volunteersSkill { get; set; }
         public List<Skills> skills { get; set; }
 

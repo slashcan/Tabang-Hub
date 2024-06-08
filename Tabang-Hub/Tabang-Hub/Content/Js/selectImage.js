@@ -1,4 +1,24 @@
-﻿// Add event listener to selectable images
+﻿// JavaScript for image selection
+$(document).ready(function () {
+    $('.skills-container img').click(function () {
+        $(this).toggleClass('selected');
+        toggleButtonState();
+        logSelectedSkills();
+    });
+});
+
+// Function to toggle button state based on image selection
+function toggleButtonState() {
+    var selectedImages = $('.skills-container img.selected').length;
+    if (selectedImages > 0) {
+        $('.button button').prop('disabled', false);
+    } else {
+        $('.button button').prop('disabled', true);
+    }
+}
+
+
+// Add event listener to selectable images
 document.querySelectorAll('.selectable').forEach(item => {
     item.addEventListener('click', event => {
         // Toggle the 'selected' class on click
@@ -19,4 +39,15 @@ function checkSkillsSelected() {
     } else {
         submitButton.disabled = true;
     }
+}
+
+function logSelectedSkills() {
+    var storeSkill = [];
+    $('.skills-container img.selected').each(function () {
+        var skillAttribute = $(this).data('skill');
+        if (skillAttribute && !storeSkill.includes(skillAttribute)) {
+            storeSkill.push(skillAttribute);
+        }
+    });
+    console.log("Skills: ", storeSkill);
 }

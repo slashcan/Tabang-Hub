@@ -5,6 +5,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Tabang_Hub.ListModel;
+using Tabang_Hub.Repository;
+using Tabang_Hub.Utils;
 
 namespace Tabang_Hub.Controllers
 {
@@ -26,7 +28,7 @@ namespace Tabang_Hub.Controllers
             var listModel = new IndexModel()
             {
                 userAccounts = getUserAccount,
-                volunteers = getVolunteerInfo,
+                volunteersInfo = getVolunteerInfo,
                 volunteersSkill = getVolunteerSkills,
                 uniqueSkill = getUniqueSkill
             };
@@ -105,5 +107,42 @@ namespace Tabang_Hub.Controllers
                 return Json(new { success = false, message = "Error: " });
             }
         }
+        [HttpPost]
+        public ActionResult SaveInformation(VolunteerInfo model)
+        {
+            try
+            {
+                string fname = model.fName;
+
+                //var volunteerInfo = new VolunteerInfo()
+                //{
+                //    userId= UserId,
+                //    fName = model.fName,
+                //    lName = model.lName,
+                //    bDay = model.bDay,
+                //    gender = model.gender,
+                //    //phoneNum = model.phoneNum,
+                //    street = model.street,
+                //    city = model.city,
+                //    province = model.province,
+                //    zipCode = model.zipCode
+                //};
+
+                if(_userManager.VolInfoUpdate(UserId, model, ref ErrorMessage) != ErrorCode.Success)
+                {
+                    ModelState.AddModelError(String.Empty, ErrorMessage);
+
+                    return View();
+                }
+
+                Console.WriteLine(fname);
+
+                return Json(new { success = true, message = "Success" });
+            }
+            catch (Exception)
+            {
+                return Json(new { success = false, message = "Error" });
+            }
+        } 
     }
 }

@@ -1,5 +1,5 @@
-﻿var click_next = document.querySelector(".next");
-var click_back = document.querySelector(".back_page");
+﻿var click_next = document.querySelectorAll(".next");
+var click_back = document.querySelectorAll(".back_page");
 var click_submit = document.querySelector(".submit");
 var click_main = document.querySelectorAll(".main");
 var progress = document.querySelectorAll(".progress_bar li");
@@ -46,27 +46,63 @@ function validateform() {
     return validate;
 }
 
-click_next.addEventListener('click', function () {
-    if (!validateform()) {
-        return false;
-    }
-    formnumber++;
-    updateform();
-    progress_forward();
+// Function to check if any skill is selected
+function checkSkillsSelected() {
+    // Get all selected skills
+    const selectedSkills = document.querySelectorAll('.selectable.selected');
+    // Enable or disable the next button based on selection
+    click_next.forEach(function (button) {
+        if (selectedSkills.length > 0) {
+            button.disabled = false;
+            button.style.backgroundColor = '#fb4552';
+            button.style.cursor = 'pointer';
+        } else {
+            button.disabled = true;
+            button.style.backgroundColor = 'grey';
+            button.style.cursor = 'not-allowed';
+        }
+    });
+}
+
+// Add event listeners to selectable images
+document.querySelectorAll('.selectable').forEach(item => {
+    item.addEventListener('click', event => {
+        // Toggle the 'selected' class on click
+        event.target.classList.toggle('selected');
+        // Check if any skill is selected
+        checkSkillsSelected();
+    });
 });
 
-click_back.addEventListener('click', function () {
-    formnumber--;
-    updateform();
-    progress_back();
+// Add event listeners for all 'next' buttons
+click_next.forEach(function (button) {
+    button.addEventListener('click', function () {
+        if (!validateform()) {
+            return false;
+        }
+        formnumber++;
+        updateform();
+        progress_forward();
+    });
 });
 
+// Add event listeners for all 'back' buttons
+click_back.forEach(function (button) {
+    button.addEventListener('click', function () {
+        formnumber--;
+        updateform();
+        progress_back();
+    });
+});
+
+// Event listener for the submit button
 click_submit.addEventListener('click', function () {
     if (!validateform()) {
         return false;
     }
     formnumber++;
     updateform();
+    progress_forward();
 });
 
 // Call this function when a new user logs in

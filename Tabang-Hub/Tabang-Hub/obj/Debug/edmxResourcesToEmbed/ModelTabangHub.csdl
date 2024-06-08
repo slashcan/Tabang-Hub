@@ -232,6 +232,7 @@
     <Property Name="skillId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="SkillName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <NavigationProperty Name="VolunteerSkill" Relationship="TabangHubModel.FK_VolunteerSkills_Skills" FromRole="Skills" ToRole="VolunteerSkill" />
+    <Property Name="SkillImage" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
   </EntityType>
   <EntityType Name="VolunteerSkill">
     <Key>

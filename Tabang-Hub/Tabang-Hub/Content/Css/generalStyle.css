@@ -18,6 +18,7 @@
 
 .skills-container {
     margin-top: 5%;
+    margin-bottom: 5%;
     display: flex;
     flex-wrap: wrap;
     gap: 15px;
@@ -25,8 +26,8 @@
 }
 
     .skills-container img {
-        flex: 1 1 calc(33.33% - 15px); /* Three images per row with 15px gap */
-        max-width: calc(33.33% - 15px); /* Adjust the width accordingly */
+        flex: 1 1 calc(33.33% - 15px); /* Two images per row with 15px gap */
+        max-width: calc(45% - 15px); /* Adjust the width accordingly */
         border-radius: 5%;
         cursor: pointer;
     }
@@ -40,16 +41,21 @@
     cursor: not-allowed;
 }
 
-
-
 @media (max-width: 480px) {
     .main {
         padding: 10px;
     }
+
     input[type="text"], input[type="password"] {
         font-size: 12px;
     }
+
     .button button {
         width: 100px;
+    }
+
+    .skills-container img {
+        flex: 1 1 calc(100% - 15px); /* One image per row with 15px gap */
+        max-width: calc(100% - 15px); /* Adjust the width accordingly */
     }
 }

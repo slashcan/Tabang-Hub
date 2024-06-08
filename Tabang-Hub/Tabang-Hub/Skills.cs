@@ -30,6 +30,8 @@ public partial class Skills
 
     public string SkillName { get; set; }
 
+    public string SkillImage { get; set; }
+
 
 
     public virtual ICollection<VolunteerSkill> VolunteerSkill { get; set; }

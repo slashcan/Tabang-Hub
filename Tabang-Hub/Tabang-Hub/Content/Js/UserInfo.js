@@ -1,6 +1,4 @@
-﻿// JavaScript for input validation in the "User information" section
-
-document.addEventListener('DOMContentLoaded', function () {
+﻿document.addEventListener('DOMContentLoaded', function () {
     // Add event listener to the Next button in the "User information" section
     document.querySelector('.main.active .button .next').addEventListener('click', function () {
         // Validate inputs before proceeding

@@ -102,6 +102,7 @@
     <EntitySetMapping Name="Skills">
       <EntityTypeMapping TypeName="TabangHubModel.Skills">
         <MappingFragment StoreEntitySet="Skills">
+          <ScalarProperty Name="SkillImage" ColumnName="SkillImage" />
           <ScalarProperty Name="SkillName" ColumnName="SkillName" />
           <ScalarProperty Name="skillId" ColumnName="skillId" />
         </MappingFragment>

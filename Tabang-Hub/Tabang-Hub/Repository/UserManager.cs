@@ -27,7 +27,6 @@ namespace Tabang_Hub.Repository
             _volunteerSkills = new BaseRepository<VolunteerSkill>();
             _profilePic = new BaseRepository<ProfilePicture>();
             _userRoles = new BaseRepository<UserRole>();
-
         }
 
         public UserAccount GetUserByEmail(String email)
@@ -117,7 +116,7 @@ namespace Tabang_Hub.Repository
             }          
             return ErrorCode.Success;
         }
-        public ErrorCode UpdateUserStatus(int userId, short newStatus, ref string errMsg)
+        public ErrorCode UpdateUserStatus(int userId, short newStatus, ref String errMsg)
         {
             // First, retrieve the user account by its ID
             var user = _userAcc.Get(userId);
@@ -135,6 +134,16 @@ namespace Tabang_Hub.Repository
                 errMsg = "User not found";
                 return ErrorCode.Error;
             }
+        }
+
+        public ErrorCode VolInfoUpdate(int userId, VolunteerInfo volInfo, ref String errMsg)
+        {
+            if(_volunteerInfo.Update(userId, volInfo, out errMsg) != Contracts.ErrorCode.Success)
+            {
+                return ErrorCode.Error;
+            }
+
+            return ErrorCode.Success; 
         }
     }
 }
