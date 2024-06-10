@@ -62,7 +62,7 @@ namespace Tabang_Hub.Controllers
         }
 
         [HttpPost]
-        public JsonResult EditAboutMe(string aboutMe, List<int> skills)
+        public JsonResult EditAboutMe(string aboutMe, List<int?> skills)
         {
             try
             {

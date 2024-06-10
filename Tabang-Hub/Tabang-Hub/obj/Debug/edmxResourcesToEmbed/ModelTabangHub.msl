@@ -141,8 +141,9 @@
       <EntityTypeMapping TypeName="TabangHubModel.VolunteerSkill">
         <MappingFragment StoreEntitySet="VolunteerSkill">
           <ScalarProperty Name="skillName" ColumnName="skillName" />
-          <ScalarProperty Name="userId" ColumnName="userId" />
           <ScalarProperty Name="skillId" ColumnName="skillId" />
+          <ScalarProperty Name="userId" ColumnName="userId" />
+          <ScalarProperty Name="volunteerSkillId" ColumnName="volunteerSkillId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
