@@ -1,0 +1,326 @@
+﻿@model Tabang_Hub.Utils.Lists
+@{
+    ViewBag.Title = "VolunteerProfile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>VolunteerProfile</h2>
+
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-2 text-center">
+                    <img src="~/Content/images/tabanghub3.png" class="rounded-circle img-fluid" alt="Profile Picture">
+                    <div id="profile" class="d-none">
+                        <label for="profilePic">Profile Picture</label>
+                        <input type="file" class="form-control-file d-none" id="profilePic" accept="image/*" />
+                    </div>
+                </div>
+                @foreach (var VolInfo in Model.volunteersInfo)
+                {
+                    <div class="col-md-8">
+                        <h4>@VolInfo.lName.ToUpper(), @VolInfo.fName.ToUpper()</h4>
+
+                        <p id="address">
+                            @VolInfo.street.Substring(0, 1).ToUpper()@VolInfo.street.Substring(1),
+                            @VolInfo.city.Substring(0, 1).ToUpper()@VolInfo.city.Substring(1) City,
+                            @VolInfo.province.Substring(0, 1).ToUpper()@VolInfo.province.Substring(1)
+                        </p>
+                        <div id="addressInput" class="d-none">
+                            <input type="text" id="streetInput" class="form-control mb-1" value="@VolInfo.street" placeholder="Street">
+                            <input type="text" id="cityInput" class="form-control mb-1" value="@VolInfo.city" placeholder="City">
+                            <input type="text" id="provinceInput" class="form-control mb-1" value="@VolInfo.province" placeholder="Province">
+                        </div>
+
+                        <p class="mb-1"><strong>Contact number: </strong><span id="phone">@VolInfo.phoneNum</span></p>
+                        <input type="text" id="phoneInput" class="form-control d-none" value="@VolInfo.phoneNum">
+
+                        <p class="mb-1"><strong>Email: </strong><span id="email">@VolInfo.UserAccount.email</span></p>
+                        <input type="email" id="emailInput" class="form-control d-none" value="@VolInfo.UserAccount.email">
+
+                        <p class="mb-1">
+                            <strong>Availability:</strong> Available ko every day basta naay kaon
+                        </p>
+                    </div>
+                }
+                <div class="col-md-2 text-right">
+                    <button id="editButton" class="btn btn-outline-success" onclick="toggleEdit()">Edit</button>
+                    <button id="cancelButton" class="btn btn-outline-danger d-none" onclick="cancelEdit()">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card mt-3">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-5">
+                    <h5>About me</h5>
+                    @foreach (var aboutVolunteer in Model.volunteersInfo)
+                    {
+                        <p class="mb-1">
+                            <span id="aboutMe">
+                                @aboutVolunteer.aboutMe
+                            </span>
+                        </p>
+                        <textarea rows="5" id="aboutMeInput" class="form-control d-none">@aboutVolunteer.aboutMe</textarea>
+                    }
+                </div>
+                <div class="col-md-5">
+                    <h5>Skills</h5>
+                    <div id="skillsDisplay">
+                        @foreach (var UserSkill in Model.volunteersSkill)
+                        {
+                            <span class="badge badge-secondary skill-badge" data-skill-id="@UserSkill.skillId">
+                                @UserSkill.skillName
+                                <span class="remove-skill d-none" onclick="removeSkill(this)">x</span>
+                            </span>
+                        }
+                    </div>
+                    <select id="skillsDropdown" class="form-control d-none mt-2" onchange="addSkill()">
+                        <option value="" label="Select a skill"></option>
+                        @foreach (var Skills in Model.uniqueSkill)
+                        {
+                            <option value="@Skills.skillId">@Skills.skillName</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-2 text-right">
+                    <button id="editButtonAboutMe" class="btn btn-outline-success" onclick="toggleEditAboutMe()">Edit</button>
+                    <button id="cancelButtonAboutMe" class="btn btn-outline-danger d-none" onclick="cancelEditAboutMe()">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card mt-3">
+        <div class="card-body">
+            <h5 class="text-center">Activity History</h5>
+            <div class="row">
+                <div class="col-md-4">
+                    <h6>Top 1 Activity</h6>
+                    <p>June 2019 - March 2020</p>
+                    <h6>Top 2 Activity</h6>
+                    <p>June 2019 - March 2020</p>
+                    <h6>Top 3 Activity</h6>
+                    <p>June 2019 - March 2020</p>
+                </div>
+                <div class="col-md-4">
+                    <h6>Top 4 Activity</h6>
+                    <p>June 2019 - March 2020</p>
+                    <h6>Top 5 Activity</h6>
+                    <p>June 2019 - March 2020</p>
+                    <h6>Top 6 Activity</h6>
+                    <p>June 2019 - March 2020</p>
+                </div>
+                <div class="col-md-4">
+                    <h6>Top 7 Activity</h6>
+                    <p>June 2019 - March 2020</p>
+                    <h6>Top 8 Activity</h6>
+                    <p>June 2019 - March 2020</p>
+                    <h6>Top 9 Activity</h6>
+                    <p>June 2019 - March 2020</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script>
+    var originalValues = {};
+
+    function toggleEdit() {
+        var isEditing = document.getElementById('editButton').innerText === 'Edit';
+
+        if (isEditing) {
+            originalValues.street = document.getElementById('streetInput').value;
+            originalValues.city = document.getElementById('cityInput').value;
+            originalValues.province = document.getElementById('provinceInput').value;
+            originalValues.phone = document.getElementById('phoneInput').value;
+            originalValues.email = document.getElementById('emailInput').value;
+        }
+
+        document.getElementById('address').classList.toggle('d-none', isEditing);
+        document.getElementById('addressInput').classList.toggle('d-none', !isEditing);
+
+        document.getElementById('phone').classList.toggle('d-none', isEditing);
+        document.getElementById('phoneInput').classList.toggle('d-none', !isEditing);
+
+        document.getElementById('email').classList.toggle('d-none', isEditing);
+        document.getElementById('emailInput').classList.toggle('d-none', !isEditing);
+
+        document.getElementById('profile').classList.toggle('d-none', !isEditing);
+        document.getElementById('profilePic').classList.toggle('d-none', isEditing);
+
+        document.getElementById('editButton').innerText = isEditing ? 'Save' : 'Edit';
+        document.getElementById('cancelButton').classList.toggle('d-none', !isEditing);
+
+        if (!isEditing) {
+            var street = document.getElementById('streetInput').value;
+            var city = document.getElementById('cityInput').value;
+            var province = document.getElementById('provinceInput').value;
+            var phone = document.getElementById('phoneInput').value;
+            var email = document.getElementById('emailInput').value;
+
+            var profilePic = document.getElementById('profilePic').files[0];
+
+            SaveChanges(street, city, province, phone, email);
+        }
+    }
+
+    function cancelEdit() {
+        document.getElementById('streetInput').value = originalValues.street;
+        document.getElementById('cityInput').value = originalValues.city;
+        document.getElementById('provinceInput').value = originalValues.province;
+        document.getElementById('phoneInput').value = originalValues.phone;
+        document.getElementById('emailInput').value = originalValues.email;
+
+        toggleEdit();
+    }
+
+    function SaveChanges(street, city, province, phone, email) {
+        console.log(street, city, province, phone, email);
+
+        $.ajax({
+            url: '/Volunteer/EditBasicInfo',
+            type: 'POST',
+            data: {
+                street: street,
+                city: city,
+                province: province,
+                phone: phone,
+                email: email
+            },
+            success: function (response) {
+                if (response.success) {
+                    console.log("Updated");
+
+                    $('#address').text(street + ', ' + city + ' City, ' + province);
+                    $('#phone').text(phone);
+                    $('#email').text(email);
+                } else {
+                    console.log("Error: " + response.message);
+                }
+            },
+            error: function (xhr, status, error) {
+                console.log("Error function " + error);
+            }
+        });
+    }
+
+    function toggleEditAboutMe() {
+        var isEditing = document.getElementById('editButtonAboutMe').innerText === 'Edit';
+
+        if (isEditing) {
+            originalValues.aboutMe = document.getElementById('aboutMeInput').value;
+        }
+
+        document.getElementById('aboutMe').classList.toggle('d-none', isEditing);
+        document.getElementById('aboutMeInput').classList.toggle('d-none', !isEditing);
+
+        document.getElementById('skillsDropdown').classList.toggle('d-none', !isEditing);
+
+        document.querySelectorAll('.remove-skill').forEach(element => {
+            element.classList.toggle('d-none', !isEditing);
+        });
+
+        document.getElementById('editButtonAboutMe').innerText = isEditing ? 'Save' : 'Edit';
+        document.getElementById('cancelButtonAboutMe').classList.toggle('d-none', !isEditing);
+
+        if (!isEditing) {
+            var aboutMe = document.getElementById('aboutMeInput').value;
+
+            var getDisplaySkill = getSkillsDisplayData();
+
+            SaveAboutMe(aboutMe, getDisplaySkill);
+        }
+    }
+
+    function cancelEditAboutMe() {
+        document.getElementById('aboutMeInput').value = originalValues.aboutMe;
+
+        toggleEditAboutMe();
+    }
+
+    function SaveAboutMe(aboutMe, getDisplaySkill) {
+        console.log(aboutMe);
+        console.log(getDisplaySkill);
+        var getSkills = getDisplaySkill;
+
+        $.ajax({
+            url: '/Volunteer/EditAboutMe',
+            type: 'POST',
+            data: {
+                aboutMe: aboutMe,
+                skills: getSkills
+            },
+            success: function (response) {
+                if (response.success) {
+                    console.log("Updated");
+
+                    $('#aboutMe').text(aboutMe);
+                } else {
+                    console.log("Error: " + response.message);
+                }
+            },
+            error: function (xhr, status, error) {
+                console.log("Error function " + error);
+            }
+        });
+    }
+
+    function addSkill() {
+        var selectedSkill = document.getElementById('skillsDropdown').value;
+        var selectedSkillName = document.getElementById('skillsDropdown').options[document.getElementById('skillsDropdown').selectedIndex].text;
+
+        if (selectedSkill) {
+            var skillsDisplay = document.getElementById('skillsDisplay');
+            var newSkill = document.createElement('span');
+            newSkill.className = 'badge badge-secondary skill-badge';
+            newSkill.setAttribute('data-skill-id', selectedSkill);
+            newSkill.innerHTML = `${selectedSkillName} <span class="remove-skill" onclick="removeSkill(this)">x</span>`;
+            skillsDisplay.appendChild(newSkill);
+
+            // Remove selected skill from the dropdown
+            var options = document.getElementById('skillsDropdown').options;
+            for (var i = 0; i < options.length; i++) {
+                if (options[i].value === selectedSkill) {
+                    options[i].remove();
+                    break;
+                }
+            }
+        }
+    }
+
+    function removeSkill(element) {
+        var skillBadge = element.parentNode;
+        var skillId = skillBadge.getAttribute('data-skill-id');
+        var skillName = skillBadge.innerText.replace(' x', '');
+
+        // Add the skill back to the dropdown
+        var skillsDropdown = document.getElementById('skillsDropdown');
+        var option = document.createElement('option');
+        option.value = skillId;
+        option.text = skillName;
+        skillsDropdown.add(option);
+
+        // Remove the skill badge
+        skillBadge.remove();
+    }
+
+    function getSkillsDisplayData() {
+        var skillsDisplay = document.getElementById('skillsDisplay');
+        var skillElements = skillsDisplay.getElementsByClassName('skill-badge');
+        var skills = [];
+
+        for (var i = 0; i < skillElements.length; i++) {
+            skills.push(skillElements[i].getAttribute('data-skill-id'));
+        }
+
+        return skills;
+    }
+</script>

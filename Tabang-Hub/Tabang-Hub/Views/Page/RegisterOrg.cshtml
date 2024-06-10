@@ -1,0 +1,115 @@
+﻿@model Tabang_Hub.UserAccount
+
+@{
+    ViewBag.Title = "RegisterOrg";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10 col-sm-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-md-4 text-center">
+                            <img src="~/Content/images/tabanghub3.png" alt="Tabang Hub Logo" class="img-fluid mb-3" style="max-width: 200px;">
+                        </div>
+                        <div class="col-md-8">
+                            <h2>Create a New Account</h2>
+                            <p>Fill in the details to create your account.</p>
+                            <form action="#" method="post" enctype="multipart/form-data">
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">Email Address</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                        <input type="email" class="form-control" id="email" name="email" placeholder="Enter Your Email" required>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="password" class="form-label">Password</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                                        <input type="password" class="form-control" id="password" name="password" placeholder="Enter Password" required>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="confirmPassword" class="form-label">Confirm Password</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                                        <input type="password" class="form-control" id="confirmPassword" name="ConfirmPass" placeholder="Confirm Password" required>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="imageUpload1" class="form-label">Upload Profile Image 1</label>
+                                    <input class="form-control" type="file" id="imageUpload1" name="picture1" accept="image/*" onchange="previewImage(event, 'imagePreview1')">
+                                    <img id="imagePreview1" class="img-fluid mt-3" src="#" alt="Image Preview 1" style="display:none; max-width: 200px;">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="imageUpload2" class="form-label">Upload Profile Image 2</label>
+                                    <input class="form-control" type="file" id="imageUpload2" name="picture2" accept="image/*" onchange="previewImage(event, 'imagePreview2')">
+                                    <img id="imagePreview2" class="img-fluid mt-3" src="#" alt="Image Preview 2" style="display:none; max-width: 200px;">
+                                </div>
+                                <button class="btn btn-danger w-100" type="submit">Register</button>
+                            </form>
+                            <p class="mt-3 text-center">Already have an account? <a href="~/Page/Login">Login here</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*<div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-md-10 col-sm-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-md-4 text-center">
+                                <img src="~/Content/images/tabanghub3.png" alt="Tabang Hub Logo" class="img-fluid mb-3" style="max-width: 200px;">
+                            </div>
+                            <div class="col-md-8">
+                                <h2>Create a New Account</h2>
+                                <p>Fill in the details to create your account.</p>
+                                <form action="/Page/RegisterOrg" method="post" enctype="multipart/form-data">
+                                    <div class="mb-3">
+                                        <label for="orgEmail" class="form-label">Email Address</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                            <input type="email" class="form-control" id="orgEmail" name="orgEmail" placeholder="Enter Your Email" required>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="orgPassword" class="form-label">Password</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                                            <input type="password" class="form-control" id="orgPassword" name="orgPassword" placeholder="Enter Password" required>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="confirmPassword" class="form-label">Confirm Password</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                                            <input type="password" class="form-control" id="confirmPassword" name="ConfirmPass" placeholder="Confirm Password" required>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="imageUpload1" class="form-label">Upload Profile Image 1</label>
+                                        <input class="form-control" type="file" id="imageUpload1" name="picture1" accept="image/*" onchange="previewImage(event, 'imagePreview1')">
+                                        <img id="imagePreview1" class="img-fluid mt-3" src="#" alt="Image Preview 1" style="display:none; max-width: 200px;">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="imageUpload2" class="form-label">Upload Profile Image 2</label>
+                                        <input class="form-control" type="file" id="imageUpload2" name="picture2" accept="image/*" onchange="previewImage(event, 'imagePreview2')">
+                                        <img id="imagePreview2" class="img-fluid mt-3" src="#" alt="Image Preview 2" style="display:none; max-width: 200px;">
+                                    </div>
+                                    <button class="btn btn-danger w-100" type="submit">Register</button>
+                                </form>
+                                <p class="mt-3 text-center">Already have an account? <a href="~/Page/Login">Login here</a></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>*@
