@@ -28,9 +28,9 @@ public partial class Skills
 
     public int skillId { get; set; }
 
-    public string SkillName { get; set; }
+    public string skillName { get; set; }
 
-    public string SkillImage { get; set; }
+    public string skillImage { get; set; }
 
 
 

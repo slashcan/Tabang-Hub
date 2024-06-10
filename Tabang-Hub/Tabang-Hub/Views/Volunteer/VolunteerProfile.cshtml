@@ -1,4 +1,4 @@
-﻿@model Tabang_Hub.ListModel.IndexModel
+﻿@model Tabang_Hub.Utils.Lists
 @{
     ViewBag.Title = "VolunteerProfile";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -83,7 +83,7 @@
                         <option value="" label="Select a skill"></option>
                         @foreach (var Skills in Model.uniqueSkill)
                         {
-                            <option value="@Skills.skillId">@Skills.SkillName</option>
+                            <option value="@Skills.skillId">@Skills.skillName</option>
                         }
                     </select>
                 </div>

@@ -5,9 +5,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Helpers;
 using System.Web.Mvc;
-using Tabang_Hub.ListModel;
-using Tabang_Hub.Repository;
 using Tabang_Hub.Utils;
+using Tabang_Hub.Repository;
 
 namespace Tabang_Hub.Controllers
 {
@@ -20,13 +19,13 @@ namespace Tabang_Hub.Controllers
         }
         public ActionResult VolunteerProfile()
         {
-            var getUserAccount = db.UserAccounts.Where(m => m.userId == UserId).ToList();
-            var getVolunteerInfo = db.VolunteerInfoes.Where(m => m.userId == UserId).ToList();
+            var getUserAccount = db.UserAccount.Where(m => m.userId == UserId).ToList();
+            var getVolunteerInfo = db.VolunteerInfo.Where(m => m.userId == UserId).ToList();
             var getVolunteerSkills = db.VolunteerSkill.Where(m => m.userId == UserId).ToList();
 
             var getUniqueSkill = db.sp_GetSkills(UserId).ToList();
 
-            var listModel = new IndexModel()
+            var listModel = new Lists()
             {
                 userAccounts = getUserAccount,
                 volunteersInfo = getVolunteerInfo,
@@ -42,8 +41,8 @@ namespace Tabang_Hub.Controllers
         {
             try
             {
-                var VolunteerUpdate = db.VolunteerInfoes.Where(m => m.userId == UserId).FirstOrDefault();
-                var UserUpdate = db.UserAccounts.Where(m => m.userId == UserId).FirstOrDefault();
+                var VolunteerUpdate = db.VolunteerInfo.Where(m => m.userId == UserId).FirstOrDefault();
+                var UserUpdate = db.UserAccount.Where(m => m.userId == UserId).FirstOrDefault();
 
                 VolunteerUpdate.street = street;
                 VolunteerUpdate.phoneNum = phone;
@@ -67,7 +66,7 @@ namespace Tabang_Hub.Controllers
         {
             try
             {
-                var VolunteerUpdate = db.VolunteerInfoes.Where(m => m.userId == UserId).FirstOrDefault();
+                var VolunteerUpdate = db.VolunteerInfo.Where(m => m.userId == UserId).FirstOrDefault();
                 VolunteerUpdate.aboutMe = aboutMe;
                 var getVolSkillCount = db.VolunteerSkill.Where(m => m.userId == UserId).Count();
 
@@ -98,7 +97,7 @@ namespace Tabang_Hub.Controllers
                         foreach (var skillId in skills)
                         {
                             var existSkill = db.VolunteerSkill.Where(m => m.userId == UserId && m.skillId == skillId).FirstOrDefault();
-                            var getSkillName = db.Skills.Where(m => m.skillId == skillId).Select(m => m.SkillName).FirstOrDefault();
+                            var getSkillName = db.Skills.Where(m => m.skillId == skillId).Select(m => m.skillName).FirstOrDefault();
 
                             if (existSkill == null)
                             {
@@ -135,7 +134,7 @@ namespace Tabang_Hub.Controllers
         {
             try
             {
-                var volInfo = db.VolunteerInfoes.Where(m => m.userId == UserId).FirstOrDefault();
+                var volInfo = db.VolunteerInfo.Where(m => m.userId == UserId).FirstOrDefault();
                 volInfo.fName = model.fName;
                 volInfo.lName = model.lName;
                 volInfo.bDay = model.bDay;
@@ -148,12 +147,12 @@ namespace Tabang_Hub.Controllers
 
                 foreach (var vSkill in volunteerSkill)
                 {
-                    var getSkill = _skills.GetAll().Where(m => m.SkillName == vSkill).FirstOrDefault();
+                    var getSkill = _skills.GetAll().Where(m => m.skillName == vSkill).FirstOrDefault();
                     var skll = new VolunteerSkill
                     {
                         userId = UserId,
                         skillId = getSkill.skillId,
-                        skillName = getSkill.SkillName
+                        skillName = getSkill.skillName
                     };
 
                     _volunteerSkills.Create(skll);

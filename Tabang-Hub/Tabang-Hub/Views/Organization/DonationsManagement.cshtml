@@ -1,80 +1,163 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "DonationsManagement";
     Layout = "~/Views/Shared/_Organization.cshtml";
 }
 
+<style>
+    .navbar-nav .nav-link {
+        padding-left: 10px;
+        padding-right: 10px;
+        white-space: nowrap;
+        font-size: 14px;
+    }
+
+    .content-section {
+        display: none;
+    }
+
+        .content-section.active {
+            display: block;
+        }
+
+    .navbar-center {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .preview-container {
+        display: flex;
+        flex-wrap: wrap;
+        margin-top: 10px;
+    }
+
+    .preview-image {
+        margin: 5px;
+        max-width: 100px;
+        max-height: 100px;
+    }
+</style>
+
 <div class="container mt-5">
-    <!-- Overview/Dashboard -->
-    <div class="card mb-4">
-        <div class="card-header">Dashboard</div>
-        <div class="card-body">
-            <p>Overview of donations, including total amount, number of donors, and recent donations.</p>
+    <!-- Sub Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
+        <div class="container">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse navbar-center" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link" href="#dashboard" onclick="showSection('dashboard')">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#donation-creation" onclick="showSection('donation-creation')">Create Donation</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#donation-list" onclick="showSection('donation-list')">Donation List</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#communication-tools" onclick="showSection('communication-tools')">Communication Tools</a></li>
+                </ul>
+            </div>
         </div>
-    </div>
+    </nav>
 
-    <!-- Donation Recording -->
-    <div class="card mb-4">
-        <div class="card-header">Donation Recording</div>
-        <div class="card-body">
-            <p>Record new donations, including donor information, donation amount, and payment method.</p>
+    <!-- Content Sections -->
+    <div class="container">
+        <!-- Overview/Dashboard -->
+        <div id="dashboard" class="mb-4 content-section active">
+            <div class="card">
+                <div class="card-header">Dashboard</div>
+                <div class="card-body">
+                    <!-- Empty content for now -->
+                </div>
+            </div>
         </div>
-    </div>
 
-    <!-- Donor Management -->
-    <div class="card mb-4">
-        <div class="card-header">Donor Management</div>
-        <div class="card-body">
-            <p>Manage donor information, view profiles, and edit details.</p>
+        <!-- Donation Creation -->
+        <div id="donation-creation" class="mb-4 content-section">
+            <div class="card">
+                <div class="card-header">Create Donation</div>
+                <div class="card-body">
+                    <form action="/Organization/CreateDonations" method="post" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label for="CreateDonations_donationTitle" class="form-label">Donation Title</label>
+                            <input type="text" class="form-control" id="CreateDonations_donationTitle" name="CreateDonations.donationTitle" placeholder="Enter donation title" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="CreateDonations_donationDescription" class="form-label">Donation Description</label>
+                            <textarea class="form-control" id="CreateDonations_donationDescription" name="CreateDonations.donationDescription" rows="4" placeholder="Enter donation description" required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="CreateDonations_targetAmount" class="form-label">Target Amount</label>
+                            <input type="number" class="form-control" id="CreateDonations_targetAmount" name="CreateDonations.targetAmount" placeholder="Enter target amount" required>
+                        </div>
+                        <div class="mb-3 row">
+                            <div class="col">
+                                <label for="CreateDonations_startDate" class="form-label">Start Date</label>
+                                <input type="date" class="form-control" id="CreateDonations_startDate" name="CreateDonations.startDate" required>
+                            </div>
+                            <div class="col">
+                                <label for="CreateDonations_endDate" class="form-label">End Date</label>
+                                <input type="date" class="form-control" id="CreateDonations_endDate" name="CreateDonations.endDate" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="CreateDonations_location" class="form-label">Location</label>
+                            <input type="text" class="form-control" id="CreateDonations_location" name="CreateDonations.location" placeholder="Enter location" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="CreateDonations_uploadImage" class="form-label">Upload Images</label>
+                            <input type="file" class="form-control" id="CreateDonations_uploadImage" name="images" multiple onchange="previewImages()">
+                            <div class="preview-container" id="image-preview"></div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Create Donation</button>
+                    </form>
+                </div>
+            </div>
         </div>
-    </div>
 
-    <!-- Donation History -->
-    <div class="card mb-4">
-        <div class="card-header">Donation History</div>
-        <div class="card-body">
-            <p>View a comprehensive history of all donations, edit records, and export data.</p>
+        <!-- Donation List -->
+        <div id="donation-list" class="mb-4 content-section">
+            <div class="card">
+                <div class="card-header">Donation List</div>
+                <div class="card-body">
+                    <!-- Empty content for now -->
+                </div>
+            </div>
         </div>
-    </div>
 
-    <!-- Recurring Donations -->
-    <div class="card mb-4">
-        <div class="card-header">Recurring Donations</div>
-        <div class="card-body">
-            <p>Set up and manage recurring donations, including schedules and notifications.</p>
-        </div>
-    </div>
-
-    <!-- Fundraising Campaigns -->
-    <div class="card mb-4">
-        <div class="card-header">Fundraising Campaigns</div>
-        <div class="card-body">
-            <p>Create and manage fundraising campaigns, track progress, and promote via email or social media.</p>
-        </div>
-    </div>
-
-    <!-- Communication Tools -->
-    <div class="card mb-4">
-        <div class="card-header">Communication Tools</div>
-        <div class="card-body">
-            <p>Send thank-you emails, create newsletters, and provide updates to donors.</p>
-        </div>
-    </div>
-
-    <!-- Reports and Analytics -->
-    <div class="card mb-4">
-        <div class="card-header">Reports and Analytics</div>
-        <div class="card-body">
-            <p>Generate reports and analyze donation data, including trends and top donors.</p>
-        </div>
-    </div>
-
-    <!-- Tax Receipts and Acknowledgements -->
-    <div class="card mb-4">
-        <div class="card-header">Tax Receipts and Acknowledgements</div>
-        <div class="card-body">
-            <p>Generate and send tax receipts and acknowledgments to donors.</p>
+        <!-- Communication Tools -->
+        <div id="communication-tools" class="mb-4 content-section">
+            <div class="card">
+                <div class="card-header">Communication Tools</div>
+                <div class="card-body">
+                    <!-- Empty content for now -->
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
+<script>
+    function showSection(sectionId) {
+        // Hide all sections
+        document.querySelectorAll('.content-section').forEach(section => {
+            section.classList.remove('active');
+        });
+
+        // Show the selected section
+        document.getElementById(sectionId).classList.add('active');
+    }
+
+    function previewImages() {
+        const previewContainer = document.getElementById('image-preview');
+        previewContainer.innerHTML = ''; // Clear previous previews
+        const files = document.getElementById('CreateDonations_uploadImage').files;
+
+        Array.from(files).forEach(file => {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.className = 'preview-image';
+                previewContainer.appendChild(img);
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+</script>

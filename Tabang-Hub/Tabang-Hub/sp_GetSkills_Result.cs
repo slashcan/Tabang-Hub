@@ -19,7 +19,7 @@ public partial class sp_GetSkills_Result
 
     public int skillId { get; set; }
 
-    public string SkillName { get; set; }
+    public string skillName { get; set; }
 
 }
 

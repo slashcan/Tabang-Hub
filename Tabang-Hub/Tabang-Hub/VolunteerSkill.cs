@@ -30,8 +30,6 @@ public partial class VolunteerSkill
 
     public virtual Skills Skills { get; set; }
 
-    public virtual UserAccount UserAccount { get; set; }
-
 }
 
 }

@@ -21,15 +21,15 @@ public partial class UserAccount
     public UserAccount()
     {
 
-        this.OrgInfoes = new HashSet<OrgInfo>();
+        this.OrgEvents = new HashSet<OrgEvents>();
 
-        this.OrgValidations = new HashSet<OrgValidation>();
+        this.OrgInfo = new HashSet<OrgInfo>();
 
-        this.UserRoles = new HashSet<UserRole>();
+        this.OrgValidation = new HashSet<OrgValidation>();
 
-        this.VolunteerInfoes = new HashSet<VolunteerInfo>();
+        this.UserRoles = new HashSet<UserRoles>();
 
-        this.VolunteerSkill = new HashSet<VolunteerSkill>();
+        this.VolunteerInfo = new HashSet<VolunteerInfo>();
 
     }
 
@@ -48,15 +48,15 @@ public partial class UserAccount
 
 
 
-    public virtual ICollection<OrgInfo> OrgInfoes { get; set; }
+    public virtual ICollection<OrgEvents> OrgEvents { get; set; }
 
-    public virtual ICollection<OrgValidation> OrgValidations { get; set; }
+    public virtual ICollection<OrgInfo> OrgInfo { get; set; }
 
-    public virtual ICollection<UserRole> UserRoles { get; set; }
+    public virtual ICollection<OrgValidation> OrgValidation { get; set; }
 
-    public virtual ICollection<VolunteerInfo> VolunteerInfoes { get; set; }
+    public virtual ICollection<UserRoles> UserRoles { get; set; }
 
-    public virtual ICollection<VolunteerSkill> VolunteerSkill { get; set; }
+    public virtual ICollection<VolunteerInfo> VolunteerInfo { get; set; }
 
 }
 

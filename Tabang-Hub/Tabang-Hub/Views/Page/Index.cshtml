@@ -1,4 +1,4 @@
-﻿@model Tabang_Hub.ListModel.IndexModel
+﻿﻿@model Tabang_Hub.Utils.Lists
 @{
     ViewBag.Title = "Index";
 }
@@ -98,15 +98,15 @@
                                 <div class="skills-container">
                                     @foreach (var skillImage in Model.skills)
                                     {
-                                        <img src="~/SkillsImages/@skillImage.SkillImage" class="selectable" data-skill="@skillImage.SkillName" >
+                                        <img src="~/SkillsImages/@skillImage.skillImage" class="selectable" data-skill="@skillImage.skillName">
                                     }
                                 </div>
                             </div>
-                                <div class="button">
-                                    <button class="submit" disabled>Next</button>
-                                    <i class="fa fa-angle-right"></i>
-                                </div>
-                                <i class="fa fa-arrow-left back_page"></i>
+                            <div class="button">
+                                <button class="submit" disabled>Next</button>
+                                <i class="fa fa-angle-right"></i>
+                            </div>
+                            <i class="fa fa-arrow-left back_page"></i>
                         </div>
 
                         <!-- Done -->
@@ -186,7 +186,7 @@
                 zipCode: zipCode,
                 gender: gender
             };
-            
+
             var volunteerSkill = logSelectedSkills();
             SaveDatas(informationData, volunteerSkill);
         }

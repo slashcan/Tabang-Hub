@@ -4,7 +4,6 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Tabang_Hub.Repository;
-using Tabang_Hub.ListModel;
 
 namespace Tabang_Hub.Controllers
 {
@@ -12,6 +11,8 @@ namespace Tabang_Hub.Controllers
     {
         public TabangHubEntities db;
         public UserManager _userManager;
+        public OrganizationManager _organizationManager;
+        public VolunteerManager _volunteerManager;
         public String ErrorMessage;
 
         public BaseRepository<Skills> _skills;
@@ -21,7 +22,7 @@ namespace Tabang_Hub.Controllers
         public BaseRepository<OrgInfo> _orgInfo;
         public BaseRepository<OrgValidation> _orgValid;
         public BaseRepository<ProfilePicture> _profilePic;
-        public BaseRepository<UserRole> _userRoles;
+        public BaseRepository<UserRoles> _userRoles;
 
         public String Email { get { return User.Identity.Name;  } }
         public int UserId { get { return _userManager.GetUserByEmail(Email).userId; } }
@@ -30,6 +31,8 @@ namespace Tabang_Hub.Controllers
         {
             db = new TabangHubEntities();
            _userManager = new UserManager();
+            _organizationManager = new OrganizationManager();
+            _volunteerManager = new VolunteerManager();
             ErrorMessage = String.Empty;
 
             _skills = new BaseRepository<Skills>();
@@ -39,7 +42,8 @@ namespace Tabang_Hub.Controllers
             _orgInfo = new BaseRepository<OrgInfo>();
             _orgValid = new BaseRepository<OrgValidation>();
             _profilePic = new BaseRepository<ProfilePicture>();
-            _userRoles = new BaseRepository<UserRole>();
+            _userRoles = new BaseRepository<UserRoles>();
+            
         }
     }
 }

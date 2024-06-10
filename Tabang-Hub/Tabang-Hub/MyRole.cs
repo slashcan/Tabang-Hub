@@ -45,7 +45,7 @@ namespace Tabang_Hub
         {
             using (var db = new TabangHubEntities())
             {
-                return db.Roles.Select(m => m.roleName).ToArray();
+                return db.Role.Select(m => m.roleName).ToArray();
             }
         }
 

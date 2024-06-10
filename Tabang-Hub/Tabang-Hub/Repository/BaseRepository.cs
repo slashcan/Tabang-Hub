@@ -4,6 +4,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using Tabang_Hub.Contracts;
+using Tabang_Hub.Utils;
 
 namespace Tabang_Hub.Repository
 {
@@ -44,6 +45,21 @@ namespace Tabang_Hub.Repository
                 return ErrorCode.Error;
             }
         }
+
+        public ErrorCode Create(T t)
+        {
+            try
+            {
+                _table.Add(t);
+                _db.SaveChanges();             
+
+                return ErrorCode.Success;
+            }
+            catch (Exception ex)
+            {             
+                return ErrorCode.Error;
+            }
+        }
         public ErrorCode Delete(object id)
         {
             try
@@ -54,7 +70,7 @@ namespace Tabang_Hub.Repository
 
                 return ErrorCode.Success;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return ErrorCode.Error;
             }
@@ -84,35 +100,24 @@ namespace Tabang_Hub.Repository
             throw new NotImplementedException();
         }
 
-
-        //Arvie's way
-        public ErrorCode Create(T t)
+        ErrorCode IBaseRepository<T>.Create(T t, out string errorMsg)
         {
-            try
-            {
-                _table.Add(t);
-                _db.SaveChanges();
-
-                return ErrorCode.Success;
-            }
-            catch (Exception ex)
-            {
-                return ErrorCode.Error;
-            }
+            throw new NotImplementedException();
         }
+
+        ErrorCode IBaseRepository<T>.Update(object id, T t, out string errorMsg)
+        {
+            throw new NotImplementedException();
+        }
+
+        ErrorCode IBaseRepository<T>.Delete(object id, out string errorMsg)
+        {
+            throw new NotImplementedException();
+        }
+
         public ErrorCode Update(object id, T t)
         {
-            try
-            {
-                var obj = Get(id);
-                _db.Entry(obj).CurrentValues.SetValues(t);
-                _db.SaveChanges();
-                return ErrorCode.Success;
-            }
-            catch (Exception ex)
-            {
-                return ErrorCode.Error;
-            }
+            throw new NotImplementedException();
         }
     }
 }

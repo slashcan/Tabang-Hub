@@ -7,7 +7,6 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
-using Tabang_Hub.ListModel;
 using Tabang_Hub.Repository;
 using Tabang_Hub.Utils;
 
@@ -26,11 +25,11 @@ namespace Tabang_Hub.Controllers
                 {
                     case 1:
 
-                        var getInfo = db.VolunteerInfoes.Where(m => m.userId == UserId).ToList();
+                        var getInfo = db.VolunteerInfo.Where(m => m.userId == UserId).ToList();
                         var getVolunteerSkills = db.VolunteerSkill.Where(m => m.userId == UserId).ToList();
-                        var getSkills =  _skills.GetAll().ToList();
+                        var getSkills = _skills.GetAll().ToList();
 
-                        var indexModel = new IndexModel()
+                        var indexModel = new Lists()
                         {
                             volunteersInfo = getInfo,
                             volunteersSkill = getVolunteerSkills,
@@ -58,7 +57,7 @@ namespace Tabang_Hub.Controllers
         }
         [AllowAnonymous]
         [HttpPost]
-        public ActionResult RegisterOrg(UserAccount u, OrgInfo o, OrgValidation ov, UserRole r, HttpPostedFileBase picture1, HttpPostedFileBase picture2)
+        public ActionResult RegisterOrg(UserAccount u, OrgInfo o, OrgValidation ov, UserRoles r, HttpPostedFileBase picture1, HttpPostedFileBase picture2)
         {
             if (picture1 != null && picture1.ContentLength > 0)
             {
@@ -118,7 +117,7 @@ namespace Tabang_Hub.Controllers
         }
         [AllowAnonymous]
         [HttpPost]
-        public ActionResult Register(UserAccount u,VolunteerInfo v, UserRole r, String ConfirmPass)
+        public ActionResult Register(UserAccount u, VolunteerInfo v, UserRoles r, String ConfirmPass)
         {
             u.status = 0;
             u.roleId = 1;
