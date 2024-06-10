@@ -15,9 +15,7 @@ namespace Tabang_Hub
     public partial class Skills
     {
         public int skillId { get; set; }
-        public Nullable<int> userId { get; set; }
         public string skillName { get; set; }
-    
-        public virtual UserAccount UserAccount { get; set; }
+        public string skillImage { get; set; }
     }
 }

@@ -1,7 +1,233 @@
-﻿
+﻿﻿@model Tabang_Hub.Utils.Lists
 @{
     ViewBag.Title = "Index";
 }
 
-<h2>Volunteer Page</h2>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
 
+    <!-- CSS Files -->
+    <link href="~/Content/Css/popup.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/air-datepicker/2.2.3/css/datepicker.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="~/Content/Css/generalStyle.css" rel="stylesheet" />
+    <link href="~/Content/Css/progress.css" rel="stylesheet" />
+</head>
+<body>
+    <h2>Volunteer Page</h2>
+    @if (Model.volunteersSkill.Count == 0)
+    {
+
+        <div id="modal-overlay">
+            <div style="margin-top: 7%" id="modal-content">
+
+                <ul class="progress_bar">
+                    <li class="active">User details</li>
+                    <li>Skill(s)</li>
+                    <li>Done</li>
+                </ul>
+                <div class="container">
+                    <div class="card">
+
+                        <!-- User information -->
+                        <div class="main active">
+                            <div class="scrollable-container">
+                                <div class="logo">
+                                    <img src="https://imgur.com/H8Yg6Sk.png">
+                                    <p>Registration Process</p>
+                                    <h3>Your Decision Awaits</h3>
+                                    <span><img src="../duck1.png" alt=""></span>
+                                    <h4>User details</h4>
+                                </div>
+                                <div class="input_text">
+                                    <input id="fname" type="text" placeholder="Firstname" required>
+                                </div>
+                                <div class="input_text">
+                                    <input id="lname" type="text" placeholder="Lastname" required>
+                                </div>
+                                <div class="input_text">
+                                    <label>Birthday</label>
+                                    <input type="date" id="datepicker" placeholder="MM/DD/YYYY" required>
+                                </div>
+
+                                <div class="input_text">
+                                    <input id="phoneNumber" type="text" placeholder="Phone number" required>
+                                </div>
+                                <div class="input_text">
+                                    <input id="street" type="text" placeholder="Street" required>
+                                </div>
+                                <div class="input_text">
+                                    <input id="city" type="text" placeholder="City" required>
+                                </div>
+                                <div class="input_text">
+                                    <input id="province" type="text" placeholder="Province" required>
+                                </div>
+                                <div class="input_text">
+                                    <input id="zipCode" type="text" placeholder="Zip Code" required>
+                                </div>
+
+                                <div class="input_text gender-inputs">
+                                    <label for="gender">Gender: </label>
+                                    <input type="radio" id="male" name="gender" value="male">
+                                    <label for="male">Male</label>
+                                    <input type="radio" id="female" name="gender" value="female">
+                                    <label for="female">Female</label>
+                                </div>
+
+                                <div class="button">
+                                    <button class="next" style="background-color: #fb4552; color: white;" onmouseover="this.style.backgroundColor='#fb4552'" onmouseout="this.style.backgroundColor='#fb4552'">Next</button>
+                                    <i class="fa fa-angle-right"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Skills -->
+                        <div class="main">
+                            <div class="scrollable-container">
+                                <div class="logo">
+                                    <img src="https://imgur.com/H8Yg6Sk.png">
+                                    <p>Registration Process</p>
+                                    <h3>Your Decision Awaits</h3>
+                                    <span><img src="https://imgur.com/LcjrXas.jpg"></span>
+                                    <h4>Choose at least 1 or more skills</h4>
+                                </div>
+                                <div class="skills-container">
+                                    @foreach (var skillImage in Model.skills)
+                                    {
+                                        <img src="~/SkillsImages/@skillImage.skillImage" class="selectable" data-skill="@skillImage.skillName">
+                                    }
+                                </div>
+                            </div>
+                            <div class="button">
+                                <button class="submit" disabled>Next</button>
+                                <i class="fa fa-angle-right"></i>
+                            </div>
+                            <i class="fa fa-arrow-left back_page"></i>
+                        </div>
+
+                        <!-- Done -->
+                        <div class="main">
+                            <div class="logo">
+                                <img src="https://imgur.com/H8Yg6Sk.png">
+                            </div>
+                            <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+                                <circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none" />
+                                <path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
+                            </svg>
+                            <div class="m_top">
+                                <h3>Thank you <span class="shown_name"></span></h3>
+                                <p>Thank you for filling up the needed information.</p>
+
+                                <div class="button">
+                                    <button onclick="SaveInformations()" class="next" style="background-color: #fb4552; color: white;" onmouseover="this.style.backgroundColor='#fb4552'" onmouseout="this.style.backgroundColor='#fb4552'">Submit</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <h1>Content sa mga na a nay skills</h1>
+    }
+
+    <!-- JavaScript Files -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="~/Content/Js/progress.js"></script>
+    <script src="~/Content/Js/selectImage.js"></script>
+    <script src="~/Content/Js/popup.js"></script>
+
+    <script>
+        // Add event listener to the Submit button in the Done section
+        document.querySelector('.main:last-child .next').addEventListener('click', function () {
+            // Hide the popup
+            document.getElementById('modal-overlay').style.display = 'none';
+            // Set a flag in local storage to indicate that the popup has been shown
+            localStorage.setItem('popupShown', true);
+        });
+
+        // Call onNewUserLogin when a new user logs in
+        function onNewUserLogin() {
+            resetProgressBar();
+            document.getElementById('modal-overlay').style.display = 'block';
+        }
+
+        // Example usage: Call this function when a new user logs in
+        onNewUserLogin();
+    </script>
+
+    <script>
+        function SaveInformations() {
+            console.log("Save button click");
+            var fname = document.getElementById('fname').value;
+            var lname = document.getElementById('lname').value;
+            var bday = document.getElementById('datepicker').value;
+            var phoneNum = document.getElementById('phoneNumber').value;
+            var street = document.getElementById('street').value;
+            var city = document.getElementById('city').value;
+            var province = document.getElementById('province').value;
+            var zipCode = document.getElementById('zipCode').value
+            var gender = getSelectedGender();
+
+            var informationData = {
+                fname: fname,
+                lname: lname,
+                bday: bday,
+                phoneNum: phoneNum,
+                street: street,
+                city: city,
+                province: province,
+                zipCode: zipCode,
+                gender: gender
+            };
+
+            var volunteerSkill = logSelectedSkills();
+            SaveDatas(informationData, volunteerSkill);
+        }
+
+        function getSelectedGender() {
+            var gender = document.getElementsByName('gender');
+            var selectedGender;
+
+            for (var i = 0; i < gender.length; i++) {
+                if (gender[i].checked) {
+                    selectedGender = gender[i].value;
+                    break;
+                }
+            }
+            return selectedGender;
+        }
+
+        function SaveDatas(informationData, volunteerSkill) {
+            console.log("Save informations Function: ", informationData);
+            console.log("Log Selected Skills: ", volunteerSkill);
+
+            console.log("Save datas");
+            $.ajax({
+                type: 'POST',
+                url: '/Volunteer/SaveInformation',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    model: informationData,
+                    volunteerSkill: volunteerSkill
+                }),
+                success: function (response) {
+                    console.log("Response is: ", response);
+                    location.reload();
+                },
+                error: function (xhr, status, error) {
+                    console.log("Error response is: ", error)
+                }
+            });
+        }
+    </script>
+
+
+</body>
+</html>

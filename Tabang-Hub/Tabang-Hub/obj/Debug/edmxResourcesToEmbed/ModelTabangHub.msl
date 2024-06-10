@@ -1,6 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
   <EntityContainerMapping StorageEntityContainer="TabangHubModelStoreContainer" CdmEntityContainer="TabangHubEntities">
+    <FunctionImportMapping FunctionImportName="sp_GetSkills" FunctionName="TabangHubModel.Store.sp_GetSkills">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="TabangHubModel.sp_GetSkills_Result">
+          <ScalarProperty Name="skillId" ColumnName="skillId" />
+          <ScalarProperty Name="skillName" ColumnName="skillName" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
     <EntitySetMapping Name="OrgEventImage">
       <EntityTypeMapping TypeName="TabangHubModel.OrgEventImage">
         <MappingFragment StoreEntitySet="OrgEventImage">
@@ -83,8 +91,8 @@
     <EntitySetMapping Name="Skills">
       <EntityTypeMapping TypeName="TabangHubModel.Skills">
         <MappingFragment StoreEntitySet="Skills">
+          <ScalarProperty Name="skillImage" ColumnName="skillImage" />
           <ScalarProperty Name="skillName" ColumnName="skillName" />
-          <ScalarProperty Name="userId" ColumnName="userId" />
           <ScalarProperty Name="skillId" ColumnName="skillId" />
         </MappingFragment>
       </EntityTypeMapping>
@@ -113,6 +121,7 @@
     <EntitySetMapping Name="VolunteerInfo">
       <EntityTypeMapping TypeName="TabangHubModel.VolunteerInfo">
         <MappingFragment StoreEntitySet="VolunteerInfo">
+          <ScalarProperty Name="aboutMe" ColumnName="aboutMe" />
           <ScalarProperty Name="profileId" ColumnName="profileId" />
           <ScalarProperty Name="zipCode" ColumnName="zipCode" />
           <ScalarProperty Name="province" ColumnName="province" />
@@ -125,6 +134,15 @@
           <ScalarProperty Name="fName" ColumnName="fName" />
           <ScalarProperty Name="userId" ColumnName="userId" />
           <ScalarProperty Name="volunteerId" ColumnName="volunteerId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="VolunteerSkill">
+      <EntityTypeMapping TypeName="TabangHubModel.VolunteerSkill">
+        <MappingFragment StoreEntitySet="VolunteerSkill">
+          <ScalarProperty Name="skillName" ColumnName="skillName" />
+          <ScalarProperty Name="userId" ColumnName="userId" />
+          <ScalarProperty Name="skillId" ColumnName="skillId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

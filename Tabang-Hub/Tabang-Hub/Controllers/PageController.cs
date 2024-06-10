@@ -24,7 +24,18 @@ namespace Tabang_Hub.Controllers
                 switch (user.roleId)
                 {
                     case 1:
-                        return View();
+
+                        var getInfo = db.VolunteerInfo.Where(m => m.userId == UserId).ToList();
+                        var getVolunteerSkills = db.VolunteerSkill.Where(m => m.userId == UserId).ToList();
+                        var getSkills = _skills.GetAll().ToList();
+
+                        var indexModel = new Lists()
+                        {
+                            volunteersInfo = getInfo,
+                            volunteersSkill = getVolunteerSkills,
+                            skills = getSkills
+                        };
+                        return View(indexModel);
                     case 2:
                         return RedirectToAction("Index", "Organization");
                     case 3:
@@ -106,7 +117,7 @@ namespace Tabang_Hub.Controllers
         }
         [AllowAnonymous]
         [HttpPost]
-        public ActionResult Register(UserAccount u,VolunteerInfo v, UserRoles r, String ConfirmPass)
+        public ActionResult Register(UserAccount u, VolunteerInfo v, UserRoles r, String ConfirmPass)
         {
             u.status = 0;
             u.roleId = 1;

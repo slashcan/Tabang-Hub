@@ -70,7 +70,7 @@ namespace Tabang_Hub.Repository
             return ErrorCode.Success;
         }
 
-        public ErrorCode EditOrgInfo(OrgInfo orgInformation, ProfilePicture profilePic, int id,ref string errMsg)
+        public ErrorCode EditOrgInfo(OrgInfo orgInformation, ProfilePicture profilePic, int id, ref string errMsg)
         {
             if (orgInformation == null)
             {

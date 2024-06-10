@@ -12,6 +12,9 @@ namespace Tabang_Hub
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
+    using System.Data.Objects;
+    using System.Data.Objects.DataClasses;
+    using System.Linq;
     
     public partial class TabangHubEntities : DbContext
     {
@@ -36,7 +39,17 @@ namespace Tabang_Hub
         public DbSet<UserAccount> UserAccount { get; set; }
         public DbSet<UserRoles> UserRoles { get; set; }
         public DbSet<VolunteerInfo> VolunteerInfo { get; set; }
+        public DbSet<VolunteerSkill> VolunteerSkill { get; set; }
         public DbSet<vw_ListOfEvent> vw_ListOfEvent { get; set; }
         public DbSet<vw_UserRoles> vw_UserRoles { get; set; }
+    
+        public virtual ObjectResult<sp_GetSkills_Result> sp_GetSkills(Nullable<int> userId)
+        {
+            var userIdParameter = userId.HasValue ?
+                new ObjectParameter("userId", userId) :
+                new ObjectParameter("userId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_GetSkills_Result>("sp_GetSkills", userIdParameter);
+        }
     }
 }

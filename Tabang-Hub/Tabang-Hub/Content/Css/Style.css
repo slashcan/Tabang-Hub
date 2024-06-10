@@ -1,15 +1,16 @@
-﻿.card {
+﻿﻿.card {
     transition: transform 0.2s, box-shadow 0.2s;
     cursor: pointer;
     border: none;
     border-radius: 15px;
     overflow: hidden;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
 }
 
-    .card:hover {
+/*.card:hover {
         transform: scale(1.05);
         box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-    }
+    }*/
 
 .card-title {
     font-size: 1.5rem;

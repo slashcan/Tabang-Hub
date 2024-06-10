@@ -94,11 +94,18 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\Css\generalStyle.css" />
+    <Content Include="Content\Css\popup.css" />
+    <Content Include="Content\Css\progress.css" />
     <Content Include="Content\Css\Style.css" />
     <Content Include="Content\images\organization.png" />
     <Content Include="Content\images\tabanghub3.png" />
     <Content Include="Content\images\volunteer.png" />
     <Content Include="Content\Js\JavaScript.js" />
+    <Content Include="Content\Js\popup.js" />
+    <Content Include="Content\Js\progress.js" />
+    <Content Include="Content\Js\selectImage.js" />
+    <Content Include="Content\Js\UserInfo.js" />
     <Content Include="Global.asax" />
     <Content Include="ModelTabangHub.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
@@ -118,6 +125,7 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\OrganizationController.cs" />
     <Compile Include="Controllers\PageController.cs" />
+    <Compile Include="Controllers\VolunteerController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -160,10 +168,14 @@
     <Compile Include="Repository\MailManager.cs" />
     <Compile Include="Repository\OrganizationManager.cs" />
     <Compile Include="Repository\UserManager.cs" />
+    <Compile Include="Repository\VolunteerManager.cs" />
     <Compile Include="Role.cs">
       <DependentUpon>ModelTabangHub.tt</DependentUpon>
     </Compile>
     <Compile Include="Skills.cs">
+      <DependentUpon>ModelTabangHub.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sp_GetSkills_Result.cs">
       <DependentUpon>ModelTabangHub.tt</DependentUpon>
     </Compile>
     <Compile Include="UserAccount.cs">
@@ -175,6 +187,9 @@
     <Compile Include="Utils\Lists.cs" />
     <Compile Include="Utils\Utilities.cs" />
     <Compile Include="VolunteerInfo.cs">
+      <DependentUpon>ModelTabangHub.tt</DependentUpon>
+    </Compile>
+    <Compile Include="VolunteerSkill.cs">
       <DependentUpon>ModelTabangHub.tt</DependentUpon>
     </Compile>
     <Compile Include="vw_ListOfEvent.cs">
@@ -210,6 +225,7 @@
     <Content Include="Views\Organization\ReportsManagement.cshtml" />
     <Content Include="Views\Organization\Details.cshtml" />
     <Content Include="Views\Organization\OrgProfile.cshtml" />
+    <Content Include="Views\Volunteer\VolunteerProfile.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

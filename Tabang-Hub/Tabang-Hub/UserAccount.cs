@@ -19,7 +19,7 @@ namespace Tabang_Hub
             this.OrgEvents = new HashSet<OrgEvents>();
             this.OrgInfo = new HashSet<OrgInfo>();
             this.OrgValidation = new HashSet<OrgValidation>();
-            this.Skills = new HashSet<Skills>();
+            this.VolunteerSkill = new HashSet<VolunteerSkill>();
             this.UserRoles = new HashSet<UserRoles>();
             this.VolunteerInfo = new HashSet<VolunteerInfo>();
         }
@@ -34,7 +34,7 @@ namespace Tabang_Hub
         public virtual ICollection<OrgEvents> OrgEvents { get; set; }
         public virtual ICollection<OrgInfo> OrgInfo { get; set; }
         public virtual ICollection<OrgValidation> OrgValidation { get; set; }
-        public virtual ICollection<Skills> Skills { get; set; }
+        public virtual ICollection<VolunteerSkill> VolunteerSkill { get; set; }
         public virtual ICollection<UserRoles> UserRoles { get; set; }
         public virtual ICollection<VolunteerInfo> VolunteerInfo { get; set; }
     }

@@ -44,7 +44,22 @@ namespace Tabang_Hub.Repository
                 errorMsg = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
                 return ErrorCode.Error;
             }
-        }       
+        }
+
+        public ErrorCode Create(T t)
+        {
+            try
+            {
+                _table.Add(t);
+                _db.SaveChanges();             
+
+                return ErrorCode.Success;
+            }
+            catch (Exception ex)
+            {             
+                return ErrorCode.Error;
+            }
+        }
         public ErrorCode Delete(object id)
         {
             try
@@ -96,6 +111,11 @@ namespace Tabang_Hub.Repository
         }
 
         ErrorCode IBaseRepository<T>.Delete(object id, out string errorMsg)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ErrorCode Update(object id, T t)
         {
             throw new NotImplementedException();
         }

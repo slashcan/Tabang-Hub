@@ -26,6 +26,7 @@ namespace Tabang_Hub
         public string province { get; set; }
         public string zipCode { get; set; }
         public Nullable<int> profileId { get; set; }
+        public string aboutMe { get; set; }
     
         public virtual ProfilePicture ProfilePicture { get; set; }
         public virtual UserAccount UserAccount { get; set; }
