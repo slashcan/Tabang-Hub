@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-
     <title>Responsive Navbar</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -19,7 +18,6 @@
     </style>
 </head>
 <body>
-
     <nav class="navbar navbar-expand-md navbar-light">
         <div class="container-xxl">
             <a href="/" class="navbar-brand">
@@ -41,22 +39,17 @@
                         <li class="nav-item">
                             <a href="#" class="nav-link">Skill base</a>
                         </li>
-
                         <li class="nav-item">
                             <a href="#" class="nav-link">General</a>
                         </li>
-
-                        <li class="nav-item d-md-none">
-                            <a href="~/Page/Logout" class="nav-link">Logout</a>
-                        </li>
                     </ul>
-
                     <ul class="navbar-nav">
-                        <li class="nav-item d-none d-md-inline dropdown">
+                        <!-- Profile picture in dropdown for all screens -->
+                        <li class="nav-item dropdown">
                             <a href="#" class="nav-link dropdown-toggle" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <img src="~/Content/images/volunteer.png" alt="Profile Picture" class="profile-pic">
                             </a>
-                            <ul class="dropdown-menu" aria-labelledby="profileDropdown">
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
                                 <li><a class="dropdown-item" href="~/Volunteer/VolunteerProfile">Profile</a></li>
                                 <li><a class="dropdown-item" href="~/Page/Settings">Settings</a></li>
                                 <li><a class="dropdown-item" href="~/Page/Logout">Logout</a></li>

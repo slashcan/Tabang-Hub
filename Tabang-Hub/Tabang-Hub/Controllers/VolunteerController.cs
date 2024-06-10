@@ -63,43 +63,65 @@ namespace Tabang_Hub.Controllers
         }
 
         [HttpPost]
-        public JsonResult EditAboutMe(string aboutMe, List<int> skills)
+        public JsonResult EditAboutMe(string aboutMe, List<int?> skills)
         {
             try
             {
                 var VolunteerUpdate = db.VolunteerInfoes.Where(m => m.userId == UserId).FirstOrDefault();
                 VolunteerUpdate.aboutMe = aboutMe;
+                var getVolSkillCount = db.VolunteerSkill.Where(m => m.userId == UserId).Count();
 
-                if (skills != null && skills.Count > 0)
+                if (skills == null)
                 {
-
-                    foreach (var skillId in skills)
+                    var removeAllSkills = db.VolunteerSkill.Where(m => m.userId == UserId).ToList();
+                    foreach (var removeSkill in removeAllSkills)
                     {
-                        var existSkill = db.VolunteerSkill.Where(m => m.userId == UserId && m.skillId == skillId).FirstOrDefault();
-                        var getSkillName = db.Skills.Where(m => m.skillId == skillId).Select(m => m.SkillName).FirstOrDefault();
-
-                        if (existSkill == null)
-                        {
-                            var newVolSkill = new VolunteerSkill
-                            {
-                                userId = UserId,
-                                skillId = skillId,
-                                skillName = getSkillName
-                            };
-                            db.VolunteerSkill.Add(newVolSkill);
-                            Console.WriteLine($"Adding Skill ID: {skillId} for User ID: {UserId}");
-                        }
-                        else
-                        {
-                            Console.WriteLine($"Skill ID: {skillId} already exists for User ID: {UserId}");
-                        }
+                        db.VolunteerSkill.Remove(removeSkill);
                     }
                 }
                 else
                 {
-                    Console.WriteLine("No skills provided.");
-                }
 
+                    if (skills.Count < getVolSkillCount)
+                    {
+                        //Ang user ganahan tang tangon ang skill sa database
+                        var skillToRemove = db.VolunteerSkill.Where(m => !skills.Contains(m.skillId)).ToList();
+
+                        foreach (var removeSkill in skillToRemove)
+                        {
+                            db.VolunteerSkill.Remove(removeSkill);
+                        }
+                    }
+                    if (skills != null && skills.Count > 0)
+                    {
+
+                        foreach (var skillId in skills)
+                        {
+                            var existSkill = db.VolunteerSkill.Where(m => m.userId == UserId && m.skillId == skillId).FirstOrDefault();
+                            var getSkillName = db.Skills.Where(m => m.skillId == skillId).Select(m => m.SkillName).FirstOrDefault();
+
+                            if (existSkill == null)
+                            {
+                                var newVolSkill = new VolunteerSkill
+                                {
+                                    userId = UserId,
+                                    skillId = skillId,
+                                    skillName = getSkillName
+                                };
+                                db.VolunteerSkill.Add(newVolSkill);
+                                Console.WriteLine($"Adding Skill ID: {skillId} for User ID: {UserId}");
+                            }
+                            else
+                            {
+                                Console.WriteLine($"Skill ID: {skillId} already exists for User ID: {UserId}");
+                            }
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("No skills provided.");
+                    }
+                }
                 db.SaveChanges();
                 return Json(new { success = true, message = "Success !" });
             }
