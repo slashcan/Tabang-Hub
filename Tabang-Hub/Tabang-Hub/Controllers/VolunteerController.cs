@@ -52,7 +52,7 @@ namespace Tabang_Hub.Controllers
                 UserUpdate.email = email;
 
                 db.SaveChanges();
-
+                
                 return Json(new { success = true, message = "Success !" });
             }
             catch (Exception)
