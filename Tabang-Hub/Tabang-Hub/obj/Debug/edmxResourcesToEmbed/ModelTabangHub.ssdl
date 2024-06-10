@@ -119,10 +119,11 @@
   </EntityType>
   <EntityType Name="VolunteerSkill">
     <Key>
-      <PropertyRef Name="skillId" />
+      <PropertyRef Name="volunteerSkillId" />
     </Key>
-    <Property Name="skillId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="volunteerSkillId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="userId" Type="int" />
+    <Property Name="skillId" Type="int" />
     <Property Name="skillName" Type="nvarchar" MaxLength="255" />
   </EntityType>
   <!--Errors Found During Generation:
@@ -229,14 +230,14 @@ warning 6002: The table/view 'TabangHub.dbo.vw_UserRoles' does not have a primar
     </ReferentialConstraint>
   </Association>
   <Association Name="FK_Skills_UserAccount">
-    <End Role="UserAccount" Type="Self.UserAccount" Multiplicity="0..1" />
+    <End Role="Skills" Type="Self.Skills" Multiplicity="0..1" />
     <End Role="VolunteerSkill" Type="Self.VolunteerSkill" Multiplicity="*" />
     <ReferentialConstraint>
-      <Principal Role="UserAccount">
-        <PropertyRef Name="userId" />
+      <Principal Role="Skills">
+        <PropertyRef Name="skillId" />
       </Principal>
       <Dependent Role="VolunteerSkill">
-        <PropertyRef Name="userId" />
+        <PropertyRef Name="skillId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -339,7 +340,7 @@ FROM [dbo].[vw_UserRoles] AS [vw_UserRoles]</DefiningQuery>
       <End Role="OrgValidation" EntitySet="OrgValidation" />
     </AssociationSet>
     <AssociationSet Name="FK_Skills_UserAccount" Association="Self.FK_Skills_UserAccount">
-      <End Role="UserAccount" EntitySet="UserAccount" />
+      <End Role="Skills" EntitySet="Skills" />
       <End Role="VolunteerSkill" EntitySet="VolunteerSkill" />
     </AssociationSet>
     <AssociationSet Name="FK_UserRoles_UserAccount" Association="Self.FK_UserRoles_UserAccount">
