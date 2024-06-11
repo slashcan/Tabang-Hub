@@ -28,12 +28,14 @@ namespace Tabang_Hub.Controllers
                         var getInfo = db.VolunteerInfo.Where(m => m.userId == UserId).ToList();
                         var getVolunteerSkills = db.VolunteerSkill.Where(m => m.userId == UserId).ToList();
                         var getSkills = _skills.GetAll().ToList();
+                        var getProfile = db.ProfilePicture.Where(m => m.userId == UserId).ToList();
 
                         var indexModel = new Lists()
                         {
                             volunteersInfo = getInfo,
                             volunteersSkill = getVolunteerSkills,
-                            skills = getSkills
+                            skills = getSkills,
+                            picture = getProfile
                         };
                         return View(indexModel);
                     case 2:

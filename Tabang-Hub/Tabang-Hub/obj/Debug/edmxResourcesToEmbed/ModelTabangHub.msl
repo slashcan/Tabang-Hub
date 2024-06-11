@@ -121,6 +121,7 @@
     <EntitySetMapping Name="VolunteerInfo">
       <EntityTypeMapping TypeName="TabangHubModel.VolunteerInfo">
         <MappingFragment StoreEntitySet="VolunteerInfo">
+          <ScalarProperty Name="availability" ColumnName="availability" />
           <ScalarProperty Name="aboutMe" ColumnName="aboutMe" />
           <ScalarProperty Name="profileId" ColumnName="profileId" />
           <ScalarProperty Name="zipCode" ColumnName="zipCode" />

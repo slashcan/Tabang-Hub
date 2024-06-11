@@ -17,12 +17,12 @@ namespace Tabang_Hub.Utils
         public OrgInfo OrgInfo { get; set; }
         public ProfilePicture profilePic { get; set; }
 
-        //Tables
+        //Tables List
         public List<UserAccount> userAccounts { get; set; }
         public List<VolunteerInfo> volunteersInfo { get; set; }
         public List<VolunteerSkill> volunteersSkill { get; set; }
         public List<Skills> skills { get; set; }
-
+        public List<ProfilePicture> picture { get; set; }
 
         //Stored Procedure
         public List<sp_GetSkills_Result> uniqueSkill { get; set; }
