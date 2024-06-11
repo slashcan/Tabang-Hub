@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@model Tabang_Hub.Utils.Lists
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -14,6 +16,9 @@
             height: 40px;
             border-radius: 50%;
             object-fit: cover;
+        }
+        .card-body {
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
         }
     </style>
 </head>
@@ -47,7 +52,10 @@
                         <!-- Profile picture in dropdown for all screens -->
                         <li class="nav-item dropdown">
                             <a href="#" class="nav-link dropdown-toggle" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <img src="~/Content/images/volunteer.png" alt="Profile Picture" class="profile-pic">
+                                @foreach (var pic in Model.picture)
+                                {
+                                    <img src="~/UserProfile/@pic.profilePath" alt="Profile Picture" class="profile-pic">
+                                }
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
                                 <li><a class="dropdown-item" href="~/Volunteer/VolunteerProfile">Profile</a></li>

@@ -13,10 +13,12 @@
         <div class="card-body">
             <div class="row">
                 <div class="col-md-2 text-center">
-                    <img src="~/Content/images/tabanghub3.png" class="rounded-circle img-fluid" alt="Profile Picture">
+                    @foreach (var pic in Model.picture)
+                    {
+                        <img src="~/UserProfile/@pic.profilePath" class="rounded-circle img-fluid" alt="Profile Picture">
+                    }
                     <div id="profile" class="d-none">
-                        <label for="profilePic">Profile Picture</label>
-                        <input type="file" class="form-control-file d-none" id="profilePic" accept="image/*" />
+                        <input type="file" class="form-control-file d-none" id="profilePic" accept="image/*" onchange="previewProfilePic()">
                     </div>
                 </div>
                 @foreach (var VolInfo in Model.volunteersInfo)
@@ -41,9 +43,17 @@
                         <p class="mb-1"><strong>Email: </strong><span id="email">@VolInfo.UserAccount.email</span></p>
                         <input type="email" id="emailInput" class="form-control d-none" value="@VolInfo.UserAccount.email">
 
-                        <p class="mb-1">
-                            <strong>Availability:</strong> Available ko every day basta naay kaon
-                        </p>
+                        <p class="mb-1"><strong>Availability: </strong><span id="availability">@VolInfo.availability</span></p>
+                        <div id="availabilityInput" class="d-none">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="availability" id="fullTime" value="Full Time" @(VolInfo.availability == "Full Time" ? "checked" : "")>
+                                <label class="form-check-label" for="fullTime">Full Time</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="availability" id="partTime" value="Part Time" @(VolInfo.availability == "Part Time" ? "checked" : "")>
+                                <label class="form-check-label" for="partTime">Part Time</label>
+                            </div>
+                        </div>
                     </div>
                 }
                 <div class="col-md-2 text-right">
@@ -132,6 +142,18 @@
 
 <script>
     var originalValues = {};
+    var originalProfilePicSrc = "";
+
+    function previewProfilePic() {
+        var file = document.getElementById('profilePic').files[0];
+        var reader = new FileReader();
+        reader.onloadend = function () {
+            document.getElementById('profilePicPreview').src = reader.result;
+        }
+        if (file) {
+            reader.readAsDataURL(file);
+        }
+    }
 
     function toggleEdit() {
         var isEditing = document.getElementById('editButton').innerText === 'Edit';
@@ -142,6 +164,10 @@
             originalValues.province = document.getElementById('provinceInput').value;
             originalValues.phone = document.getElementById('phoneInput').value;
             originalValues.email = document.getElementById('emailInput').value;
+
+            originalValues.availability = document.querySelector('input[name="availability"]:checked').value;
+
+            //originalProfilePicSrc = document.getElementById('profilePicPreview').src;
         }
 
         document.getElementById('address').classList.toggle('d-none', isEditing);
@@ -153,8 +179,11 @@
         document.getElementById('email').classList.toggle('d-none', isEditing);
         document.getElementById('emailInput').classList.toggle('d-none', !isEditing);
 
+        document.getElementById('availability').classList.toggle('d-none', isEditing);
+        document.getElementById('availabilityInput').classList.toggle('d-none', !isEditing);
+
         document.getElementById('profile').classList.toggle('d-none', !isEditing);
-        document.getElementById('profilePic').classList.toggle('d-none', isEditing);
+        document.getElementById('profilePic').classList.toggle('d-none', !isEditing);
 
         document.getElementById('editButton').innerText = isEditing ? 'Save' : 'Edit';
         document.getElementById('cancelButton').classList.toggle('d-none', !isEditing);
@@ -165,10 +194,11 @@
             var province = document.getElementById('provinceInput').value;
             var phone = document.getElementById('phoneInput').value;
             var email = document.getElementById('emailInput').value;
+            var availability = document.querySelector('input[name="availability"]:checked').value;
 
             var profilePic = document.getElementById('profilePic').files[0];
 
-            SaveChanges(street, city, province, phone, email);
+            SaveChanges(street, city, province, phone, email, availability, profilePic);
         }
     }
 
@@ -179,29 +209,45 @@
         document.getElementById('phoneInput').value = originalValues.phone;
         document.getElementById('emailInput').value = originalValues.email;
 
+        var availabilityRadios = document.getElementsByName('availability');
+        for (var i = 0; i < availabilityRadios.length; i++) {
+            if (availabilityRadios[i].value === originalValues.availability) {
+                availabilityRadios[i].checked = true;
+            }
+        }
+        // Hide profile picture upload input on cancel
+        document.getElementById('profilePic').classList.add('d-none');
+
+        //document.getElementById('profilePicPreview').src = originalProfilePicSrc;
         toggleEdit();
     }
 
-    function SaveChanges(street, city, province, phone, email) {
-        console.log(street, city, province, phone, email);
+    function SaveChanges(street, city, province, phone, email, availability, profilePic) {
+        console.log(street, city, province, phone, email, availability);
+
+        var formData = new FormData();
+        formData.append('street', street);
+        formData.append('city', city);
+        formData.append('province', province);
+        formData.append('phone', phone);
+        formData.append('email', email);
+        formData.append('availability', availability);
+        formData.append('profilePic', profilePic);
 
         $.ajax({
             url: '/Volunteer/EditBasicInfo',
             type: 'POST',
-            data: {
-                street: street,
-                city: city,
-                province: province,
-                phone: phone,
-                email: email
-            },
+            data: formData,
+            contentType: false,
+            processData: false,
             success: function (response) {
                 if (response.success) {
                     console.log("Updated");
-
                     $('#address').text(street + ', ' + city + ' City, ' + province);
                     $('#phone').text(phone);
                     $('#email').text(email);
+                    $('#availability').text(availability);
+                    window.location.reload();
                 } else {
                     console.log("Error: " + response.message);
                 }
@@ -210,6 +256,34 @@
                 console.log("Error function " + error);
             }
         });
+
+        //$.ajax({
+        //    url: '/Volunteer/EditBasicInfo',
+        //    type: 'POST',
+        //    data: {
+        //        street: street,
+        //        city: city,
+        //        province: province,
+        //        phone: phone,
+        //        email: email,
+        //        availability: availability
+        //    },
+        //    success: function (response) {
+        //        if (response.success) {
+        //            console.log("Updated");
+
+        //            $('#address').text(street + ', ' + city + ' City, ' + province);
+        //            $('#phone').text(phone);
+        //            $('#email').text(email);
+        //            $('#availability').text(availability);
+        //        } else {
+        //            console.log("Error: " + response.message);
+        //        }
+        //    },
+        //    error: function (xhr, status, error) {
+        //        console.log("Error function " + error);
+        //    }
+        //});
     }
 
     function toggleEditAboutMe() {

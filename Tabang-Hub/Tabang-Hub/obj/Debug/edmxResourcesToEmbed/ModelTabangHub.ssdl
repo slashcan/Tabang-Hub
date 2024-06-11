@@ -115,6 +115,7 @@
     <Property Name="province" Type="nvarchar" MaxLength="255" />
     <Property Name="zipCode" Type="nvarchar" MaxLength="255" />
     <Property Name="profileId" Type="int" />
+    <Property Name="availability" Type="nvarchar" MaxLength="25" />
     <Property Name="aboutMe" Type="text" />
   </EntityType>
   <EntityType Name="VolunteerSkill">

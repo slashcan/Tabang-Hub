@@ -44,6 +44,8 @@ public partial class VolunteerInfo
 
     public string aboutMe { get; set; }
 
+    public string availability { get; set; }
+
 
 
     public virtual ProfilePicture ProfilePicture { get; set; }

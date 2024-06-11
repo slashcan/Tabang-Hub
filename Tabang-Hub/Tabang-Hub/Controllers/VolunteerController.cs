@@ -7,6 +7,7 @@ using System.Web.Helpers;
 using System.Web.Mvc;
 using Tabang_Hub.Utils;
 using Tabang_Hub.Repository;
+using System.IO;
 
 namespace Tabang_Hub.Controllers
 {
@@ -22,22 +23,24 @@ namespace Tabang_Hub.Controllers
             var getUserAccount = db.UserAccount.Where(m => m.userId == UserId).ToList();
             var getVolunteerInfo = db.VolunteerInfo.Where(m => m.userId == UserId).ToList();
             var getVolunteerSkills = db.VolunteerSkill.Where(m => m.userId == UserId).ToList();
-
+            
             var getUniqueSkill = db.sp_GetSkills(UserId).ToList();
+            var getProfile = db.ProfilePicture.Where(m => m.userId == UserId).ToList();
 
             var listModel = new Lists()
             {
                 userAccounts = getUserAccount,
                 volunteersInfo = getVolunteerInfo,
                 volunteersSkill = getVolunteerSkills,
-                uniqueSkill = getUniqueSkill
+                uniqueSkill = getUniqueSkill,
+                picture = getProfile
             };
 
             return View(listModel);
         }
 
         [HttpPost]
-        public JsonResult EditBasicInfo(string phone, string street, string city, string province, string email)
+        public JsonResult EditBasicInfo(string phone, string street, string city, string province, string email, string availability, HttpPostedFileBase profilePic)
         {
             try
             {
@@ -48,8 +51,31 @@ namespace Tabang_Hub.Controllers
                 VolunteerUpdate.phoneNum = phone;
                 VolunteerUpdate.city = city;
                 VolunteerUpdate.province = province;
+                VolunteerUpdate.availability = availability;
 
                 UserUpdate.email = email;
+
+                if (profilePic != null)
+                {
+                    // Get the path to the "UserProfile" folder
+                    string profilesFolderPath = Server.MapPath("~/UserProfile");
+
+                    if (!Directory.Exists(profilesFolderPath))
+                    {
+                        Directory.CreateDirectory(profilesFolderPath);
+                    }
+                    // Combine the folder path and the filename
+                    string fileName = Path.GetFileName(profilePic.FileName);
+                    string filePath = Path.Combine(profilesFolderPath, fileName);
+
+                    var VolunteerProfile = new ProfilePicture
+                    {
+                        userId = UserId,
+                        profilePath = fileName
+                    };
+                    var updateProfile = db.ProfilePicture.Where(m => m.userId == UserId).FirstOrDefault();
+                    updateProfile.profilePath = fileName;
+                }
 
                 db.SaveChanges();
 

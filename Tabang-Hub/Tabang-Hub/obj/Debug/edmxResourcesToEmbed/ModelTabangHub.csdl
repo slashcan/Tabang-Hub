@@ -198,6 +198,7 @@
     <Property Name="aboutMe" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
     <NavigationProperty Name="ProfilePicture" Relationship="TabangHubModel.FK_VolunteerInfo_ProfilePicture" FromRole="VolunteerInfo" ToRole="ProfilePicture" />
     <NavigationProperty Name="UserAccount" Relationship="TabangHubModel.FK_VolunteerInfo_UserAccount" FromRole="VolunteerInfo" ToRole="UserAccount" />
+    <Property Name="availability" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
   </EntityType>
   <EntityType Name="VolunteerSkill">
     <Key>

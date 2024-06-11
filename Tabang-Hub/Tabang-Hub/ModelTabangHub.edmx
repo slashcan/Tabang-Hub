@@ -120,6 +120,7 @@
           <Property Name="province" Type="nvarchar" MaxLength="255" />
           <Property Name="zipCode" Type="nvarchar" MaxLength="255" />
           <Property Name="profileId" Type="int" />
+          <Property Name="availability" Type="nvarchar" MaxLength="25" />
           <Property Name="aboutMe" Type="text" />
         </EntityType>
         <EntityType Name="VolunteerSkill">
@@ -563,6 +564,7 @@ FROM [dbo].[vw_UserRoles] AS [vw_UserRoles]</DefiningQuery>
           <Property Name="aboutMe" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="ProfilePicture" Relationship="TabangHubModel.FK_VolunteerInfo_ProfilePicture" FromRole="VolunteerInfo" ToRole="ProfilePicture" />
           <NavigationProperty Name="UserAccount" Relationship="TabangHubModel.FK_VolunteerInfo_UserAccount" FromRole="VolunteerInfo" ToRole="UserAccount" />
+          <Property Name="availability" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="VolunteerSkill">
           <Key>
@@ -847,6 +849,7 @@ FROM [dbo].[vw_UserRoles] AS [vw_UserRoles]</DefiningQuery>
           <EntitySetMapping Name="VolunteerInfo">
             <EntityTypeMapping TypeName="TabangHubModel.VolunteerInfo">
               <MappingFragment StoreEntitySet="VolunteerInfo">
+                <ScalarProperty Name="availability" ColumnName="availability" />
                 <ScalarProperty Name="aboutMe" ColumnName="aboutMe" />
                 <ScalarProperty Name="profileId" ColumnName="profileId" />
                 <ScalarProperty Name="zipCode" ColumnName="zipCode" />
