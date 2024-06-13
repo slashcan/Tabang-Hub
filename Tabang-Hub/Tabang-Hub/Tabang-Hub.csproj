@@ -145,10 +145,10 @@
       <DependentUpon>ModelTabangHub.edmx</DependentUpon>
     </Compile>
     <Compile Include="MyRole.cs" />
-    <Compile Include="OrgEventImage.cs">
+    <Compile Include="OrgEvent.cs">
       <DependentUpon>ModelTabangHub.tt</DependentUpon>
     </Compile>
-    <Compile Include="OrgEvents.cs">
+    <Compile Include="OrgEventImage.cs">
       <DependentUpon>ModelTabangHub.tt</DependentUpon>
     </Compile>
     <Compile Include="OrgInfo.cs">
@@ -172,7 +172,7 @@
     <Compile Include="Role.cs">
       <DependentUpon>ModelTabangHub.tt</DependentUpon>
     </Compile>
-    <Compile Include="Skills.cs">
+    <Compile Include="Skill.cs">
       <DependentUpon>ModelTabangHub.tt</DependentUpon>
     </Compile>
     <Compile Include="sp_GetSkills_Result.cs">
@@ -181,7 +181,7 @@
     <Compile Include="UserAccount.cs">
       <DependentUpon>ModelTabangHub.tt</DependentUpon>
     </Compile>
-    <Compile Include="UserRoles.cs">
+    <Compile Include="UserRole.cs">
       <DependentUpon>ModelTabangHub.tt</DependentUpon>
     </Compile>
     <Compile Include="Utils\Lists.cs" />

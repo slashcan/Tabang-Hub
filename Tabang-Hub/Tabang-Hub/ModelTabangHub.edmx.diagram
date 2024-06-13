@@ -4,31 +4,31 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="704ba36627af4e269e315f213ee5bf7e" Name="Diagram1">
-        <EntityTypeShape EntityType="TabangHubModel.OrgEventImage" Width="1.5" PointX="5.25" PointY="23.625" />
-        <EntityTypeShape EntityType="TabangHubModel.OrgEvents" Width="1.5" PointX="3" PointY="21.75" />
-        <EntityTypeShape EntityType="TabangHubModel.OrgInfo" Width="1.5" PointX="6" PointY="9.5" />
-        <EntityTypeShape EntityType="TabangHubModel.OrgSkillRequirement" Width="1.5" PointX="5.25" PointY="21.125" />
-        <EntityTypeShape EntityType="TabangHubModel.OrgValidation" Width="1.5" PointX="3" PointY="15.5" />
-        <EntityTypeShape EntityType="TabangHubModel.ProfilePicture" Width="1.5" PointX="3.75" PointY="6.375" />
-        <EntityTypeShape EntityType="TabangHubModel.Role" Width="1.5" PointX="0.75" PointY="3.75" />
-        <EntityTypeShape EntityType="TabangHubModel.Skills" Width="1.5" PointX="0.75" PointY="1" />
-        <EntityTypeShape EntityType="TabangHubModel.UserAccount" Width="1.5" PointX="0.75" PointY="9.75" />
-        <EntityTypeShape EntityType="TabangHubModel.UserRoles" Width="1.5" PointX="3" PointY="18.625" />
-        <EntityTypeShape EntityType="TabangHubModel.VolunteerInfo" Width="1.5" PointX="3" PointY="9.375" />
-        <EntityTypeShape EntityType="TabangHubModel.VolunteerSkill" Width="1.5" PointX="3" PointY="0.875" />
-        <EntityTypeShape EntityType="TabangHubModel.vw_ListOfEvent" Width="1.5" PointX="5.75" PointY="0.75" />
-        <EntityTypeShape EntityType="TabangHubModel.vw_UserRoles" Width="1.5" PointX="5.75" PointY="4.75" />
-        <AssociationConnector Association="TabangHubModel.FK_OrgEventImage_OrgEvents" />
-        <AssociationConnector Association="TabangHubModel.FK_OrgEvents_UserAccount" />
-        <AssociationConnector Association="TabangHubModel.FK_OrgSkillRequirement_OrgEvents" />
-        <AssociationConnector Association="TabangHubModel.FK_OrgInfo_ProfilePicture" />
-        <AssociationConnector Association="TabangHubModel.FK_OrgInfo_UserAccount" />
-        <AssociationConnector Association="TabangHubModel.FK_OrgValidation_UserAccount" />
-        <AssociationConnector Association="TabangHubModel.FK_VolunteerInfo_ProfilePicture" />
-        <AssociationConnector Association="TabangHubModel.FK_Skills_UserAccount" />
-        <AssociationConnector Association="TabangHubModel.FK_UserRoles_UserAccount" />
-        <AssociationConnector Association="TabangHubModel.FK_VolunteerInfo_UserAccount" />
+      <Diagram DiagramId="872be99ac14c481bbbd68eb13fb5f856" Name="Diagram1">
+        <EntityTypeShape EntityType="TabangHubModel.OrgEventImage" Width="1.5" PointX="5.25" PointY="6.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="TabangHubModel.OrgEvent" Width="1.5" PointX="3" PointY="7" IsExpanded="true" />
+        <EntityTypeShape EntityType="TabangHubModel.OrgInfo" Width="1.5" PointX="6" PointY="11.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="TabangHubModel.OrgSkillRequirement" Width="1.5" PointX="5.25" PointY="9" IsExpanded="true" />
+        <EntityTypeShape EntityType="TabangHubModel.OrgValidation" Width="1.5" PointX="3" PointY="16" IsExpanded="true" />
+        <EntityTypeShape EntityType="TabangHubModel.ProfilePicture" Width="1.5" PointX="5.75" PointY="3.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="TabangHubModel.Role" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="TabangHubModel.Skill" Width="1.5" PointX="7.75" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="TabangHubModel.UserAccount" Width="1.5" PointX="0.75" PointY="9.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="TabangHubModel.UserRole" Width="1.5" PointX="3" PointY="19.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="TabangHubModel.VolunteerInfo" Width="1.5" PointX="8" PointY="6.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="TabangHubModel.VolunteerSkill" Width="1.5" PointX="10" PointY="0.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="TabangHubModel.vw_ListOfEvent" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="TabangHubModel.vw_UserRoles" Width="1.5" PointX="10.75" PointY="3.75" IsExpanded="true" />
+        <AssociationConnector Association="TabangHubModel.FK_OrgEventImage_OrgEvents" ManuallyRouted="false" />
+        <AssociationConnector Association="TabangHubModel.FK_OrgEvents_UserAccount" ManuallyRouted="false" />
+        <AssociationConnector Association="TabangHubModel.FK_OrgSkillRequirement_OrgEvents" ManuallyRouted="false" />
+        <AssociationConnector Association="TabangHubModel.FK_OrgInfo_ProfilePicture" ManuallyRouted="false" />
+        <AssociationConnector Association="TabangHubModel.FK_OrgInfo_UserAccount" ManuallyRouted="false" />
+        <AssociationConnector Association="TabangHubModel.FK_OrgValidation_UserAccount" ManuallyRouted="false" />
+        <AssociationConnector Association="TabangHubModel.FK_VolunteerInfo_ProfilePicture" ManuallyRouted="false" />
+        <AssociationConnector Association="TabangHubModel.FK_Skills_UserAccount" ManuallyRouted="false" />
+        <AssociationConnector Association="TabangHubModel.FK_UserRoles_UserAccount" ManuallyRouted="false" />
+        <AssociationConnector Association="TabangHubModel.FK_VolunteerInfo_UserAccount" ManuallyRouted="false" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

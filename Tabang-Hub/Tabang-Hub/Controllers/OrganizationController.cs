@@ -147,10 +147,60 @@ namespace Tabang_Hub.Controllers
         }
         #endregion
 
+        #region Organization Management
         public ActionResult DonationsManagement()
         {
             return View();
         }
+        [HttpPost]
+        public ActionResult CreateDonations(Utils.Lists events, string[] skills, HttpPostedFileBase[] images)
+        {
+            events.CreateEvents.userId = UserId;
+            string errMsg = string.Empty;
+            List<string> uploadedFiles = new List<string>();
+
+            if (images != null && images.Length > 0)
+            {
+                foreach (var image in images)
+                {
+                    if (image != null && image.ContentLength > 0)
+                    {
+                        var inputFileName = Path.GetFileName(image.FileName);
+                        var serverSavePath = Path.Combine(Server.MapPath("~/Content/IdPicture/"), inputFileName);
+
+                        if (!Directory.Exists(Server.MapPath("~/Content/IdPicture/")))
+                            Directory.CreateDirectory(Server.MapPath("~/Content/IdPicture/"));
+
+
+                        using (var srcImage = Image.FromStream(image.InputStream))
+                        {
+                            var newWidth = 400;
+                            var newHeight = 300;
+                            var resizedImage = new Bitmap(newWidth, newHeight);
+
+                            using (var graphics = Graphics.FromImage(resizedImage))
+                            {
+                                graphics.CompositingQuality = CompositingQuality.HighQuality;
+                                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                                graphics.SmoothingMode = SmoothingMode.HighQuality;
+                                graphics.DrawImage(srcImage, 0, 0, newWidth, newHeight);
+                            }
+
+                            resizedImage.Save(serverSavePath, ImageFormat.Jpeg);
+                        }
+
+                        uploadedFiles.Add(inputFileName);
+                    }
+                }
+            }
+            if (_organizationManager.CreateEvents(events.CreateEvents, uploadedFiles, skills, ref errMsg) != ErrorCode.Success)
+            {
+                ModelState.AddModelError(String.Empty, errMsg);
+                return View();
+            }
+            return RedirectToAction("VolunteerManagement");
+        }
+        #endregion
         public ActionResult ReportsManagement()
         {
             return View();

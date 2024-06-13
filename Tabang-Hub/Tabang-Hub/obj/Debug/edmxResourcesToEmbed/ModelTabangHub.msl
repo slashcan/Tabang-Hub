@@ -1,14 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
   <EntityContainerMapping StorageEntityContainer="TabangHubModelStoreContainer" CdmEntityContainer="TabangHubEntities">
-    <FunctionImportMapping FunctionImportName="sp_GetSkills" FunctionName="TabangHubModel.Store.sp_GetSkills">
-      <ResultMapping>
-        <ComplexTypeMapping TypeName="TabangHubModel.sp_GetSkills_Result">
-          <ScalarProperty Name="skillId" ColumnName="skillId" />
-          <ScalarProperty Name="skillName" ColumnName="skillName" />
-        </ComplexTypeMapping>
-      </ResultMapping>
-    </FunctionImportMapping>
     <EntitySetMapping Name="OrgEventImage">
       <EntityTypeMapping TypeName="TabangHubModel.OrgEventImage">
         <MappingFragment StoreEntitySet="OrgEventImage">
@@ -21,10 +13,12 @@
     <EntitySetMapping Name="OrgEvents">
       <EntityTypeMapping TypeName="TabangHubModel.OrgEvents">
         <MappingFragment StoreEntitySet="OrgEvents">
+          <ScalarProperty Name="eventType" ColumnName="eventType" />
           <ScalarProperty Name="location" ColumnName="location" />
           <ScalarProperty Name="dateEnd" ColumnName="dateEnd" />
           <ScalarProperty Name="dateStart" ColumnName="dateStart" />
           <ScalarProperty Name="maxVolunteer" ColumnName="maxVolunteer" />
+          <ScalarProperty Name="targetAmount" ColumnName="targetAmount" />
           <ScalarProperty Name="eventDescription" ColumnName="eventDescription" />
           <ScalarProperty Name="eventTitle" ColumnName="eventTitle" />
           <ScalarProperty Name="userId" ColumnName="userId" />
@@ -91,8 +85,8 @@
     <EntitySetMapping Name="Skills">
       <EntityTypeMapping TypeName="TabangHubModel.Skills">
         <MappingFragment StoreEntitySet="Skills">
-          <ScalarProperty Name="skillImage" ColumnName="skillImage" />
           <ScalarProperty Name="skillName" ColumnName="skillName" />
+          <ScalarProperty Name="userId" ColumnName="userId" />
           <ScalarProperty Name="skillId" ColumnName="skillId" />
         </MappingFragment>
       </EntityTypeMapping>
@@ -109,6 +103,17 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="UserDonated">
+      <EntityTypeMapping TypeName="TabangHubModel.UserDonated">
+        <MappingFragment StoreEntitySet="UserDonated">
+          <ScalarProperty Name="donatedAt" ColumnName="donatedAt" />
+          <ScalarProperty Name="amount" ColumnName="amount" />
+          <ScalarProperty Name="userId" ColumnName="userId" />
+          <ScalarProperty Name="eventId" ColumnName="eventId" />
+          <ScalarProperty Name="orgUserDonatedId" ColumnName="orgUserDonatedId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="UserRoles">
       <EntityTypeMapping TypeName="TabangHubModel.UserRoles">
         <MappingFragment StoreEntitySet="UserRoles">
@@ -121,8 +126,6 @@
     <EntitySetMapping Name="VolunteerInfo">
       <EntityTypeMapping TypeName="TabangHubModel.VolunteerInfo">
         <MappingFragment StoreEntitySet="VolunteerInfo">
-          <ScalarProperty Name="availability" ColumnName="availability" />
-          <ScalarProperty Name="aboutMe" ColumnName="aboutMe" />
           <ScalarProperty Name="profileId" ColumnName="profileId" />
           <ScalarProperty Name="zipCode" ColumnName="zipCode" />
           <ScalarProperty Name="province" ColumnName="province" />
@@ -135,16 +138,6 @@
           <ScalarProperty Name="fName" ColumnName="fName" />
           <ScalarProperty Name="userId" ColumnName="userId" />
           <ScalarProperty Name="volunteerId" ColumnName="volunteerId" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="VolunteerSkill">
-      <EntityTypeMapping TypeName="TabangHubModel.VolunteerSkill">
-        <MappingFragment StoreEntitySet="VolunteerSkill">
-          <ScalarProperty Name="skillName" ColumnName="skillName" />
-          <ScalarProperty Name="skillId" ColumnName="skillId" />
-          <ScalarProperty Name="userId" ColumnName="userId" />
-          <ScalarProperty Name="volunteerSkillId" ColumnName="volunteerSkillId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
