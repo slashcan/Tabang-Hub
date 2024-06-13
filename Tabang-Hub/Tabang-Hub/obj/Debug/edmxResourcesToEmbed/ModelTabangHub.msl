@@ -21,10 +21,12 @@
     <EntitySetMapping Name="OrgEvents">
       <EntityTypeMapping TypeName="TabangHubModel.OrgEvents">
         <MappingFragment StoreEntitySet="OrgEvents">
+          <ScalarProperty Name="eventType" ColumnName="eventType" />
           <ScalarProperty Name="location" ColumnName="location" />
           <ScalarProperty Name="dateEnd" ColumnName="dateEnd" />
           <ScalarProperty Name="dateStart" ColumnName="dateStart" />
           <ScalarProperty Name="maxVolunteer" ColumnName="maxVolunteer" />
+          <ScalarProperty Name="targetAmount" ColumnName="targetAmount" />
           <ScalarProperty Name="eventDescription" ColumnName="eventDescription" />
           <ScalarProperty Name="eventTitle" ColumnName="eventTitle" />
           <ScalarProperty Name="userId" ColumnName="userId" />
@@ -109,6 +111,17 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="UserDonated">
+      <EntityTypeMapping TypeName="TabangHubModel.UserDonated">
+        <MappingFragment StoreEntitySet="UserDonated">
+          <ScalarProperty Name="donatedAt" ColumnName="donatedAt" />
+          <ScalarProperty Name="amount" ColumnName="amount" />
+          <ScalarProperty Name="userId" ColumnName="userId" />
+          <ScalarProperty Name="eventId" ColumnName="eventId" />
+          <ScalarProperty Name="orgUserDonatedId" ColumnName="orgUserDonatedId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="UserRoles">
       <EntityTypeMapping TypeName="TabangHubModel.UserRoles">
         <MappingFragment StoreEntitySet="UserRoles">
@@ -121,8 +134,8 @@
     <EntitySetMapping Name="VolunteerInfo">
       <EntityTypeMapping TypeName="TabangHubModel.VolunteerInfo">
         <MappingFragment StoreEntitySet="VolunteerInfo">
-          <ScalarProperty Name="availability" ColumnName="availability" />
           <ScalarProperty Name="aboutMe" ColumnName="aboutMe" />
+          <ScalarProperty Name="availability" ColumnName="availability" />
           <ScalarProperty Name="profileId" ColumnName="profileId" />
           <ScalarProperty Name="zipCode" ColumnName="zipCode" />
           <ScalarProperty Name="province" ColumnName="province" />
@@ -151,14 +164,17 @@
     <EntitySetMapping Name="vw_ListOfEvent">
       <EntityTypeMapping TypeName="TabangHubModel.vw_ListOfEvent">
         <MappingFragment StoreEntitySet="vw_ListOfEvent">
-          <ScalarProperty Name="Skill_Id" ColumnName="Skill_Id" />
-          <ScalarProperty Name="Image_Id" ColumnName="Image_Id" />
+          <ScalarProperty Name="Total_Skills" ColumnName="Total_Skills" />
+          <ScalarProperty Name="Total_Image" ColumnName="Total_Image" />
+          <ScalarProperty Name="Event_Type" ColumnName="Event_Type" />
           <ScalarProperty Name="Location" ColumnName="Location" />
           <ScalarProperty Name="Date_Ended" ColumnName="Date_Ended" />
           <ScalarProperty Name="Date_Started" ColumnName="Date_Started" />
           <ScalarProperty Name="Maximum_Volunteer" ColumnName="Maximum_Volunteer" />
-          <ScalarProperty Name="Description" ColumnName="Description" />
-          <ScalarProperty Name="Title" ColumnName="Title" />
+          <ScalarProperty Name="Target_Amount" ColumnName="Target_Amount" />
+          <ScalarProperty Name="Event_Description" ColumnName="Event_Description" />
+          <ScalarProperty Name="Event_Title" ColumnName="Event_Title" />
+          <ScalarProperty Name="User_Id" ColumnName="User_Id" />
           <ScalarProperty Name="Event_Id" ColumnName="Event_Id" />
         </MappingFragment>
       </EntityTypeMapping>

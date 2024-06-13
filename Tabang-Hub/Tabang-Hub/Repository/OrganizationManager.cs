@@ -29,44 +29,71 @@ namespace Tabang_Hub.Repository
         public ErrorCode CreateEvents(OrgEvents orgEvents, List<string> imageFileNames, string[] skills, ref string errMsg)
         {
             // Create the event
-            if (_orgEvents.Create(orgEvents, out errMsg) != ErrorCode.Success)
+            if (orgEvents.eventType == 1)
             {
-                return ErrorCode.Error;
-            }
-
-            // Get the eventId of the newly created event
-            int eventId = orgEvents.eventId;
-
-            // Add each skill associated with the eventId
-            foreach (var skill in skills)
-            {
-                var skillRequirement = new OrgSkillRequirement
-                {
-                    eventId = eventId,
-                    skillName = skill
-                };
-
-                if (_orgSkillRequirements.Create(skillRequirement, out errMsg) != ErrorCode.Success)
+                if (_orgEvents.Create(orgEvents, out errMsg) != ErrorCode.Success)
                 {
                     return ErrorCode.Error;
                 }
-            }
 
-            // Add each image associated with the eventId
-            foreach (var fileName in imageFileNames)
-            {
-                var orgEventImage = new OrgEventImage
+                // Get the eventId of the newly created event
+                int eventId = orgEvents.eventId;
+
+                // Add each skill associated with the eventId            
+                foreach (var skill in skills)
                 {
-                    eventId = eventId,
-                    eventImage = fileName
-                };
+                    var skillRequirement = new OrgSkillRequirement
+                    {
+                        eventId = eventId,
+                        skillName = skill
+                    };
 
-                if (_orgEventsImage.Create(orgEventImage, out errMsg) != ErrorCode.Success)
+                    if (_orgSkillRequirements.Create(skillRequirement, out errMsg) != ErrorCode.Success)
+                    {
+                        return ErrorCode.Error;
+                    }
+                }
+
+                // Add each image associated with the eventId
+                foreach (var fileName in imageFileNames)
+                {
+                    var orgEventImage = new OrgEventImage
+                    {
+                        eventId = eventId,
+                        eventImage = fileName
+                    };
+
+                    if (_orgEventsImage.Create(orgEventImage, out errMsg) != ErrorCode.Success)
+                    {
+                        return ErrorCode.Error;
+                    }
+                }
+            }
+            else
+            {
+                if (_orgEvents.Create(orgEvents, out errMsg) != ErrorCode.Success)
                 {
                     return ErrorCode.Error;
                 }
-            }
 
+                // Get the eventId of the newly created event
+                int eventId = orgEvents.eventId;              
+
+                // Add each image associated with the eventId
+                foreach (var fileName in imageFileNames)
+                {
+                    var orgEventImage = new OrgEventImage
+                    {
+                        eventId = eventId,
+                        eventImage = fileName
+                    };
+
+                    if (_orgEventsImage.Create(orgEventImage, out errMsg) != ErrorCode.Success)
+                    {
+                        return ErrorCode.Error;
+                    }
+                }
+            }
             return ErrorCode.Success;
         }
 
@@ -112,9 +139,9 @@ namespace Tabang_Hub.Repository
             return ErrorCode.Success;
         }
 
-        public List<vw_ListOfEvent> ListOfEvents()
+        public List<vw_ListOfEvent> ListOfEvents(int userId, int eventType)
         { 
-            return _listOfEvents.GetAll();
+            return _listOfEvents.GetAll().Where(m => m.User_Id == userId && m.Event_Type == eventType).ToList();
         }
         public OrgInfo GetOrgInfoByUserId(int? id)
         { 

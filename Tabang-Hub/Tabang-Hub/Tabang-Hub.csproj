@@ -181,6 +181,9 @@
     <Compile Include="UserAccount.cs">
       <DependentUpon>ModelTabangHub.tt</DependentUpon>
     </Compile>
+    <Compile Include="UserDonated.cs">
+      <DependentUpon>ModelTabangHub.tt</DependentUpon>
+    </Compile>
     <Compile Include="UserRoles.cs">
       <DependentUpon>ModelTabangHub.tt</DependentUpon>
     </Compile>
