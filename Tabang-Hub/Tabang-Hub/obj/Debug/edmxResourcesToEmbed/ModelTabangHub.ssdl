@@ -79,8 +79,8 @@
       <PropertyRef Name="skillId" />
     </Key>
     <Property Name="skillId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="userId" Type="int" />
     <Property Name="skillName" Type="nvarchar" MaxLength="255" />
+    <Property Name="skillImage" Type="nvarchar" MaxLength="255" />
   </EntityType>
   <EntityType Name="UserAccount">
     <Key>
@@ -127,6 +127,17 @@
     <Property Name="province" Type="nvarchar" MaxLength="255" />
     <Property Name="zipCode" Type="nvarchar" MaxLength="255" />
     <Property Name="profileId" Type="int" />
+    <Property Name="availability" Type="nvarchar" MaxLength="25" />
+    <Property Name="aboutMe" Type="text" />
+  </EntityType>
+  <EntityType Name="VolunteerSkill">
+    <Key>
+      <PropertyRef Name="volunteerSkillId" />
+    </Key>
+    <Property Name="volunteerSkillId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="userId" Type="int" />
+    <Property Name="skillId" Type="int" />
+    <Property Name="skillName" Type="nvarchar" MaxLength="255" />
   </EntityType>
   <!--Errors Found During Generation:
 warning 6002: The table/view 'TabangHub.dbo.vw_ListOfEvent' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -135,14 +146,17 @@ warning 6002: The table/view 'TabangHub.dbo.vw_ListOfEvent' does not have a prim
       <PropertyRef Name="Event_Id" />
     </Key>
     <Property Name="Event_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="Title" Type="nvarchar" MaxLength="255" />
-    <Property Name="Description" Type="text" />
+    <Property Name="User_Id" Type="int" />
+    <Property Name="Event_Title" Type="nvarchar" MaxLength="255" />
+    <Property Name="Event_Description" Type="text" />
+    <Property Name="Target_Amount" Type="decimal" Precision="10" Scale="2" />
     <Property Name="Maximum_Volunteer" Type="int" />
     <Property Name="Date_Started" Type="datetime" />
     <Property Name="Date_Ended" Type="datetime" />
     <Property Name="Location" Type="nvarchar" MaxLength="255" />
-    <Property Name="Image_Id" Type="int" />
-    <Property Name="Skill_Id" Type="int" />
+    <Property Name="Event_Type" Type="int" />
+    <Property Name="Total_Image" Type="int" />
+    <Property Name="Total_Skills" Type="int" />
   </EntityType>
   <!--Errors Found During Generation:
 warning 6002: The table/view 'TabangHub.dbo.vw_UserRoles' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -232,26 +246,14 @@ warning 6002: The table/view 'TabangHub.dbo.vw_UserRoles' does not have a primar
     </ReferentialConstraint>
   </Association>
   <Association Name="FK_Skills_UserAccount">
-    <End Role="UserAccount" Type="Self.UserAccount" Multiplicity="0..1" />
-    <End Role="Skills" Type="Self.Skills" Multiplicity="*" />
+    <End Role="Skills" Type="Self.Skills" Multiplicity="0..1" />
+    <End Role="VolunteerSkill" Type="Self.VolunteerSkill" Multiplicity="*" />
     <ReferentialConstraint>
-      <Principal Role="UserAccount">
-        <PropertyRef Name="userId" />
+      <Principal Role="Skills">
+        <PropertyRef Name="skillId" />
       </Principal>
-      <Dependent Role="Skills">
-        <PropertyRef Name="userId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_UserDonated_OrgEvents">
-    <End Role="OrgEvents" Type="Self.OrgEvents" Multiplicity="0..1" />
-    <End Role="UserDonated" Type="Self.UserDonated" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="OrgEvents">
-        <PropertyRef Name="eventId" />
-      </Principal>
-      <Dependent Role="UserDonated">
-        <PropertyRef Name="eventId" />
+      <Dependent Role="VolunteerSkill">
+        <PropertyRef Name="skillId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -264,6 +266,18 @@ warning 6002: The table/view 'TabangHub.dbo.vw_UserRoles' does not have a primar
       </Principal>
       <Dependent Role="UserDonated">
         <PropertyRef Name="userId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UserDonated_UserDonated">
+    <End Role="OrgEvents" Type="Self.OrgEvents" Multiplicity="0..1" />
+    <End Role="UserDonated" Type="Self.UserDonated" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="OrgEvents">
+        <PropertyRef Name="eventId" />
+      </Principal>
+      <Dependent Role="UserDonated">
+        <PropertyRef Name="eventId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -303,6 +317,9 @@ warning 6002: The table/view 'TabangHub.dbo.vw_UserRoles' does not have a primar
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Function Name="sp_GetSkills" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="userId" Type="int" Mode="In" />
+  </Function>
   <EntityContainer Name="TabangHubModelStoreContainer">
     <EntitySet Name="OrgEventImage" EntityType="Self.OrgEventImage" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="OrgEvents" EntityType="Self.OrgEvents" Schema="dbo" store:Type="Tables" />
@@ -316,17 +333,21 @@ warning 6002: The table/view 'TabangHub.dbo.vw_UserRoles' does not have a primar
     <EntitySet Name="UserDonated" EntityType="Self.UserDonated" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="UserRoles" EntityType="Self.UserRoles" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="VolunteerInfo" EntityType="Self.VolunteerInfo" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="VolunteerSkill" EntityType="Self.VolunteerSkill" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="vw_ListOfEvent" EntityType="Self.vw_ListOfEvent" store:Type="Views" store:Schema="dbo">
       <DefiningQuery>SELECT 
 [vw_ListOfEvent].[Event_Id] AS [Event_Id], 
-[vw_ListOfEvent].[Title] AS [Title], 
-[vw_ListOfEvent].[Description] AS [Description], 
+[vw_ListOfEvent].[User_Id] AS [User_Id], 
+[vw_ListOfEvent].[Event_Title] AS [Event_Title], 
+[vw_ListOfEvent].[Event_Description] AS [Event_Description], 
+[vw_ListOfEvent].[Target_Amount] AS [Target_Amount], 
 [vw_ListOfEvent].[Maximum_Volunteer] AS [Maximum_Volunteer], 
 [vw_ListOfEvent].[Date_Started] AS [Date_Started], 
 [vw_ListOfEvent].[Date_Ended] AS [Date_Ended], 
 [vw_ListOfEvent].[Location] AS [Location], 
-[vw_ListOfEvent].[Image_Id] AS [Image_Id], 
-[vw_ListOfEvent].[Skill_Id] AS [Skill_Id]
+[vw_ListOfEvent].[Event_Type] AS [Event_Type], 
+[vw_ListOfEvent].[Total_Image] AS [Total_Image], 
+[vw_ListOfEvent].[Total_Skills] AS [Total_Skills]
 FROM [dbo].[vw_ListOfEvent] AS [vw_ListOfEvent]</DefiningQuery>
     </EntitySet>
     <EntitySet Name="vw_UserRoles" EntityType="Self.vw_UserRoles" store:Type="Views" store:Schema="dbo">
@@ -363,15 +384,15 @@ FROM [dbo].[vw_UserRoles] AS [vw_UserRoles]</DefiningQuery>
       <End Role="OrgValidation" EntitySet="OrgValidation" />
     </AssociationSet>
     <AssociationSet Name="FK_Skills_UserAccount" Association="Self.FK_Skills_UserAccount">
-      <End Role="UserAccount" EntitySet="UserAccount" />
       <End Role="Skills" EntitySet="Skills" />
-    </AssociationSet>
-    <AssociationSet Name="FK_UserDonated_OrgEvents" Association="Self.FK_UserDonated_OrgEvents">
-      <End Role="OrgEvents" EntitySet="OrgEvents" />
-      <End Role="UserDonated" EntitySet="UserDonated" />
+      <End Role="VolunteerSkill" EntitySet="VolunteerSkill" />
     </AssociationSet>
     <AssociationSet Name="FK_UserDonated_UserAccount" Association="Self.FK_UserDonated_UserAccount">
       <End Role="UserAccount" EntitySet="UserAccount" />
+      <End Role="UserDonated" EntitySet="UserDonated" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UserDonated_UserDonated" Association="Self.FK_UserDonated_UserDonated">
+      <End Role="OrgEvents" EntitySet="OrgEvents" />
       <End Role="UserDonated" EntitySet="UserDonated" />
     </AssociationSet>
     <AssociationSet Name="FK_UserRoles_UserAccount" Association="Self.FK_UserRoles_UserAccount">

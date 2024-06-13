@@ -19,6 +19,6 @@ namespace Tabang_Hub
         public Nullable<int> skillId { get; set; }
         public string skillName { get; set; }
     
-        public virtual Skill Skill { get; set; }
+        public virtual Skills Skills { get; set; }
     }
 }

@@ -16,15 +16,15 @@ namespace Tabang_Hub
     {
         public ProfilePicture()
         {
-            this.OrgInfoes = new HashSet<OrgInfo>();
-            this.VolunteerInfoes = new HashSet<VolunteerInfo>();
+            this.OrgInfo = new HashSet<OrgInfo>();
+            this.VolunteerInfo = new HashSet<VolunteerInfo>();
         }
     
         public int profileId { get; set; }
         public Nullable<int> userId { get; set; }
         public string profilePath { get; set; }
     
-        public virtual ICollection<OrgInfo> OrgInfoes { get; set; }
-        public virtual ICollection<VolunteerInfo> VolunteerInfoes { get; set; }
+        public virtual ICollection<OrgInfo> OrgInfo { get; set; }
+        public virtual ICollection<VolunteerInfo> VolunteerInfo { get; set; }
     }
 }

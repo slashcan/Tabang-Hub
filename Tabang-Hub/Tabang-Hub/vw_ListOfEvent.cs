@@ -15,13 +15,16 @@ namespace Tabang_Hub
     public partial class vw_ListOfEvent
     {
         public int Event_Id { get; set; }
-        public string Title { get; set; }
-        public string Description { get; set; }
+        public Nullable<int> User_Id { get; set; }
+        public string Event_Title { get; set; }
+        public string Event_Description { get; set; }
+        public Nullable<decimal> Target_Amount { get; set; }
         public Nullable<int> Maximum_Volunteer { get; set; }
         public Nullable<System.DateTime> Date_Started { get; set; }
         public Nullable<System.DateTime> Date_Ended { get; set; }
         public string Location { get; set; }
-        public Nullable<int> Image_Id { get; set; }
-        public Nullable<int> Skill_Id { get; set; }
+        public Nullable<int> Event_Type { get; set; }
+        public Nullable<int> Total_Image { get; set; }
+        public Nullable<int> Total_Skills { get; set; }
     }
 }

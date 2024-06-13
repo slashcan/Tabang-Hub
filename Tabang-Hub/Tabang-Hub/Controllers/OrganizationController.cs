@@ -66,7 +66,7 @@ namespace Tabang_Hub.Controllers
         #region Event Management
         public ActionResult EventsManagement()
         {
-            var lists =_organizationManager.ListOfEvents();
+            var lists =_organizationManager.ListOfEvents(UserId, 1);
 
             var indexModel = new Utils.Lists()
             {
@@ -79,6 +79,7 @@ namespace Tabang_Hub.Controllers
         public ActionResult CreateEvents(Utils.Lists events, string[] skills, HttpPostedFileBase[] images)
         {
             events.CreateEvents.userId = UserId;
+            events.CreateEvents.eventType = 1;
             string errMsg = string.Empty;
             List<string> uploadedFiles = new List<string>();
 
@@ -121,7 +122,7 @@ namespace Tabang_Hub.Controllers
                 ModelState.AddModelError(String.Empty, errMsg);
                 return View();
             }
-            return RedirectToAction("VolunteerManagement");
+            return RedirectToAction("EventsManagement");
         }
         public ActionResult Details(int id) 
         { 
@@ -150,12 +151,20 @@ namespace Tabang_Hub.Controllers
         #region Organization Management
         public ActionResult DonationsManagement()
         {
-            return View();
+            var lists = _organizationManager.ListOfEvents(UserId, 2);
+
+            var indexModel = new Utils.Lists()
+            {
+                listOfEvents = lists,
+            };
+
+            return View(indexModel);
         }
         [HttpPost]
-        public ActionResult CreateDonations(Utils.Lists events, string[] skills, HttpPostedFileBase[] images)
+        public ActionResult CreateDonations(Utils.Lists events, HttpPostedFileBase[] images)
         {
             events.CreateEvents.userId = UserId;
+            events.CreateEvents.eventType = 2;
             string errMsg = string.Empty;
             List<string> uploadedFiles = new List<string>();
 
@@ -193,12 +202,13 @@ namespace Tabang_Hub.Controllers
                     }
                 }
             }
-            if (_organizationManager.CreateEvents(events.CreateEvents, uploadedFiles, skills, ref errMsg) != ErrorCode.Success)
+            String[] skills = null;
+            if (_organizationManager.CreateEvents(events.CreateEvents, uploadedFiles,skills, ref errMsg) != ErrorCode.Success)
             {
                 ModelState.AddModelError(String.Empty, errMsg);
                 return View();
             }
-            return RedirectToAction("VolunteerManagement");
+            return RedirectToAction("DonationsManagement");
         }
         #endregion
         public ActionResult ReportsManagement()

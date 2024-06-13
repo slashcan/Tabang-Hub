@@ -16,11 +16,12 @@ namespace Tabang_Hub
     {
         public UserAccount()
         {
-            this.OrgEvents = new HashSet<OrgEvent>();
-            this.OrgInfoes = new HashSet<OrgInfo>();
-            this.OrgValidations = new HashSet<OrgValidation>();
-            this.UserRoles = new HashSet<UserRole>();
-            this.VolunteerInfoes = new HashSet<VolunteerInfo>();
+            this.OrgEvents = new HashSet<OrgEvents>();
+            this.OrgInfo = new HashSet<OrgInfo>();
+            this.OrgValidation = new HashSet<OrgValidation>();
+            this.UserDonated = new HashSet<UserDonated>();
+            this.UserRoles = new HashSet<UserRoles>();
+            this.VolunteerInfo = new HashSet<VolunteerInfo>();
         }
     
         public int userId { get; set; }
@@ -30,10 +31,11 @@ namespace Tabang_Hub
         public short status { get; set; }
         public int roleId { get; set; }
     
-        public virtual ICollection<OrgEvent> OrgEvents { get; set; }
-        public virtual ICollection<OrgInfo> OrgInfoes { get; set; }
-        public virtual ICollection<OrgValidation> OrgValidations { get; set; }
-        public virtual ICollection<UserRole> UserRoles { get; set; }
-        public virtual ICollection<VolunteerInfo> VolunteerInfoes { get; set; }
+        public virtual ICollection<OrgEvents> OrgEvents { get; set; }
+        public virtual ICollection<OrgInfo> OrgInfo { get; set; }
+        public virtual ICollection<OrgValidation> OrgValidation { get; set; }
+        public virtual ICollection<UserDonated> UserDonated { get; set; }
+        public virtual ICollection<UserRoles> UserRoles { get; set; }
+        public virtual ICollection<VolunteerInfo> VolunteerInfo { get; set; }
     }
 }

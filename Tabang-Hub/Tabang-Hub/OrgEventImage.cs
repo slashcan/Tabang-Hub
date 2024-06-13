@@ -18,6 +18,6 @@ namespace Tabang_Hub
         public Nullable<int> eventId { get; set; }
         public string eventImage { get; set; }
     
-        public virtual OrgEvent OrgEvent { get; set; }
+        public virtual OrgEvents OrgEvents { get; set; }
     }
 }

@@ -28,18 +28,19 @@ namespace Tabang_Hub
             throw new UnintentionalCodeFirstException();
         }
     
-        public DbSet<OrgEventImage> OrgEventImages { get; set; }
-        public DbSet<OrgEvent> OrgEvents { get; set; }
-        public DbSet<OrgInfo> OrgInfoes { get; set; }
-        public DbSet<OrgSkillRequirement> OrgSkillRequirements { get; set; }
-        public DbSet<OrgValidation> OrgValidations { get; set; }
-        public DbSet<ProfilePicture> ProfilePictures { get; set; }
-        public DbSet<Role> Roles { get; set; }
-        public DbSet<Skill> Skills { get; set; }
-        public DbSet<UserAccount> UserAccounts { get; set; }
-        public DbSet<UserRole> UserRoles { get; set; }
-        public DbSet<VolunteerInfo> VolunteerInfoes { get; set; }
-        public DbSet<VolunteerSkill> VolunteerSkills { get; set; }
+        public DbSet<OrgEventImage> OrgEventImage { get; set; }
+        public DbSet<OrgEvents> OrgEvents { get; set; }
+        public DbSet<OrgInfo> OrgInfo { get; set; }
+        public DbSet<OrgSkillRequirement> OrgSkillRequirement { get; set; }
+        public DbSet<OrgValidation> OrgValidation { get; set; }
+        public DbSet<ProfilePicture> ProfilePicture { get; set; }
+        public DbSet<Role> Role { get; set; }
+        public DbSet<Skills> Skills { get; set; }
+        public DbSet<UserAccount> UserAccount { get; set; }
+        public DbSet<UserDonated> UserDonated { get; set; }
+        public DbSet<UserRoles> UserRoles { get; set; }
+        public DbSet<VolunteerInfo> VolunteerInfo { get; set; }
+        public DbSet<VolunteerSkill> VolunteerSkill { get; set; }
         public DbSet<vw_ListOfEvent> vw_ListOfEvent { get; set; }
         public DbSet<vw_UserRoles> vw_UserRoles { get; set; }
     
