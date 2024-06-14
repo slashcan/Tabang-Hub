@@ -1,9 +1,17 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\arvie\\Desktop\\TabHub\\Tabang-Hub\\Tabang-Hub\\",
+  "WorkspaceRootPath": "C:\\Users\\dosad\\Documents\\GitHub\\Tabang-Hub\\Tabang-Hub\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|c:\\users\\arvie\\desktop\\tabhub\\tabang-hub\\tabang-hub\\tabang-hub\\controllers\\volunteercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|c:\\users\\dosad\\documents\\github\\tabang-hub\\tabang-hub\\tabang-hub\\views\\organization\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|solutionrelative:tabang-hub\\views\\organization\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|c:\\users\\dosad\\documents\\github\\tabang-hub\\tabang-hub\\tabang-hub\\web.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
+      "RelativeMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|solutionrelative:tabang-hub\\web.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|C:\\Users\\dosad\\Documents\\GitHub\\Tabang-Hub\\Tabang-Hub\\tabang-hub\\controllers\\volunteercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|solutionrelative:tabang-hub\\controllers\\volunteercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
@@ -19,15 +27,40 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "Details.cshtml",
+              "DocumentMoniker": "C:\\Users\\dosad\\Documents\\GitHub\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Views\\Organization\\Details.cshtml",
+              "RelativeDocumentMoniker": "Tabang-Hub\\Views\\Organization\\Details.cshtml",
+              "ToolTip": "C:\\Users\\dosad\\Documents\\GitHub\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Views\\Organization\\Details.cshtml",
+              "RelativeToolTip": "Tabang-Hub\\Views\\Organization\\Details.cshtml",
+              "ViewState": "AQIAAEsAAAAAAAAAAAAAAHMAAACbAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-06-14T16:00:21.977Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Web.config",
+              "DocumentMoniker": "C:\\Users\\dosad\\Documents\\GitHub\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Web.config",
+              "RelativeDocumentMoniker": "Tabang-Hub\\Web.config",
+              "ToolTip": "C:\\Users\\dosad\\Documents\\GitHub\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Web.config",
+              "RelativeToolTip": "Tabang-Hub\\Web.config",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABkAAAA5AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000601|",
+              "WhenOpened": "2024-06-14T13:13:20.17Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
               "Title": "VolunteerController.cs",
-              "DocumentMoniker": "C:\\Users\\arvie\\Desktop\\TabHub\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Controllers\\VolunteerController.cs",
+              "DocumentMoniker": "C:\\Users\\dosad\\Documents\\GitHub\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Controllers\\VolunteerController.cs",
               "RelativeDocumentMoniker": "Tabang-Hub\\Controllers\\VolunteerController.cs",
-              "ToolTip": "C:\\Users\\arvie\\Desktop\\TabHub\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Controllers\\VolunteerController.cs",
+              "ToolTip": "C:\\Users\\dosad\\Documents\\GitHub\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Controllers\\VolunteerController.cs",
               "RelativeToolTip": "Tabang-Hub\\Controllers\\VolunteerController.cs",
               "ViewState": "AQIAAF4AAAAAAAAAAAAkwAgAAAAcAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-14T09:16:15.348Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-06-14T09:16:15.348Z"
             }
           ]
         }
