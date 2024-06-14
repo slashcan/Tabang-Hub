@@ -151,6 +151,16 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="Volunteers">
+      <EntityTypeMapping TypeName="TabangHubModel.Volunteers">
+        <MappingFragment StoreEntitySet="Volunteers">
+          <ScalarProperty Name="appliedAt" ColumnName="appliedAt" />
+          <ScalarProperty Name="eventId" ColumnName="eventId" />
+          <ScalarProperty Name="userId" ColumnName="userId" />
+          <ScalarProperty Name="applyVolunteerId" ColumnName="applyVolunteerId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="VolunteerSkill">
       <EntityTypeMapping TypeName="TabangHubModel.VolunteerSkill">
         <MappingFragment StoreEntitySet="VolunteerSkill">

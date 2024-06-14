@@ -23,6 +23,13 @@ namespace Tabang_Hub.Controllers
         public BaseRepository<OrgValidation> _orgValid;
         public BaseRepository<ProfilePicture> _profilePic;
         public BaseRepository<UserRoles> _userRoles;
+        public BaseRepository<OrgEvents> _orgEvents;
+        public BaseRepository<OrgEventImage> _eventImages;
+        public BaseRepository<Volunteers> _volunteers;
+        public BaseRepository<OrgSkillRequirement> _skillRequirement;
+
+        //View
+        public BaseRepository<vw_ListOfEvent> _listsOfEvent;
 
         public String Email { get { return User.Identity.Name;  } }
         public int UserId { get { return _userManager.GetUserByEmail(Email).userId; } }
@@ -43,7 +50,12 @@ namespace Tabang_Hub.Controllers
             _orgValid = new BaseRepository<OrgValidation>();
             _profilePic = new BaseRepository<ProfilePicture>();
             _userRoles = new BaseRepository<UserRoles>();
-            
+            _orgEvents = new BaseRepository<OrgEvents>();
+            _eventImages = new BaseRepository<OrgEventImage>();
+            _volunteers = new BaseRepository<Volunteers>();
+            _skillRequirement = new BaseRepository<OrgSkillRequirement>();
+
+            _listsOfEvent = new BaseRepository<vw_ListOfEvent>();
         }
     }
 }

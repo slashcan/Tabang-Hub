@@ -22,6 +22,7 @@ namespace Tabang_Hub
             this.UserDonated = new HashSet<UserDonated>();
             this.UserRoles = new HashSet<UserRoles>();
             this.VolunteerInfo = new HashSet<VolunteerInfo>();
+            this.Volunteers = new HashSet<Volunteers>();
         }
     
         public int userId { get; set; }
@@ -37,5 +38,6 @@ namespace Tabang_Hub
         public virtual ICollection<UserDonated> UserDonated { get; set; }
         public virtual ICollection<UserRoles> UserRoles { get; set; }
         public virtual ICollection<VolunteerInfo> VolunteerInfo { get; set; }
+        public virtual ICollection<Volunteers> Volunteers { get; set; }
     }
 }

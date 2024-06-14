@@ -94,6 +94,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\Css\generalskill.css" />
     <Content Include="Content\Css\generalStyle.css" />
     <Content Include="Content\Css\popup.css" />
     <Content Include="Content\Css\progress.css" />
@@ -192,6 +193,9 @@
     <Compile Include="VolunteerInfo.cs">
       <DependentUpon>ModelTabangHub.tt</DependentUpon>
     </Compile>
+    <Compile Include="Volunteers.cs">
+      <DependentUpon>ModelTabangHub.tt</DependentUpon>
+    </Compile>
     <Compile Include="VolunteerSkill.cs">
       <DependentUpon>ModelTabangHub.tt</DependentUpon>
     </Compile>
@@ -229,6 +233,8 @@
     <Content Include="Views\Organization\Details.cshtml" />
     <Content Include="Views\Organization\OrgProfile.cshtml" />
     <Content Include="Views\Volunteer\VolunteerProfile.cshtml" />
+    <Content Include="Views\Volunteer\EventDetails.cshtml" />
+    <Content Include="Views\Volunteer\GeneralSkill.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
