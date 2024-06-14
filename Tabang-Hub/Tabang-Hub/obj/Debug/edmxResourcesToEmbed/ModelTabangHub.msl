@@ -137,6 +137,15 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="Volunteers">
+      <EntityTypeMapping TypeName="TabangHubModel.Volunteers">
+        <MappingFragment StoreEntitySet="Volunteers">
+          <ScalarProperty Name="eventId" ColumnName="eventId" />
+          <ScalarProperty Name="userId" ColumnName="userId" />
+          <ScalarProperty Name="applyVolunteerId" ColumnName="applyVolunteerId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="VolunteerSkill">
       <EntityTypeMapping TypeName="TabangHubModel.VolunteerSkill">
         <MappingFragment StoreEntitySet="VolunteerSkill">
@@ -150,6 +159,7 @@
     <EntitySetMapping Name="vw_ListOfEvent">
       <EntityTypeMapping TypeName="TabangHubModel.vw_ListOfEvent">
         <MappingFragment StoreEntitySet="vw_ListOfEvent">
+<<<<<<< Updated upstream
           <ScalarProperty Name="Skill_Id" ColumnName="Skill_Id" />
           <ScalarProperty Name="Image_Id" ColumnName="Image_Id" />
           <ScalarProperty Name="Location" ColumnName="Location" />
@@ -158,6 +168,20 @@
           <ScalarProperty Name="Maximum_Volunteer" ColumnName="Maximum_Volunteer" />
           <ScalarProperty Name="Description" ColumnName="Description" />
           <ScalarProperty Name="Title" ColumnName="Title" />
+=======
+          <ScalarProperty Name="Total_Skills" ColumnName="Total_Skills" />
+          <ScalarProperty Name="Total_Image" ColumnName="Total_Image" />
+          <ScalarProperty Name="Event_Type" ColumnName="Event_Type" />
+          <ScalarProperty Name="location" ColumnName="location" />
+          <ScalarProperty Name="Date_Ended" ColumnName="Date_Ended" />
+          <ScalarProperty Name="Date_Started" ColumnName="Date_Started" />
+          <ScalarProperty Name="Maximum_Volunteer" ColumnName="Maximum_Volunteer" />
+          <ScalarProperty Name="Target_Amount" ColumnName="Target_Amount" />
+          <ScalarProperty Name="Event_Description" ColumnName="Event_Description" />
+          <ScalarProperty Name="Event_Title" ColumnName="Event_Title" />
+          <ScalarProperty Name="Organization_Name" ColumnName="Organization_Name" />
+          <ScalarProperty Name="User_Id" ColumnName="User_Id" />
+>>>>>>> Stashed changes
           <ScalarProperty Name="Event_Id" ColumnName="Event_Id" />
         </MappingFragment>
       </EntityTypeMapping>

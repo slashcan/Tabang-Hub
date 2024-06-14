@@ -15,37 +15,19 @@ namespace Tabang_Hub
 using System;
     using System.Collections.Generic;
     
-<<<<<<< Updated upstream:Tabang-Hub/Tabang-Hub/UserRole.cs
-public partial class UserRole
+public partial class Volunteers
 {
 
-    public int userRoleId { get; set; }
-
-    public int userId { get; set; }
-
-    public int userRole1 { get; set; }
-
-
-
-=======
-public partial class UserDonated
-{
-
-    public int orgUserDonatedId { get; set; }
-
-    public Nullable<int> eventId { get; set; }
+    public int applyVolunteerId { get; set; }
 
     public Nullable<int> userId { get; set; }
 
-    public Nullable<decimal> amount { get; set; }
-
-    public Nullable<System.DateTime> donatedAt { get; set; }
+    public Nullable<int> eventId { get; set; }
 
 
 
     public virtual OrgEvents OrgEvents { get; set; }
 
->>>>>>> Stashed changes:Tabang-Hub/Tabang-Hub/UserDonated.cs
     public virtual UserAccount UserAccount { get; set; }
 
 }

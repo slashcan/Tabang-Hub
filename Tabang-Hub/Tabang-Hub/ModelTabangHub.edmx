@@ -122,6 +122,14 @@
           <Property Name="profileId" Type="int" />
           <Property Name="aboutMe" Type="text" />
         </EntityType>
+        <EntityType Name="Volunteers">
+          <Key>
+            <PropertyRef Name="applyVolunteerId" />
+          </Key>
+          <Property Name="applyVolunteerId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="userId" Type="int" />
+          <Property Name="eventId" Type="int" />
+        </EntityType>
         <EntityType Name="VolunteerSkill">
           <Key>
             <PropertyRef Name="volunteerSkillId" />
@@ -137,6 +145,7 @@ warning 6002: The table/view 'TabangHub.dbo.vw_ListOfEvent' does not have a prim
           <Key>
             <PropertyRef Name="Event_Id" />
           </Key>
+<<<<<<< Updated upstream
           <Property Name="Event_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Title" Type="nvarchar" MaxLength="255" />
           <Property Name="Description" Type="text" />
@@ -146,6 +155,21 @@ warning 6002: The table/view 'TabangHub.dbo.vw_ListOfEvent' does not have a prim
           <Property Name="Location" Type="nvarchar" MaxLength="255" />
           <Property Name="Image_Id" Type="int" />
           <Property Name="Skill_Id" Type="int" />
+=======
+          <Property Name="Event_Id" Type="int" Nullable="false" />
+          <Property Name="User_Id" Type="int" />
+          <Property Name="Organization_Name" Type="nvarchar" MaxLength="255" />
+          <Property Name="Event_Title" Type="nvarchar" MaxLength="255" />
+          <Property Name="Event_Description" Type="text" />
+          <Property Name="Target_Amount" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="Maximum_Volunteer" Type="int" />
+          <Property Name="Date_Started" Type="datetime" />
+          <Property Name="Date_Ended" Type="datetime" />
+          <Property Name="location" Type="nvarchar" MaxLength="255" />
+          <Property Name="Event_Type" Type="int" />
+          <Property Name="Total_Image" Type="int" />
+          <Property Name="Total_Skills" Type="int" />
+>>>>>>> Stashed changes
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'TabangHub.dbo.vw_UserRoles' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -282,6 +306,30 @@ warning 6002: The table/view 'TabangHub.dbo.vw_UserRoles' does not have a primar
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Volunteers_OrgEvents">
+          <End Role="OrgEvents" Type="Self.OrgEvents" Multiplicity="0..1" />
+          <End Role="Volunteers" Type="Self.Volunteers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OrgEvents">
+              <PropertyRef Name="eventId" />
+            </Principal>
+            <Dependent Role="Volunteers">
+              <PropertyRef Name="eventId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Volunteers_UserAccount">
+          <End Role="UserAccount" Type="Self.UserAccount" Multiplicity="0..1" />
+          <End Role="Volunteers" Type="Self.Volunteers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserAccount">
+              <PropertyRef Name="userId" />
+            </Principal>
+            <Dependent Role="Volunteers">
+              <PropertyRef Name="userId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Function Name="sp_GetSkills" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="userId" Type="int" Mode="In" />
         </Function>
@@ -297,10 +345,12 @@ warning 6002: The table/view 'TabangHub.dbo.vw_UserRoles' does not have a primar
           <EntitySet Name="UserAccount" EntityType="Self.UserAccount" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserRoles" EntityType="Self.UserRoles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="VolunteerInfo" EntityType="Self.VolunteerInfo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Volunteers" EntityType="Self.Volunteers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="VolunteerSkill" EntityType="Self.VolunteerSkill" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="vw_ListOfEvent" EntityType="Self.vw_ListOfEvent" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
 [vw_ListOfEvent].[Event_Id] AS [Event_Id], 
+<<<<<<< Updated upstream
 [vw_ListOfEvent].[Title] AS [Title], 
 [vw_ListOfEvent].[Description] AS [Description], 
 [vw_ListOfEvent].[Maximum_Volunteer] AS [Maximum_Volunteer], 
@@ -309,6 +359,20 @@ warning 6002: The table/view 'TabangHub.dbo.vw_UserRoles' does not have a primar
 [vw_ListOfEvent].[Location] AS [Location], 
 [vw_ListOfEvent].[Image_Id] AS [Image_Id], 
 [vw_ListOfEvent].[Skill_Id] AS [Skill_Id]
+=======
+[vw_ListOfEvent].[User_Id] AS [User_Id], 
+[vw_ListOfEvent].[Organization_Name] AS [Organization_Name], 
+[vw_ListOfEvent].[Event_Title] AS [Event_Title], 
+[vw_ListOfEvent].[Event_Description] AS [Event_Description], 
+[vw_ListOfEvent].[Target_Amount] AS [Target_Amount], 
+[vw_ListOfEvent].[Maximum_Volunteer] AS [Maximum_Volunteer], 
+[vw_ListOfEvent].[Date_Started] AS [Date_Started], 
+[vw_ListOfEvent].[Date_Ended] AS [Date_Ended], 
+[vw_ListOfEvent].[location] AS [location], 
+[vw_ListOfEvent].[Event_Type] AS [Event_Type], 
+[vw_ListOfEvent].[Total_Image] AS [Total_Image], 
+[vw_ListOfEvent].[Total_Skills] AS [Total_Skills]
+>>>>>>> Stashed changes
 FROM [dbo].[vw_ListOfEvent] AS [vw_ListOfEvent]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="vw_UserRoles" EntityType="Self.vw_UserRoles" store:Type="Views" store:Schema="dbo">
@@ -360,6 +424,14 @@ FROM [dbo].[vw_UserRoles] AS [vw_UserRoles]</DefiningQuery>
             <End Role="UserAccount" EntitySet="UserAccount" />
             <End Role="VolunteerInfo" EntitySet="VolunteerInfo" />
           </AssociationSet>
+          <AssociationSet Name="FK_Volunteers_OrgEvents" Association="Self.FK_Volunteers_OrgEvents">
+            <End Role="OrgEvents" EntitySet="OrgEvents" />
+            <End Role="Volunteers" EntitySet="Volunteers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Volunteers_UserAccount" Association="Self.FK_Volunteers_UserAccount">
+            <End Role="UserAccount" EntitySet="UserAccount" />
+            <End Role="Volunteers" EntitySet="Volunteers" />
+          </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -380,6 +452,7 @@ FROM [dbo].[vw_UserRoles] AS [vw_UserRoles]</DefiningQuery>
           <EntitySet Name="UserAccount" EntityType="TabangHubModel.UserAccount" />
           <EntitySet Name="UserRoles" EntityType="TabangHubModel.UserRoles" />
           <EntitySet Name="VolunteerInfo" EntityType="TabangHubModel.VolunteerInfo" />
+          <EntitySet Name="Volunteers" EntityType="TabangHubModel.Volunteers" />
           <EntitySet Name="VolunteerSkill" EntityType="TabangHubModel.VolunteerSkill" />
           <EntitySet Name="vw_ListOfEvent" EntityType="TabangHubModel.vw_ListOfEvent" />
           <EntitySet Name="vw_UserRoles" EntityType="TabangHubModel.vw_UserRoles" />
@@ -395,6 +468,17 @@ FROM [dbo].[vw_UserRoles] AS [vw_UserRoles]</DefiningQuery>
             <End Role="OrgEvents" EntitySet="OrgEvents" />
             <End Role="OrgSkillRequirement" EntitySet="OrgSkillRequirement" />
           </AssociationSet>
+<<<<<<< Updated upstream
+=======
+          <AssociationSet Name="FK_UserDonated_UserDonated" Association="TabangHubModel.FK_UserDonated_UserDonated">
+            <End Role="OrgEvents" EntitySet="OrgEvents" />
+            <End Role="UserDonated" EntitySet="UserDonated" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Volunteers_OrgEvents" Association="TabangHubModel.FK_Volunteers_OrgEvents">
+            <End Role="OrgEvents" EntitySet="OrgEvents" />
+            <End Role="Volunteers" EntitySet="Volunteers" />
+          </AssociationSet>
+>>>>>>> Stashed changes
           <AssociationSet Name="FK_OrgInfo_ProfilePicture" Association="TabangHubModel.FK_OrgInfo_ProfilePicture">
             <End Role="ProfilePicture" EntitySet="ProfilePicture" />
             <End Role="OrgInfo" EntitySet="OrgInfo" />
@@ -422,6 +506,10 @@ FROM [dbo].[vw_UserRoles] AS [vw_UserRoles]</DefiningQuery>
           <AssociationSet Name="FK_VolunteerInfo_UserAccount" Association="TabangHubModel.FK_VolunteerInfo_UserAccount">
             <End Role="UserAccount" EntitySet="UserAccount" />
             <End Role="VolunteerInfo" EntitySet="VolunteerInfo" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Volunteers_UserAccount" Association="TabangHubModel.FK_Volunteers_UserAccount">
+            <End Role="UserAccount" EntitySet="UserAccount" />
+            <End Role="Volunteers" EntitySet="Volunteers" />
           </AssociationSet>
           </EntityContainer>
         <ComplexType Name="sp_GetSkills_Result">
@@ -452,6 +540,11 @@ FROM [dbo].[vw_UserRoles] AS [vw_UserRoles]</DefiningQuery>
           <NavigationProperty Name="OrgEventImage" Relationship="TabangHubModel.FK_OrgEventImage_OrgEvents" FromRole="OrgEvents" ToRole="OrgEventImage" />
           <NavigationProperty Name="UserAccount" Relationship="TabangHubModel.FK_OrgEvents_UserAccount" FromRole="OrgEvents" ToRole="UserAccount" />
           <NavigationProperty Name="OrgSkillRequirement" Relationship="TabangHubModel.FK_OrgSkillRequirement_OrgEvents" FromRole="OrgEvents" ToRole="OrgSkillRequirement" />
+<<<<<<< Updated upstream
+=======
+          <NavigationProperty Name="UserDonated" Relationship="TabangHubModel.FK_UserDonated_UserDonated" FromRole="OrgEvents" ToRole="UserDonated" />
+          <NavigationProperty Name="Volunteers" Relationship="TabangHubModel.FK_Volunteers_OrgEvents" FromRole="OrgEvents" ToRole="Volunteers" />
+>>>>>>> Stashed changes
         </EntityType>
         <EntityType Name="OrgInfo">
           <Key>
@@ -534,6 +627,7 @@ FROM [dbo].[vw_UserRoles] AS [vw_UserRoles]</DefiningQuery>
           <NavigationProperty Name="OrgValidation" Relationship="TabangHubModel.FK_OrgValidation_UserAccount" FromRole="UserAccount" ToRole="OrgValidation" />
           <NavigationProperty Name="UserRoles" Relationship="TabangHubModel.FK_UserRoles_UserAccount" FromRole="UserAccount" ToRole="UserRoles" />
           <NavigationProperty Name="VolunteerInfo" Relationship="TabangHubModel.FK_VolunteerInfo_UserAccount" FromRole="UserAccount" ToRole="VolunteerInfo" />
+          <NavigationProperty Name="Volunteers" Relationship="TabangHubModel.FK_Volunteers_UserAccount" FromRole="UserAccount" ToRole="Volunteers" />
         </EntityType>
         <EntityType Name="UserRoles">
           <Key>
@@ -564,6 +658,16 @@ FROM [dbo].[vw_UserRoles] AS [vw_UserRoles]</DefiningQuery>
           <NavigationProperty Name="ProfilePicture" Relationship="TabangHubModel.FK_VolunteerInfo_ProfilePicture" FromRole="VolunteerInfo" ToRole="ProfilePicture" />
           <NavigationProperty Name="UserAccount" Relationship="TabangHubModel.FK_VolunteerInfo_UserAccount" FromRole="VolunteerInfo" ToRole="UserAccount" />
         </EntityType>
+        <EntityType Name="Volunteers">
+          <Key>
+            <PropertyRef Name="applyVolunteerId" />
+          </Key>
+          <Property Name="applyVolunteerId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="userId" Type="Int32" />
+          <Property Name="eventId" Type="Int32" />
+          <NavigationProperty Name="OrgEvents" Relationship="TabangHubModel.FK_Volunteers_OrgEvents" FromRole="Volunteers" ToRole="OrgEvents" />
+          <NavigationProperty Name="UserAccount" Relationship="TabangHubModel.FK_Volunteers_UserAccount" FromRole="Volunteers" ToRole="UserAccount" />
+        </EntityType>
         <EntityType Name="VolunteerSkill">
           <Key>
             <PropertyRef Name="volunteerSkillId" />
@@ -578,6 +682,7 @@ FROM [dbo].[vw_UserRoles] AS [vw_UserRoles]</DefiningQuery>
           <Key>
             <PropertyRef Name="Event_Id" />
           </Key>
+<<<<<<< Updated upstream
           <Property Name="Event_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Title" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
@@ -587,6 +692,21 @@ FROM [dbo].[vw_UserRoles] AS [vw_UserRoles]</DefiningQuery>
           <Property Name="Location" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="Image_Id" Type="Int32" />
           <Property Name="Skill_Id" Type="Int32" />
+=======
+          <Property Name="Event_Id" Type="Int32" Nullable="false" />
+          <Property Name="User_Id" Type="Int32" />
+          <Property Name="Organization_Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Event_Title" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Event_Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Target_Amount" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="Maximum_Volunteer" Type="Int32" />
+          <Property Name="Date_Started" Type="DateTime" Precision="3" />
+          <Property Name="Date_Ended" Type="DateTime" Precision="3" />
+          <Property Name="location" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Event_Type" Type="Int32" />
+          <Property Name="Total_Image" Type="Int32" />
+          <Property Name="Total_Skills" Type="Int32" />
+>>>>>>> Stashed changes
         </EntityType>
         <EntityType Name="vw_UserRoles">
           <Key>
@@ -637,6 +757,33 @@ FROM [dbo].[vw_UserRoles] AS [vw_UserRoles]</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
+<<<<<<< Updated upstream
+=======
+        <Association Name="FK_UserDonated_UserDonated">
+          <End Type="TabangHubModel.OrgEvents" Role="OrgEvents" Multiplicity="0..1" />
+          <End Type="TabangHubModel.UserDonated" Role="UserDonated" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OrgEvents">
+              <PropertyRef Name="eventId" />
+            </Principal>
+            <Dependent Role="UserDonated">
+              <PropertyRef Name="eventId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Volunteers_OrgEvents">
+          <End Type="TabangHubModel.OrgEvents" Role="OrgEvents" Multiplicity="0..1" />
+          <End Type="TabangHubModel.Volunteers" Role="Volunteers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OrgEvents">
+              <PropertyRef Name="eventId" />
+            </Principal>
+            <Dependent Role="Volunteers">
+              <PropertyRef Name="eventId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+>>>>>>> Stashed changes
         <Association Name="FK_OrgInfo_ProfilePicture">
           <End Type="TabangHubModel.ProfilePicture" Role="ProfilePicture" Multiplicity="0..1" />
           <End Type="TabangHubModel.OrgInfo" Role="OrgInfo" Multiplicity="*" />
@@ -717,6 +864,18 @@ FROM [dbo].[vw_UserRoles] AS [vw_UserRoles]</DefiningQuery>
               <PropertyRef Name="userId" />
             </Principal>
             <Dependent Role="VolunteerInfo">
+              <PropertyRef Name="userId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Volunteers_UserAccount">
+          <End Type="TabangHubModel.UserAccount" Role="UserAccount" Multiplicity="0..1" />
+          <End Type="TabangHubModel.Volunteers" Role="Volunteers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserAccount">
+              <PropertyRef Name="userId" />
+            </Principal>
+            <Dependent Role="Volunteers">
               <PropertyRef Name="userId" />
             </Dependent>
           </ReferentialConstraint>
@@ -863,6 +1022,15 @@ FROM [dbo].[vw_UserRoles] AS [vw_UserRoles]</DefiningQuery>
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Volunteers">
+            <EntityTypeMapping TypeName="TabangHubModel.Volunteers">
+              <MappingFragment StoreEntitySet="Volunteers">
+                <ScalarProperty Name="eventId" ColumnName="eventId" />
+                <ScalarProperty Name="userId" ColumnName="userId" />
+                <ScalarProperty Name="applyVolunteerId" ColumnName="applyVolunteerId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="VolunteerSkill">
             <EntityTypeMapping TypeName="TabangHubModel.VolunteerSkill">
               <MappingFragment StoreEntitySet="VolunteerSkill">
@@ -876,6 +1044,7 @@ FROM [dbo].[vw_UserRoles] AS [vw_UserRoles]</DefiningQuery>
           <EntitySetMapping Name="vw_ListOfEvent">
             <EntityTypeMapping TypeName="TabangHubModel.vw_ListOfEvent">
               <MappingFragment StoreEntitySet="vw_ListOfEvent">
+<<<<<<< Updated upstream
                 <ScalarProperty Name="Skill_Id" ColumnName="Skill_Id" />
                 <ScalarProperty Name="Image_Id" ColumnName="Image_Id" />
                 <ScalarProperty Name="Location" ColumnName="Location" />
@@ -884,6 +1053,20 @@ FROM [dbo].[vw_UserRoles] AS [vw_UserRoles]</DefiningQuery>
                 <ScalarProperty Name="Maximum_Volunteer" ColumnName="Maximum_Volunteer" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="Title" ColumnName="Title" />
+=======
+                <ScalarProperty Name="Total_Skills" ColumnName="Total_Skills" />
+                <ScalarProperty Name="Total_Image" ColumnName="Total_Image" />
+                <ScalarProperty Name="Event_Type" ColumnName="Event_Type" />
+                <ScalarProperty Name="location" ColumnName="location" />
+                <ScalarProperty Name="Date_Ended" ColumnName="Date_Ended" />
+                <ScalarProperty Name="Date_Started" ColumnName="Date_Started" />
+                <ScalarProperty Name="Maximum_Volunteer" ColumnName="Maximum_Volunteer" />
+                <ScalarProperty Name="Target_Amount" ColumnName="Target_Amount" />
+                <ScalarProperty Name="Event_Description" ColumnName="Event_Description" />
+                <ScalarProperty Name="Event_Title" ColumnName="Event_Title" />
+                <ScalarProperty Name="Organization_Name" ColumnName="Organization_Name" />
+                <ScalarProperty Name="User_Id" ColumnName="User_Id" />
+>>>>>>> Stashed changes
                 <ScalarProperty Name="Event_Id" ColumnName="Event_Id" />
               </MappingFragment>
             </EntityTypeMapping>

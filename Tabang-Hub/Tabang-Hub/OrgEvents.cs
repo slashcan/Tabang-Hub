@@ -25,6 +25,13 @@ public partial class OrgEvents
 
         this.OrgSkillRequirement = new HashSet<OrgSkillRequirement>();
 
+<<<<<<< Updated upstream
+=======
+        this.UserDonated = new HashSet<UserDonated>();
+
+        this.Volunteers = new HashSet<Volunteers>();
+
+>>>>>>> Stashed changes
     }
 
 
@@ -36,6 +43,11 @@ public partial class OrgEvents
 
     public string eventDescription { get; set; }
 
+<<<<<<< Updated upstream
+=======
+    public Nullable<decimal> targetAmount { get; set; }
+
+>>>>>>> Stashed changes
     public Nullable<int> maxVolunteer { get; set; }
 
     public Nullable<System.DateTime> dateStart { get; set; }
@@ -44,6 +56,11 @@ public partial class OrgEvents
 
     public string location { get; set; }
 
+<<<<<<< Updated upstream
+=======
+    public Nullable<int> eventType { get; set; }
+
+>>>>>>> Stashed changes
 
 
     public virtual ICollection<OrgEventImage> OrgEventImage { get; set; }
@@ -52,6 +69,13 @@ public partial class OrgEvents
 
     public virtual ICollection<OrgSkillRequirement> OrgSkillRequirement { get; set; }
 
+<<<<<<< Updated upstream
+=======
+    public virtual ICollection<UserDonated> UserDonated { get; set; }
+
+    public virtual ICollection<Volunteers> Volunteers { get; set; }
+
+>>>>>>> Stashed changes
 }
 
 }

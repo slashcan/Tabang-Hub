@@ -20,9 +20,21 @@ public partial class vw_ListOfEvent
 
     public int Event_Id { get; set; }
 
+<<<<<<< Updated upstream
     public string Title { get; set; }
 
     public string Description { get; set; }
+=======
+    public Nullable<int> User_Id { get; set; }
+
+    public string Organization_Name { get; set; }
+
+    public string Event_Title { get; set; }
+
+    public string Event_Description { get; set; }
+
+    public Nullable<decimal> Target_Amount { get; set; }
+>>>>>>> Stashed changes
 
     public Nullable<int> Maximum_Volunteer { get; set; }
 
@@ -30,11 +42,21 @@ public partial class vw_ListOfEvent
 
     public Nullable<System.DateTime> Date_Ended { get; set; }
 
+<<<<<<< Updated upstream
     public string Location { get; set; }
 
     public Nullable<int> Image_Id { get; set; }
 
     public Nullable<int> Skill_Id { get; set; }
+=======
+    public string location { get; set; }
+
+    public Nullable<int> Event_Type { get; set; }
+
+    public Nullable<int> Total_Image { get; set; }
+
+    public Nullable<int> Total_Skills { get; set; }
+>>>>>>> Stashed changes
 
 }
 

@@ -27,10 +27,20 @@ public partial class UserAccount
 
         this.OrgValidation = new HashSet<OrgValidation>();
 
+<<<<<<< Updated upstream
+=======
+        this.UserDonated = new HashSet<UserDonated>();
+
+>>>>>>> Stashed changes
         this.UserRoles = new HashSet<UserRoles>();
 
         this.VolunteerInfo = new HashSet<VolunteerInfo>();
 
+<<<<<<< Updated upstream
+=======
+        this.Volunteers = new HashSet<Volunteers>();
+
+>>>>>>> Stashed changes
     }
 
 
@@ -54,10 +64,20 @@ public partial class UserAccount
 
     public virtual ICollection<OrgValidation> OrgValidation { get; set; }
 
+<<<<<<< Updated upstream
+=======
+    public virtual ICollection<UserDonated> UserDonated { get; set; }
+
+>>>>>>> Stashed changes
     public virtual ICollection<UserRoles> UserRoles { get; set; }
 
     public virtual ICollection<VolunteerInfo> VolunteerInfo { get; set; }
 
+<<<<<<< Updated upstream
+=======
+    public virtual ICollection<Volunteers> Volunteers { get; set; }
+
+>>>>>>> Stashed changes
 }
 
 }

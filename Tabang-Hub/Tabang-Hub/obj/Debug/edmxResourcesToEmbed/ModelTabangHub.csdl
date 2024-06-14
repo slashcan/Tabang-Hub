@@ -15,6 +15,7 @@
     <EntitySet Name="UserAccount" EntityType="TabangHubModel.UserAccount" />
     <EntitySet Name="UserRoles" EntityType="TabangHubModel.UserRoles" />
     <EntitySet Name="VolunteerInfo" EntityType="TabangHubModel.VolunteerInfo" />
+    <EntitySet Name="Volunteers" EntityType="TabangHubModel.Volunteers" />
     <EntitySet Name="VolunteerSkill" EntityType="TabangHubModel.VolunteerSkill" />
     <EntitySet Name="vw_ListOfEvent" EntityType="TabangHubModel.vw_ListOfEvent" />
     <EntitySet Name="vw_UserRoles" EntityType="TabangHubModel.vw_UserRoles" />
@@ -30,6 +31,17 @@
       <End Role="OrgEvents" EntitySet="OrgEvents" />
       <End Role="OrgSkillRequirement" EntitySet="OrgSkillRequirement" />
     </AssociationSet>
+<<<<<<< Updated upstream
+=======
+    <AssociationSet Name="FK_UserDonated_UserDonated" Association="TabangHubModel.FK_UserDonated_UserDonated">
+      <End Role="OrgEvents" EntitySet="OrgEvents" />
+      <End Role="UserDonated" EntitySet="UserDonated" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Volunteers_OrgEvents" Association="TabangHubModel.FK_Volunteers_OrgEvents">
+      <End Role="OrgEvents" EntitySet="OrgEvents" />
+      <End Role="Volunteers" EntitySet="Volunteers" />
+    </AssociationSet>
+>>>>>>> Stashed changes
     <AssociationSet Name="FK_OrgInfo_ProfilePicture" Association="TabangHubModel.FK_OrgInfo_ProfilePicture">
       <End Role="ProfilePicture" EntitySet="ProfilePicture" />
       <End Role="OrgInfo" EntitySet="OrgInfo" />
@@ -57,6 +69,10 @@
     <AssociationSet Name="FK_VolunteerInfo_UserAccount" Association="TabangHubModel.FK_VolunteerInfo_UserAccount">
       <End Role="UserAccount" EntitySet="UserAccount" />
       <End Role="VolunteerInfo" EntitySet="VolunteerInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Volunteers_UserAccount" Association="TabangHubModel.FK_Volunteers_UserAccount">
+      <End Role="UserAccount" EntitySet="UserAccount" />
+      <End Role="Volunteers" EntitySet="Volunteers" />
     </AssociationSet>
   </EntityContainer>
   <ComplexType Name="sp_GetSkills_Result">
@@ -87,6 +103,11 @@
     <NavigationProperty Name="OrgEventImage" Relationship="TabangHubModel.FK_OrgEventImage_OrgEvents" FromRole="OrgEvents" ToRole="OrgEventImage" />
     <NavigationProperty Name="UserAccount" Relationship="TabangHubModel.FK_OrgEvents_UserAccount" FromRole="OrgEvents" ToRole="UserAccount" />
     <NavigationProperty Name="OrgSkillRequirement" Relationship="TabangHubModel.FK_OrgSkillRequirement_OrgEvents" FromRole="OrgEvents" ToRole="OrgSkillRequirement" />
+<<<<<<< Updated upstream
+=======
+    <NavigationProperty Name="UserDonated" Relationship="TabangHubModel.FK_UserDonated_UserDonated" FromRole="OrgEvents" ToRole="UserDonated" />
+    <NavigationProperty Name="Volunteers" Relationship="TabangHubModel.FK_Volunteers_OrgEvents" FromRole="OrgEvents" ToRole="Volunteers" />
+>>>>>>> Stashed changes
   </EntityType>
   <EntityType Name="OrgInfo">
     <Key>
@@ -169,6 +190,7 @@
     <NavigationProperty Name="OrgValidation" Relationship="TabangHubModel.FK_OrgValidation_UserAccount" FromRole="UserAccount" ToRole="OrgValidation" />
     <NavigationProperty Name="UserRoles" Relationship="TabangHubModel.FK_UserRoles_UserAccount" FromRole="UserAccount" ToRole="UserRoles" />
     <NavigationProperty Name="VolunteerInfo" Relationship="TabangHubModel.FK_VolunteerInfo_UserAccount" FromRole="UserAccount" ToRole="VolunteerInfo" />
+    <NavigationProperty Name="Volunteers" Relationship="TabangHubModel.FK_Volunteers_UserAccount" FromRole="UserAccount" ToRole="Volunteers" />
   </EntityType>
   <EntityType Name="UserRoles">
     <Key>
@@ -199,6 +221,16 @@
     <NavigationProperty Name="ProfilePicture" Relationship="TabangHubModel.FK_VolunteerInfo_ProfilePicture" FromRole="VolunteerInfo" ToRole="ProfilePicture" />
     <NavigationProperty Name="UserAccount" Relationship="TabangHubModel.FK_VolunteerInfo_UserAccount" FromRole="VolunteerInfo" ToRole="UserAccount" />
   </EntityType>
+  <EntityType Name="Volunteers">
+    <Key>
+      <PropertyRef Name="applyVolunteerId" />
+    </Key>
+    <Property Name="applyVolunteerId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="userId" Type="Int32" />
+    <Property Name="eventId" Type="Int32" />
+    <NavigationProperty Name="OrgEvents" Relationship="TabangHubModel.FK_Volunteers_OrgEvents" FromRole="Volunteers" ToRole="OrgEvents" />
+    <NavigationProperty Name="UserAccount" Relationship="TabangHubModel.FK_Volunteers_UserAccount" FromRole="Volunteers" ToRole="UserAccount" />
+  </EntityType>
   <EntityType Name="VolunteerSkill">
     <Key>
       <PropertyRef Name="volunteerSkillId" />
@@ -213,6 +245,7 @@
     <Key>
       <PropertyRef Name="Event_Id" />
     </Key>
+<<<<<<< Updated upstream
     <Property Name="Event_Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="Title" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
     <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
@@ -222,6 +255,21 @@
     <Property Name="Location" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
     <Property Name="Image_Id" Type="Int32" />
     <Property Name="Skill_Id" Type="Int32" />
+=======
+    <Property Name="Event_Id" Type="Int32" Nullable="false" />
+    <Property Name="User_Id" Type="Int32" />
+    <Property Name="Organization_Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="Event_Title" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="Event_Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="Target_Amount" Type="Decimal" Precision="10" Scale="2" />
+    <Property Name="Maximum_Volunteer" Type="Int32" />
+    <Property Name="Date_Started" Type="DateTime" Precision="3" />
+    <Property Name="Date_Ended" Type="DateTime" Precision="3" />
+    <Property Name="location" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="Event_Type" Type="Int32" />
+    <Property Name="Total_Image" Type="Int32" />
+    <Property Name="Total_Skills" Type="Int32" />
+>>>>>>> Stashed changes
   </EntityType>
   <EntityType Name="vw_UserRoles">
     <Key>
@@ -272,6 +320,33 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+<<<<<<< Updated upstream
+=======
+  <Association Name="FK_UserDonated_UserDonated">
+    <End Type="TabangHubModel.OrgEvents" Role="OrgEvents" Multiplicity="0..1" />
+    <End Type="TabangHubModel.UserDonated" Role="UserDonated" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="OrgEvents">
+        <PropertyRef Name="eventId" />
+      </Principal>
+      <Dependent Role="UserDonated">
+        <PropertyRef Name="eventId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Volunteers_OrgEvents">
+    <End Type="TabangHubModel.OrgEvents" Role="OrgEvents" Multiplicity="0..1" />
+    <End Type="TabangHubModel.Volunteers" Role="Volunteers" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="OrgEvents">
+        <PropertyRef Name="eventId" />
+      </Principal>
+      <Dependent Role="Volunteers">
+        <PropertyRef Name="eventId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+>>>>>>> Stashed changes
   <Association Name="FK_OrgInfo_ProfilePicture">
     <End Type="TabangHubModel.ProfilePicture" Role="ProfilePicture" Multiplicity="0..1" />
     <End Type="TabangHubModel.OrgInfo" Role="OrgInfo" Multiplicity="*" />
@@ -352,6 +427,18 @@
         <PropertyRef Name="userId" />
       </Principal>
       <Dependent Role="VolunteerInfo">
+        <PropertyRef Name="userId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Volunteers_UserAccount">
+    <End Type="TabangHubModel.UserAccount" Role="UserAccount" Multiplicity="0..1" />
+    <End Type="TabangHubModel.Volunteers" Role="Volunteers" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserAccount">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="Volunteers">
         <PropertyRef Name="userId" />
       </Dependent>
     </ReferentialConstraint>

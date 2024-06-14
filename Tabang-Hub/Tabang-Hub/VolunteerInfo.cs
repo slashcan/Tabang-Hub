@@ -42,6 +42,11 @@ public partial class VolunteerInfo
 
     public Nullable<int> profileId { get; set; }
 
+<<<<<<< Updated upstream
+=======
+    public string availability { get; set; }
+
+>>>>>>> Stashed changes
     public string aboutMe { get; set; }
 
 

@@ -15,7 +15,9 @@ namespace Tabang_Hub.Controllers
         public VolunteerManager _volunteerManager;
         public String ErrorMessage;
 
+        //Table
         public BaseRepository<Skills> _skills;
+        public BaseRepository<OrgSkillRequirement> _skillRequirement;
         public BaseRepository<VolunteerSkill> _volunteerSkills;
         public BaseRepository<VolunteerInfo> _volunteerInfo;
         public BaseRepository<UserAccount> _userAcc;
@@ -23,6 +25,12 @@ namespace Tabang_Hub.Controllers
         public BaseRepository<OrgValidation> _orgValid;
         public BaseRepository<ProfilePicture> _profilePic;
         public BaseRepository<UserRoles> _userRoles;
+        public BaseRepository<OrgEvents> _orgEvents;
+        public BaseRepository<OrgEventImage> _eventImages;
+        public BaseRepository<Volunteers> _volunteers;
+
+        //View
+        public BaseRepository<vw_ListOfEvent> _listsOfEvent;
 
         public String Email { get { return User.Identity.Name;  } }
         public int UserId { get { return _userManager.GetUserByEmail(Email).userId; } }
@@ -36,6 +44,7 @@ namespace Tabang_Hub.Controllers
             ErrorMessage = String.Empty;
 
             _skills = new BaseRepository<Skills>();
+            _skillRequirement = new BaseRepository<OrgSkillRequirement>();
             _volunteerSkills = new BaseRepository<VolunteerSkill>();
             _volunteerInfo = new BaseRepository<VolunteerInfo>();
             _userAcc = new BaseRepository<UserAccount>();
@@ -43,7 +52,11 @@ namespace Tabang_Hub.Controllers
             _orgValid = new BaseRepository<OrgValidation>();
             _profilePic = new BaseRepository<ProfilePicture>();
             _userRoles = new BaseRepository<UserRoles>();
-            
+            _orgEvents = new BaseRepository<OrgEvents>();
+            _eventImages = new BaseRepository<OrgEventImage>();
+            _volunteers = new BaseRepository<Volunteers>();
+
+            _listsOfEvent = new BaseRepository<vw_ListOfEvent>();
         }
     }
 }

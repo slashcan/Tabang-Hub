@@ -167,5 +167,97 @@ namespace Tabang_Hub.Controllers
                 return Json(new { success = false, message = "Error" });
             }
         }
+        public ActionResult GeneralSkill()
+        {
+            var getEventImages = _eventImages.GetAll().ToList();
+            var getSkills = _skills.GetAll().ToList();
+            var getProfile = db.ProfilePicture.Where(m => m.userId == UserId).ToList();
+            var getEvents = _listsOfEvent.GetAll().ToList();
+
+            var getOrgEvents = _orgEvents.GetAll().FirstOrDefault();
+            var getOrgInfo = db.OrgInfo.Where(m => m.userId == getOrgEvents.userId).ToList();
+
+            var getSkillRequirements = _skillRequirement.GetAll().ToList();
+
+            var indexModel = new Lists()
+            {
+                skills = getSkills,
+                picture = getProfile,
+                listOfEvents = getEvents,
+                orgInfos = getOrgInfo,
+                detailsSkillRequirement = getSkillRequirements,
+                detailsEventImage = getEventImages
+            };
+            return View(indexModel);
+        }
+        public ActionResult EventDetails(int? evetId)
+        {
+            try
+            {
+                var checkEventID = _listsOfEvent.Get(evetId);
+                if(checkEventID != null)
+                {
+                    var getProfile = db.ProfilePicture.Where(m => m.userId == UserId).ToList();
+
+                    var getOrgInfo = db.OrgEvents.Where(m => m.eventId == evetId).FirstOrDefault();
+
+                    var getInfo = _orgInfo.GetAll().Where(m => m.userId == getOrgInfo.userId).ToList();
+                    var getSkillRequirmenet = _skillRequirement.GetAll().Where(m => m.eventId == getOrgInfo.eventId).ToList();
+                    var getOrgImages = _eventImages.GetAll().Where(m => m.eventId == getOrgInfo.eventId).ToList();
+                    var getEvent = _orgEvents.GetAll().Where(m => m.eventId == getOrgInfo.eventId).ToList();
+
+                    var indexModel = new Lists()
+                    {
+                        picture = getProfile,
+                        orgInfos = getInfo,
+                        detailsSkillRequirement = getSkillRequirmenet,
+                        detailsEventImage = getOrgImages,
+                        orgEvents = getEvent
+                    };
+                    return View(indexModel);
+                }
+                else
+                {
+                    return RedirectToAction("GeneralSkill"); //Error
+                }
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("GeneralSkill"); //Error
+            }
+        }
+        [HttpPost]
+        public JsonResult ApplyVolunteer(int eventId)
+        {
+            try
+            {
+
+                var apply = new Volunteers()
+                {
+                    userId = UserId,
+                    eventId = eventId
+                };
+
+                var updateVolunteerNeeded = db.OrgEvents.Where(m => m.eventId == eventId).FirstOrDefault();
+                updateVolunteerNeeded.maxVolunteer = updateVolunteerNeeded.maxVolunteer - 1;
+
+                if(apply.userId == UserId && apply.eventId == eventId)
+                {
+                    return Json(new { success = false, message = "Already apply !" });
+                }
+                else
+                {
+                    db.SaveChanges();
+                    _volunteers.Create(apply);
+
+                    return Json(new { success = true, message = "Success !" });
+                }
+            }
+            catch (Exception)
+            {
+
+                return Json(new { success = false, message = "Error !" });
+            }
+        }
     }
 }

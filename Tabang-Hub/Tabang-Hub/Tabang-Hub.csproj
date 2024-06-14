@@ -94,13 +94,18 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\Css\GeneralSkill\generalSkill.css" />
     <Content Include="Content\Css\generalStyle.css" />
     <Content Include="Content\Css\popup.css" />
     <Content Include="Content\Css\progress.css" />
     <Content Include="Content\Css\Style.css" />
+    <Content Include="Content\images\Date&amp;Time.png" />
+    <Content Include="Content\images\Org.png" />
     <Content Include="Content\images\organization.png" />
+    <Content Include="Content\images\SkillIcon.png" />
     <Content Include="Content\images\tabanghub3.png" />
     <Content Include="Content\images\volunteer.png" />
+    <Content Include="Content\Js\GeneralSkill\generalSkill.js" />
     <Content Include="Content\Js\JavaScript.js" />
     <Content Include="Content\Js\popup.js" />
     <Content Include="Content\Js\progress.js" />
@@ -189,6 +194,9 @@
     <Compile Include="VolunteerInfo.cs">
       <DependentUpon>ModelTabangHub.tt</DependentUpon>
     </Compile>
+    <Compile Include="Volunteers.cs">
+      <DependentUpon>ModelTabangHub.tt</DependentUpon>
+    </Compile>
     <Compile Include="VolunteerSkill.cs">
       <DependentUpon>ModelTabangHub.tt</DependentUpon>
     </Compile>
@@ -226,6 +234,8 @@
     <Content Include="Views\Organization\Details.cshtml" />
     <Content Include="Views\Organization\OrgProfile.cshtml" />
     <Content Include="Views\Volunteer\VolunteerProfile.cshtml" />
+    <Content Include="Views\Volunteer\GeneralSkill.cshtml" />
+    <Content Include="Views\Volunteer\EventDetails.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

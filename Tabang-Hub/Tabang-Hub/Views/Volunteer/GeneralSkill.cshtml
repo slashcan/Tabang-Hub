@@ -1,0 +1,76 @@
+﻿@model Tabang_Hub.Utils.Lists
+@{
+    ViewBag.Title = "GeneralSkill";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+<link href="~/Content/Css/GeneralSkill/generalSkill.css" rel="stylesheet" />
+
+<h2>GeneralSkill</h2>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        @foreach (var evnt in Model.listOfEvents)
+        {
+            <div class="col-11 col-sm-5 col-md-5 col-lg-3 mb-3 d-flex">
+                <div class="card" data-id="@evnt.Event_Id" style="width: 100%; cursor: pointer;" onclick="redirectToDetails(@evnt.Event_Id)">
+                    @*@foreach (var pic in Model.detailsEventImage)
+                    {
+                        if (evnt.Event_Id == pic.eventId)
+                        {
+                            <img src="~/Content/IdPicture/@pic.eventImage" class="card-img-top" alt="">
+                        }
+                    }*@
+                    <img src="~/Content/images/tabanghub3.png" class="card-img-top" alt="" />
+
+                    <div class="card-body">
+                        <h5 style="font-size: larger" class="card-title">@evnt.Event_Title</h5>
+                        <p class="card-text">@evnt.Event_Description</p>
+                        <hr />
+                        <span>
+                            <i style='font-size:24px' class='fas'>&#xf3c5;</i> @evnt.location
+                        </span>
+                        <span>
+                            <img src="~/Content/images/Date&Time.png" alt="Icon" style="width: 16px; height: 16px;" />
+                            <span>@evnt.Date_Started <strong>-</strong></span>
+                            <span style="margin-left: 20px;">@evnt.Date_Ended</span>
+                        </span>
+                        <span>
+                            <img src="~/Content/images/Org.png" alt="Icon" style="width: 16px; height: 16px;" /> @evnt.Organization_Name
+                        </span>
+
+                        <span>
+                            @if (evnt.Event_Type == 1)
+                            {
+                                <img src="~/Content/images/SkillIcon.png" alt="Icon" style="width: 16px; height: 16px;" />
+                                foreach (var reqSkill in Model.detailsSkillRequirement)
+                                {
+                                    if (evnt.Event_Id == reqSkill.eventId)
+                                    {
+                                        <span class="badge badge-secondary skill-badge">
+                                            @reqSkill.skillName
+                                        </span>
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                <br />
+                                <a href="#">DONATE</a>
+                            }
+                        </span>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<script>
+    function redirectToDetails(eventId) {
+        window.location.href = '@Url.Action("EventDetails", "Volunteer")' + '?evetId=' + eventId;
+    }
+</script>
+
+@*<script src="~/Content/Js/GeneralSkill/generalSkill.js"></script>*@

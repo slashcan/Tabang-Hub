@@ -54,10 +54,20 @@ public partial class TabangHubEntities : DbContext
 
     public DbSet<UserAccount> UserAccount { get; set; }
 
+<<<<<<< Updated upstream
+=======
+    public DbSet<UserDonated> UserDonated { get; set; }
+
+>>>>>>> Stashed changes
     public DbSet<UserRoles> UserRoles { get; set; }
 
     public DbSet<VolunteerInfo> VolunteerInfo { get; set; }
 
+<<<<<<< Updated upstream
+=======
+    public DbSet<Volunteers> Volunteers { get; set; }
+
+>>>>>>> Stashed changes
     public DbSet<VolunteerSkill> VolunteerSkill { get; set; }
 
     public DbSet<vw_ListOfEvent> vw_ListOfEvent { get; set; }
