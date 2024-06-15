@@ -8,6 +8,9 @@
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css" rel="stylesheet">
+
 <style>
     .carousel-inner img {
         width: 100%;
@@ -22,10 +25,15 @@
 
     .event-description {
         margin-bottom: 20px;
+        text-align: justify;
     }
 
     .event-details {
         margin-top: 20px;
+    }
+
+    .org-description {
+        text-align: justify;
     }
 
     .org-info h3 {
@@ -34,18 +42,51 @@
 
     .skills-required {
         margin-top: 30px;
+        font-size: larger;
     }
 
-    .skill-badge {
+    .skill-badge .badge {
         margin: 5px 5px 0 0;
     }
-</style>
 
-<h2>Event Details</h2>
+
+    .progress {
+        position: relative;
+        height: 30px;
+        background-color: #e9ecef;
+        border-radius: 0.25rem;
+        overflow: hidden;
+    }
+
+    .progress-bar {
+        height: 100%;
+        background-color: #007bff;
+    }
+
+    .progress-label {
+        position: absolute;
+        width: 100%;
+        text-align: center;
+        left: 0;
+        top: 0;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: black; /* Adjust color as needed */
+    }
+    #counter{
+        margin-top: 10px;
+    }
+</style>
 
 <div class="container mt-5">
     <div class="row">
         <div class="col-12 event-description">
+            @foreach (var title in Model.orgEvents)
+            {
+                <h3>@title.eventTitle</h3>
+            }
             @foreach (var orgDetails in Model.orgEvents)
             {
                 <p>@orgDetails.eventDescription</p>
@@ -75,28 +116,34 @@
                 </div>
             </div>
             <div class="col-md-4 event-details">
+                @foreach (var location in Model.listOfEvents)
+                {
+                    <i class="bi bi-geo-alt" style="font-size:24px;"></i> @location.Location
 
-                <div class="skills-required">
-                    <h3>Skills Required</h3>
-                    @foreach (var rk in Model.detailsSkillRequirement)
-                    {
-                        <span class="badge badge-secondary skill-badge">
-                            @rk.skillName
-                        </span>
-                    }
-                </div>
+                    <div class="skills-required">
+                        <h4>Skills Required</h4>
+                        @foreach (var rk in Model.detailsSkillRequirement)
+                        {
+                            <span id="badge" class="badge badge-secondary skill-badge">
+                                @rk.skillName
+                            </span>
+                        }
+                    </div>
+                    <div style="margin-top: 50px; color: dimgray" class="org-info">
+                        <div class="d-flex align-items-center mb-2">
+                            <i class="bi bi-calendar me-2" style="font-size:16px;"></i>
+                            <span>@location.Date_Started <strong>-</strong> @location.Date_Ended</span>
+                        </div>
+                    </div>
 
-                <div class="org-info">
-                    <h3>Organization Information</h3>
-                    @foreach (var o in Model.orgInfos)
-                    {
-                        <p><strong>Name:</strong> @o.orgName</p>
-                        <p><strong>Description:</strong> @o.orgDescription</p>
-                        <p><strong>Email:</strong> @o.orgEmail</p>
-                        <p><strong>Type:</strong> @o.orgType</p>
-                        <p><strong>Phone:</strong> @o.phoneNum</p>
-                    }
-                </div>
+                    <label id="counter">Volunteer counter</label>
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" style="width: @Model.listOfEvents.Count(m => m.Event_Id == location.Event_Id)%;" aria-valuenow="@location.Maximum_Volunteer" aria-valuemin="0" aria-valuemax="100"></div>
+                        <div class="progress-label">@location.Maximum_Volunteer</div>
+                    </div>
+                }
+                <hr />
+
 
                 <div class="apply-button mt-3">
                     @foreach (var orgDetails in Model.orgEvents)
@@ -110,8 +157,96 @@
         </div>
     </div>
 </div>
+<br />
+<hr />
+@* This should be the other event of this organization *@
+<div class="container mt-5">
+    @*<div class="card" style="background-color: red">
+        <div style="background-color: darkblue; text-align: center" class="card-body">
+            <div class="row justify-content-center">
+                @foreach (var evnt in Model.listOfEvents)
+                {
+                    <div class="col-11 col-sm-5 col-md-5 col-lg-3 mb-3 d-flex">
+                        <div class="card" data-id="@evnt.Event_Id" style="width: 100%; cursor: pointer;" onclick="redirectToDetails(@evnt.Event_Id)">
+                            <img src="~/Content/images/tabanghub3.png" class="card-img-top" alt="" />
+                            <div class="card-body">
+                                <h5 style="font-size: larger" class="card-title">@evnt.Event_Title</h5>
+                                <hr />
+                                <div class="d-flex align-items-center mb-2">
+                                    <i class="bi bi-geo-alt me-2" style="font-size:24px;"></i>
+                                    <span>@evnt.Location</span>
+                                </div>
+                                <div class="d-flex align-items-center mb-2">
+                                    <i class="bi bi-calendar me-2" style="font-size:16px;"></i>
+                                    <span>@evnt.Date_Started <strong>-</strong> @evnt.Date_Ended</span>
+                                </div>
+                                <div class="d-flex align-items-center mb-2">
+                                    <i class="bi bi-building me-2" style="font-size:16px;"></i>
+                                    <span>@evnt.Event_Title</span>
+                                </div>
+                                <div class="d-flex align-items-center mb-2">
+                                    @if (evnt.Event_Type == 1)
+                                    {
+                                        <i class="bi bi-tools me-2" style="font-size:16px;"></i>
+                                        foreach (var reqSkill in Model.detailsSkillRequirement)
+                                        {
+                                            if (evnt.Event_Id == reqSkill.eventId)
+                                            {
+                                                <span class="badge bg-secondary skill-badge me-1">
+                                                    @reqSkill.skillName
+                                                </span>
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <br />
+                                        <a href="#">DONATE</a>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+
+            </div>
+        </div>
+    </div>*@
+</div>
+
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                @foreach (var info in Model.orgInfos)
+                {
+                    <div class="col-md-7 org-description">
+                        <h3>About us</h3>
+                        <p>
+                            @info.orgDescription
+                        </p>
+                    
+                    </div>
+                    <div class="col-md-3">
+                        <h3>Contact us</h3>
+                        <p>
+                            @info.phoneNum
+                        </p>
+                        <p>
+                            @info.orgEmail
+                        </p>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
 
 <br />
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.6/js/bootstrap.bundle.min.js"></script>
 
 <script>
     function applyEvent(eventId) {

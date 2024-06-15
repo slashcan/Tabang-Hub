@@ -53,5 +53,14 @@ namespace Tabang_Hub
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_GetSkills_Result>("sp_GetSkills", userIdParameter);
         }
+    
+        public virtual ObjectResult<sp_OtherEventOfOrg_Result> sp_OtherEventOfOrg(Nullable<int> userId)
+        {
+            var userIdParameter = userId.HasValue ?
+                new ObjectParameter("userId", userId) :
+                new ObjectParameter("userId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_OtherEventOfOrg_Result>("sp_OtherEventOfOrg", userIdParameter);
+        }
     }
 }

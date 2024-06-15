@@ -32,7 +32,7 @@
     <Property Name="orgName" Type="nvarchar" MaxLength="255" />
     <Property Name="orgEmail" Type="nvarchar" MaxLength="255" />
     <Property Name="orgType" Type="nvarchar" MaxLength="255" />
-    <Property Name="orgDescription" Type="nvarchar" MaxLength="255" />
+    <Property Name="orgDescription" Type="text" />
     <Property Name="phoneNum" Type="nvarchar" MaxLength="255" />
     <Property Name="street" Type="nvarchar" MaxLength="255" />
     <Property Name="city" Type="nvarchar" MaxLength="255" />
@@ -351,6 +351,9 @@ warning 6002: The table/view 'TabangHub.dbo.vw_UserRoles' does not have a primar
     </ReferentialConstraint>
   </Association>
   <Function Name="sp_GetSkills" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="userId" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_OtherEventOfOrg" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="userId" Type="int" Mode="In" />
   </Function>
   <EntityContainer Name="TabangHubModelStoreContainer">

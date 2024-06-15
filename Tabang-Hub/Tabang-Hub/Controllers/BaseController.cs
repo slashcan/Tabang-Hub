@@ -31,6 +31,9 @@ namespace Tabang_Hub.Controllers
         //View
         public BaseRepository<vw_ListOfEvent> _listsOfEvent;
 
+        //Stored procedure
+        public BaseRepository<sp_OtherEventOfOrg_Result> _orgOtherEvent;
+
         public String Email { get { return User.Identity.Name;  } }
         public int UserId { get { return _userManager.GetUserByEmail(Email).userId; } }
         public String UserEmail { get { return _userManager.GetUserByEmail(Email).email; } }
@@ -56,6 +59,8 @@ namespace Tabang_Hub.Controllers
             _skillRequirement = new BaseRepository<OrgSkillRequirement>();
 
             _listsOfEvent = new BaseRepository<vw_ListOfEvent>();
+
+            _orgOtherEvent = new BaseRepository<sp_OtherEventOfOrg_Result>();
         }
     }
 }

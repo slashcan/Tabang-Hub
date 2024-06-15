@@ -206,13 +206,19 @@ namespace Tabang_Hub.Controllers
                     var getOrgImages = _eventImages.GetAll().Where(m => m.eventId == getOrgInfo.eventId).ToList();
                     var getEvent = _orgEvents.GetAll().Where(m => m.eventId == getOrgInfo.eventId).ToList();
 
+                    var getOrgOtherEvent = db.sp_OtherEventOfOrg(getOrgInfo.userId).ToList();
+
+                    var getEvents = _listsOfEvent.GetAll().Where(m => m.Event_Id == getOrgInfo.eventId).ToList();
+
                     var indexModel = new Lists()
                     {
                         picture = getProfile,
                         orgInfos = getInfo,
                         detailsSkillRequirement = getSkillRequirmenet,
                         detailsEventImage = getOrgImages,
-                        orgEvents = getEvent
+                        orgEvents = getEvent,
+                        orgOtherEvent = getOrgOtherEvent,
+                        listOfEvents = getEvents
                     };
                     return View(indexModel);
                 }
@@ -231,6 +237,7 @@ namespace Tabang_Hub.Controllers
         {
             try
             {
+                var getAllVolunteers = _volunteers.GetAll().Where(m => m.eventId == eventId).FirstOrDefault();
 
                 var apply = new Volunteers()
                 {
@@ -239,18 +246,19 @@ namespace Tabang_Hub.Controllers
                 };
 
                 var updateVolunteerNeeded = db.OrgEvents.Where(m => m.eventId == eventId).FirstOrDefault();
-                updateVolunteerNeeded.maxVolunteer = updateVolunteerNeeded.maxVolunteer - 1;
+                
+                if (getAllVolunteers == null)
+                {
 
-                if (apply.userId == UserId && apply.eventId == eventId)
-                {
-                    return Json(new { success = false, message = "Already apply !" });
-                }
-                else
-                {
+                    updateVolunteerNeeded.maxVolunteer = updateVolunteerNeeded.maxVolunteer - 1;
                     db.SaveChanges();
                     _volunteers.Create(apply);
 
                     return Json(new { success = true, message = "Success !" });
+                }
+                else
+                {
+                    return Json(new { success = false, message = "Already apply !" });
                 }
             }
             catch (Exception)

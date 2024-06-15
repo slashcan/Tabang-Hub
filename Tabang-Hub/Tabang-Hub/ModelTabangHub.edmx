@@ -37,7 +37,7 @@
           <Property Name="orgName" Type="nvarchar" MaxLength="255" />
           <Property Name="orgEmail" Type="nvarchar" MaxLength="255" />
           <Property Name="orgType" Type="nvarchar" MaxLength="255" />
-          <Property Name="orgDescription" Type="nvarchar" MaxLength="255" />
+          <Property Name="orgDescription" Type="text" />
           <Property Name="phoneNum" Type="nvarchar" MaxLength="255" />
           <Property Name="street" Type="nvarchar" MaxLength="255" />
           <Property Name="city" Type="nvarchar" MaxLength="255" />
@@ -358,6 +358,9 @@ warning 6002: The table/view 'TabangHub.dbo.vw_UserRoles' does not have a primar
         <Function Name="sp_GetSkills" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="userId" Type="int" Mode="In" />
         </Function>
+        <Function Name="sp_OtherEventOfOrg" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="userId" Type="int" Mode="In" />
+        </Function>
         <EntityContainer Name="TabangHubModelStoreContainer">
           <EntitySet Name="OrgEventImage" EntityType="Self.OrgEventImage" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OrgEvents" EntityType="Self.OrgEvents" Schema="dbo" store:Type="Tables" />
@@ -535,6 +538,9 @@ FROM [dbo].[vw_UserRoles] AS [vw_UserRoles]</DefiningQuery>
             <End Role="UserAccount" EntitySet="UserAccount" />
             <End Role="Volunteers" EntitySet="Volunteers" />
           </AssociationSet>
+          <FunctionImport Name="sp_OtherEventOfOrg" ReturnType="Collection(TabangHubModel.sp_OtherEventOfOrg_Result)">
+            <Parameter Name="userId" Mode="In" Type="Int32" />
+          </FunctionImport>
           </EntityContainer>
         <ComplexType Name="sp_GetSkills_Result">
           <Property Type="Int32" Name="skillId" Nullable="false" />
@@ -578,7 +584,7 @@ FROM [dbo].[vw_UserRoles] AS [vw_UserRoles]</DefiningQuery>
           <Property Name="orgName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="orgEmail" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="orgType" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="orgDescription" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="orgDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="phoneNum" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="street" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="city" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
@@ -914,6 +920,20 @@ FROM [dbo].[vw_UserRoles] AS [vw_UserRoles]</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <ComplexType Name="sp_OtherEventOfOrg_Result">
+          <Property Type="Int32" Name="orgInfoId" Nullable="false" />
+          <Property Type="Int32" Name="userId" Nullable="true" />
+          <Property Type="String" Name="orgName" Nullable="true" MaxLength="255" />
+          <Property Type="String" Name="orgEmail" Nullable="true" MaxLength="255" />
+          <Property Type="String" Name="orgType" Nullable="true" MaxLength="255" />
+          <Property Type="String" Name="orgDescription" Nullable="true" MaxLength="Max" />
+          <Property Type="String" Name="phoneNum" Nullable="true" MaxLength="255" />
+          <Property Type="String" Name="street" Nullable="true" MaxLength="255" />
+          <Property Type="String" Name="city" Nullable="true" MaxLength="255" />
+          <Property Type="String" Name="province" Nullable="true" MaxLength="255" />
+          <Property Type="String" Name="zipCode" Nullable="true" MaxLength="255" />
+          <Property Type="Int32" Name="profileId" Nullable="true" />
+        </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1119,6 +1139,24 @@ FROM [dbo].[vw_UserRoles] AS [vw_UserRoles]</DefiningQuery>
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="sp_OtherEventOfOrg" FunctionName="TabangHubModel.Store.sp_OtherEventOfOrg">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="TabangHubModel.sp_OtherEventOfOrg_Result">
+                <ScalarProperty Name="orgInfoId" ColumnName="orgInfoId" />
+                <ScalarProperty Name="userId" ColumnName="userId" />
+                <ScalarProperty Name="orgName" ColumnName="orgName" />
+                <ScalarProperty Name="orgEmail" ColumnName="orgEmail" />
+                <ScalarProperty Name="orgType" ColumnName="orgType" />
+                <ScalarProperty Name="orgDescription" ColumnName="orgDescription" />
+                <ScalarProperty Name="phoneNum" ColumnName="phoneNum" />
+                <ScalarProperty Name="street" ColumnName="street" />
+                <ScalarProperty Name="city" ColumnName="city" />
+                <ScalarProperty Name="province" ColumnName="province" />
+                <ScalarProperty Name="zipCode" ColumnName="zipCode" />
+                <ScalarProperty Name="profileId" ColumnName="profileId" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

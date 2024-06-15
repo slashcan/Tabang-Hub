@@ -118,6 +118,10 @@
       <DependentUpon>ModelTabangHub.edmx</DependentUpon>
       <LastGenOutput>ModelTabangHub.cs</LastGenOutput>
     </Content>
+    <None Include="scripts\_vs2012.intellisense.js" />
+    <None Include="scripts\_references.js" />
+    <Content Include="scripts\NamespacesAndEnumSupport.js" />
+    <Content Include="scripts\_vs2012.intellisense.Test.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -177,6 +181,9 @@
       <DependentUpon>ModelTabangHub.tt</DependentUpon>
     </Compile>
     <Compile Include="sp_GetSkills_Result.cs">
+      <DependentUpon>ModelTabangHub.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sp_OtherEventOfOrg_Result.cs">
       <DependentUpon>ModelTabangHub.tt</DependentUpon>
     </Compile>
     <Compile Include="UserAccount.cs">

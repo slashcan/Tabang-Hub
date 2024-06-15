@@ -32,6 +32,7 @@ namespace Tabang_Hub.Utils
 
         //Stored Procedure
         public List<sp_GetSkills_Result> uniqueSkill { get; set; }
+        public List<sp_OtherEventOfOrg_Result> orgOtherEvent { get; set; }
 
         //View
         public List<vw_ListOfEvent> listOfEvents { get; set; }

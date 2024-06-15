@@ -200,5 +200,23 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="sp_OtherEventOfOrg" FunctionName="TabangHubModel.Store.sp_OtherEventOfOrg">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="TabangHubModel.sp_OtherEventOfOrg_Result">
+          <ScalarProperty Name="orgInfoId" ColumnName="orgInfoId" />
+          <ScalarProperty Name="userId" ColumnName="userId" />
+          <ScalarProperty Name="orgName" ColumnName="orgName" />
+          <ScalarProperty Name="orgEmail" ColumnName="orgEmail" />
+          <ScalarProperty Name="orgType" ColumnName="orgType" />
+          <ScalarProperty Name="orgDescription" ColumnName="orgDescription" />
+          <ScalarProperty Name="phoneNum" ColumnName="phoneNum" />
+          <ScalarProperty Name="street" ColumnName="street" />
+          <ScalarProperty Name="city" ColumnName="city" />
+          <ScalarProperty Name="province" ColumnName="province" />
+          <ScalarProperty Name="zipCode" ColumnName="zipCode" />
+          <ScalarProperty Name="profileId" ColumnName="profileId" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
   </EntityContainerMapping>
 </Mapping>

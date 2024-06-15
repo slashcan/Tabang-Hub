@@ -76,6 +76,9 @@
       <End Role="UserAccount" EntitySet="UserAccount" />
       <End Role="Volunteers" EntitySet="Volunteers" />
     </AssociationSet>
+    <FunctionImport Name="sp_OtherEventOfOrg" ReturnType="Collection(TabangHubModel.sp_OtherEventOfOrg_Result)">
+      <Parameter Name="userId" Mode="In" Type="Int32" />
+    </FunctionImport>
   </EntityContainer>
   <ComplexType Name="sp_GetSkills_Result">
     <Property Type="Int32" Name="skillId" Nullable="false" />
@@ -119,7 +122,7 @@
     <Property Name="orgName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
     <Property Name="orgEmail" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
     <Property Name="orgType" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-    <Property Name="orgDescription" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="orgDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
     <Property Name="phoneNum" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
     <Property Name="street" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
     <Property Name="city" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
@@ -455,4 +458,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <ComplexType Name="sp_OtherEventOfOrg_Result">
+    <Property Type="Int32" Name="orgInfoId" Nullable="false" />
+    <Property Type="Int32" Name="userId" Nullable="true" />
+    <Property Type="String" Name="orgName" Nullable="true" MaxLength="255" />
+    <Property Type="String" Name="orgEmail" Nullable="true" MaxLength="255" />
+    <Property Type="String" Name="orgType" Nullable="true" MaxLength="255" />
+    <Property Type="String" Name="orgDescription" Nullable="true" MaxLength="Max" />
+    <Property Type="String" Name="phoneNum" Nullable="true" MaxLength="255" />
+    <Property Type="String" Name="street" Nullable="true" MaxLength="255" />
+    <Property Type="String" Name="city" Nullable="true" MaxLength="255" />
+    <Property Type="String" Name="province" Nullable="true" MaxLength="255" />
+    <Property Type="String" Name="zipCode" Nullable="true" MaxLength="255" />
+    <Property Type="Int32" Name="profileId" Nullable="true" />
+  </ComplexType>
 </Schema>
