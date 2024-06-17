@@ -190,6 +190,28 @@ namespace Tabang_Hub.Controllers
             };
             return View(indexModel);
         }
+        public ActionResult DonationDetails(int eventId)
+        {
+            var getProfile = db.ProfilePicture.Where(m => m.userId == UserId).ToList();
+            var events = _organizationManager.GetEventById(eventId);
+            var listofImage = _organizationManager.listOfEventImage(eventId);
+            var listOfSkills = _organizationManager.listOfSkillRequirement(eventId);
+
+
+            var indexModel = new Utils.Lists()
+            {
+                picture = getProfile,
+                eventDetails = events,
+                detailsEventImage = listofImage,
+                detailsSkillRequirement = listOfSkills
+            };
+
+            if (events != null)
+            {
+                return View(indexModel);
+            }
+            return View();
+        }
         public ActionResult EventDetails(int? eventId)
         {
             try

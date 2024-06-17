@@ -13,38 +13,38 @@
     <div class="row justify-content-center">
         @foreach (var evnt in Model.listOfEvents)
         {
-            <div class="col-11 col-sm-5 col-md-5 col-lg-3 mb-3 d-flex">
-                <div class="card" data-id="@evnt.Event_Id" style="width: 100%; cursor: pointer;" onclick="redirectToDetails(@evnt.Event_Id)">
-                    @*@foreach (var pic in Model.detailsEventImage)
-                        {
-                            if (evnt.Event_Id == pic.eventId)
+            if (evnt.Event_Type == 1)
+            {
+                <div class="col-11 col-sm-5 col-md-5 col-lg-3 mb-3 d-flex">
+                    <div class="card" data-id="@evnt.Event_Id" style="width: 100%; cursor: pointer;" onclick="redirectToDetails(@evnt.Event_Id)">
+                        @*@foreach (var pic in Model.detailsEventImage)
                             {
-                                <img src="~/Content/IdPicture/@pic.eventImage" class="card-img-top" alt="">
-                            }
-                        }*@
-                    <img src="~/Content/images/tabanghub3.png" class="card-img-top" alt="" />
+                                if (evnt.Event_Id == pic.eventId)
+                                {
+                                    <img src="~/Content/IdPicture/@pic.eventImage" class="card-img-top" alt="">
+                                }
+                            }*@
+                        <img src="~/Content/images/tabanghub3.png" class="card-img-top" alt="" />
 
-                    <div class="card-body">
-                        <h5 style="font-size: larger" class="card-title">@evnt.Event_Title</h5>
-                        <p class="card-text">@evnt.Event_Description</p>
-                        <hr />
-                        <span>
-                            <i class="bi bi-geo-alt" style="font-size:24px;"></i> @evnt.Location
-                        </span>
-                        <span>
-                            <i class="bi bi-calendar" style="font-size:16px;"></i>
-                            <span>@evnt.Date_Started <strong>-</strong></span>
-                            <span style="margin-left: 20px;">@evnt.Date_Ended</span>
-                        </span>
-                        <span>
-                            <i class="bi bi-building" style="font-size:16px;"></i> @evnt.Event_Title
-                        </span>
+                        <div class="card-body">
+                            <h5 style="font-size: larger" class="card-title">@evnt.Event_Title</h5>
+                            <p class="card-text">@evnt.Event_Description</p>
+                            <hr />
+                            <span>
+                                <i class="bi bi-geo-alt" style="font-size:24px;"></i> @evnt.Location
+                            </span>
+                            <span>
+                                <i class="bi bi-calendar" style="font-size:16px;"></i>
+                                <span>@evnt.Date_Started <strong>-</strong></span>
+                                <span style="margin-left: 20px;">@evnt.Date_Ended</span>
+                            </span>
+                            <span>
+                                <i class="bi bi-building" style="font-size:16px;"></i> @evnt.Event_Title
+                            </span>
 
-                        <span>
-                            @if (evnt.Event_Type == 1)
-                            {
+                            <span>
                                 <i class="bi bi-tools" style="font-size:16px;"></i>
-                                foreach (var reqSkill in Model.detailsSkillRequirement)
+                                @foreach (var reqSkill in Model.detailsSkillRequirement)
                                 {
                                     if (evnt.Event_Id == reqSkill.eventId)
                                     {
@@ -53,16 +53,47 @@
                                         </span>
                                     }
                                 }
-                            }
-                            else
-                            {
-                                <br />
-                                <a href="#">DONATE</a>
-                            }
-                        </span>
+                            </span>
+                        </div>
                     </div>
                 </div>
-            </div>
+            }
+            else
+            {
+                <div class="col-11 col-sm-5 col-md-5 col-lg-3 mb-3 d-flex">
+                    <div class="card" data-id="@evnt.Event_Id" style="width: 100%; cursor: pointer;" onclick="redirectToDonationDetails(@evnt.Event_Id)">
+                        @*@foreach (var pic in Model.detailsEventImage)
+                            {
+                                if (evnt.Event_Id == pic.eventId)
+                                {
+                                    <img src="~/Content/IdPicture/@pic.eventImage" class="card-img-top" alt="">
+                                }
+                            }*@
+                        <img src="~/Content/images/tabanghub3.png" class="card-img-top" alt="" />
+
+                        <div class="card-body">
+                            <h5 style="font-size: larger" class="card-title">@evnt.Event_Title</h5>
+                            <p class="card-text">@evnt.Event_Description</p>
+                            <hr />
+                            <span>
+                                <i class="bi bi-geo-alt" style="font-size:24px;"></i> @evnt.Location
+                            </span>
+                            <span>
+                                <i class="bi bi-calendar" style="font-size:16px;"></i>
+                                <span>@evnt.Date_Started <strong>-</strong></span>
+                                <span style="margin-left: 20px;">@evnt.Date_Ended</span>
+                            </span>
+                            <span>
+                                <i class="bi bi-building" style="font-size:16px;"></i> @evnt.Event_Title
+                            </span>
+
+                            <span>
+                                <i href="#">Donate</i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            }
         }
     </div>
 </div>
@@ -71,4 +102,7 @@
     function redirectToDetails(eventId) {
         window.location.href = '@Url.Action("EventDetails", "Volunteer")' + '?eventId=' + eventId;
     }
+    function redirectToDonationDetails(eventId) {
+    window.location.href = '@Url.Action("DonationDetails", "Volunteer")' + '?eventId=' + eventId;
+}
 </script>

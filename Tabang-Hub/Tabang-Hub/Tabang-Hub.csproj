@@ -242,6 +242,7 @@
     <Content Include="Views\Volunteer\VolunteerProfile.cshtml" />
     <Content Include="Views\Volunteer\EventDetails.cshtml" />
     <Content Include="Views\Volunteer\GeneralSkill.cshtml" />
+    <Content Include="Views\Volunteer\DonationDetails.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
