@@ -11,6 +11,7 @@
 <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css" rel="stylesheet">
 
+<link href="~/Content/Css/opportunityCarousel.css" rel="stylesheet" />
 <style>
     .carousel-inner img {
         width: 100%;
@@ -159,63 +160,11 @@
 </div>
 <br />
 <hr />
-@* This should be the other event of this organization *@
-<div class="container mt-5">
-    @*<div class="card" style="background-color: red">
-        <div style="background-color: darkblue; text-align: center" class="card-body">
-            <div class="row justify-content-center">
-                @foreach (var evnt in Model.listOfEvents)
-                {
-                    <div class="col-11 col-sm-5 col-md-5 col-lg-3 mb-3 d-flex">
-                        <div class="card" data-id="@evnt.Event_Id" style="width: 100%; cursor: pointer;" onclick="redirectToDetails(@evnt.Event_Id)">
-                            <img src="~/Content/images/tabanghub3.png" class="card-img-top" alt="" />
-                            <div class="card-body">
-                                <h5 style="font-size: larger" class="card-title">@evnt.Event_Title</h5>
-                                <hr />
-                                <div class="d-flex align-items-center mb-2">
-                                    <i class="bi bi-geo-alt me-2" style="font-size:24px;"></i>
-                                    <span>@evnt.Location</span>
-                                </div>
-                                <div class="d-flex align-items-center mb-2">
-                                    <i class="bi bi-calendar me-2" style="font-size:16px;"></i>
-                                    <span>@evnt.Date_Started <strong>-</strong> @evnt.Date_Ended</span>
-                                </div>
-                                <div class="d-flex align-items-center mb-2">
-                                    <i class="bi bi-building me-2" style="font-size:16px;"></i>
-                                    <span>@evnt.Event_Title</span>
-                                </div>
-                                <div class="d-flex align-items-center mb-2">
-                                    @if (evnt.Event_Type == 1)
-                                    {
-                                        <i class="bi bi-tools me-2" style="font-size:16px;"></i>
-                                        foreach (var reqSkill in Model.detailsSkillRequirement)
-                                        {
-                                            if (evnt.Event_Id == reqSkill.eventId)
-                                            {
-                                                <span class="badge bg-secondary skill-badge me-1">
-                                                    @reqSkill.skillName
-                                                </span>
-                                            }
-                                        }
-                                    }
-                                    else
-                                    {
-                                        <br />
-                                        <a href="#">DONATE</a>
-                                    }
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                }
-
-
-            </div>
-        </div>
-    </div>*@
-</div>
 
 <div class="container mt-5">
+    <div style="text-align: center">
+        <h1>Organization</h1>
+    </div>
     <div class="card">
         <div class="card-body">
             <div class="row">
@@ -239,6 +188,62 @@
                     </div>
                 }
             </div>
+        </div>
+    </div>
+</div>
+
+<div class="similar-opportunities-container">
+    <div class="header">
+        <h2>Similar opportunities</h2>
+        <a href="#" class="see-all">See all</a>
+    </div>
+    <div class="similar-opportunities-carousel">
+        <div class="carousel-buttons-opportunities">
+            <button class="carousel-button-opportunities prev-button-opportunities">&lt;</button>
+            <button class="carousel-button-opportunities next-button-opportunities">&gt;</button>
+        </div>
+        <div class="carousel-track-opportunities">
+            <div class="opportunity-card">
+                <img src="~/Content/images/tabanghub3.png" alt="Tech Systems Set Up">
+                <div class="card-content">
+                    <p>PROJECT | 6-7 WEEKS</p>
+                    <h3>Tech Systems Set Up 1</h3>
+                    <p>for Jews of the Melbourne CBD</p>
+                </div>
+            </div>
+            <div class="opportunity-card">
+                <img src="~/Content/images/tabanghub3.png" alt="Website Set Up (CMS-Based)">
+                <div class="card-content">
+                    <p>PROJECT | 4-9 WEEKS</p>
+                    <h3>Website Set Up (CMS-Based) 2</h3>
+                    <p>for The Pop-Up Village, Designing Justice + Designing Spaces</p>
+                </div>
+            </div>
+            <div class="opportunity-card">
+                <img src="~/Content/images/tabanghub3.png" alt="Artificial Intelligence">
+                <div class="card-content">
+                    <p>PHONE CALL | 1 HOUR</p>
+                    <h3>Artificial Intelligence 3</h3>
+                    <p>for Essential Theatre, Inc</p>
+                </div>
+            </div>
+            <div class="opportunity-card">
+                <img src="~/Content/images/tabanghub3.png" alt="Artificial Intelligence">
+                <div class="card-content">
+                    <p>PHONE CALL | 1 HOUR</p>
+                    <h3>Artificial Intelligence 4</h3>
+                    <p>for Essential Theatre, Inc</p>
+                </div>
+            </div>
+            <div class="opportunity-card">
+                <img src="~/Content/images/tabanghub3.png" alt="Artificial Intelligence">
+                <div class="card-content">
+                    <p>PHONE CALL | 1 HOUR</p>
+                    <h3>Artificial Intelligence 5</h3>
+                    <p>for Essential Theatre, Inc</p>
+                </div>
+            </div>
+            <!-- Add more cards as needed -->
         </div>
     </div>
 </div>
@@ -268,4 +273,67 @@
             }
         })
     }
+
+
+    const track = document.querySelector('.carousel-track-opportunities');
+    const prevButton = document.querySelector('.prev-button-opportunities');
+    const nextButton = document.querySelector('.next-button-opportunities');
+    const cards = Array.from(track.children);
+    const cardWidth = cards[0].getBoundingClientRect().width + 20; // +20 for margin-right
+
+    let currentIndex = 0;
+
+    function updateCarousel() {
+        track.style.transform = 'translateX(' + (-currentIndex * cardWidth) + 'px)';
+        // Ensure visibility logic is set correctly
+        toggleNavButtons();
+    }
+
+    nextButton.addEventListener('click', () => {
+        if (currentIndex < cards.length - 3) {
+            currentIndex++;
+        } else {
+            currentIndex = 0; // Reset to the first card to loop
+        }
+        updateCarousel();
+    });
+
+    prevButton.addEventListener('click', () => {
+        if (currentIndex > 0) {
+            currentIndex--;
+        } else {
+            currentIndex = cards.length - 3; // Go to the last possible start position
+        }
+        updateCarousel();
+    });
+
+    function toggleNavButtons() {
+        // Ensure the back button is always visible
+        prevButton.style.visibility = 'visible';
+        // The next button is always visible, no need to hide it
+    }
+
+    // Initial setup
+    updateCarousel();
+    toggleNavButtons();
+
+    // Window resize listener to adjust visibility of navigation buttons
+    window.addEventListener('resize', () => {
+        if (window.innerWidth <= 770) {
+            prevButton.style.visibility = 'hidden';
+            nextButton.style.visibility = 'hidden';
+        } else {
+            // Recheck visibility on wider screens
+            toggleNavButtons();
+        }
+    }); prevButton.addEventListener('click', () => {
+        if (currentIndex > 0) {
+            currentIndex--;
+        } else {
+            currentIndex = cards.length - 3; // Reset to the last possible start position
+        }
+        updateCarousel();
+    });
+
+    updateCarousel(); // Initial update
 </script>

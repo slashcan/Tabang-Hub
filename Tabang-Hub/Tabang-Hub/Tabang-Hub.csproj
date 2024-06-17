@@ -96,6 +96,7 @@
   <ItemGroup>
     <Content Include="Content\Css\generalskill.css" />
     <Content Include="Content\Css\generalStyle.css" />
+    <Content Include="Content\Css\opportunityCarousel.css" />
     <Content Include="Content\Css\popup.css" />
     <Content Include="Content\Css\progress.css" />
     <Content Include="Content\Css\Style.css" />
