@@ -32,7 +32,7 @@ namespace Tabang_Hub.Controllers
         public BaseRepository<vw_ListOfEvent> _listsOfEvent;
 
         //Stored procedure
-        public BaseRepository<sp_OtherEventOfOrg_Result> _orgOtherEvent;
+        public BaseRepository<sp_OtherEvent_Result> _orgOtherEvent;
 
         public String Email { get { return User.Identity.Name;  } }
         public int UserId { get { return _userManager.GetUserByEmail(Email).userId; } }
@@ -60,7 +60,7 @@ namespace Tabang_Hub.Controllers
 
             _listsOfEvent = new BaseRepository<vw_ListOfEvent>();
 
-            _orgOtherEvent = new BaseRepository<sp_OtherEventOfOrg_Result>();
+            _orgOtherEvent = new BaseRepository<sp_OtherEvent_Result>();
         }
     }
 }

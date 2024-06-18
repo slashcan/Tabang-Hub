@@ -358,7 +358,7 @@ warning 6002: The table/view 'TabangHub.dbo.vw_UserRoles' does not have a primar
         <Function Name="sp_GetSkills" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="userId" Type="int" Mode="In" />
         </Function>
-        <Function Name="sp_OtherEventOfOrg" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+        <Function Name="sp_OtherEvent" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="userId" Type="int" Mode="In" />
         </Function>
         <EntityContainer Name="TabangHubModelStoreContainer">
@@ -538,8 +538,8 @@ FROM [dbo].[vw_UserRoles] AS [vw_UserRoles]</DefiningQuery>
             <End Role="UserAccount" EntitySet="UserAccount" />
             <End Role="Volunteers" EntitySet="Volunteers" />
           </AssociationSet>
-          <FunctionImport Name="sp_OtherEventOfOrg" ReturnType="Collection(TabangHubModel.sp_OtherEventOfOrg_Result)">
-            <Parameter Name="userId" Mode="In" Type="Int32" />
+          <FunctionImport Name="sp_OtherEvent" ReturnType="Collection(TabangHubModel.sp_OtherEvent_Result)">
+          <Parameter Name="userId" Mode="In" Type="Int32" />
           </FunctionImport>
           </EntityContainer>
         <ComplexType Name="sp_GetSkills_Result">
@@ -920,19 +920,19 @@ FROM [dbo].[vw_UserRoles] AS [vw_UserRoles]</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <ComplexType Name="sp_OtherEventOfOrg_Result">
-          <Property Type="Int32" Name="orgInfoId" Nullable="false" />
-          <Property Type="Int32" Name="userId" Nullable="true" />
-          <Property Type="String" Name="orgName" Nullable="true" MaxLength="255" />
-          <Property Type="String" Name="orgEmail" Nullable="true" MaxLength="255" />
-          <Property Type="String" Name="orgType" Nullable="true" MaxLength="255" />
-          <Property Type="String" Name="orgDescription" Nullable="true" MaxLength="Max" />
-          <Property Type="String" Name="phoneNum" Nullable="true" MaxLength="255" />
-          <Property Type="String" Name="street" Nullable="true" MaxLength="255" />
-          <Property Type="String" Name="city" Nullable="true" MaxLength="255" />
-          <Property Type="String" Name="province" Nullable="true" MaxLength="255" />
-          <Property Type="String" Name="zipCode" Nullable="true" MaxLength="255" />
-          <Property Type="Int32" Name="profileId" Nullable="true" />
+        <ComplexType Name="sp_OtherEvent_Result">
+          <Property Type="Int32" Name="Event_Id" Nullable="false" />
+          <Property Type="Int32" Name="User_Id" Nullable="true" />
+          <Property Type="String" Name="Event_Title" Nullable="true" MaxLength="255" />
+          <Property Type="String" Name="Event_Description" Nullable="true" MaxLength="Max" />
+          <Property Type="Decimal" Name="Target_Amount" Nullable="true" Precision="10" Scale="2" />
+          <Property Type="Int32" Name="Maximum_Volunteer" Nullable="true" />
+          <Property Type="DateTime" Name="Date_Started" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="Date_Ended" Nullable="true" Precision="23" />
+          <Property Type="String" Name="location" Nullable="true" MaxLength="255" />
+          <Property Type="Int32" Name="Event_Type" Nullable="true" />
+          <Property Type="Int32" Name="Total_Image" Nullable="true" />
+          <Property Type="Int32" Name="Total_Skills" Nullable="true" />
         </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
@@ -1139,21 +1139,21 @@ FROM [dbo].[vw_UserRoles] AS [vw_UserRoles]</DefiningQuery>
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="sp_OtherEventOfOrg" FunctionName="TabangHubModel.Store.sp_OtherEventOfOrg">
+          <FunctionImportMapping FunctionImportName="sp_OtherEvent" FunctionName="TabangHubModel.Store.sp_OtherEvent">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="TabangHubModel.sp_OtherEventOfOrg_Result">
-                <ScalarProperty Name="orgInfoId" ColumnName="orgInfoId" />
-                <ScalarProperty Name="userId" ColumnName="userId" />
-                <ScalarProperty Name="orgName" ColumnName="orgName" />
-                <ScalarProperty Name="orgEmail" ColumnName="orgEmail" />
-                <ScalarProperty Name="orgType" ColumnName="orgType" />
-                <ScalarProperty Name="orgDescription" ColumnName="orgDescription" />
-                <ScalarProperty Name="phoneNum" ColumnName="phoneNum" />
-                <ScalarProperty Name="street" ColumnName="street" />
-                <ScalarProperty Name="city" ColumnName="city" />
-                <ScalarProperty Name="province" ColumnName="province" />
-                <ScalarProperty Name="zipCode" ColumnName="zipCode" />
-                <ScalarProperty Name="profileId" ColumnName="profileId" />
+              <ComplexTypeMapping TypeName="TabangHubModel.sp_OtherEvent_Result">
+                <ScalarProperty Name="Event_Id" ColumnName="Event_Id" />
+                <ScalarProperty Name="User_Id" ColumnName="User_Id" />
+                <ScalarProperty Name="Event_Title" ColumnName="Event_Title" />
+                <ScalarProperty Name="Event_Description" ColumnName="Event_Description" />
+                <ScalarProperty Name="Target_Amount" ColumnName="Target_Amount" />
+                <ScalarProperty Name="Maximum_Volunteer" ColumnName="Maximum_Volunteer" />
+                <ScalarProperty Name="Date_Started" ColumnName="Date_Started" />
+                <ScalarProperty Name="Date_Ended" ColumnName="Date_Ended" />
+                <ScalarProperty Name="location" ColumnName="location" />
+                <ScalarProperty Name="Event_Type" ColumnName="Event_Type" />
+                <ScalarProperty Name="Total_Image" ColumnName="Total_Image" />
+                <ScalarProperty Name="Total_Skills" ColumnName="Total_Skills" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

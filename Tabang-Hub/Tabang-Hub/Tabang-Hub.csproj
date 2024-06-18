@@ -96,6 +96,7 @@
   <ItemGroup>
     <Content Include="Content\Css\generalskill.css" />
     <Content Include="Content\Css\generalStyle.css" />
+    <Content Include="Content\Css\opportunityCarousel.css" />
     <Content Include="Content\Css\popup.css" />
     <Content Include="Content\Css\progress.css" />
     <Content Include="Content\Css\Style.css" />
@@ -183,7 +184,7 @@
     <Compile Include="sp_GetSkills_Result.cs">
       <DependentUpon>ModelTabangHub.tt</DependentUpon>
     </Compile>
-    <Compile Include="sp_OtherEventOfOrg_Result.cs">
+    <Compile Include="sp_OtherEvent_Result.cs">
       <DependentUpon>ModelTabangHub.tt</DependentUpon>
     </Compile>
     <Compile Include="UserAccount.cs">
