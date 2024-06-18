@@ -76,7 +76,7 @@
       <End Role="UserAccount" EntitySet="UserAccount" />
       <End Role="Volunteers" EntitySet="Volunteers" />
     </AssociationSet>
-    <FunctionImport Name="sp_OtherEventOfOrg" ReturnType="Collection(TabangHubModel.sp_OtherEventOfOrg_Result)">
+    <FunctionImport Name="sp_OtherEvent" ReturnType="Collection(TabangHubModel.sp_OtherEvent_Result)">
       <Parameter Name="userId" Mode="In" Type="Int32" />
     </FunctionImport>
   </EntityContainer>
@@ -458,18 +458,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <ComplexType Name="sp_OtherEventOfOrg_Result">
-    <Property Type="Int32" Name="orgInfoId" Nullable="false" />
-    <Property Type="Int32" Name="userId" Nullable="true" />
-    <Property Type="String" Name="orgName" Nullable="true" MaxLength="255" />
-    <Property Type="String" Name="orgEmail" Nullable="true" MaxLength="255" />
-    <Property Type="String" Name="orgType" Nullable="true" MaxLength="255" />
-    <Property Type="String" Name="orgDescription" Nullable="true" MaxLength="Max" />
-    <Property Type="String" Name="phoneNum" Nullable="true" MaxLength="255" />
-    <Property Type="String" Name="street" Nullable="true" MaxLength="255" />
-    <Property Type="String" Name="city" Nullable="true" MaxLength="255" />
-    <Property Type="String" Name="province" Nullable="true" MaxLength="255" />
-    <Property Type="String" Name="zipCode" Nullable="true" MaxLength="255" />
-    <Property Type="Int32" Name="profileId" Nullable="true" />
+  <ComplexType Name="sp_OtherEvent_Result">
+    <Property Type="Int32" Name="Event_Id" Nullable="false" />
+    <Property Type="Int32" Name="User_Id" Nullable="true" />
+    <Property Type="String" Name="Event_Title" Nullable="true" MaxLength="255" />
+    <Property Type="String" Name="Event_Description" Nullable="true" MaxLength="Max" />
+    <Property Type="Decimal" Name="Target_Amount" Nullable="true" Precision="10" Scale="2" />
+    <Property Type="Int32" Name="Maximum_Volunteer" Nullable="true" />
+    <Property Type="DateTime" Name="Date_Started" Nullable="true" Precision="23" />
+    <Property Type="DateTime" Name="Date_Ended" Nullable="true" Precision="23" />
+    <Property Type="String" Name="location" Nullable="true" MaxLength="255" />
+    <Property Type="Int32" Name="Event_Type" Nullable="true" />
+    <Property Type="Int32" Name="Total_Image" Nullable="true" />
+    <Property Type="Int32" Name="Total_Skills" Nullable="true" />
   </ComplexType>
 </Schema>

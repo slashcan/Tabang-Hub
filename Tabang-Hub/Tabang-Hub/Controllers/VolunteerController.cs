@@ -198,17 +198,14 @@ namespace Tabang_Hub.Controllers
                 if (checkEventID != null)
                 {
                     var getProfile = db.ProfilePicture.Where(m => m.userId == UserId).ToList();
-
                     var getOrgInfo = db.OrgEvents.Where(m => m.eventId == eventId).FirstOrDefault();
-
                     var getInfo = _orgInfo.GetAll().Where(m => m.userId == getOrgInfo.userId).ToList();
                     var getSkillRequirmenet = _skillRequirement.GetAll().Where(m => m.eventId == getOrgInfo.eventId).ToList();
                     var getOrgImages = _eventImages.GetAll().Where(m => m.eventId == getOrgInfo.eventId).ToList();
                     var getEvent = _orgEvents.GetAll().Where(m => m.eventId == getOrgInfo.eventId).ToList();
-
-                    var getOrgOtherEvent = db.sp_OtherEventOfOrg(getOrgInfo.userId).ToList();
-
+                    var getOrgOtherEvent = db.sp_OtherEvent(getOrgInfo.userId).ToList();
                     var getEvents = _listsOfEvent.GetAll().Where(m => m.Event_Id == getOrgInfo.eventId).ToList();
+                    var getVolunteers = _volunteers.GetAll().Where(m => m.eventId == eventId).ToList();
 
                     var indexModel = new Lists()
                     {
@@ -218,7 +215,8 @@ namespace Tabang_Hub.Controllers
                         detailsEventImage = getOrgImages,
                         orgEvents = getEvent,
                         orgOtherEvent = getOrgOtherEvent,
-                        listOfEvents = getEvents
+                        listOfEvents = getEvents,
+                        volunteers = getVolunteers
                     };
                     return View(indexModel);
                 }
@@ -237,7 +235,7 @@ namespace Tabang_Hub.Controllers
         {
             try
             {
-                var getAllVolunteers = _volunteers.GetAll().Where(m => m.eventId == eventId).FirstOrDefault();
+                var checkVolunteer = _volunteers.GetAll().Where(m => m.userId == UserId).FirstOrDefault();
 
                 var apply = new Volunteers()
                 {
@@ -245,13 +243,12 @@ namespace Tabang_Hub.Controllers
                     eventId = eventId
                 };
 
-                var updateVolunteerNeeded = db.OrgEvents.Where(m => m.eventId == eventId).FirstOrDefault();
+                //var updateVolunteerNeeded = db.OrgEvents.Where(m => m.eventId == eventId).FirstOrDefault();
                 
-                if (getAllVolunteers == null)
+                if (checkVolunteer == null)
                 {
-
-                    updateVolunteerNeeded.maxVolunteer = updateVolunteerNeeded.maxVolunteer - 1;
-                    db.SaveChanges();
+                    //updateVolunteerNeeded.maxVolunteer = updateVolunteerNeeded.maxVolunteer - 1;
+                    //db.SaveChanges();
                     _volunteers.Create(apply);
 
                     return Json(new { success = true, message = "Success !" });

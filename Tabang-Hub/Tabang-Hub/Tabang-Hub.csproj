@@ -184,7 +184,7 @@
     <Compile Include="sp_GetSkills_Result.cs">
       <DependentUpon>ModelTabangHub.tt</DependentUpon>
     </Compile>
-    <Compile Include="sp_OtherEventOfOrg_Result.cs">
+    <Compile Include="sp_OtherEvent_Result.cs">
       <DependentUpon>ModelTabangHub.tt</DependentUpon>
     </Compile>
     <Compile Include="UserAccount.cs">

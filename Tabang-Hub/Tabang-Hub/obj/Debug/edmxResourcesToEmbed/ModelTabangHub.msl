@@ -200,21 +200,21 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <FunctionImportMapping FunctionImportName="sp_OtherEventOfOrg" FunctionName="TabangHubModel.Store.sp_OtherEventOfOrg">
+    <FunctionImportMapping FunctionImportName="sp_OtherEvent" FunctionName="TabangHubModel.Store.sp_OtherEvent">
       <ResultMapping>
-        <ComplexTypeMapping TypeName="TabangHubModel.sp_OtherEventOfOrg_Result">
-          <ScalarProperty Name="orgInfoId" ColumnName="orgInfoId" />
-          <ScalarProperty Name="userId" ColumnName="userId" />
-          <ScalarProperty Name="orgName" ColumnName="orgName" />
-          <ScalarProperty Name="orgEmail" ColumnName="orgEmail" />
-          <ScalarProperty Name="orgType" ColumnName="orgType" />
-          <ScalarProperty Name="orgDescription" ColumnName="orgDescription" />
-          <ScalarProperty Name="phoneNum" ColumnName="phoneNum" />
-          <ScalarProperty Name="street" ColumnName="street" />
-          <ScalarProperty Name="city" ColumnName="city" />
-          <ScalarProperty Name="province" ColumnName="province" />
-          <ScalarProperty Name="zipCode" ColumnName="zipCode" />
-          <ScalarProperty Name="profileId" ColumnName="profileId" />
+        <ComplexTypeMapping TypeName="TabangHubModel.sp_OtherEvent_Result">
+          <ScalarProperty Name="Event_Id" ColumnName="Event_Id" />
+          <ScalarProperty Name="User_Id" ColumnName="User_Id" />
+          <ScalarProperty Name="Event_Title" ColumnName="Event_Title" />
+          <ScalarProperty Name="Event_Description" ColumnName="Event_Description" />
+          <ScalarProperty Name="Target_Amount" ColumnName="Target_Amount" />
+          <ScalarProperty Name="Maximum_Volunteer" ColumnName="Maximum_Volunteer" />
+          <ScalarProperty Name="Date_Started" ColumnName="Date_Started" />
+          <ScalarProperty Name="Date_Ended" ColumnName="Date_Ended" />
+          <ScalarProperty Name="location" ColumnName="location" />
+          <ScalarProperty Name="Event_Type" ColumnName="Event_Type" />
+          <ScalarProperty Name="Total_Image" ColumnName="Total_Image" />
+          <ScalarProperty Name="Total_Skills" ColumnName="Total_Skills" />
         </ComplexTypeMapping>
       </ResultMapping>
     </FunctionImportMapping>
