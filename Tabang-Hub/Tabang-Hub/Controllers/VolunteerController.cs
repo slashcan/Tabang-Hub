@@ -267,6 +267,7 @@ namespace Tabang_Hub.Controllers
         public ActionResult DonationDetails(int eventId)
         {
             var getOrgInfo = db.OrgEvents.Where(m => m.eventId == eventId).FirstOrDefault();
+            var listofUserDonated = _organizationManager.ListOfUserDonated(eventId);
             var getInfo = _orgInfo.GetAll().Where(m => m.userId == getOrgInfo.userId).ToList();
             var listofImage = _organizationManager.listOfEventImage(eventId);
             var getSkillRequirmenet = _skillRequirement.GetAll().Where(m => m.eventId == getOrgInfo.eventId).ToList();
@@ -282,6 +283,7 @@ namespace Tabang_Hub.Controllers
                 orgInfos = getInfo,
                 detailsSkillRequirement = getSkillRequirmenet,
                 picture = getProfile,
+                listofUserDonated = listofUserDonated,
             };
 
             return View(indexModel);
@@ -295,10 +297,10 @@ namespace Tabang_Hub.Controllers
 
             if (_volunteerManager.CreateDonation(donated.userDonated, ref errMsg) != ErrorCode.Success)
             {
-                ModelState.AddModelError(String.Empty, errMsg);
-                return View();
+                return Json(new { success = false, message = errMsg });
             }
-            return View("GeneralSkill");
+            return Json(new { success = true });
         }
+
     }
 }

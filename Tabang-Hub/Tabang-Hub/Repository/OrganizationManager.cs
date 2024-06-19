@@ -14,6 +14,7 @@ namespace Tabang_Hub.Repository
         public BaseRepository<vw_ListOfEvent> _listOfEvents;
         public BaseRepository<OrgInfo> _orgInfo;
         public BaseRepository<ProfilePicture> _profilePic;
+        public BaseRepository<UserDonated> _userDonated;
 
         public OrganizationManager()
         {
@@ -23,6 +24,7 @@ namespace Tabang_Hub.Repository
             _listOfEvents = new BaseRepository<vw_ListOfEvent>();
             _orgInfo = new BaseRepository<OrgInfo>();
             _profilePic = new BaseRepository<ProfilePicture>();
+            _userDonated = new BaseRepository<UserDonated>();
         }
 
 
@@ -164,6 +166,10 @@ namespace Tabang_Hub.Repository
         public List<OrgSkillRequirement> listOfSkillRequirement(int id)
         { 
             return _orgSkillRequirements.GetAll().Where(m => m.eventId == id).ToList();
+        }
+        public List<UserDonated> ListOfUserDonated(int id)
+        {
+            return _userDonated.GetAll().Where(m => m.eventId == id).ToList();
         }
     }
 }
