@@ -109,6 +109,15 @@
     <Content Include="Content\Js\selectImage.js" />
     <Content Include="Content\Js\UserInfo.js" />
     <Content Include="Global.asax" />
+    <EntityDeploy Include="ModelTabangHub.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>ModelTabangHub.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="ModelTabangHub.edmx.diagram">
+      <DependentUpon>ModelTabangHub.edmx</DependentUpon>
+    </Content>
+    <None Include="scripts\_vs2012.intellisense.js" />
+    <None Include="scripts\_references.js" />
     <Content Include="ModelTabangHub.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>ModelTabangHub.edmx</DependentUpon>
@@ -119,8 +128,6 @@
       <DependentUpon>ModelTabangHub.edmx</DependentUpon>
       <LastGenOutput>ModelTabangHub.cs</LastGenOutput>
     </Content>
-    <None Include="scripts\_vs2012.intellisense.js" />
-    <None Include="scripts\_references.js" />
     <Content Include="scripts\NamespacesAndEnumSupport.js" />
     <Content Include="scripts\_vs2012.intellisense.Test.js" />
     <Content Include="Web.config" />
@@ -216,13 +223,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\web.config" />
-    <EntityDeploy Include="ModelTabangHub.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>ModelTabangHub.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <Content Include="ModelTabangHub.edmx.diagram">
-      <DependentUpon>ModelTabangHub.edmx</DependentUpon>
-    </Content>
     <None Include="packages.config" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Page\Register.cshtml" />
@@ -243,6 +243,7 @@
     <Content Include="Views\Volunteer\VolunteerProfile.cshtml" />
     <Content Include="Views\Volunteer\EventDetails.cshtml" />
     <Content Include="Views\Volunteer\GeneralSkill.cshtml" />
+    <Content Include="Views\Volunteer\DonationDetails.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
