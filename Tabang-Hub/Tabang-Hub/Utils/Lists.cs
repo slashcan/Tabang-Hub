@@ -30,6 +30,7 @@ namespace Tabang_Hub.Utils
         public List<OrgInfo> orgInfos { get; set; }
         public List<OrgEvents> orgEvents { get; set; }
         public List<Volunteers> volunteers { get; set; }
+        public UserDonated userDonated { get; set; }
 
         //Stored Procedure
         public List<sp_GetSkills_Result> uniqueSkill { get; set; }

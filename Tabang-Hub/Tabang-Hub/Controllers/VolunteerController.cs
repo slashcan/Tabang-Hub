@@ -264,5 +264,41 @@ namespace Tabang_Hub.Controllers
                 return Json(new { success = false, message = "Error !" });
             }
         }
+        public ActionResult DonationDetails(int eventId)
+        {
+            var getOrgInfo = db.OrgEvents.Where(m => m.eventId == eventId).FirstOrDefault();
+            var getInfo = _orgInfo.GetAll().Where(m => m.userId == getOrgInfo.userId).ToList();
+            var listofImage = _organizationManager.listOfEventImage(eventId);
+            var getSkillRequirmenet = _skillRequirement.GetAll().Where(m => m.eventId == getOrgInfo.eventId).ToList();
+            var donation = _organizationManager.GetEventById(eventId);
+            var orgInfo = _organizationManager.GetOrgInfoByUserId(donation.User_Id);
+            var getProfile = db.ProfilePicture.Where(m => m.userId == UserId).ToList();
+
+            var indexModel = new Utils.Lists()
+            {
+                OrgInfo = orgInfo,
+                eventDetails = donation,
+                detailsEventImage = listofImage,
+                orgInfos = getInfo,
+                detailsSkillRequirement = getSkillRequirmenet,
+                picture = getProfile,
+            };
+
+            return View(indexModel);
+        }
+        [HttpPost]
+        public ActionResult DonateNow(Lists donated)
+        {
+            donated.userDonated.userId = UserId;
+            donated.userDonated.donatedAt = DateTime.Now;
+            string errMsg = string.Empty;
+
+            if (_volunteerManager.CreateDonation(donated.userDonated, ref errMsg) != ErrorCode.Success)
+            {
+                ModelState.AddModelError(String.Empty, errMsg);
+                return View();
+            }
+            return View("GeneralSkill");
+        }
     }
 }

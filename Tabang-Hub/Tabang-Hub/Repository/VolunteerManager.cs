@@ -13,10 +13,20 @@ namespace Tabang_Hub.Repository
     public class VolunteerManager
     {
         public BaseRepository<Skills> _skills;
+        public BaseRepository<UserDonated> _userDonated;
         public VolunteerManager() 
         {
             _skills = new BaseRepository<Skills>();
+            _userDonated = new BaseRepository<UserDonated>();
         }
 
+        public ErrorCode CreateDonation(UserDonated userDonated, ref String errMsg)
+        {
+            if (_userDonated.Create(userDonated, out errMsg) != ErrorCode.Success)
+            {
+                return ErrorCode.Error;
+            }
+            return ErrorCode.Success;
+        }
     }
 }
