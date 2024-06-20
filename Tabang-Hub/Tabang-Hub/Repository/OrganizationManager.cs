@@ -15,6 +15,8 @@ namespace Tabang_Hub.Repository
         public BaseRepository<OrgInfo> _orgInfo;
         public BaseRepository<ProfilePicture> _profilePic;
         public BaseRepository<UserDonated> _userDonated;
+        public BaseRepository<Volunteers> _eventVolunteers;
+        public BaseRepository<VolunteerSkill> _volunteerSkills;
 
         public OrganizationManager()
         {
@@ -25,6 +27,8 @@ namespace Tabang_Hub.Repository
             _orgInfo = new BaseRepository<OrgInfo>();
             _profilePic = new BaseRepository<ProfilePicture>();
             _userDonated = new BaseRepository<UserDonated>();
+            _eventVolunteers = new BaseRepository<Volunteers>();
+            _volunteerSkills = new BaseRepository<VolunteerSkill>();
         }
 
 
@@ -170,6 +174,14 @@ namespace Tabang_Hub.Repository
         public List<UserDonated> ListOfUserDonated(int id)
         {
             return _userDonated.GetAll().Where(m => m.eventId == id).ToList();
+        }
+        public List<Volunteers> ListOfEventVolunteers(int eventId)
+        { 
+            return _eventVolunteers.GetAll().Where(m => m.eventId == eventId).ToList();
+        }
+        public List<VolunteerSkill> ListOfEventVolunteerSkills()
+        {
+            return _volunteerSkills.GetAll();
         }
     }
 }

@@ -1,11 +1,32 @@
 ﻿@model Tabang_Hub.Utils.Lists
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "VolunteerManagement";
     Layout = "~/Views/Shared/_Organization.cshtml";
 }
 
 <style>
+    .navbar-nav .nav-link {
+        padding-left: 10px;
+        padding-right: 10px;
+        white-space: nowrap;
+        font-size: 14px;
+    }
+
+    .content-section {
+        display: none;
+    }
+
+        .content-section.active {
+            display: block;
+        }
+
+    .navbar-center {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+    }
+
     .fixed-size-img {
         width: 100%;
         max-height: 450px; /* Set the maximum height you want */
@@ -52,79 +73,146 @@
             cursor: not-allowed;
             background-color: #e9ecef;
         }
+
+    .list-group-item {
+        display: flex;
+        align-items: center;
+        border: 1px solid #ced4da;
+        border-radius: 5px;
+        margin-bottom: 10px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    }
+
+        .list-group-item .badge {
+            font-size: 0.75em;
+        }
 </style>
 
-<div class="container mt-4">
+<div class="container mt-5">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
+        <div class="container">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse navbar-center" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link" href="#details" onclick="showSection('details', event)">Details</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#volunteer-list" onclick="showSection('volunteer-list', event)">Volunteer List</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 
     <!-- Organization Profile Section -->
-    <div class="row mb-4">
-        <div class="col-md-12">
-            <div class="profile-card">
-                <div class="d-flex align-items-center">
-                    <img src="@Url.Content("~/Content/images/tabanghub3.png")" class="profile-img me-3" alt="Organization Profile">
-                    <div>
-                        <h4>@Model.OrgInfo.orgName</h4>
-                        <p>@Model.OrgInfo.orgDescription.</p>
-                        <a href="#" class="btn btn-primary mt-2">Visit Organization</a>
+    <div id="details" class="content-section active">
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <div class="profile-card">
+                    <div class="d-flex align-items-center">
+                        <img src="@Url.Content("~/Content/images/tabanghub3.png")" class="profile-img me-3" alt="Organization Profile">
+                        <div>
+                            <h4>@Model.OrgInfo.orgName</h4>
+                            <p>@Model.OrgInfo.orgDescription.</p>
+                            <a href="#" class="btn btn-primary mt-2">Visit Organization</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Event Images Carousel -->
+        <div class="row">
+            <div class="col-md-6">
+                <div id="carouselExampleDark" class="carousel carousel-dark slide" data-bs-ride="carousel">
+                    <div class="carousel-indicators">
+                        @for (int i = 0; i < Model.detailsEventImage.Count; i++)
+                        {
+                            <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="@i" class="@(i == 0 ? "active" : "")" aria-current="@(i == 0 ? "true" : "false")" aria-label="Slide @i"></button>
+                        }
+                    </div>
+                    <div class="carousel-inner">
+                        @for (int i = 0; i < Model.detailsEventImage.Count; i++)
+                        {
+                            <div class="carousel-item @(i == 0 ? "active" : "")">
+                                <img src="@Url.Content("~/Content/IdPicture/" + Model.detailsEventImage[i].eventImage)" class="d-block w-100 img-fluid fixed-size-img border border-primary" alt="Event Image">
+                            </div>
+                        }
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Event Details -->
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">Event Details</h5>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item"><i class="bi bi-calendar-event me-2"></i><strong>Event Name:</strong> @Model.eventDetails.Event_Title</li>
+                            <li class="list-group-item"><i class="bi bi-file-earmark-text me-2"></i><strong>Description:</strong> @Model.eventDetails.Event_Description</li>
+                            <li class="list-group-item"><i class="bi bi-people me-2"></i><strong>Max Volunteer:</strong> @Model.eventDetails.Maximum_Volunteer</li>
+                            <li class="list-group-item"><i class="bi bi-calendar me-2"></i><strong>Date Started:</strong> @Model.eventDetails.Date_Started</li>
+                            <li class="list-group-item"><i class="bi bi-calendar me-2"></i><strong>Date Ended:</strong> @Model.eventDetails.Date_Ended</li>
+                            <li class="list-group-item"><i class="bi bi-geo-alt me-2"></i><strong>Location:</strong> @Model.eventDetails.Location</li>
+                        </ul>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Skills Needed</h5>
+                        <div class="skills-container" id="skills-container">
+                            @foreach (var skill in Model.detailsSkillRequirement)
+                            {
+                                <button type="button" class="skill-button" data-skill-id="@skill.skillRequirementId">@skill.skillName</button>
+                            }
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Content Section -->
-    <div class="row">
-        <!-- Event Images Carousel -->
-        <div class="col-md-6">
-            <div id="carouselExampleDark" class="carousel carousel-dark slide" data-bs-ride="carousel">
-                <div class="carousel-indicators">
-                    @for (int i = 0; i < Model.detailsEventImage.Count; i++)
-                    {
-                        <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="@i" class="@(i == 0 ? "active" : "")" aria-current="@(i == 0 ? "true" : "false")" aria-label="Slide @i"></button>
-                    }
-                </div>
-                <div class="carousel-inner">
-                    @for (int i = 0; i < Model.detailsEventImage.Count; i++)
-                    {
-                        <div class="carousel-item @(i == 0 ? "active" : "")">
-                            <img src="@Url.Content("~/Content/IdPicture/" + Model.detailsEventImage[i].eventImage)" class="d-block w-100 img-fluid fixed-size-img border border-primary" alt="Event Image">
+    <!-- Volunteer List Section -->
+    <div id="volunteer-list" class="content-section">
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">Volunteer List</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="list-group">
+                            @foreach (var volunteer in Model.listOfEventVolunteers)
+                            {
+                                <div class="list-group-item list-group-item-action d-flex align-items-center">
+                                    <img src="@Url.Content("~/Content/images/organization.png")" class="profile-img me-3" alt="Volunteer Image">
+                                    <div class="flex-grow-1">
+                                        <p class="mb-0"><strong>Email:</strong> @volunteer.UserAccount.email</p>
+                                        <p class="mb-0">
+                                            <strong>Skills:</strong>
+                                            @foreach (var skill in Model.volunteersSkills)
+                                            {
+                                                if (skill.userId == volunteer.userId)
+                                                {
+                                                    <span class="badge bg-secondary me-1">@skill.skillName</span>
+                                                }
+                                            }
+                                        </p>
+                                    </div>
+                                    <div class="ms-auto">
+                                        <a href="@Url.Action("Details", "Volunteer", new { id = volunteer.userId })" class="btn btn-outline-primary btn-sm">View</a>
+                                    </div>
+                                </div>
+                            }
                         </div>
-                    }
-                </div>
-                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Previous</span>
-                </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Next</span>
-                </button>
-            </div>
-        </div>
-
-        <!-- Event Details -->
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="card-title">Event Details</h5>
-                </div>
-                <div class="card-body">
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item"><i class="bi bi-calendar-event me-2"></i><strong>Event Name:</strong> @Model.eventDetails.Event_Title</li>
-                        <li class="list-group-item"><i class="bi bi-file-earmark-text me-2"></i><strong>Description:</strong> @Model.eventDetails.Event_Description</li>
-                        <li class="list-group-item"><i class="bi bi-people me-2"></i><strong>Max Volunteer:</strong> @Model.eventDetails.Maximum_Volunteer</li>
-                        <li class="list-group-item"><i class="bi bi-calendar me-2"></i><strong>Date Started:</strong> @Model.eventDetails.Date_Started</li>
-                        <li class="list-group-item"><i class="bi bi-calendar me-2"></i><strong>Date Ended:</strong> @Model.eventDetails.Date_Ended</li>
-                        <li class="list-group-item"><i class="bi bi-geo-alt me-2"></i><strong>Location:</strong> @Model.eventDetails.Location</li>
-                    </ul>
-                </div>
-                <div class="card-body">
-                    <h5 class="card-title">Skills Needed</h5>
-                    <div class="skills-container" id="skills-container">
-                        @foreach (var skill in Model.detailsSkillRequirement)
-                        {
-                            <button type="button" class="skill-button" data-skill-id="@skill.skillRequirementId">@skill.skillName</button>
-                        }
                     </div>
                 </div>
             </div>
@@ -133,14 +221,14 @@
 </div>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        var skillButtons = document.querySelectorAll('.skill-button');
-
-        skillButtons.forEach(button => {
-            button.addEventListener('click', function () {
-                this.classList.toggle('selected');
-                this.disabled = !this.disabled;
-            });
+    function showSection(sectionId, event) {
+        event.preventDefault();
+        // Hide all sections
+        document.querySelectorAll('.content-section').forEach(section => {
+            section.classList.remove('active');
         });
-    });
+
+        // Show the selected section
+        document.getElementById(sectionId).classList.add('active');
+    }
 </script>
