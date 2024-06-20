@@ -68,7 +68,7 @@ namespace Tabang_Hub.Controllers
         {
             var lists =_organizationManager.ListOfEvents(UserId, 1);
 
-            var indexModel = new Utils.Lists()
+            var indexModel = new Lists()
             {
                 listOfEvents = lists,
             };
@@ -129,15 +129,18 @@ namespace Tabang_Hub.Controllers
             var events = _organizationManager.GetEventById(id);
             var listofImage = _organizationManager.listOfEventImage(id);
             var listOfSkills = _organizationManager.listOfSkillRequirement(id);
-            var orgInfo  = _organizationManager.GetOrgInfoByUserId(UserId);
+            var orgInfo = _organizationManager.GetOrgInfoByUserId(UserId);
+            var listOfEventVolunteers = _organizationManager.ListOfEventVolunteers(id);
+            var volunteerSkills = _organizationManager.ListOfEventVolunteerSkills();
 
-
-            var indexModel = new Utils.Lists()
+            var indexModel = new Lists()
             {
                 OrgInfo = orgInfo,
                 eventDetails = events,
                 detailsEventImage = listofImage,
-                detailsSkillRequirement = listOfSkills
+                detailsSkillRequirement = listOfSkills,
+                listOfEventVolunteers = listOfEventVolunteers,
+                volunteersSkills = volunteerSkills,
             };
 
             if (events != null)

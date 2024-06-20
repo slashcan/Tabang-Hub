@@ -24,7 +24,7 @@ namespace Tabang_Hub.Utils
         public List<OrgSkillRequirement> detailsSkillRequirement { get; set; }
         public List<UserAccount> userAccounts { get; set; }
         public List<VolunteerInfo> volunteersInfo { get; set; }
-        public List<VolunteerSkill> volunteersSkill { get; set; }
+        public List<VolunteerSkill> volunteersSkills { get; set; }
         public List<Skills> skills { get; set; }
         public List<ProfilePicture> picture { get; set; }
         public List<OrgInfo> orgInfos { get; set; }
@@ -32,6 +32,7 @@ namespace Tabang_Hub.Utils
         public List<Volunteers> volunteers { get; set; }
         public UserDonated userDonated { get; set; }
         public List<UserDonated> listofUserDonated { get; set; }
+        public List<Volunteers> listOfEventVolunteers { get; set; }
 
         //Stored Procedure
         public List<sp_GetSkills_Result> uniqueSkill { get; set; }

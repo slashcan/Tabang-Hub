@@ -29,7 +29,7 @@ namespace Tabang_Hub.Controllers
             {
                 userAccounts = getUserAccount,
                 volunteersInfo = getVolunteerInfo,
-                volunteersSkill = getVolunteerSkills,
+                volunteersSkills = getVolunteerSkills,
                 uniqueSkill = getUniqueSkill
             };
 
