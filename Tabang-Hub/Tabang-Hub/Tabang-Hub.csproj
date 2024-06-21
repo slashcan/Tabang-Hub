@@ -105,7 +105,9 @@
     <Content Include="Content\images\volunteer.png" />
     <Content Include="Content\Js\JavaScript.js" />
     <Content Include="Content\Js\popup.js" />
+    <Content Include="Content\Js\profile.js" />
     <Content Include="Content\Js\progress.js" />
+    <Content Include="Content\Js\SaveDataInfo.js" />
     <Content Include="Content\Js\selectImage.js" />
     <Content Include="Content\Js\UserInfo.js" />
     <Content Include="Global.asax" />

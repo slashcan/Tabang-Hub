@@ -34,15 +34,57 @@ function progress_back() {
 function validateform() {
     var validate = true;
     var inputs = document.querySelectorAll(".main.active input");
+
     inputs.forEach(function (inpt) {
-        inpt.classList.remove('warning');
-        if (inpt.hasAttribute("required")) {
-            if (inpt.value.length == "0") {
+        inpt.setCustomValidity(''); // Clear previous custom validity
+        inpt.classList.remove('error'); // Remove previous error class
+
+        if (inpt.hasAttribute("required") && inpt.value.length == "0") {
+            validate = false;
+            inpt.setCustomValidity('Please fill out this field.');
+        } else {
+            if (inpt.id === 'phoneNumber' && !inpt.value.match(/^09[0-9]{9}$/)) {
                 validate = false;
-                inpt.classList.add('warning');
+                inpt.setCustomValidity('Phone number should start with 09 and contain 11 digits.');
+            }
+            if (inpt.id === 'zipCode' && !inpt.value.match(/^[0-9]{4}$/)) {
+                validate = false;
+                inpt.setCustomValidity('Zip Code should contain 4 digits.');
+            }
+            if (inpt.id === 'datepicker') {
+                var today = new Date();
+                var birthDate = new Date(inpt.value);
+                var age = today.getFullYear() - birthDate.getFullYear();
+                var monthDifference = today.getMonth() - birthDate.getMonth();
+                if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
+                    age--;
+                }
+                if (age < 18) {
+                    validate = false;
+                    inpt.setCustomValidity('You must be at least 18 years old.');
+                }
             }
         }
+
+        // Check validity and apply error class
+        if (!inpt.checkValidity()) {
+            validate = false;
+            inpt.reportValidity(); // Show the browser's default error tooltip
+            inpt.classList.add('error'); // Add error class
+        }
     });
+
+    var genderInputs = document.getElementsByName('gender');
+    var genderSelected = Array.from(genderInputs).some(input => input.checked);
+    var genderErrorMessage = document.querySelector('.gender-inputs .error-message');
+    if (!genderSelected) {
+        validate = false;
+        genderErrorMessage.innerText = 'Please select a gender.';
+    } else {
+        /*genderErrorMessage.innerText = '';*/
+    }
+
+    console.log("Form validation result:", validate);
     return validate;
 }
 
@@ -77,12 +119,18 @@ document.querySelectorAll('.selectable').forEach(item => {
 // Add event listeners for all 'next' buttons
 click_next.forEach(function (button) {
     button.addEventListener('click', function () {
-        if (!validateform()) {
-            return false;
+        if (validateform()) {
+            console.log("All fields are valid. Proceeding to the next step.");
+            formnumber++;
+            updateform();
+            progress_forward();
+        } else {
+            console.log("There are invalid fields. Showing errors.");
+            // Ensure all invalid inputs show the red border
+            document.querySelectorAll('.main.active input:invalid').forEach(function (inpt) {
+                inpt.classList.add('error');
+            });
         }
-        formnumber++;
-        updateform();
-        progress_forward();
     });
 });
 
@@ -97,12 +145,16 @@ click_back.forEach(function (button) {
 
 // Event listener for the submit button
 click_submit.addEventListener('click', function () {
-    if (!validateform()) {
-        return false;
+    if (validateform()) {
+        formnumber++;
+        updateform();
+        progress_forward();
+    } else {
+        // Ensure all invalid inputs show the red border
+        document.querySelectorAll('.main.active input:invalid').forEach(function (inpt) {
+            inpt.classList.add('error');
+        });
     }
-    formnumber++;
-    updateform();
-    progress_forward();
 });
 
 // Call this function when a new user logs in

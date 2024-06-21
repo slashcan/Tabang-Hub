@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="TabangHubModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="TabangHubModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="OrgEventImage">
           <Key>
             <PropertyRef Name="eventImageId" />
@@ -458,8 +458,7 @@ FROM [dbo].[vw_UserRoles] AS [vw_UserRoles]</DefiningQuery>
             <End Role="Volunteers" EntitySet="Volunteers" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="TabangHubModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -911,10 +910,10 @@ FROM [dbo].[vw_UserRoles] AS [vw_UserRoles]</DefiningQuery>
             <End Role="Volunteers" EntitySet="Volunteers" />
           </AssociationSet>
           <FunctionImport Name="sp_GetSkills" ReturnType="Collection(TabangHubModel.sp_GetSkills_Result)">
-            <Parameter Name="userId" Mode="In" Type="Int32" />
+          <Parameter Name="userId" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="sp_OtherEvent" ReturnType="Collection(TabangHubModel.sp_OtherEvent_Result)">
-            <Parameter Name="userId" Mode="In" Type="Int32" />
+          <Parameter Name="userId" Mode="In" Type="Int32" />
           </FunctionImport>
         </EntityContainer>
         <ComplexType Name="sp_GetSkills_Result">
