@@ -1,4 +1,4 @@
-﻿﻿@model Tabang_Hub.Utils.Lists
+﻿@model Tabang_Hub.Utils.Lists
 @{
     ViewBag.Title = "Index";
 }
@@ -16,15 +16,24 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="~/Content/Css/generalStyle.css" rel="stylesheet" />
     <link href="~/Content/Css/progress.css" rel="stylesheet" />
+    <style>
+        .error {
+            border: 2px solid red !important;
+        }
+
+        .error-message {
+            color: red;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+    </style>
 </head>
 <body>
     <h2>Volunteer Page</h2>
-    @if (Model.volunteersSkill.Count == 0)
+    @if (Model.volunteersSkills.Count == 0)
     {
-
         <div id="modal-overlay">
             <div style="margin-top: 7%" id="modal-content">
-
                 <ul class="progress_bar">
                     <li class="active">User details</li>
                     <li>Skill(s)</li>
@@ -32,7 +41,6 @@
                 </ul>
                 <div class="container">
                     <div class="card">
-
                         <!-- User information -->
                         <div class="main active">
                             <div class="scrollable-container">
@@ -45,39 +53,44 @@
                                 </div>
                                 <div class="input_text">
                                     <input id="fname" type="text" placeholder="Firstname" required>
+                                    <span class="error-message"></span>
                                 </div>
                                 <div class="input_text">
                                     <input id="lname" type="text" placeholder="Lastname" required>
+                                    <span class="error-message"></span>
                                 </div>
                                 <div class="input_text">
                                     <label>Birthday</label>
                                     <input type="date" id="datepicker" placeholder="MM/DD/YYYY" required>
+                                    <span class="error-message"></span>
                                 </div>
-
                                 <div class="input_text">
-                                    <input id="phoneNumber" type="text" placeholder="Phone number" required>
+                                    <input id="phoneNumber" type="text" placeholder="Phone number" pattern="09[0-9]{9}" title="Phone number should start with 09 and contain 11 digits" required>
+                                    <span class="error-message"></span>
                                 </div>
                                 <div class="input_text">
                                     <input id="street" type="text" placeholder="Street" required>
+                                    <span class="error-message"></span>
                                 </div>
                                 <div class="input_text">
                                     <input id="city" type="text" placeholder="City" required>
+                                    <span class="error-message"></span>
                                 </div>
                                 <div class="input_text">
                                     <input id="province" type="text" placeholder="Province" required>
+                                    <span class="error-message"></span>
                                 </div>
                                 <div class="input_text">
-                                    <input id="zipCode" type="text" placeholder="Zip Code" required>
+                                    <input id="zipCode" type="text" placeholder="Zip Code" pattern="[0-9]{4}" title="Zip Code should contain 4 digits" required>
+                                    <span class="error-message"></span>
                                 </div>
-
                                 <div class="input_text gender-inputs">
                                     <label for="gender">Gender: </label>
-                                    <input type="radio" id="male" name="gender" value="male">
+                                    <input type="radio" id="male" name="gender" value="male" required>
                                     <label for="male">Male</label>
-                                    <input type="radio" id="female" name="gender" value="female">
+                                    <input type="radio" id="female" name="gender" value="female" required>
                                     <label for="female">Female</label>
                                 </div>
-
                                 <div class="button">
                                     <button class="next" style="background-color: #fb4552; color: white;" onmouseover="this.style.backgroundColor='#fb4552'" onmouseout="this.style.backgroundColor='#fb4552'">Next</button>
                                     <i class="fa fa-angle-right"></i>
@@ -121,7 +134,6 @@
                             <div class="m_top">
                                 <h3>Thank you <span class="shown_name"></span></h3>
                                 <p>Thank you for filling up the needed information.</p>
-
                                 <div class="button">
                                     <button onclick="SaveInformations()" class="next" style="background-color: #fb4552; color: white;" onmouseover="this.style.backgroundColor='#fb4552'" onmouseout="this.style.backgroundColor='#fb4552'">Submit</button>
                                 </div>
@@ -142,8 +154,8 @@
     <script src="~/Content/Js/progress.js"></script>
     <script src="~/Content/Js/selectImage.js"></script>
     <script src="~/Content/Js/popup.js"></script>
-
-    <script>
+    <script src="~/Content/Js/SaveDataInfo.js"></script>
+    @*<script>
         // Add event listener to the Submit button in the Done section
         document.querySelector('.main:last-child .next').addEventListener('click', function () {
             // Hide the popup
@@ -172,7 +184,7 @@
             var street = document.getElementById('street').value;
             var city = document.getElementById('city').value;
             var province = document.getElementById('province').value;
-            var zipCode = document.getElementById('zipCode').value
+            var zipCode = document.getElementById('zipCode').value;
             var gender = getSelectedGender();
 
             var informationData = {
@@ -222,12 +234,11 @@
                     location.reload();
                 },
                 error: function (xhr, status, error) {
-                    console.log("Error response is: ", error)
+                    console.log("Error response is: ", error);
                 }
             });
         }
-    </script>
-
+    </script>*@
 
 </body>
 </html>

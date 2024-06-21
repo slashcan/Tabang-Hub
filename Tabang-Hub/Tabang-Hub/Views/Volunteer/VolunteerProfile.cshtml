@@ -15,7 +15,7 @@
                 <div class="col-md-2 text-center">
                     @foreach (var pic in Model.picture)
                     {
-                        <img src="~/UserProfile/@pic.profilePath" class="rounded-circle img-fluid" alt="Profile Picture">
+                        <img src="~/UserProfile/@pic.profilePath" id="profilePicPreview" class="rounded-circle img-fluid" alt="Profile Picture">
                     }
                     <div id="profile" class="d-none">
                         <input type="file" class="form-control-file d-none" id="profilePic" accept="image/*" onchange="previewProfilePic()">
@@ -32,16 +32,21 @@
                             @VolInfo.province.Substring(0, 1).ToUpper()@VolInfo.province.Substring(1)
                         </p>
                         <div id="addressInput" class="d-none">
-                            <input type="text" id="streetInput" class="form-control mb-1" value="@VolInfo.street" placeholder="Street">
-                            <input type="text" id="cityInput" class="form-control mb-1" value="@VolInfo.city" placeholder="City">
-                            <input type="text" id="provinceInput" class="form-control mb-1" value="@VolInfo.province" placeholder="Province">
+                            <input type="text" id="streetInput" class="form-control mb-1" value="@VolInfo.street" placeholder="Street" required>
+                            <span class="error-message text-danger"></span>
+                            <input type="text" id="cityInput" class="form-control mb-1" value="@VolInfo.city" placeholder="City" required>
+                            <span class="error-message text-danger"></span>
+                            <input type="text" id="provinceInput" class="form-control mb-1" value="@VolInfo.province" placeholder="Province" required>
+                            <span class="error-message text-danger"></span>
                         </div>
 
                         <p class="mb-1"><strong>Contact number: </strong><span id="phone">@VolInfo.phoneNum</span></p>
-                        <input type="text" id="phoneInput" class="form-control d-none" value="@VolInfo.phoneNum">
+                        <input type="text" id="phoneInput" class="form-control d-none" value="@VolInfo.phoneNum" required pattern="^09[0-9]{9}$" title="Phone number should start with 09 and contain 11 digits">
+                        <span class="error-message text-danger"></span>
 
                         <p class="mb-1"><strong>Email: </strong><span id="email">@VolInfo.UserAccount.email</span></p>
-                        <input type="email" id="emailInput" class="form-control d-none" value="@VolInfo.UserAccount.email">
+                        <input type="email" id="emailInput" class="form-control d-none" value="@VolInfo.UserAccount.email" required>
+                        <span class="error-message text-danger"></span>
 
                         <p class="mb-1"><strong>Availability: </strong><span id="availability">@VolInfo.availability</span></p>
                         <div id="availabilityInput" class="d-none">
@@ -81,7 +86,7 @@
                 <div class="col-md-5">
                     <h5>Skills</h5>
                     <div id="skillsDisplay">
-                        @foreach (var UserSkill in Model.volunteersSkill)
+                        @foreach (var UserSkill in Model.volunteersSkills)
                         {
                             <span class="badge badge-secondary skill-badge" data-skill-id="@UserSkill.skillId">
                                 @UserSkill.skillName
@@ -139,262 +144,4 @@
 <br />
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-<script>
-    var originalValues = {};
-    var originalProfilePicSrc = "";
-
-    function previewProfilePic() {
-        var file = document.getElementById('profilePic').files[0];
-        var reader = new FileReader();
-        reader.onloadend = function () {
-            document.getElementById('profilePicPreview').src = reader.result;
-        }
-        if (file) {
-            reader.readAsDataURL(file);
-        }
-    }
-
-    function toggleEdit() {
-        var isEditing = document.getElementById('editButton').innerText === 'Edit';
-
-        if (isEditing) {
-            originalValues.street = document.getElementById('streetInput').value;
-            originalValues.city = document.getElementById('cityInput').value;
-            originalValues.province = document.getElementById('provinceInput').value;
-            originalValues.phone = document.getElementById('phoneInput').value;
-            originalValues.email = document.getElementById('emailInput').value;
-
-            originalValues.availability = document.querySelector('input[name="availability"]:checked').value;
-
-            //originalProfilePicSrc = document.getElementById('profilePicPreview').src;
-        }
-
-        document.getElementById('address').classList.toggle('d-none', isEditing);
-        document.getElementById('addressInput').classList.toggle('d-none', !isEditing);
-
-        document.getElementById('phone').classList.toggle('d-none', isEditing);
-        document.getElementById('phoneInput').classList.toggle('d-none', !isEditing);
-
-        document.getElementById('email').classList.toggle('d-none', isEditing);
-        document.getElementById('emailInput').classList.toggle('d-none', !isEditing);
-
-        document.getElementById('availability').classList.toggle('d-none', isEditing);
-        document.getElementById('availabilityInput').classList.toggle('d-none', !isEditing);
-
-        document.getElementById('profile').classList.toggle('d-none', !isEditing);
-        document.getElementById('profilePic').classList.toggle('d-none', !isEditing);
-
-        document.getElementById('editButton').innerText = isEditing ? 'Save' : 'Edit';
-        document.getElementById('cancelButton').classList.toggle('d-none', !isEditing);
-
-        if (!isEditing) {
-            var street = document.getElementById('streetInput').value;
-            var city = document.getElementById('cityInput').value;
-            var province = document.getElementById('provinceInput').value;
-            var phone = document.getElementById('phoneInput').value;
-            var email = document.getElementById('emailInput').value;
-            var availability = document.querySelector('input[name="availability"]:checked').value;
-
-            var profilePic = document.getElementById('profilePic').files[0];
-
-            SaveChanges(street, city, province, phone, email, availability, profilePic);
-        }
-    }
-
-    function cancelEdit() {
-        document.getElementById('streetInput').value = originalValues.street;
-        document.getElementById('cityInput').value = originalValues.city;
-        document.getElementById('provinceInput').value = originalValues.province;
-        document.getElementById('phoneInput').value = originalValues.phone;
-        document.getElementById('emailInput').value = originalValues.email;
-
-        var availabilityRadios = document.getElementsByName('availability');
-        for (var i = 0; i < availabilityRadios.length; i++) {
-            if (availabilityRadios[i].value === originalValues.availability) {
-                availabilityRadios[i].checked = true;
-            }
-        }
-        // Hide profile picture upload input on cancel
-        document.getElementById('profilePic').classList.add('d-none');
-
-        //document.getElementById('profilePicPreview').src = originalProfilePicSrc;
-        toggleEdit();
-    }
-
-    function SaveChanges(street, city, province, phone, email, availability, profilePic) {
-        console.log(street, city, province, phone, email, availability);
-
-        var formData = new FormData();
-        formData.append('street', street);
-        formData.append('city', city);
-        formData.append('province', province);
-        formData.append('phone', phone);
-        formData.append('email', email);
-        formData.append('availability', availability);
-        formData.append('profilePic', profilePic);
-
-        $.ajax({
-            url: '/Volunteer/EditBasicInfo',
-            type: 'POST',
-            data: formData,
-            contentType: false,
-            processData: false,
-            success: function (response) {
-                if (response.success) {
-                    console.log("Updated");
-                    $('#address').text(street + ', ' + city + ' City, ' + province);
-                    $('#phone').text(phone);
-                    $('#email').text(email);
-                    $('#availability').text(availability);
-                    window.location.reload();
-                } else {
-                    console.log("Error: " + response.message);
-                }
-            },
-            error: function (xhr, status, error) {
-                console.log("Error function " + error);
-            }
-        });
-
-        //$.ajax({
-        //    url: '/Volunteer/EditBasicInfo',
-        //    type: 'POST',
-        //    data: {
-        //        street: street,
-        //        city: city,
-        //        province: province,
-        //        phone: phone,
-        //        email: email,
-        //        availability: availability
-        //    },
-        //    success: function (response) {
-        //        if (response.success) {
-        //            console.log("Updated");
-
-        //            $('#address').text(street + ', ' + city + ' City, ' + province);
-        //            $('#phone').text(phone);
-        //            $('#email').text(email);
-        //            $('#availability').text(availability);
-        //        } else {
-        //            console.log("Error: " + response.message);
-        //        }
-        //    },
-        //    error: function (xhr, status, error) {
-        //        console.log("Error function " + error);
-        //    }
-        //});
-    }
-
-    function toggleEditAboutMe() {
-        var isEditing = document.getElementById('editButtonAboutMe').innerText === 'Edit';
-
-        if (isEditing) {
-            originalValues.aboutMe = document.getElementById('aboutMeInput').value;
-        }
-
-        document.getElementById('aboutMe').classList.toggle('d-none', isEditing);
-        document.getElementById('aboutMeInput').classList.toggle('d-none', !isEditing);
-
-        document.getElementById('skillsDropdown').classList.toggle('d-none', !isEditing);
-
-        document.querySelectorAll('.remove-skill').forEach(element => {
-            element.classList.toggle('d-none', !isEditing);
-        });
-
-        document.getElementById('editButtonAboutMe').innerText = isEditing ? 'Save' : 'Edit';
-        document.getElementById('cancelButtonAboutMe').classList.toggle('d-none', !isEditing);
-
-        if (!isEditing) {
-            var aboutMe = document.getElementById('aboutMeInput').value;
-
-            var getDisplaySkill = getSkillsDisplayData();
-
-            SaveAboutMe(aboutMe, getDisplaySkill);
-        }
-    }
-
-    function cancelEditAboutMe() {
-        document.getElementById('aboutMeInput').value = originalValues.aboutMe;
-
-        toggleEditAboutMe();
-    }
-
-    function SaveAboutMe(aboutMe, getDisplaySkill) {
-        console.log(aboutMe);
-        console.log(getDisplaySkill);
-        var getSkills = getDisplaySkill;
-
-        $.ajax({
-            url: '/Volunteer/EditAboutMe',
-            type: 'POST',
-            data: {
-                aboutMe: aboutMe,
-                skills: getSkills
-            },
-            success: function (response) {
-                if (response.success) {
-                    console.log("Updated");
-
-                    $('#aboutMe').text(aboutMe);
-                } else {
-                    console.log("Error: " + response.message);
-                }
-            },
-            error: function (xhr, status, error) {
-                console.log("Error function " + error);
-            }
-        });
-    }
-
-    function addSkill() {
-        var selectedSkill = document.getElementById('skillsDropdown').value;
-        var selectedSkillName = document.getElementById('skillsDropdown').options[document.getElementById('skillsDropdown').selectedIndex].text;
-
-        if (selectedSkill) {
-            var skillsDisplay = document.getElementById('skillsDisplay');
-            var newSkill = document.createElement('span');
-            newSkill.className = 'badge badge-secondary skill-badge';
-            newSkill.setAttribute('data-skill-id', selectedSkill);
-            newSkill.innerHTML = `${selectedSkillName} <span class="remove-skill" onclick="removeSkill(this)">x</span>`;
-            skillsDisplay.appendChild(newSkill);
-
-            // Remove selected skill from the dropdown
-            var options = document.getElementById('skillsDropdown').options;
-            for (var i = 0; i < options.length; i++) {
-                if (options[i].value === selectedSkill) {
-                    options[i].remove();
-                    break;
-                }
-            }
-        }
-    }
-
-    function removeSkill(element) {
-        var skillBadge = element.parentNode;
-        var skillId = skillBadge.getAttribute('data-skill-id');
-        var skillName = skillBadge.innerText.replace(' x', '');
-
-        // Add the skill back to the dropdown
-        var skillsDropdown = document.getElementById('skillsDropdown');
-        var option = document.createElement('option');
-        option.value = skillId;
-        option.text = skillName;
-        skillsDropdown.add(option);
-
-        // Remove the skill badge
-        skillBadge.remove();
-    }
-
-    function getSkillsDisplayData() {
-        var skillsDisplay = document.getElementById('skillsDisplay');
-        var skillElements = skillsDisplay.getElementsByClassName('skill-badge');
-        var skills = [];
-
-        for (var i = 0; i < skillElements.length; i++) {
-            skills.push(skillElements[i].getAttribute('data-skill-id'));
-        }
-
-        return skills;
-    }
-</script>
+<script src="~/Content/Js/profile.js"></script>
