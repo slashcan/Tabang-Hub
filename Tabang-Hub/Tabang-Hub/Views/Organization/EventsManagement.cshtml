@@ -183,7 +183,10 @@
                                     <td>@list.Total_Image</td>
                                     <td>@list.Total_Skills</td>
                                     <td>
-                                        <a href="@Url.Action("Delete", "Event", new { id = list.Event_Id })" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this event?');">Delete</a>
+                                        <form action="@Url.Action("Delete", "Organization")" method="post" onsubmit="return confirm('Are you sure you want to delete this event?');">
+                                            <input type="hidden" name="eventId" value="@list.Event_Id" />
+                                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                        </form>
                                     </td>
                                 </tr>
                             }
@@ -199,6 +202,13 @@
                 rows.forEach(row => {
                     row.addEventListener('click', function () {
                         window.location.href = this.getAttribute('data-href');
+                    });
+                });
+
+                var deleteButtons = document.querySelectorAll('.btn-danger');
+                deleteButtons.forEach(button => {
+                    button.addEventListener('click', function (event) {
+                        event.stopPropagation();
                     });
                 });
             });

@@ -33,7 +33,7 @@ namespace Tabang_Hub.Controllers
                         var indexModel = new Lists()
                         {
                             volunteersInfo = getInfo,
-                            volunteersSkill = getVolunteerSkills,
+                            volunteersSkills = getVolunteerSkills,
                             skills = getSkills,
                             picture = getProfile
                         };

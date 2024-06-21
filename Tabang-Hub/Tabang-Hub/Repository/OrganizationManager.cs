@@ -15,6 +15,8 @@ namespace Tabang_Hub.Repository
         public BaseRepository<OrgInfo> _orgInfo;
         public BaseRepository<ProfilePicture> _profilePic;
         public BaseRepository<UserDonated> _userDonated;
+        public BaseRepository<Volunteers> _eventVolunteers;
+        public BaseRepository<VolunteerSkill> _volunteerSkills;
 
         public OrganizationManager()
         {
@@ -25,6 +27,8 @@ namespace Tabang_Hub.Repository
             _orgInfo = new BaseRepository<OrgInfo>();
             _profilePic = new BaseRepository<ProfilePicture>();
             _userDonated = new BaseRepository<UserDonated>();
+            _eventVolunteers = new BaseRepository<Volunteers>();
+            _volunteerSkills = new BaseRepository<VolunteerSkill>();
         }
 
 
@@ -79,7 +83,7 @@ namespace Tabang_Hub.Repository
                 }
 
                 // Get the eventId of the newly created event
-                int eventId = orgEvents.eventId;              
+                int eventId = orgEvents.eventId;
 
                 // Add each image associated with the eventId
                 foreach (var fileName in imageFileNames)
@@ -118,7 +122,7 @@ namespace Tabang_Hub.Repository
             {
                 return ErrorCode.Error;
             }
-         
+
             orgInformation.profileId = profilePic.profileId;
             var orgId = GetOrgInfoByUserId(id);
 
@@ -142,19 +146,19 @@ namespace Tabang_Hub.Repository
         }
 
         public List<vw_ListOfEvent> ListOfEvents(int userId, int eventType)
-        { 
+        {
             return _listOfEvents.GetAll().Where(m => m.User_Id == userId && m.Event_Type == eventType).ToList();
         }
         public OrgInfo GetOrgInfoByUserId(int? id)
-        { 
+        {
             return _orgInfo._table.Where(m => m.userId == id).FirstOrDefault();
         }
         public OrgInfo GetOrgInfoByUserId(int id)
-        { 
+        {
             return _orgInfo._table.Where(m => m.userId == id).FirstOrDefault();
         }
         public vw_ListOfEvent GetEventById(int id)
-        { 
+        {
             return _listOfEvents._table.Where(m => m.Event_Id == id).FirstOrDefault();
         }
 
@@ -164,12 +168,71 @@ namespace Tabang_Hub.Repository
         }
 
         public List<OrgSkillRequirement> listOfSkillRequirement(int id)
-        { 
+        {
             return _orgSkillRequirements.GetAll().Where(m => m.eventId == id).ToList();
         }
         public List<UserDonated> ListOfUserDonated(int id)
         {
             return _userDonated.GetAll().Where(m => m.eventId == id).ToList();
         }
+        public List<Volunteers> ListOfEventVolunteers(int eventId)
+        {
+            return _eventVolunteers.GetAll().Where(m => m.eventId == eventId).ToList();
+        }
+        public List<VolunteerSkill> ListOfEventVolunteerSkills()
+        {
+            return _volunteerSkills.GetAll();
+        }
+        public ErrorCode DeleteEvent(int eventId)
+        {
+            var skillsRequirement = listOfSkillRequirement(eventId);
+            var eventImage = listOfEventImage(eventId);
+            var eventVolunteers = ListOfEventVolunteers(eventId);
+
+            if (skillsRequirement != null)
+            {
+                foreach (var skillRequirement in skillsRequirement)
+                {
+                    var result = _orgSkillRequirements.Delete(skillRequirement.skillRequirementId);
+                    if (result != ErrorCode.Success)
+                    {
+                        return ErrorCode.Error;
+                    }
+                }
+            }
+
+            if (eventImage != null)
+            {
+                foreach (var eventImages in eventImage)
+                {
+                    var result = _orgEventsImage.Delete(eventImages.eventImageId);
+                    if (result != ErrorCode.Success)
+                    {
+                        return ErrorCode.Error;
+                    }
+                }
+            }
+
+            if (eventVolunteers != null)
+            {
+                foreach (var eventVolunteer in eventVolunteers)
+                {
+                    var result = _eventVolunteers.Delete(eventVolunteer.applyVolunteerId);
+                    if (result != ErrorCode.Success)
+                    {
+                        return ErrorCode.Error;
+                    }
+                }
+            }
+
+            var deleteEventResult = _orgEvents.Delete(eventId);
+            if (deleteEventResult != ErrorCode.Success)
+            {
+                return ErrorCode.Error;
+            }
+
+            return ErrorCode.Success;
+        }
+
     }
 }

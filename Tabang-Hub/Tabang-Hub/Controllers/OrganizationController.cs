@@ -54,7 +54,7 @@ namespace Tabang_Hub.Controllers
             {
                 ModelState.AddModelError(string.Empty, errMsg);
                 return View("OrgProfile", orgProfile); // Returning the view with the model to display validation errors
-            }         
+            }
 
             return RedirectToAction("OrgProfile");
         }
@@ -66,9 +66,9 @@ namespace Tabang_Hub.Controllers
         #region Event Management
         public ActionResult EventsManagement()
         {
-            var lists =_organizationManager.ListOfEvents(UserId, 1);
+            var lists = _organizationManager.ListOfEvents(UserId, 1);
 
-            var indexModel = new Utils.Lists()
+            var indexModel = new Lists()
             {
                 listOfEvents = lists,
             };
@@ -124,28 +124,48 @@ namespace Tabang_Hub.Controllers
             }
             return RedirectToAction("EventsManagement");
         }
-        public ActionResult Details(int id) 
-        { 
+        public ActionResult Details(int id)
+        {
             var events = _organizationManager.GetEventById(id);
             var listofImage = _organizationManager.listOfEventImage(id);
             var listOfSkills = _organizationManager.listOfSkillRequirement(id);
-            var orgInfo  = _organizationManager.GetOrgInfoByUserId(UserId);
+            var orgInfo = _organizationManager.GetOrgInfoByUserId(UserId);
+            var listOfEventVolunteers = _organizationManager.ListOfEventVolunteers(id);
+            var volunteerSkills = _organizationManager.ListOfEventVolunteerSkills();
 
-
-            var indexModel = new Utils.Lists()
+            var indexModel = new Lists()
             {
                 OrgInfo = orgInfo,
                 eventDetails = events,
                 detailsEventImage = listofImage,
-                detailsSkillRequirement = listOfSkills
+                detailsSkillRequirement = listOfSkills,
+                listOfEventVolunteers = listOfEventVolunteers,
+                volunteersSkills = volunteerSkills,
             };
 
             if (events != null)
-            { 
+            {
                 return View(indexModel);
             }
             return RedirectToAction("EventsManagement");
         }
+        [HttpPost]
+        public ActionResult Delete(int eventId)
+        {
+            var deleteEvent = _organizationManager.DeleteEvent(eventId);
+
+            if (deleteEvent != ErrorCode.Success)
+            {
+                // You may want to set a TempData or ViewBag message to inform the user of the error
+                TempData["ErrorMessage"] = "There was an error deleting the event. Please try again.";
+                return RedirectToAction("EventsManagement");
+            }
+
+            // You may want to set a TempData or ViewBag message to inform the user of the success
+            TempData["SuccessMessage"] = "Event deleted successfully.";
+            return RedirectToAction("EventsManagement");
+        }
+
         #endregion
 
         #region Organization Management
@@ -203,7 +223,7 @@ namespace Tabang_Hub.Controllers
                 }
             }
             String[] skills = null;
-            if (_organizationManager.CreateEvents(events.CreateEvents, uploadedFiles,skills, ref errMsg) != ErrorCode.Success)
+            if (_organizationManager.CreateEvents(events.CreateEvents, uploadedFiles, skills, ref errMsg) != ErrorCode.Success)
             {
                 ModelState.AddModelError(String.Empty, errMsg);
                 return View();

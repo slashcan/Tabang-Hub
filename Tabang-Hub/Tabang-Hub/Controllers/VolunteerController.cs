@@ -7,6 +7,7 @@ using System.Web.Helpers;
 using System.Web.Mvc;
 using Tabang_Hub.Utils;
 using Tabang_Hub.Repository;
+using System.Web.Security;
 
 namespace Tabang_Hub.Controllers
 {
@@ -22,6 +23,7 @@ namespace Tabang_Hub.Controllers
             var getUserAccount = db.UserAccount.Where(m => m.userId == UserId).ToList();
             var getVolunteerInfo = db.VolunteerInfo.Where(m => m.userId == UserId).ToList();
             var getVolunteerSkills = db.VolunteerSkill.Where(m => m.userId == UserId).ToList();
+            var getProfile = db.ProfilePicture.Where(m => m.userId == UserId).ToList();
 
             var getUniqueSkill = db.sp_GetSkills(UserId).ToList();
 
@@ -29,8 +31,9 @@ namespace Tabang_Hub.Controllers
             {
                 userAccounts = getUserAccount,
                 volunteersInfo = getVolunteerInfo,
-                volunteersSkill = getVolunteerSkills,
-                uniqueSkill = getUniqueSkill
+                volunteersSkills = getVolunteerSkills,
+                uniqueSkill = getUniqueSkill,
+                picture = getProfile
             };
 
             return View(listModel);
@@ -52,6 +55,7 @@ namespace Tabang_Hub.Controllers
                 UserUpdate.email = email;
 
                 db.SaveChanges();
+                FormsAuthentication.SetAuthCookie(email, false);
 
                 return Json(new { success = true, message = "Success !" });
             }
@@ -244,7 +248,7 @@ namespace Tabang_Hub.Controllers
                 };
 
                 //var updateVolunteerNeeded = db.OrgEvents.Where(m => m.eventId == eventId).FirstOrDefault();
-                
+
                 if (checkVolunteer == null)
                 {
                     //updateVolunteerNeeded.maxVolunteer = updateVolunteerNeeded.maxVolunteer - 1;
