@@ -38,6 +38,15 @@
         max-width: 100px;
         max-height: 100px;
     }
+
+    .error {
+        color: red;
+        font-size: 0.875em;
+    }
+
+    .input-error {
+        border-color: red;
+    }
 </style>
 
 <div class="container mt-5">
@@ -72,36 +81,43 @@
         <div id="donation-creation" class="mb-4 content-section">
             <div class="card-header">Create Donation</div>
             <div class="card-body">
-                <form action="/Organization/CreateDonations" method="post" enctype="multipart/form-data">
+                <form id="create-donation-form" action="/Organization/CreateDonations" method="post" enctype="multipart/form-data" onsubmit="return validateDonationForm()">
                     <div class="mb-3">
-                        <label for="CreateDonations_donationTitle" class="form-label">Donation Title</label>
-                        <input type="text" class="form-control" id="CreateDonations_eventTitle" name="CreateEvents.eventTitle" placeholder="Enter donation title" required>
+                        <label for="CreateEvents_eventTitle" class="form-label">Donation Title</label>
+                        <input type="text" class="form-control" id="CreateEvents_eventTitle" name="CreateEvents.eventTitle" placeholder="Enter donation title">
+                        <span class="error" id="CreateEvents_eventTitle_error"></span>
                     </div>
                     <div class="mb-3">
-                        <label for="CreateDonations_donationDescription" class="form-label">Donation Description</label>
-                        <textarea class="form-control" id="CreateDonations_eventDescription" name="CreateEvents.eventDescription" rows="4" placeholder="Enter donation description" required></textarea>
+                        <label for="CreateEvents_eventDescription" class="form-label">Donation Description</label>
+                        <textarea class="form-control" id="CreateEvents_eventDescription" name="CreateEvents.eventDescription" rows="4" placeholder="Enter donation description"></textarea>
+                        <span class="error" id="CreateEvents_eventDescription_error"></span>
                     </div>
                     <div class="mb-3">
-                        <label for="CreateDonations_targetAmount" class="form-label">Target Amount</label>
-                        <input type="number" class="form-control" id="CreateDonations_targetAmount" name="CreateEvents.targetAmount" placeholder="Enter target amount" required>
+                        <label for="CreateEvents_targetAmount" class="form-label">Target Amount</label>
+                        <input type="number" class="form-control" id="CreateEvents_targetAmount" name="CreateEvents.targetAmount" placeholder="Enter target amount">
+                        <span class="error" id="CreateEvents_targetAmount_error"></span>
                     </div>
                     <div class="mb-3 row">
                         <div class="col">
-                            <label for="CreateDonations_startDate" class="form-label">Start Date</label>
-                            <input type="date" class="form-control" id="CreateDonations_dateStart" name="CreateEvents.dateStart" required>
+                            <label for="CreateEvents_dateStart" class="form-label">Start Date</label>
+                            <input type="date" class="form-control" id="CreateEvents_dateStart" name="CreateEvents.dateStart">
+                            <span class="error" id="CreateEvents_dateStart_error"></span>
                         </div>
                         <div class="col">
-                            <label for="CreateDonations_endDate" class="form-label">End Date</label>
-                            <input type="date" class="form-control" id="CreateDonations_dateEnd" name="CreateEvents.dateEnd" required>
+                            <label for="CreateEvents_dateEnd" class="form-label">End Date</label>
+                            <input type="date" class="form-control" id="CreateEvents_dateEnd" name="CreateEvents.dateEnd">
+                            <span class="error" id="CreateEvents_dateEnd_error"></span>
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label for="CreateDonations_location" class="form-label">Location</label>
-                        <input type="text" class="form-control" id="CreateDonations_location" name="CreateEvents.location" placeholder="Enter location" required>
+                        <label for="CreateEvents_location" class="form-label">Location</label>
+                        <input type="text" class="form-control" id="CreateEvents_location" name="CreateEvents.location" placeholder="Enter location">
+                        <span class="error" id="CreateEvents_location_error"></span>
                     </div>
                     <div class="mb-3">
-                        <label for="CreateDonations_uploadImage" class="form-label">Upload Images</label>
-                        <input type="file" class="form-control" id="CreateDonations_uploadImage" name="images" multiple onchange="previewImages()">
+                        <label for="CreateEvents_uploadImage" class="form-label">Upload Images</label>
+                        <input type="file" class="form-control" id="CreateEvents_uploadImage" name="images" multiple onchange="previewImages()">
+                        <span class="error" id="CreateEvents_uploadImage_error"></span>
                         <div class="preview-container" id="image-preview"></div>
                     </div>
                     <button type="submit" class="btn btn-primary">Create Donation</button>
@@ -131,7 +147,7 @@
                         <tbody>
                             @foreach (var list in Model.listOfEvents)
                             {
-                                <tr class="text-center" data-href="@Url.Action("Details", "Organization", new { id = list.Event_Id })" style="cursor: pointer;">
+                                <tr class="text-center" data-event-id="@list.Event_Id" style="cursor: pointer;">
                                     <td>@list.Event_Title</td>
                                     <td>@list.Event_Description</td>
                                     <td>@list.Target_Amount</td>
@@ -140,7 +156,9 @@
                                     <td>@list.Location</td>
                                     <td>@list.Total_Image</td>
                                     <td>
-                                        <a href="@Url.Action("Delete", "Event", new { id = list.Event_Id })" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this event?');">Delete</a>
+                                        <form class="delete-form" data-event-id="@list.Event_Id">
+                                            <button type="button" class="btn btn-sm btn-danger delete-button">Delete</button>
+                                        </form>
                                     </td>
                                 </tr>
                             }
@@ -160,7 +178,90 @@
     </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var deleteUrl = '@Url.Action("Delete", "Organization")';
+
+        document.querySelectorAll('.delete-button').forEach(button => {
+            button.addEventListener('click', function (event) {
+                event.stopPropagation();  // Stop the click event from propagating to the row
+                var form = this.closest('.delete-form');
+                var eventId = form.getAttribute('data-event-id');
+
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!',
+                    allowOutsideClick: false,
+                    allowEscapeKey: false
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Submit the form to delete the event
+                        var xhr = new XMLHttpRequest();
+                        xhr.open("POST", deleteUrl, true);
+                        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                        xhr.onload = function() {
+                            if (xhr.status === 200) {
+                                Swal.fire({
+                                    title: 'Deleted!',
+                                    text: 'Your donation has been deleted.',
+                                    icon: 'success',
+                                    allowOutsideClick: false,
+                                    allowEscapeKey: false
+                                });
+
+                                // Remove the deleted donation row from the table
+                                form.closest('tr').remove();
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error!',
+                                    text: 'There was an error deleting the donation. Please try again.',
+                                    allowOutsideClick: false,
+                                    allowEscapeKey: false
+                                });
+                            }
+                        };
+                        xhr.send("eventId=" + eventId);
+                    }
+                });
+            });
+        });
+
+        document.getElementById('create-donation-form').addEventListener('submit', function (event) {
+            event.preventDefault();
+            if (validateDonationForm()) {
+                var form = event.target;
+                var formData = new FormData(form);
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", form.action, true);
+                xhr.onload = function () {
+                    if (xhr.status === 200) {
+                        Swal.fire({
+                            title: 'Successfully Created!',
+                            text: 'Your donation has been successfully created.',
+                            icon: 'success'
+                        }).then(() => {
+                            window.location.reload();
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error!',
+                            text: 'There was an error creating the donation. Please try again.'
+                        });
+                    }
+                };
+                xhr.send(formData);
+            }
+        });
+    });
+
     function showSection(sectionId) {
         // Hide all sections
         document.querySelectorAll('.content-section').forEach(section => {
@@ -171,10 +272,82 @@
         document.getElementById(sectionId).classList.add('active');
     }
 
+    function validateDonationForm() {
+        const allowedExtensions = ['jpg', 'jpeg', 'png', 'gif'];
+        const files = document.getElementById('CreateEvents_uploadImage').files;
+        const startDate = new Date(document.getElementById('CreateEvents_dateStart').value);
+        const endDate = new Date(document.getElementById('CreateEvents_dateEnd').value);
+        const now = new Date();
+
+        let isValid = true;
+
+        const title = document.getElementById('CreateEvents_eventTitle');
+        const description = document.getElementById('CreateEvents_eventDescription');
+        const targetAmount = document.getElementById('CreateEvents_targetAmount');
+        const location = document.getElementById('CreateEvents_location');
+        const startDateError = document.getElementById('CreateEvents_dateStart_error');
+        const endDateError = document.getElementById('CreateEvents_dateEnd_error');
+
+        // Clear previous errors
+        document.querySelectorAll('.error').forEach(error => error.textContent = '');
+        document.querySelectorAll('.input-error').forEach(input => input.classList.remove('input-error'));
+
+        if (title.value.trim() === '') {
+            document.getElementById('CreateEvents_eventTitle_error').textContent = 'Donation Title is required.';
+            title.classList.add('input-error');
+            isValid = false;
+        }
+        if (description.value.trim() === '') {
+            document.getElementById('CreateEvents_eventDescription_error').textContent = 'Donation Description is required.';
+            description.classList.add('input-error');
+            isValid = false;
+        }
+        if (targetAmount.value <= 0) {
+            document.getElementById('CreateEvents_targetAmount_error').textContent = 'Target Amount must be greater than 0.';
+            targetAmount.classList.add('input-error');
+            isValid = false;
+        }
+        if (location.value.trim() === '') {
+            document.getElementById('CreateEvents_location_error').textContent = 'Location is required.';
+            location.classList.add('input-error');
+            isValid = false;
+        }
+        if (startDate < now) {
+            startDateError.textContent = 'Start date and time cannot be before the current date and time.';
+            document.getElementById('CreateEvents_dateStart').classList.add('input-error');
+            isValid = false;
+        }
+        if (endDate < startDate) {
+            endDateError.textContent = 'End date and time cannot be before the start date and time.';
+            document.getElementById('CreateEvents_dateEnd').classList.add('input-error');
+            isValid = false;
+        }
+        if (files.length === 0) {
+            document.getElementById('CreateEvents_uploadImage_error').textContent = 'You must upload at least one image.';
+            document.getElementById('CreateEvents_uploadImage').classList.add('input-error');
+            isValid = false;
+        } else {
+            for (let i = 0; i < files.length; i++) {
+                const fileExtension = files[i].name.split('.').pop().toLowerCase();
+                if (!allowedExtensions.includes(fileExtension)) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Invalid File Type',
+                        text: 'Invalid file type. Only JPG, JPEG, PNG, and GIF files are allowed.',
+                        allowOutsideClick: false,
+                        allowEscapeKey: false
+                    });
+                    isValid = false;
+                }
+            }
+        }
+        return isValid;
+    }
+
     function previewImages() {
         const previewContainer = document.getElementById('image-preview');
         previewContainer.innerHTML = ''; // Clear previous previews
-        const files = document.getElementById('CreateDonations_uploadImage').files;
+        const files = document.getElementById('CreateEvents_uploadImage').files;
 
         Array.from(files).forEach(file => {
             const reader = new FileReader();
