@@ -83,47 +83,67 @@ namespace Tabang_Hub.Controllers
             string errMsg = string.Empty;
             List<string> uploadedFiles = new List<string>();
 
+            var allowedExtensions = new List<string> { ".jpg", ".jpeg", ".png", ".gif" };
+
             if (images != null && images.Length > 0)
             {
                 foreach (var image in images)
                 {
                     if (image != null && image.ContentLength > 0)
                     {
+                        var extension = Path.GetExtension(image.FileName).ToLower();
+
+                        if (!allowedExtensions.Contains(extension))
+                        {
+                            ModelState.AddModelError(String.Empty, "Invalid file type. Only JPG, JPEG, PNG, and GIF files are allowed.");
+                            return RedirectToAction("EventsManagement");
+                        }
+
                         var inputFileName = Path.GetFileName(image.FileName);
                         var serverSavePath = Path.Combine(Server.MapPath("~/Content/IdPicture/"), inputFileName);
 
                         if (!Directory.Exists(Server.MapPath("~/Content/IdPicture/")))
                             Directory.CreateDirectory(Server.MapPath("~/Content/IdPicture/"));
 
-
-                        using (var srcImage = Image.FromStream(image.InputStream))
+                        try
                         {
-                            var newWidth = 400;
-                            var newHeight = 300;
-                            var resizedImage = new Bitmap(newWidth, newHeight);
-
-                            using (var graphics = Graphics.FromImage(resizedImage))
+                            using (var srcImage = Image.FromStream(image.InputStream))
                             {
-                                graphics.CompositingQuality = CompositingQuality.HighQuality;
-                                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                                graphics.SmoothingMode = SmoothingMode.HighQuality;
-                                graphics.DrawImage(srcImage, 0, 0, newWidth, newHeight);
+                                var newWidth = 400;
+                                var newHeight = 300;
+                                var resizedImage = new Bitmap(newWidth, newHeight);
+
+                                using (var graphics = Graphics.FromImage(resizedImage))
+                                {
+                                    graphics.CompositingQuality = CompositingQuality.HighQuality;
+                                    graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                                    graphics.SmoothingMode = SmoothingMode.HighQuality;
+                                    graphics.DrawImage(srcImage, 0, 0, newWidth, newHeight);
+                                }
+
+                                resizedImage.Save(serverSavePath, ImageFormat.Jpeg);
                             }
 
-                            resizedImage.Save(serverSavePath, ImageFormat.Jpeg);
+                            uploadedFiles.Add(inputFileName);
                         }
-
-                        uploadedFiles.Add(inputFileName);
+                        catch (Exception ex)
+                        {
+                            ModelState.AddModelError(String.Empty, $"Error processing file {inputFileName}: {ex.Message}");
+                            return RedirectToAction("EventsManagement");
+                        }
                     }
                 }
             }
+
             if (_organizationManager.CreateEvents(events.CreateEvents, uploadedFiles, skills, ref errMsg) != ErrorCode.Success)
             {
                 ModelState.AddModelError(String.Empty, errMsg);
-                return View();
+                return RedirectToAction("EventsManagement");
             }
+
             return RedirectToAction("EventsManagement");
         }
+
         public ActionResult Details(int id)
         {
             var events = _organizationManager.GetEventById(id);
