@@ -85,6 +85,50 @@ namespace Tabang_Hub.Controllers
 
             var allowedExtensions = new List<string> { ".jpg", ".jpeg", ".png", ".gif" };
 
+            // Server-side validation
+            if (string.IsNullOrWhiteSpace(events.CreateEvents.eventTitle))
+            {
+                ModelState.AddModelError("CreateEvents.eventTitle", "Event Title is required.");
+            }
+            if (string.IsNullOrWhiteSpace(events.CreateEvents.eventDescription))
+            {
+                ModelState.AddModelError("CreateEvents.eventDescription", "Event Description is required.");
+            }
+            if (events.CreateEvents.maxVolunteer <= 0)
+            {
+                ModelState.AddModelError("CreateEvents.maxVolunteer", "Maximum Volunteers must be greater than 0.");
+            }
+            if (events.CreateEvents.dateStart == null || events.CreateEvents.dateEnd == null)
+            {
+                ModelState.AddModelError("CreateEvents.dateStart", "Start Date and End Date are required.");
+            }
+            if (events.CreateEvents.dateStart < DateTime.Now)
+            {
+                ModelState.AddModelError("CreateEvents.dateStart", "Start date and time cannot be before the current date and time.");
+            }
+            if (events.CreateEvents.dateEnd < events.CreateEvents.dateStart)
+            {
+                ModelState.AddModelError("CreateEvents.dateEnd", "End date and time cannot be before the start date and time.");
+            }
+            if (string.IsNullOrWhiteSpace(events.CreateEvents.location))
+            {
+                ModelState.AddModelError("CreateEvents.location", "Location is required.");
+            }
+            if (skills == null || skills.Length == 0)
+            {
+                ModelState.AddModelError("CreateEvents.skills", "At least one skill is required.");
+            }
+            if (images == null || images.Length == 0)
+            {
+                ModelState.AddModelError("CreateEvents.images", "At least one image is required.");
+            }
+
+            // Check if there are validation errors
+            if (!ModelState.IsValid)
+            {
+                return RedirectToAction("EventsManagement");
+            }
+
             if (images != null && images.Length > 0)
             {
                 foreach (var image in images)
@@ -143,7 +187,6 @@ namespace Tabang_Hub.Controllers
 
             return RedirectToAction("EventsManagement");
         }
-
         public ActionResult Details(int id)
         {
             var events = _organizationManager.GetEventById(id);
