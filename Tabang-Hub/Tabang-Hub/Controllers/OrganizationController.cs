@@ -76,12 +76,52 @@ namespace Tabang_Hub.Controllers
             return View(indexModel);
         }
         [HttpPost]
-        public ActionResult CreateEvents(Utils.Lists events, string[] skills, HttpPostedFileBase[] images)
+        public ActionResult CreateEvents(Lists events, String[] skills, HttpPostedFileBase[] images)
         {
             events.CreateEvents.userId = UserId;
             events.CreateEvents.eventType = 1;
             string errMsg = string.Empty;
             List<string> uploadedFiles = new List<string>();
+
+            var allowedExtensions = new List<string> { ".jpg", ".jpeg", ".png", ".gif" };
+
+            // Server-side validation
+            if (string.IsNullOrWhiteSpace(events.CreateEvents.eventTitle))
+            {
+                ModelState.AddModelError("CreateEvents.eventTitle", "Event Title is required.");
+            }
+            if (string.IsNullOrWhiteSpace(events.CreateEvents.eventDescription))
+            {
+                ModelState.AddModelError("CreateEvents.eventDescription", "Event Description is required.");
+            }
+            if (events.CreateEvents.maxVolunteer <= 0)
+            {
+                ModelState.AddModelError("CreateEvents.maxVolunteer", "Maximum Volunteers must be greater than 0.");
+            }
+            if (events.CreateEvents.dateStart == null || events.CreateEvents.dateEnd == null)
+            {
+                ModelState.AddModelError("CreateEvents.dateStart", "Start Date and End Date are required.");
+            }
+            if (events.CreateEvents.dateStart < DateTime.Now)
+            {
+                ModelState.AddModelError("CreateEvents.dateStart", "Start date and time cannot be before the current date and time.");
+            }
+            if (events.CreateEvents.dateEnd <= events.CreateEvents.dateStart)
+            {
+                ModelState.AddModelError("CreateEvents.dateEnd", "End date and time cannot be before or the same as the start date and time.");
+            }
+            if (string.IsNullOrWhiteSpace(events.CreateEvents.location))
+            {
+                ModelState.AddModelError("CreateEvents.location", "Location is required.");
+            }
+            if (skills == null || skills.Length == 0)
+            {
+                ModelState.AddModelError("CreateEvents.skills", "At least one skill is required.");
+            }
+            if (images == null || images.Length == 0)
+            {
+                ModelState.AddModelError("CreateEvents.images", "At least one image is required.");
+            }
 
             if (images != null && images.Length > 0)
             {
@@ -89,39 +129,56 @@ namespace Tabang_Hub.Controllers
                 {
                     if (image != null && image.ContentLength > 0)
                     {
+                        var extension = Path.GetExtension(image.FileName).ToLower();
+
+                        if (!allowedExtensions.Contains(extension))
+                        {
+                            ModelState.AddModelError(String.Empty, "Invalid file type. Only JPG, JPEG, PNG, and GIF files are allowed.");
+                            return RedirectToAction("EventsManagement");
+                        }
+
                         var inputFileName = Path.GetFileName(image.FileName);
                         var serverSavePath = Path.Combine(Server.MapPath("~/Content/IdPicture/"), inputFileName);
 
                         if (!Directory.Exists(Server.MapPath("~/Content/IdPicture/")))
                             Directory.CreateDirectory(Server.MapPath("~/Content/IdPicture/"));
 
-
-                        using (var srcImage = Image.FromStream(image.InputStream))
+                        try
                         {
-                            var newWidth = 400;
-                            var newHeight = 300;
-                            var resizedImage = new Bitmap(newWidth, newHeight);
-
-                            using (var graphics = Graphics.FromImage(resizedImage))
+                            using (var srcImage = Image.FromStream(image.InputStream))
                             {
-                                graphics.CompositingQuality = CompositingQuality.HighQuality;
-                                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                                graphics.SmoothingMode = SmoothingMode.HighQuality;
-                                graphics.DrawImage(srcImage, 0, 0, newWidth, newHeight);
+                                var newWidth = 400;
+                                var newHeight = 300;
+                                var resizedImage = new Bitmap(newWidth, newHeight);
+
+                                using (var graphics = Graphics.FromImage(resizedImage))
+                                {
+                                    graphics.CompositingQuality = CompositingQuality.HighQuality;
+                                    graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                                    graphics.SmoothingMode = SmoothingMode.HighQuality;
+                                    graphics.DrawImage(srcImage, 0, 0, newWidth, newHeight);
+                                }
+
+                                resizedImage.Save(serverSavePath, ImageFormat.Jpeg);
                             }
 
-                            resizedImage.Save(serverSavePath, ImageFormat.Jpeg);
+                            uploadedFiles.Add(inputFileName);
                         }
-
-                        uploadedFiles.Add(inputFileName);
+                        catch (Exception ex)
+                        {
+                            ModelState.AddModelError(String.Empty, $"Error processing file {inputFileName}: {ex.Message}");
+                            return RedirectToAction("EventsManagement");
+                        }
                     }
                 }
             }
+
             if (_organizationManager.CreateEvents(events.CreateEvents, uploadedFiles, skills, ref errMsg) != ErrorCode.Success)
             {
                 ModelState.AddModelError(String.Empty, errMsg);
-                return View();
+                return RedirectToAction("EventsManagement");
             }
+
             return RedirectToAction("EventsManagement");
         }
         public ActionResult Details(int id) 
@@ -149,6 +206,22 @@ namespace Tabang_Hub.Controllers
             }
             return RedirectToAction("EventsManagement");
         }
+        [HttpPost]
+        public ActionResult Delete(int eventId)
+        {
+            var deleteEvent = _organizationManager.DeleteEvent(eventId);
+
+            if (deleteEvent != ErrorCode.Success)
+            {
+                // You may want to set a TempData or ViewBag message to inform the user of the error
+                TempData["ErrorMessage"] = "There was an error deleting the event. Please try again.";
+                return RedirectToAction("EventsManagement");
+            }
+
+            // You may want to set a TempData or ViewBag message to inform the user of the success
+            TempData["SuccessMessage"] = "Event deleted successfully.";
+            return RedirectToAction("EventsManagement");
+        }
         #endregion
 
         #region Organization Management
@@ -171,46 +244,104 @@ namespace Tabang_Hub.Controllers
             string errMsg = string.Empty;
             List<string> uploadedFiles = new List<string>();
 
+            var allowedExtensions = new List<string> { ".jpg", ".jpeg", ".png", ".gif" };
+
+            // Server-side validation
+            if (string.IsNullOrWhiteSpace(events.CreateEvents.eventTitle))
+            {
+                ModelState.AddModelError("CreateEvents.eventTitle", "Donation Title is required.");
+            }
+            if (string.IsNullOrWhiteSpace(events.CreateEvents.eventDescription))
+            {
+                ModelState.AddModelError("CreateEvents.eventDescription", "Donation Description is required.");
+            }
+            if (events.CreateEvents.targetAmount <= 0)
+            {
+                ModelState.AddModelError("CreateEvents.targetAmount", "Target Amount must be greater than 0.");
+            }
+            if (events.CreateEvents.dateStart == null || events.CreateEvents.dateEnd == null)
+            {
+                ModelState.AddModelError("CreateEvents.dateStart", "Start Date and End Date are required.");
+            }
+            if (events.CreateEvents.dateStart < DateTime.Now)
+            {
+                ModelState.AddModelError("CreateEvents.dateStart", "Start date and time cannot be before the current date and time.");
+            }
+            if (events.CreateEvents.dateEnd < events.CreateEvents.dateStart)
+            {
+                ModelState.AddModelError("CreateEvents.dateEnd", "End date and time cannot be before the start date and time.");
+            }
+            if (string.IsNullOrWhiteSpace(events.CreateEvents.location))
+            {
+                ModelState.AddModelError("CreateEvents.location", "Location is required.");
+            }
+            if (images == null || images.Length == 0)
+            {
+                ModelState.AddModelError("CreateEvents.images", "At least one image is required.");
+            }
+
+            // Check if there are validation errors
+            if (!ModelState.IsValid)
+            {
+                return RedirectToAction("DonationsManagement");
+            }
+
             if (images != null && images.Length > 0)
             {
                 foreach (var image in images)
                 {
                     if (image != null && image.ContentLength > 0)
                     {
+                        var extension = Path.GetExtension(image.FileName).ToLower();
+
+                        if (!allowedExtensions.Contains(extension))
+                        {
+                            ModelState.AddModelError(String.Empty, "Invalid file type. Only JPG, JPEG, PNG, and GIF files are allowed.");
+                            return RedirectToAction("DonationsManagement");
+                        }
+
                         var inputFileName = Path.GetFileName(image.FileName);
                         var serverSavePath = Path.Combine(Server.MapPath("~/Content/IdPicture/"), inputFileName);
 
                         if (!Directory.Exists(Server.MapPath("~/Content/IdPicture/")))
                             Directory.CreateDirectory(Server.MapPath("~/Content/IdPicture/"));
 
-
-                        using (var srcImage = Image.FromStream(image.InputStream))
+                        try
                         {
-                            var newWidth = 400;
-                            var newHeight = 300;
-                            var resizedImage = new Bitmap(newWidth, newHeight);
-
-                            using (var graphics = Graphics.FromImage(resizedImage))
+                            using (var srcImage = Image.FromStream(image.InputStream))
                             {
-                                graphics.CompositingQuality = CompositingQuality.HighQuality;
-                                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                                graphics.SmoothingMode = SmoothingMode.HighQuality;
-                                graphics.DrawImage(srcImage, 0, 0, newWidth, newHeight);
+                                var newWidth = 400;
+                                var newHeight = 300;
+                                var resizedImage = new Bitmap(newWidth, newHeight);
+
+                                using (var graphics = Graphics.FromImage(resizedImage))
+                                {
+                                    graphics.CompositingQuality = CompositingQuality.HighQuality;
+                                    graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                                    graphics.SmoothingMode = SmoothingMode.HighQuality;
+                                    graphics.DrawImage(srcImage, 0, 0, newWidth, newHeight);
+                                }
+
+                                resizedImage.Save(serverSavePath, ImageFormat.Jpeg);
                             }
 
-                            resizedImage.Save(serverSavePath, ImageFormat.Jpeg);
+                            uploadedFiles.Add(inputFileName);
                         }
-
-                        uploadedFiles.Add(inputFileName);
+                        catch (Exception ex)
+                        {
+                            ModelState.AddModelError(String.Empty, $"Error processing file {inputFileName}: {ex.Message}");
+                            return RedirectToAction("DonationsManagement");
+                        }
                     }
                 }
             }
-            String[] skills = null;
-            if (_organizationManager.CreateEvents(events.CreateEvents, uploadedFiles,skills, ref errMsg) != ErrorCode.Success)
+
+            if (_organizationManager.CreateEvents(events.CreateEvents, uploadedFiles, null, ref errMsg) != ErrorCode.Success)
             {
                 ModelState.AddModelError(String.Empty, errMsg);
-                return View();
+                return RedirectToAction("DonationsManagement");
             }
+
             return RedirectToAction("DonationsManagement");
         }
         #endregion

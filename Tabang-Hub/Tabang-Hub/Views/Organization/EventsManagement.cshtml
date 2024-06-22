@@ -1,4 +1,4 @@
-﻿@model Tabang_Hub.Utils.Lists
+﻿﻿@model Tabang_Hub.Utils.Lists
 
 @{
     ViewBag.Title = "EventsManagement";
@@ -69,6 +69,15 @@
         max-width: 100px;
         max-height: 100px;
     }
+
+    .error {
+        color: red;
+        font-size: 0.875em;
+    }
+
+    .input-error {
+        border-color: red;
+    }
 </style>
 
 <div class="container">
@@ -103,36 +112,43 @@
         <div id="event-creation" class="mb-4 content-section">
             <div class="card-header">Event Creation</div>
             <div class="card-body">
-                <form action="/Organization/CreateEvents" method="post" enctype="multipart/form-data">
+                <form id="create-event-form" action="/Organization/CreateEvents" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
                     <div class="mb-3">
                         <label for="CreateEvents_eventTitle" class="form-label">Event Title</label>
                         <input type="text" class="form-control" id="CreateEvents_eventTitle" name="CreateEvents.eventTitle" placeholder="Enter event title">
+                        <span class="error" id="CreateEvents_eventTitle_error"></span>
                     </div>
                     <div class="mb-3">
                         <label for="CreateEvents_eventDescription" class="form-label">Event Description</label>
                         <textarea class="form-control" id="CreateEvents_eventDescription" name="CreateEvents.eventDescription" rows="4" placeholder="Enter event description"></textarea>
+                        <span class="error" id="CreateEvents_eventDescription_error"></span>
                     </div>
                     <div class="mb-3">
                         <label for="CreateEvents_maxVolunteer" class="form-label">Maximum Volunteers</label>
                         <input type="number" class="form-control" id="CreateEvents_maxVolunteer" name="CreateEvents.maxVolunteer" placeholder="Enter maximum number of volunteers">
+                        <span class="error" id="CreateEvents_maxVolunteer_error"></span>
                     </div>
                     <div class="mb-3 row">
                         <div class="col">
                             <label for="CreateEvents_dateStart" class="form-label">Start Date and Time</label>
                             <input type="datetime-local" class="form-control" id="CreateEvents_dateStart" name="CreateEvents.dateStart">
+                            <span class="error" id="CreateEvents_dateStart_error"></span>
                         </div>
                         <div class="col">
                             <label for="CreateEvents_dateEnd" class="form-label">End Date and Time</label>
                             <input type="datetime-local" class="form-control" id="CreateEvents_dateEnd" name="CreateEvents.dateEnd">
+                            <span class="error" id="CreateEvents_dateEnd_error"></span>
                         </div>
                     </div>
                     <div class="mb-3">
                         <label for="CreateEvents_location" class="form-label">Location</label>
                         <input type="text" class="form-control" id="CreateEvents_location" name="CreateEvents.location" placeholder="Enter location">
+                        <span class="error" id="CreateEvents_location_error"></span>
                     </div>
                     <div class="mb-3">
                         <label>Volunteer Skills Requirements</label>
                         <div class="added-skills" id="added-skills"></div>
+                        <span class="error" id="CreateEvents_skills_error"></span>
                     </div>
                     <div class="skills-container">
                         <button type="button" class="btn btn-outline-primary skill-button" onclick="addSkill('Mason')">Mason</button>
@@ -144,6 +160,7 @@
                     <div class="mb-3">
                         <label for="CreateEvents_uploadImage" class="form-label">Upload Images</label>
                         <input type="file" class="form-control" id="CreateEvents_uploadImage" name="images" multiple onchange="previewImages()">
+                        <span class="error" id="CreateEvents_uploadImage_error"></span>
                         <div class="preview-container" id="image-preview"></div>
                     </div>
                     <button type="submit" class="btn btn-primary">Create Event</button>
@@ -173,7 +190,7 @@
                         <tbody>
                             @foreach (var list in Model.listOfEvents)
                             {
-                                <tr class="text-center" data-href="@Url.Action("Details", "Organization", new { id = list.Event_Id })" style="cursor: pointer;">
+                                <tr class="text-center" data-event-id="@list.Event_Id" style="cursor: pointer;">
                                     <td>@list.Event_Title</td>
                                     <td>@list.Event_Description</td>
                                     <td>@list.Maximum_Volunteer</td>
@@ -183,7 +200,9 @@
                                     <td>@list.Total_Image</td>
                                     <td>@list.Total_Skills</td>
                                     <td>
-                                        <a href="@Url.Action("Delete", "Event", new { id = list.Event_Id })" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this event?');">Delete</a>
+                                        <form class="delete-form" data-event-id="@list.Event_Id">
+                                            <button type="button" class="btn btn-sm btn-danger delete-button">Delete</button>
+                                        </form>
                                     </td>
                                 </tr>
                             }
@@ -192,23 +211,6 @@
                 </div>
             </div>
         </div>
-
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                var rows = document.querySelectorAll('tr[data-href]');
-                rows.forEach(row => {
-                    row.addEventListener('click', function () {
-                        window.location.href = this.getAttribute('data-href');
-                    });
-                });
-            });
-        </script>
-
-
-
-
-
-
 
         <!-- Scheduling and Calendar -->
         <div id="scheduling-calendar" class="mb-4 content-section">
@@ -220,70 +222,231 @@
     </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-    function showSection(sectionId) {
-        // Hide all sections
-        document.querySelectorAll('.content-section').forEach(section => {
-            section.classList.remove('active');
+    document.addEventListener('DOMContentLoaded', function () {
+    var deleteUrl = '@Url.Action("Delete", "Organization")';
+
+    document.querySelectorAll('.delete-button').forEach(button => {
+        button.addEventListener('click', function (event) {
+            event.stopPropagation();  // Stop the click event from propagating to the row
+            var form = this.closest('.delete-form');
+            var eventId = form.getAttribute('data-event-id');
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!',
+                allowOutsideClick: false,
+                allowEscapeKey: false
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Submit the form to delete the event
+                    var xhr = new XMLHttpRequest();
+                    xhr.open("POST", deleteUrl, true);
+                    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                    xhr.onload = function() {
+                        if (xhr.status === 200) {
+                            Swal.fire({
+                                title: 'Deleted!',
+                                text: 'Your event has been deleted.',
+                                icon: 'success',
+                                allowOutsideClick: false,
+                                allowEscapeKey: false
+                            });
+
+                            // Remove the deleted event row from the table
+                            form.closest('tr').remove();
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Error!',
+                                text: 'There was an error deleting the event. Please try again.',
+                                allowOutsideClick: false,
+                                allowEscapeKey: false
+                            });
+                        }
+                    };
+                    xhr.send("eventId=" + eventId);
+                }
+            });
         });
+    });
 
-        // Show the selected section
-        document.getElementById(sectionId).classList.add('active');
+        document.getElementById('create-event-form').addEventListener('submit', function (event) {
+            event.preventDefault();
+            if (validateForm()) {
+                var form = event.target;
+                var formData = new FormData(form);
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", form.action, true);
+                xhr.onload = function () {
+                    if (xhr.status === 200) {
+                        Swal.fire({
+                            title: 'Successfully Created!',
+                            text: 'Your event has been successfully created.',
+                            icon: 'success'
+                        }).then(() => {
+                            window.location.reload();
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error!',
+                            text: 'There was an error creating the event. Please try again.'
+                        });
+                    }
+                };
+                xhr.send(formData);
+            }
+        });
+    });
+
+function showSection(sectionId) {
+    // Hide all sections
+    document.querySelectorAll('.content-section').forEach(section => {
+        section.classList.remove('active');
+    });
+
+    // Show the selected section
+    document.getElementById(sectionId).classList.add('active');
+}
+
+function validateForm() {
+    const allowedExtensions = ['jpg', 'jpeg', 'png', 'gif'];
+    const files = document.getElementById('CreateEvents_uploadImage').files;
+    const startDate = new Date(document.getElementById('CreateEvents_dateStart').value);
+    const endDate = new Date(document.getElementById('CreateEvents_dateEnd').value);
+    const now = new Date();
+
+    let isValid = true;
+
+    const title = document.getElementById('CreateEvents_eventTitle');
+    const description = document.getElementById('CreateEvents_eventDescription');
+    const maxVolunteers = document.getElementById('CreateEvents_maxVolunteer');
+    const location = document.getElementById('CreateEvents_location');
+    const skills = document.getElementById('added-skills').children;
+    const startDateError = document.getElementById('CreateEvents_dateStart_error');
+    const endDateError = document.getElementById('CreateEvents_dateEnd_error');
+
+    // Clear previous errors
+    document.querySelectorAll('.error').forEach(error => error.textContent = '');
+    document.querySelectorAll('.input-error').forEach(input => input.classList.remove('input-error'));
+
+    if (title.value.trim() === '') {
+        document.getElementById('CreateEvents_eventTitle_error').textContent = 'Event Title is required.';
+        title.classList.add('input-error');
+        isValid = false;
     }
-
-    function addSkill(skill) {
-        const addedSkillsContainer = document.getElementById('added-skills');
-
-        // Check if the skill is already added
-        if (Array.from(addedSkillsContainer.children).some(child => child.textContent.includes(skill))) {
-            return;
+    if (description.value.trim() === '') {
+        document.getElementById('CreateEvents_eventDescription_error').textContent = 'Event Description is required.';
+        description.classList.add('input-error');
+        isValid = false;
+    }
+    if (maxVolunteers.value <= 0) {
+        document.getElementById('CreateEvents_maxVolunteer_error').textContent = 'Maximum Volunteers must be greater than 0.';
+        maxVolunteers.classList.add('input-error');
+        isValid = false;
+    }
+    if (location.value.trim() === '') {
+        document.getElementById('CreateEvents_location_error').textContent = 'Location is required.';
+        location.classList.add('input-error');
+        isValid = false;
+    }
+    if (startDate < now) {
+        startDateError.textContent = 'Start date and time cannot be before the current date and time.';
+        document.getElementById('CreateEvents_dateStart').classList.add('input-error');
+        isValid = false;
+    }
+    if (endDate < startDate) {
+        endDateError.textContent = 'End date and time cannot be before the start date and time.';
+        document.getElementById('CreateEvents_dateEnd').classList.add('input-error');
+        isValid = false;
+    }
+    if (skills.length === 0) {
+        document.getElementById('CreateEvents_skills_error').textContent = 'You must add at least one skill requirement.';
+        document.getElementById('added-skills').classList.add('input-error');
+        isValid = false;
+    }
+    if (files.length === 0) {
+        document.getElementById('CreateEvents_uploadImage_error').textContent = 'You must upload at least one image.';
+        document.getElementById('CreateEvents_uploadImage').classList.add('input-error');
+        isValid = false;
+    } else {
+        for (let i = 0; i < files.length; i++) {
+            const fileExtension = files[i].name.split('.').pop().toLowerCase();
+            if (!allowedExtensions.includes(fileExtension)) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Invalid File Type',
+                    text: 'Invalid file type. Only JPG, JPEG, PNG, and GIF files are allowed.',
+                    allowOutsideClick: false,
+                    allowEscapeKey: false
+                });
+                isValid = false;
+            }
         }
+    }
+    return isValid;
+}
 
-        // Create skill tag
-        const skillTag = document.createElement('span');
-        skillTag.className = 'skill-tag btn btn-outline-secondary';
-        skillTag.textContent = skill;
+function addSkill(skill) {
+    const addedSkillsContainer = document.getElementById('added-skills');
 
-        // Create hidden input for the skill
-        const skillInput = document.createElement('input');
-        skillInput.type = 'hidden';
-        skillInput.name = 'Skills';
-        skillInput.value = skill;
+    // Check if the skill is already added
+    if (Array.from(addedSkillsContainer.children).some(child => child.textContent.includes(skill))) {
+        return;
+    }
 
-        // Append the hidden input and skill tag
-        skillTag.appendChild(skillInput);
+    // Create skill tag
+    const skillTag = document.createElement('span');
+    skillTag.className = 'skill-tag btn btn-outline-secondary';
+    skillTag.textContent = skill;
 
-        // Create remove button
-        const removeButton = document.createElement('span');
-        removeButton.className = 'remove-skill';
-        removeButton.textContent = ' x';
-        removeButton.onclick = function () {
-            removeSkill(skillTag);
+    // Create hidden input for the skill
+    const skillInput = document.createElement('input');
+    skillInput.type = 'hidden';
+    skillInput.name = 'Skills';
+    skillInput.value = skill;
+
+    // Append the hidden input and skill tag
+    skillTag.appendChild(skillInput);
+
+    // Create remove button
+    const removeButton = document.createElement('span');
+    removeButton.className = 'remove-skill';
+    removeButton.textContent = ' x';
+    removeButton.onclick = function () {
+        removeSkill(skillTag);
+    };
+
+    skillTag.appendChild(removeButton);
+    addedSkillsContainer.appendChild(skillTag);
+}
+
+function removeSkill(skillTag) {
+    const addedSkillsContainer = document.getElementById('added-skills');
+    addedSkillsContainer.removeChild(skillTag);
+}
+
+function previewImages() {
+    const previewContainer = document.getElementById('image-preview');
+    previewContainer.innerHTML = ''; // Clear previous previews
+    const files = document.getElementById('CreateEvents_uploadImage').files;
+
+    Array.from(files).forEach(file => {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            const img = document.createElement('img');
+            img.src = e.target.result;
+            img.className = 'preview-image';
+            previewContainer.appendChild(img);
         };
-
-        skillTag.appendChild(removeButton);
-        addedSkillsContainer.appendChild(skillTag);
-    }
-
-    function removeSkill(skillTag) {
-        const addedSkillsContainer = document.getElementById('added-skills');
-        addedSkillsContainer.removeChild(skillTag);
-    }
-
-    function previewImages() {
-        const previewContainer = document.getElementById('image-preview');
-        previewContainer.innerHTML = ''; // Clear previous previews
-        const files = document.getElementById('CreateEvents_uploadImage').files;
-
-        Array.from(files).forEach(file => {
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                const img = document.createElement('img');
-                img.src = e.target.result;
-                img.className = 'preview-image';
-                previewContainer.appendChild(img);
-            };
-            reader.readAsDataURL(file);
-        });
-    }
+        reader.readAsDataURL(file);
+    });
+}
 </script>
