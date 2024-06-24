@@ -55,7 +55,7 @@ namespace Tabang_Hub.Controllers
                 ModelState.AddModelError(string.Empty, errMsg);
                 return View("OrgProfile", orgProfile); // Returning the view with the model to display validation errors
             }         
-
+            
             return RedirectToAction("OrgProfile");
         }
 

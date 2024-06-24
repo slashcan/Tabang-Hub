@@ -244,7 +244,9 @@ namespace Tabang_Hub.Controllers
                 var apply = new Volunteers()
                 {
                     userId = UserId,
-                    eventId = eventId
+                    eventId = eventId,
+                    Status = 0,
+                    appliedAt = DateTime.Now
                 };
 
                 //var updateVolunteerNeeded = db.OrgEvents.Where(m => m.eventId == eventId).FirstOrDefault();
