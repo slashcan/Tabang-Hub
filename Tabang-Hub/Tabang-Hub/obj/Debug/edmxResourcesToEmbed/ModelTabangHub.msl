@@ -146,6 +146,7 @@
     <EntitySetMapping Name="Volunteers">
       <EntityTypeMapping TypeName="TabangHubModel.Volunteers">
         <MappingFragment StoreEntitySet="Volunteers">
+          <ScalarProperty Name="Status" ColumnName="Status" />
           <ScalarProperty Name="applyVolunteerId" ColumnName="applyVolunteerId" />
           <ScalarProperty Name="userId" ColumnName="userId" />
           <ScalarProperty Name="eventId" ColumnName="eventId" />
