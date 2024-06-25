@@ -222,6 +222,18 @@ namespace Tabang_Hub.Controllers
             TempData["SuccessMessage"] = "Event deleted successfully.";
             return RedirectToAction("EventsManagement");
         }
+        [HttpPost]
+        public ActionResult ConfirmApplicants(int id)
+        {
+            string errMsg = string.Empty;
+
+            if (_organizationManager.ConfirmApplicants(id, ref errMsg) != ErrorCode.Success)
+            {
+                ModelState.AddModelError(String.Empty, errMsg);
+                return RedirectToAction("EventsManagement");
+            }
+            return RedirectToAction("EventsManagement");
+        }
         #endregion
 
         #region Organization Management

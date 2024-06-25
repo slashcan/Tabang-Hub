@@ -165,6 +165,7 @@
     <Property Name="appliedAt" Type="DateTime" Precision="0" />
     <NavigationProperty Name="OrgEvents" Relationship="Self.FK_Volunteers_OrgEvents" FromRole="Volunteers" ToRole="OrgEvents" />
     <NavigationProperty Name="UserAccount" Relationship="Self.FK_Volunteers_UserAccount" FromRole="Volunteers" ToRole="UserAccount" />
+    <Property Name="Status" Type="Int32" />
   </EntityType>
   <EntityType Name="VolunteerSkill">
     <Key>

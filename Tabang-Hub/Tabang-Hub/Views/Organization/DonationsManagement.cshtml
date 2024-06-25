@@ -47,6 +47,10 @@
     .input-error {
         border-color: red;
     }
+    .truncate {
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 </style>
 
 <div class="container mt-5">
@@ -149,7 +153,7 @@
                             {
                                 <tr class="text-center" data-event-id="@list.Event_Id" style="cursor: pointer;">
                                     <td>@list.Event_Title</td>
-                                    <td>@list.Event_Description</td>
+                                    <td class="truncate">@list.Event_Description</td>
                                     <td>@list.Target_Amount</td>
                                     <td>@list.Date_Started</td>
                                     <td>@list.Date_Ended</td>
@@ -360,4 +364,10 @@
             reader.readAsDataURL(file);
         });
     }
+    document.querySelectorAll('.truncate').forEach(element => {
+        if (element.textContent.length > 100) { // Adjust length as per your requirement
+            element.setAttribute('title', element.textContent);
+            element.textContent = element.textContent.substring(0, 97) + '...';
+        }
+    });
 </script>
