@@ -78,6 +78,10 @@
     .input-error {
         border-color: red;
     }
+    .truncate {
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 </style>
 
 <div class="container">
@@ -192,7 +196,7 @@
                             {
                                 <tr class="text-center" data-event-id="@list.Event_Id" style="cursor: pointer;">
                                     <td>@list.Event_Title</td>
-                                    <td>@list.Event_Description</td>
+                                    <td class="truncate">@list.Event_Description</td>
                                     <td>@list.Maximum_Volunteer</td>
                                     <td>@list.Date_Started</td>
                                     <td>@list.Date_Ended</td>
@@ -227,6 +231,15 @@
     document.addEventListener('DOMContentLoaded', function () {
     var deleteUrl = '@Url.Action("Delete", "Organization")';
 
+    // Event listener for row click
+    document.querySelectorAll('tr[data-event-id]').forEach(row => {
+        row.addEventListener('click', function () {
+            var eventId = this.getAttribute('data-event-id');
+            window.location.href = '/Organization/Details/' + eventId;
+        });
+    });
+
+    // Event listener for delete button click
     document.querySelectorAll('.delete-button').forEach(button => {
         button.addEventListener('click', function (event) {
             event.stopPropagation();  // Stop the click event from propagating to the row
@@ -448,5 +461,11 @@ function previewImages() {
         };
         reader.readAsDataURL(file);
     });
-}
+    }
+    document.querySelectorAll('.truncate').forEach(element => {
+        if (element.textContent.length > 100) { // Adjust length as per your requirement
+            element.setAttribute('title', element.textContent);
+            element.textContent = element.textContent.substring(0, 97) + '...';
+        }
+    });
 </script>

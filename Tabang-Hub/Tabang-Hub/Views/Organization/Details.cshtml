@@ -99,6 +99,7 @@
                 <ul class="navbar-nav">
                     <li class="nav-item"><a class="nav-link" href="#details" onclick="showSection('details', event)">Details</a></li>
                     <li class="nav-item"><a class="nav-link" href="#volunteer-list" onclick="showSection('volunteer-list', event)">Volunteer List</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#volunteer-list" onclick="showSection('applied-volunteer-list', event)">Applied Volunteer List</a></li>
                 </ul>
             </div>
         </div>
@@ -192,6 +193,8 @@
                         <div class="list-group">
                             @foreach (var volunteer in Model.listOfEventVolunteers)
                             {
+                                if(volunteer.Status == 1)
+                                { 
                                 <div class="list-group-item list-group-item-action d-flex align-items-center">
                                     <img src="@Url.Content("~/Content/images/organization.png")" class="profile-img me-3" alt="Volunteer Image">
                                     <div class="flex-grow-1">
@@ -211,6 +214,54 @@
                                         <a href="@Url.Action("Details", "Volunteer", new { id = volunteer.userId })" class="btn btn-outline-primary btn-sm">View</a>
                                     </div>
                                 </div>
+                                }                                
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Applied Volunteer List Section -->
+    <div id="applied-volunteer-list" class="content-section">
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">Applied Volunteer List</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="list-group">
+                            @foreach (var volunteer in Model.listOfEventVolunteers)
+                            {
+                                if (volunteer.Status == 0)
+                                {
+                                    <div class="list-group-item list-group-item-action d-flex align-items-center">
+                                        <img src="@Url.Content("~/Content/images/organization.png")" class="profile-img me-3" alt="Volunteer Image">
+                                        <div class="flex-grow-1">
+                                            <p class="mb-0"><strong>Email:</strong> @volunteer.UserAccount.email</p>
+                                            <p class="mb-0">
+                                                <strong>Skills:</strong>
+                                                @foreach (var skill in Model.volunteersSkills)
+                                                {
+                                                    if (skill.userId == volunteer.userId)
+                                                    {
+                                                        <span class="badge bg-secondary me-1">@skill.skillName</span>
+                                                    }
+                                                }
+                                            </p>
+                                        </div>
+                                        <div class="ms-auto">
+                                            <a href="@Url.Action("Details", "Volunteer", new { id = volunteer.userId })" class="btn btn-outline-primary btn-sm">View</a>
+                                            <form action="@Url.Action("ConfirmApplicants", "Organization")" method="post" style="display: inline;">
+                                                <input type="hidden" name="id" value="@volunteer.userId" />
+                                                <button type="submit" class="btn btn-outline-success btn-sm">Confirm</button>
+                                            </form>
+                                            <a href="@Url.Action("ConfirmApplicants", "Organization", new { id = volunteer.userId })" class="btn btn-outline-danger btn-sm">Decline</a>
+                                        </div>
+                                    </div>
+                                }
                             }
                         </div>
                     </div>
