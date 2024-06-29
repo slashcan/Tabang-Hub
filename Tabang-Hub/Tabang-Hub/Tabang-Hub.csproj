@@ -96,6 +96,7 @@
   <ItemGroup>
     <Content Include="Content\Css\generalskill.css" />
     <Content Include="Content\Css\generalStyle.css" />
+    <Content Include="Content\Css\message.css" />
     <Content Include="Content\Css\opportunityCarousel.css" />
     <Content Include="Content\Css\popup.css" />
     <Content Include="Content\Css\progress.css" />
@@ -138,6 +139,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Contracts\IBaseRepository.cs" />
     <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\MessageController.cs" />
     <Compile Include="Controllers\OrganizationController.cs" />
     <Compile Include="Controllers\PageController.cs" />
     <Compile Include="Controllers\VolunteerController.cs" />
@@ -246,6 +248,7 @@
     <Content Include="Views\Volunteer\EventDetails.cshtml" />
     <Content Include="Views\Volunteer\GeneralSkill.cshtml" />
     <Content Include="Views\Volunteer\DonationDetails.cshtml" />
+    <Content Include="Views\Message\Message.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
