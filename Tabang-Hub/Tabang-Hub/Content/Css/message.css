@@ -13,43 +13,44 @@
     overflow-y: auto;
 }
 
-    .chat-list .chat-item {
-        display: flex;
-        align-items: center;
-        padding: 10px 20px;
-        border-bottom: 1px solid #3a3d41;
-        cursor: pointer;
-    }
-
-        .chat-list .chat-item:hover {
-            background-color: #3a3d41;
-        }
-
-        .chat-list .chat-item img {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            margin-right: 10px;
-        }
-
-        .chat-list .chat-item span {
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
 .chat-item-head {
-    padding-left: 10px;
-    border-bottom: 1px solid;
+    padding: 10px;
+    border-bottom: 1px solid #3a3d41;
+    /*text-align: center;*/
 }
 
+.chat-item {
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+    border-bottom: 1px solid #3a3d41;
+    cursor: pointer;
+}
+
+    .chat-item:hover {
+        background-color: #3a3d41;
+    }
+
+    .chat-item img {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        margin-right: 10px;
+    }
+
+    .chat-item span {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
 .chat-area {
-    width: 100%;
-    background-color: #36393f;
-    color: #fff;
+    flex-grow: 1;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    background-color: #36393f;
+    color: #fff;
 }
 
 .messages {
@@ -108,30 +109,43 @@
     }
 
 /* Media Query for mobile responsiveness */
-@media (max-width: 900px) {
-    .chat-list {
-        width: 15%;
-    }
-
-        .chat-list .chat-item span {
-            display: none;
-        }
-}
-
 @media (max-width: 600px) {
-    body {
+    .message-body {
         flex-direction: column;
     }
 
     .chat-list {
         width: 100%;
+        height: auto;
         display: flex;
+        flex-direction: row;
         overflow-x: auto;
+        overflow-y: hidden;
         white-space: nowrap;
     }
 
     .chat-area {
         width: 100%;
-        height: calc(100vh - 80px); /* Adjust height to account for chat list height */
+        height: calc(100vh - 120px); /* Adjust height to account for chat list and header height */
+    }
+
+    .chat-item {
+        flex: none;
+        display: inline-block;
+        border-bottom: none; /* Remove bottom border for horizontal layout */
+    }
+
+    .chat-item-head {
+        width: 100%;
+        text-align: center;
+    }
+
+    .chat-header {
+        width: 100%;
+        background-color: #2c2f33;
+        color: #fff;
+        text-align: center;
+        padding: 10px;
+        border-bottom: 1px solid #3a3d41;
     }
 }
