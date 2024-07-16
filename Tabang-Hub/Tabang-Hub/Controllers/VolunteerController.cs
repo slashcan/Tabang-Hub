@@ -8,6 +8,7 @@ using System.Web.Mvc;
 using Tabang_Hub.Utils;
 using Tabang_Hub.Repository;
 using System.Web.Security;
+using System.Web.Management;
 
 namespace Tabang_Hub.Controllers
 {
@@ -241,6 +242,16 @@ namespace Tabang_Hub.Controllers
             {
                 var checkVolunteer = _volunteers.GetAll().Where(m => m.userId == UserId).FirstOrDefault();
 
+                var getEventRequiredSkills = _skillRequirement.GetAll().Where(m => m.eventId == eventId).Select(m => m.skillName).ToList();
+                var volSkill = _volunteerSkills.GetAll().Where(m => m.userId == UserId).Select(m => m.skillName).ToList();
+
+                bool skillMatch = getEventRequiredSkills.Any(skll => volSkill.Contains(skll));
+
+                if (!skillMatch)
+                {
+                    return Json(new { success = false, message = "No match Skill." });
+                }
+
                 var apply = new Volunteers()
                 {
                     userId = UserId,
@@ -257,11 +268,11 @@ namespace Tabang_Hub.Controllers
                     //db.SaveChanges();
                     _volunteers.Create(apply);
 
-                    return Json(new { success = true, message = "Success !" });
+                    return Json(new { success = true, message = "Application sent." });
                 }
                 else
                 {
-                    return Json(new { success = false, message = "Already apply !" });
+                    return Json(new { success = false, message = "Already apply." });
                 }
             }
             catch (Exception)
