@@ -89,7 +89,7 @@ namespace Tabang_Hub.Controllers
                     if (skills.Count < getVolSkillCount)
                     {
                         //Ang user ganahan tang tangon ang skill sa database
-                        var skillToRemove = db.VolunteerSkill.Where(m => !skills.Contains(m.skillId)).ToList();
+                        var skillToRemove = db.VolunteerSkill.Where(m => !skills.Contains(m.skillId) && m.userId == UserId).ToList();
 
                         foreach (var removeSkill in skillToRemove)
                         {
@@ -318,6 +318,67 @@ namespace Tabang_Hub.Controllers
             }
             return Json(new { success = true });
         }
+        public ActionResult Participate()
+        {
+            try
+            {
+                // Fetching all accepted and pending events for the volunteer
+                var acceptedEvents = _volunteers.GetAll().Where(m => m.userId == UserId && m.Status == 1).ToList();
+                var pendingEvents = _volunteers.GetAll().Where(m => m.userId == UserId && m.Status == 0).ToList();
 
+                var userProfile = db.ProfilePicture.Where(m => m.userId == UserId).ToList();
+
+                var indexModel = new Lists()
+                {
+                    picture = userProfile,
+                    volunteers = acceptedEvents,
+                    orgEvents = acceptedEvents.Select(e => _orgEvents.GetAll().FirstOrDefault(o => o.eventId == e.eventId)).ToList(),
+                    pendingOrgDetails = pendingEvents.Select(e => _pendingOrgDetails.GetAll().FirstOrDefault(p => p.eventId == e.eventId)).ToList()
+                };
+
+                return View(indexModel);
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("GeneralSkill");
+            }
+        }
+
+        [HttpPost]
+        public ActionResult LeaveEvent(int eventId)
+        {
+            try
+            {
+                var updateVol = _volunteers.GetAll().Where(m => m.userId == UserId && m.eventId == eventId).FirstOrDefault();
+
+                if (updateVol != null)
+                {
+                    db.sp_UpdateVolunteerStatus(updateVol.eventId, updateVol.userId);
+
+                    return Json(new { success = true, message = "Leave successfully." });
+                }
+                else
+                {
+                    return Json(new { success = false, message = "Error" });
+                }
+            }
+            catch (Exception)
+            {
+                return Json(new { success = false, message = "error message" });
+            }
+        }
+        [HttpPost]
+        public ActionResult CancelRequest(int eventId)
+        {
+            try
+            {
+                db.sp_CancelRequest(eventId, UserId);
+                return Json(new { success = true, message = "Cancel Request" });
+            }
+            catch (Exception)
+            {
+                return Json(new { success = false, message = "error message" });
+            }
+        }
     }
 }

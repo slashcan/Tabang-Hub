@@ -98,6 +98,7 @@
     <Content Include="Content\Css\generalStyle.css" />
     <Content Include="Content\Css\message.css" />
     <Content Include="Content\Css\opportunityCarousel.css" />
+    <Content Include="Content\Css\Participate.css" />
     <Content Include="Content\Css\popup.css" />
     <Content Include="Content\Css\progress.css" />
     <Content Include="Content\Css\Style.css" />
@@ -249,6 +250,7 @@
     <Content Include="Views\Volunteer\GeneralSkill.cshtml" />
     <Content Include="Views\Volunteer\DonationDetails.cshtml" />
     <Content Include="Views\Message\Message.cshtml" />
+    <Content Include="Views\Volunteer\Participate.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -24,6 +24,7 @@ namespace Tabang_Hub.Controllers
         public BaseRepository<ProfilePicture> _profilePic;
         public BaseRepository<UserRoles> _userRoles;
         public BaseRepository<OrgEvents> _orgEvents;
+        public BaseRepository<OrgEvents> _pendingOrgDetails;
         public BaseRepository<OrgEventImage> _eventImages;
         public BaseRepository<Volunteers> _volunteers;
         public BaseRepository<OrgSkillRequirement> _skillRequirement;
@@ -54,6 +55,7 @@ namespace Tabang_Hub.Controllers
             _profilePic = new BaseRepository<ProfilePicture>();
             _userRoles = new BaseRepository<UserRoles>();
             _orgEvents = new BaseRepository<OrgEvents>();
+            _pendingOrgDetails = new BaseRepository<OrgEvents>();
             _eventImages = new BaseRepository<OrgEventImage>();
             _volunteers = new BaseRepository<Volunteers>();
             _skillRequirement = new BaseRepository<OrgSkillRequirement>();
