@@ -26,6 +26,13 @@
             font-size: 0.9em;
             margin-top: 5px;
         }
+        .card{
+            width: 520px;
+        }
+        .main.active {
+            width: 520px; /* Adjust the width as needed */
+            margin: 0 auto; /* Center the element */
+        }
     </style>
 </head>
 <body>
@@ -40,7 +47,7 @@
                     <li>Done</li>
                 </ul>
                 <div class="container">
-                    <div class="card">
+                    @*<div class="card">*@
                         <!-- User information -->
                         <div class="main active">
                             <div class="scrollable-container">
@@ -48,15 +55,13 @@
                                     <img src="https://imgur.com/H8Yg6Sk.png">
                                     <p>Registration Process</p>
                                     <h3>Personal Information</h3>
-                                    @*<span><img src="../duck1.png" alt=""></span>*@
-                                    @*<h4>User details</h4>*@
                                 </div>
                                 <div class="input_text">
-                                    <input id="fname" type="text" placeholder="Firstname" required>
+                                    <input id="fname" type="text" placeholder="Firstname" required oninput="validateTextOnly(this)">
                                     <span class="error-message"></span>
                                 </div>
                                 <div class="input_text">
-                                    <input id="lname" type="text" placeholder="Lastname" required>
+                                    <input id="lname" type="text" placeholder="Lastname" required oninput="validateTextOnly(this)">
                                     <span class="error-message"></span>
                                 </div>
                                 <div class="input_text">
@@ -65,7 +70,7 @@
                                     <span class="error-message"></span>
                                 </div>
                                 <div class="input_text">
-                                    <input id="phoneNumber" type="text" placeholder="Phone number" pattern="09[0-9]{9}" title="Phone number should start with 09 and contain 11 digits" required>
+                                    <input id="phoneNumber" type="text" placeholder="Phone number" maxlength="11" pattern="09[0-9]{9}" title="Phone number should start with 09 and contain 11 digits" required oninput="validateNumberOnly(this)">
                                     <span class="error-message"></span>
                                 </div>
                                 <div class="input_text">
@@ -81,7 +86,7 @@
                                     <span class="error-message"></span>
                                 </div>
                                 <div class="input_text">
-                                    <input id="zipCode" type="text" placeholder="Zip Code" pattern="[0-9]{4}" title="Zip Code should contain 4 digits" required>
+                                    <input id="zipCode" type="text" placeholder="Zip Code" maxlength="4" pattern="[0-9]{4}" title="Zip Code should contain 4 digits" required oninput="validateNumberOnly(this)">
                                     <span class="error-message"></span>
                                 </div>
                                 <div class="input_text gender-inputs">
@@ -93,7 +98,6 @@
                                 </div>
                                 <div class="button">
                                     <button class="next" style="background-color: #fb4552; color: white;" onmouseover="this.style.backgroundColor='#fb4552'" onmouseout="this.style.backgroundColor='#fb4552'">Next</button>
-                                    @*<i class="fa fa-angle-right"></i>*@
                                 </div>
                             </div>
                         </div>
@@ -105,7 +109,6 @@
                                     <img src="https://imgur.com/H8Yg6Sk.png">
                                     <p>Registration Process</p>
                                     <h3>Select Your Skills</h3>
-                                    @*<span><img src="https://imgur.com/LcjrXas.jpg"></span>*@
                                     <h4>Choose at least 1 or more skills</h4>
                                 </div>
                                 <div class="skills-container">
@@ -139,7 +142,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    @*</div>*@
                 </div>
             </div>
         </div>
@@ -155,5 +158,30 @@
     <script src="~/Content/Js/selectImage.js"></script>
     <script src="~/Content/Js/popup.js"></script>
     <script src="~/Content/Js/SaveDataInfo.js"></script>
+    <script>
+        function validateTextOnly(input) {
+            const errorMessage = input.nextElementSibling;
+            if (/[^a-zA-Z\s-ñÑ]/.test(input.value)) {
+                input.value = input.value.replace(/[^a-zA-Z\s-ñÑ]/g, '');
+                errorMessage.textContent = 'Please use only letters, spaces, dashes, or ñ/Ñ characters.';
+                input.classList.add('error');
+            } else {
+                errorMessage.textContent = '';
+                input.classList.remove('error');
+            }
+        }
+
+        function validateNumberOnly(input) {
+            const errorMessage = input.nextElementSibling;
+            if (/[^0-9]/.test(input.value)) {
+                input.value = input.value.replace(/[^0-9]/g, '');
+                errorMessage.textContent = 'Please enter only numbers.';
+                input.classList.add('error');
+            } else {
+                errorMessage.textContent = '';
+                input.classList.remove('error');
+            }
+        }
+    </script>
 </body>
 </html>

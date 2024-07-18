@@ -27,7 +27,7 @@
 
     .skills-container img {
         flex: 1 1 calc(33.33% - 15px); /* Two images per row with 15px gap */
-        max-width: calc(45% - 15px); /* Adjust the width accordingly */
+        max-width: calc(85% - 116px); /* Adjust the width accordingly */
         border-radius: 5%;
         cursor: pointer;
     }
@@ -55,7 +55,50 @@
     }
 
     .skills-container img {
-        flex: 1 1 calc(100% - 15px); /* One image per row with 15px gap */
-        max-width: calc(100% - 15px); /* Adjust the width accordingly */
+        /*flex: 1 1 calc(100% - 15px);*/ /* One image per row with 15px gap */
+        flex: 1 1 calc(33.33% - 15px);
+        max-width: calc(85% - 116px); /* Adjust the width accordingly */
     }
+}
+
+
+/* Responsive Styles */
+@media (max-width: 600px) {
+    .main.active {
+        width: 100%; /* Full width on small screens */
+        padding: 0 10px;
+    }
+
+    .container {
+        padding: 10px;
+    }
+
+    .input_text input, .input_text label {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .button button {
+        width: 100%;
+    }
+
+    .progress_bar {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .skills-container img {
+        width: 100%;
+        margin: 5px 0;
+    }
+
+    .gender-inputs {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+        .gender-inputs label, .gender-inputs input {
+            width: auto;
+        }
 }
