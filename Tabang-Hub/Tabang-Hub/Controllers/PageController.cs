@@ -39,7 +39,7 @@ namespace Tabang_Hub.Controllers
                         };
                         return View(indexModel);
                     case 2:
-                        return RedirectToAction("Index", "Organization");
+                        return RedirectToAction("EventsManagement", "Organization");
                     case 3:
                         return RedirectToAction("Index", "Admin");
                 }
@@ -199,7 +199,7 @@ namespace Tabang_Hub.Controllers
                 }
                 else if (user.roleId == 2)
                 {
-                    return RedirectToAction("Index", "Organization");
+                    return RedirectToAction("EventsManagement", "Organization");
                 }
                 else if (user.roleId == 3)
                 {
