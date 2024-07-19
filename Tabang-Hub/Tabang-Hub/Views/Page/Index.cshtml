@@ -11,138 +11,98 @@
     <title>@ViewBag.Title</title>
 
     <!-- CSS Files -->
-    <link href="~/Content/Css/popup.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/air-datepicker/2.2.3/css/datepicker.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="~/Content/Css/generalStyle.css" rel="stylesheet" />
     <link href="~/Content/Css/progress.css" rel="stylesheet" />
-    <style>
-        .error {
-            border: 2px solid red !important;
-        }
 
-        .error-message {
-            color: red;
-            font-size: 0.9em;
-            margin-top: 5px;
-        }
-        .card{
-            width: 520px;
-        }
-        .main.active {
-            width: 520px; /* Adjust the width as needed */
-            margin: 0 auto; /* Center the element */
-        }
-    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="~/Content/Css/CustomeStyle.css" rel="stylesheet" />
 </head>
 <body>
-    <h2>Volunteer Page</h2>
+    <div class="content">
+        <!-- Your home page content goes here -->
+        <h2>Volunteer Page</h2>
+    </div>
     @if (Model.volunteersSkills.Count == 0)
     {
-        <div id="modal-overlay">
-            <div style="margin-top: 7%" id="modal-content">
-                <ul class="progress_bar">
-                    <li class="active">User details</li>
-                    <li>Skill(s)</li>
-                    <li>Done</li>
-                </ul>
-                <div class="container">
-                    @*<div class="card">*@
-                        <!-- User information -->
-                        <div class="main active">
-                            <div class="scrollable-container">
-                                <div class="logo">
-                                    <img src="https://imgur.com/H8Yg6Sk.png">
-                                    <p>Registration Process</p>
-                                    <h3>Personal Information</h3>
-                                </div>
-                                <div class="input_text">
-                                    <input id="fname" type="text" placeholder="Firstname" required oninput="validateTextOnly(this)">
-                                    <span class="error-message"></span>
-                                </div>
-                                <div class="input_text">
-                                    <input id="lname" type="text" placeholder="Lastname" required oninput="validateTextOnly(this)">
-                                    <span class="error-message"></span>
-                                </div>
-                                <div class="input_text">
-                                    <label>Birthday</label>
-                                    <input type="date" id="datepicker" placeholder="MM/DD/YYYY" required>
-                                    <span class="error-message"></span>
-                                </div>
-                                <div class="input_text">
-                                    <input id="phoneNumber" type="text" placeholder="Phone number" maxlength="11" pattern="09[0-9]{9}" title="Phone number should start with 09 and contain 11 digits" required oninput="validateNumberOnly(this)">
-                                    <span class="error-message"></span>
-                                </div>
-                                <div class="input_text">
-                                    <input id="street" type="text" placeholder="Street" required>
-                                    <span class="error-message"></span>
-                                </div>
-                                <div class="input_text">
-                                    <input id="city" type="text" placeholder="City" required>
-                                    <span class="error-message"></span>
-                                </div>
-                                <div class="input_text">
-                                    <input id="province" type="text" placeholder="Province" required>
-                                    <span class="error-message"></span>
-                                </div>
-                                <div class="input_text">
-                                    <input id="zipCode" type="text" placeholder="Zip Code" maxlength="4" pattern="[0-9]{4}" title="Zip Code should contain 4 digits" required oninput="validateNumberOnly(this)">
-                                    <span class="error-message"></span>
-                                </div>
-                                <div class="input_text gender-inputs">
-                                    <label for="gender">Gender: </label>
-                                    <input type="radio" id="male" name="gender" value="male" required>
-                                    <label for="male">Male</label>
-                                    <input type="radio" id="female" name="gender" value="female" required>
-                                    <label for="female">Female</label>
-                                </div>
-                                <div class="button">
-                                    <button class="next" style="background-color: #fb4552; color: white;" onmouseover="this.style.backgroundColor='#fb4552'" onmouseout="this.style.backgroundColor='#fb4552'">Next</button>
-                                </div>
-                            </div>
-                        </div>
+        <div class="popup-container" id="popup-container">
+            <!-- First Step: Personal Information -->
+            <div class="step-container" id="step1">
+                <div class="step-header">
+                    <div class="step-indicator">
+                        <span class="step-number">1</span> of 2
+                    </div>
+                    <h2>Personal Information</h2>
+                </div>
+                <p class="subtext">Please fill in your personal details</p>
+                <form id="personalInfoForm">
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="firstName" placeholder="Firstname" required oninput="validateTextOnly(this)" onblur="validateTextOnly(this)">
+                        <span class="error-message" id="firstNameError"></span>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="lastName" placeholder="Lastname" required oninput="validateTextOnly(this)" onblur="validateTextOnly(this)">
+                        <span class="error-message" id="lastNameError"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="birthday">Birthday</label>
+                        <input type="date" class="form-control" id="birthday" required oninput="validateBirthday(this)" onblur="validateBirthday(this)">
+                        <span class="error-message" id="birthdayError"></span>
+                    </div>
+                    <div class="form-group">
+                        <input type="tel" class="form-control" id="phoneNumber" placeholder="Phone Number" required oninput="validatePhoneNumber(this)" onblur="validatePhoneNumber(this)" maxlength="11">
+                        <span class="error-message" id="phoneNumberError"></span>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="street" placeholder="Street" required>
+                        <span class="error-message" id="streetError"></span>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="city" placeholder="City" required oninput="validateTextOnly(this)" onblur="validateTextOnly(this)">
+                        <span class="error-message" id="cityError"></span>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="province" placeholder="Province" required oninput="validateTextOnly(this)" onblur="validateTextOnly(this)">
+                        <span class="error-message" id="provinceError"></span>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="zipCode" placeholder="Zip code" required oninput="validateZipCode(this)" onblur="validateZipCode(this)" maxlength="4">
+                        <span class="error-message" id="zipCodeError"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="gender">Gender</label>
+                        <select class="form-control" id="gender" required oninput="validateForm()" onblur="validateForm()">
+                            <option value="">Select Gender</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                        </select>
+                    </div>
+                </form>
+                <div class="btn-container">
+                    <button type="button" class="btn btn-primary btn-lg btn-block btn-disabled" id="nextButton" onclick="nextStep()" disabled>Next</button>
+                </div>
+            </div>
 
-                        <!-- Skills -->
-                        <div class="main">
-                            <div class="scrollable-container">
-                                <div class="logo">
-                                    <img src="https://imgur.com/H8Yg6Sk.png">
-                                    <p>Registration Process</p>
-                                    <h3>Select Your Skills</h3>
-                                    <h4>Choose at least 1 or more skills</h4>
-                                </div>
-                                <div class="skills-container">
-                                    @foreach (var skillImage in Model.skills)
-                                    {
-                                        <img src="~/SkillsImages/@skillImage.skillImage" class="selectable" data-skill="@skillImage.skillName">
-                                    }
-                                </div>
+            <!-- Second Step: Skill Selection -->
+            <div class="step-container" id="step2" style="display: none;">
+                <div class="step-header">
+                    <i class="fas fa-arrow-left back-icon" onclick="prevStep()"></i>
+                    <h2>What skills do you have?</h2>
+                </div>
+                <p class="subtext">This will customize your new home feed</p>
+                <div class="step-content">
+                    <div class="grid-container">
+                        @foreach (var skillImage in Model.skills)
+                        {
+                            <div class="grid-item" onclick="toggleSkill(this)">
+                                <img src="~/SkillsImages/@skillImage.skillImage" class="selectable" data-skill="@skillImage.skillName">
+                                <span>@skillImage.skillName</span>
                             </div>
-                            <div class="button">
-                                <button class="submit" disabled>Next</button>
-                                <i class="fa fa-angle-right"></i>
-                            </div>
-                            <i class="fa fa-arrow-left back_page"></i>
-                        </div>
-
-                        <!-- Done -->
-                        <div class="main">
-                            <div class="logo">
-                                <img src="https://imgur.com/H8Yg6Sk.png">
-                            </div>
-                            <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
-                                <circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none" />
-                                <path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
-                            </svg>
-                            <div class="m_top">
-                                <h3>Thank you <span class="shown_name"></span></h3>
-                                <p>Thank you for filling up the needed information.</p>
-                                <div class="button">
-                                    <button onclick="SaveInformations()" class="next" style="background-color: #fb4552; color: white;" onmouseover="this.style.backgroundColor='#fb4552'" onmouseout="this.style.backgroundColor='#fb4552'">Submit</button>
-                                </div>
-                            </div>
-                        </div>
-                    @*</div>*@
+                        }
+                    </div>
+                </div>
+                <div class="step-footer">
+                    <button class="btn btn-disabled" id="completeButton" onclick="completeRegistration()" disabled>Submit</button>
                 </div>
             </div>
         </div>
@@ -154,34 +114,166 @@
 
     <!-- JavaScript Files -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="~/Content/Js/progress.js"></script>
-    <script src="~/Content/Js/selectImage.js"></script>
-    <script src="~/Content/Js/popup.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
     <script src="~/Content/Js/SaveDataInfo.js"></script>
-    <script>
+
+    @*<script>
+        function nextStep() {
+            document.getElementById('step1').style.display = 'none';
+            document.getElementById('step2').style.display = 'flex';
+            validateSkills(); // Initial validation check for the second step
+        }
+
+        function prevStep() {
+            document.getElementById('step2').style.display = 'none';
+            document.getElementById('step1').style.display = 'flex';
+        }
+
+        function completeRegistration() {
+            const formData = {
+                fname: document.getElementById('firstName').value,
+                lname: document.getElementById('lastName').value,
+                bday: document.getElementById('birthday').value,
+                phoneNum: document.getElementById('phoneNumber').value,
+                street: document.getElementById('street').value,
+                city: document.getElementById('city').value,
+                province: document.getElementById('province').value,
+                zipCode: document.getElementById('zipCode').value,
+                gender: document.getElementById('gender').value,
+            };
+
+            var storeSkill = Array.from(document.querySelectorAll('.grid-item.selected'))
+                .map(skill => skill.querySelector('span').textContent.trim());
+
+            console.log('Form Data:', formData);
+            console.log('Selected Skills:', storeSkill);
+
+            SaveDatas(formData, storeSkill);
+        }
+
+        function SaveDatas(formData, storeSkill) {
+            console.log("Save informations Function: ", formData);
+            console.log("Log Selected Skills: ", storeSkill);
+
+            $.ajax({
+                type: 'POST',
+                url: '/Volunteer/SaveInformation',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    model: formData,
+                    volunteerSkill: storeSkill
+                }),
+                success: function (response) {
+                    console.log("Response is: ", response);
+                    location.reload();
+                },
+                error: function (xhr, status, error) {
+                    console.log("Error response is: ", error);
+                }
+            });
+        }
+
+        function toggleSkill(element) {
+            element.classList.toggle('selected');
+            validateSkills();
+        }
+
         function validateTextOnly(input) {
-            const errorMessage = input.nextElementSibling;
-            if (/[^a-zA-Z\s-ñÑ]/.test(input.value)) {
-                input.value = input.value.replace(/[^a-zA-Z\s-ñÑ]/g, '');
-                errorMessage.textContent = 'Please use only letters, spaces, dashes, or ñ/Ñ characters.';
-                input.classList.add('error');
+            const errorMessage = document.getElementById(input.id + 'Error');
+            if (/[^a-zA-Z\s-ñÑ-]/.test(input.value)) {
+                input.value = input.value.replace(/[^a-zA-Z\s-ñÑ-]/g, '');
+                errorMessage.textContent = 'Invalid input. Only letters and dashes are allowed.';
+                errorMessage.style.color = 'red';
             } else {
                 errorMessage.textContent = '';
-                input.classList.remove('error');
+            }
+            validateForm();
+        }
+
+        function validateBirthday(input) {
+            const errorMessage = document.getElementById('birthdayError');
+            const birthdayDate = new Date(input.value);
+            const today = new Date();
+            let age = today.getFullYear() - birthdayDate.getFullYear();
+            const monthDifference = today.getMonth() - birthdayDate.getMonth();
+
+            if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthdayDate.getDate())) {
+                age--;
+            }
+
+            if (isNaN(age) || age < 18) {
+                errorMessage.textContent = 'You must be 18 years or older.';
+                errorMessage.style.color = 'red';
+            } else {
+                errorMessage.textContent = '';
+            }
+            validateForm();
+        }
+
+        function validatePhoneNumber(input) {
+            const errorMessage = document.getElementById('phoneNumberError');
+            input.value = input.value.replace(/[^0-9]/g, '');
+            if (!/^09\d{9}$/.test(input.value)) {
+                errorMessage.textContent = 'Phone number must be 11 digits and start with "09".';
+                errorMessage.style.color = 'red';
+            } else {
+                errorMessage.textContent = '';
+            }
+            validateForm();
+        }
+
+        function validateZipCode(input) {
+            const errorMessage = document.getElementById('zipCodeError');
+            input.value = input.value.replace(/[^0-9]/g, '');
+            if (!/^\d{4}$/.test(input.value)) {
+                errorMessage.textContent = 'Zip code must be exactly 4 digits.';
+                errorMessage.style.color = 'red';
+            } else {
+                errorMessage.textContent = '';
+            }
+            validateForm();
+        }
+
+        function validateForm() {
+            const firstName = document.getElementById('firstName').value;
+            const lastName = document.getElementById('lastName').value;
+            const birthday = document.getElementById('birthday').value;
+            const phoneNumber = document.getElementById('phoneNumber').value;
+            const street = document.getElementById('street').value;
+            const city = document.getElementById('city').value;
+            const province = document.getElementById('province').value;
+            const zipCode = document.getElementById('zipCode').value;
+            const gender = document.getElementById('gender').value;
+
+            const firstNameError = document.getElementById('firstNameError').textContent;
+            const lastNameError = document.getElementById('lastNameError').textContent;
+            const birthdayError = document.getElementById('birthdayError').textContent;
+            const phoneNumberError = document.getElementById('phoneNumberError').textContent;
+            const zipCodeError = document.getElementById('zipCodeError').textContent;
+
+            const isValid = firstName && lastName && birthday && phoneNumber && street && city && province && zipCode && gender &&
+                !firstNameError && !lastNameError && !birthdayError && !phoneNumberError && !zipCodeError;
+
+            const nextButton = document.getElementById('nextButton');
+            nextButton.disabled = !isValid;
+            if (isValid) {
+                nextButton.classList.remove('btn-disabled');
+            } else {
+                nextButton.classList.add('btn-disabled');
             }
         }
 
-        function validateNumberOnly(input) {
-            const errorMessage = input.nextElementSibling;
-            if (/[^0-9]/.test(input.value)) {
-                input.value = input.value.replace(/[^0-9]/g, '');
-                errorMessage.textContent = 'Please enter only numbers.';
-                input.classList.add('error');
+        function validateSkills() {
+            const selectedSkills = document.querySelectorAll('.grid-item.selected').length;
+            const completeButton = document.getElementById('completeButton');
+            completeButton.disabled = selectedSkills === 0;
+            if (selectedSkills > 0) {
+                completeButton.classList.remove('btn-disabled');
             } else {
-                errorMessage.textContent = '';
-                input.classList.remove('error');
+                completeButton.classList.add('btn-disabled');
             }
         }
-    </script>
+    </script>*@
 </body>
 </html>
