@@ -3,16 +3,16 @@
   "WorkspaceRootPath": "C:\\Users\\arvie\\OneDrive\\Desktop\\TabHub\\Tabang-Hub\\Tabang-Hub\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|c:\\users\\arvie\\onedrive\\desktop\\tabhub\\tabang-hub\\tabang-hub\\tabang-hub\\views\\page\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|solutionrelative:tabang-hub\\views\\page\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|c:\\users\\arvie\\onedrive\\desktop\\tabhub\\tabang-hub\\tabang-hub\\tabang-hub\\views\\volunteer\\eventdetails.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|solutionrelative:tabang-hub\\views\\volunteer\\eventdetails.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|C:\\Users\\arvie\\OneDrive\\Desktop\\TabHub\\Tabang-Hub\\Tabang-Hub\\tabang-hub\\controllers\\volunteercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|solutionrelative:tabang-hub\\controllers\\volunteercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|C:\\Users\\arvie\\OneDrive\\Desktop\\TabHub\\Tabang-Hub\\Tabang-Hub\\tabang-hub\\controllers\\pagecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|solutionrelative:tabang-hub\\controllers\\pagecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|c:\\users\\arvie\\onedrive\\desktop\\tabhub\\tabang-hub\\tabang-hub\\tabang-hub\\views\\page\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|solutionrelative:tabang-hub\\views\\page\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     }
   ],
   "DocumentGroupContainers": [
@@ -22,21 +22,8 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 1,
           "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "Index.cshtml",
-              "DocumentMoniker": "C:\\Users\\arvie\\OneDrive\\Desktop\\TabHub\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Views\\Page\\Index.cshtml",
-              "RelativeDocumentMoniker": "Tabang-Hub\\Views\\Page\\Index.cshtml",
-              "ToolTip": "C:\\Users\\arvie\\OneDrive\\Desktop\\TabHub\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Views\\Page\\Index.cshtml",
-              "RelativeToolTip": "Tabang-Hub\\Views\\Page\\Index.cshtml",
-              "ViewState": "AQIAABsAAAAAAAAAAAAAAA4AAAA/AAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-07-18T07:11:14.315Z",
-              "EditorCaption": ""
-            },
             {
               "$type": "Document",
               "DocumentIndex": 1,
@@ -45,21 +32,36 @@
               "RelativeDocumentMoniker": "Tabang-Hub\\Controllers\\VolunteerController.cs",
               "ToolTip": "C:\\Users\\arvie\\OneDrive\\Desktop\\TabHub\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Controllers\\VolunteerController.cs",
               "RelativeToolTip": "Tabang-Hub\\Controllers\\VolunteerController.cs",
-              "ViewState": "AQIAAH0AAAAAAAAAAAAAAIsAAAAPAAAA",
+              "ViewState": "AQIAAFcBAAAAAAAAAAAAwGMBAABKAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-19T12:59:49.88Z"
+              "WhenOpened": "2024-07-19T12:59:49.88Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "EventDetails.cshtml",
+              "DocumentMoniker": "C:\\Users\\arvie\\OneDrive\\Desktop\\TabHub\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Views\\Volunteer\\EventDetails.cshtml",
+              "RelativeDocumentMoniker": "Tabang-Hub\\Views\\Volunteer\\EventDetails.cshtml",
+              "ToolTip": "C:\\Users\\arvie\\OneDrive\\Desktop\\TabHub\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Views\\Volunteer\\EventDetails.cshtml",
+              "RelativeToolTip": "Tabang-Hub\\Views\\Volunteer\\EventDetails.cshtml",
+              "ViewState": "AQIAAHEBAAAAAAAAAAAAAL0AAABdAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-07-20T07:32:55.961Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "PageController.cs",
-              "DocumentMoniker": "C:\\Users\\arvie\\OneDrive\\Desktop\\TabHub\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Controllers\\PageController.cs",
-              "RelativeDocumentMoniker": "Tabang-Hub\\Controllers\\PageController.cs",
-              "ToolTip": "C:\\Users\\arvie\\OneDrive\\Desktop\\TabHub\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Controllers\\PageController.cs",
-              "RelativeToolTip": "Tabang-Hub\\Controllers\\PageController.cs",
-              "ViewState": "AQIAAAwAAAAAAAAAAAAkwPYAAAAcAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-18T07:11:11.282Z"
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\Users\\arvie\\OneDrive\\Desktop\\TabHub\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Views\\Page\\Index.cshtml",
+              "RelativeDocumentMoniker": "Tabang-Hub\\Views\\Page\\Index.cshtml",
+              "ToolTip": "C:\\Users\\arvie\\OneDrive\\Desktop\\TabHub\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Views\\Page\\Index.cshtml",
+              "RelativeToolTip": "Tabang-Hub\\Views\\Page\\Index.cshtml",
+              "ViewState": "AQIAAFoAAAAAAAAAAAAAAHIAAAAvAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-07-18T07:11:14.315Z",
+              "EditorCaption": ""
             }
           ]
         }

@@ -358,11 +358,11 @@ warning 6002: The table/view 'TabangHub.dbo.vw_UserRoles' does not have a primar
   <Function Name="sp_GetSkills" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="userId" Type="int" Mode="In" />
   </Function>
-  <Function Name="sp_OtherEvent" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+  <Function Name="sp_LeaveEvent" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="eventId" Type="int" Mode="In" />
     <Parameter Name="userId" Type="int" Mode="In" />
   </Function>
-  <Function Name="sp_UpdateVolunteerStatus" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-    <Parameter Name="eventId" Type="int" Mode="In" />
+  <Function Name="sp_OtherEvent" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="userId" Type="int" Mode="In" />
   </Function>
   <EntityContainer Name="TabangHubModelStoreContainer">

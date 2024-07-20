@@ -63,19 +63,6 @@ namespace Tabang_Hub
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_OtherEvent_Result>("sp_OtherEvent", userIdParameter);
         }
     
-        public virtual int sp_UpdateVolunteerStatus(Nullable<int> eventId, Nullable<int> userId)
-        {
-            var eventIdParameter = eventId.HasValue ?
-                new ObjectParameter("eventId", eventId) :
-                new ObjectParameter("eventId", typeof(int));
-    
-            var userIdParameter = userId.HasValue ?
-                new ObjectParameter("userId", userId) :
-                new ObjectParameter("userId", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_UpdateVolunteerStatus", eventIdParameter, userIdParameter);
-        }
-    
         public virtual int sp_CancelRequest(Nullable<int> eventId, Nullable<int> userId)
         {
             var eventIdParameter = eventId.HasValue ?
@@ -87,6 +74,19 @@ namespace Tabang_Hub
                 new ObjectParameter("userId", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_CancelRequest", eventIdParameter, userIdParameter);
+        }
+    
+        public virtual int sp_LeaveEvent(Nullable<int> eventId, Nullable<int> userId)
+        {
+            var eventIdParameter = eventId.HasValue ?
+                new ObjectParameter("eventId", eventId) :
+                new ObjectParameter("eventId", typeof(int));
+    
+            var userIdParameter = userId.HasValue ?
+                new ObjectParameter("userId", userId) :
+                new ObjectParameter("userId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_LeaveEvent", eventIdParameter, userIdParameter);
         }
     }
 }

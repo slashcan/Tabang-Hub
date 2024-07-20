@@ -240,7 +240,7 @@ namespace Tabang_Hub.Controllers
         {
             try
             {
-                var checkVolunteer = _volunteers.GetAll().Where(m => m.userId == UserId).FirstOrDefault();
+                var checkVolunteer = _volunteers.GetAll().Where(m => m.userId == UserId && m.eventId == eventId).FirstOrDefault();
 
                 var getEventRequiredSkills = _skillRequirement.GetAll().Where(m => m.eventId == eventId).Select(m => m.skillName).ToList();
                 var volSkill = _volunteerSkills.GetAll().Where(m => m.userId == UserId).Select(m => m.skillName).ToList();
@@ -353,7 +353,7 @@ namespace Tabang_Hub.Controllers
 
                 if (updateVol != null)
                 {
-                    db.sp_UpdateVolunteerStatus(updateVol.eventId, updateVol.userId);
+                    db.sp_LeaveEvent(updateVol.eventId, updateVol.userId);
 
                     return Json(new { success = true, message = "Leave successfully." });
                 }

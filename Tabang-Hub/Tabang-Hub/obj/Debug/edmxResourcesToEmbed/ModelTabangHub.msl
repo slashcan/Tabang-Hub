@@ -219,7 +219,7 @@
         </ComplexTypeMapping>
       </ResultMapping>
     </FunctionImportMapping>
-    <FunctionImportMapping FunctionImportName="sp_UpdateVolunteerStatus" FunctionName="TabangHubModel.Store.sp_UpdateVolunteerStatus" />
     <FunctionImportMapping FunctionImportName="sp_CancelRequest" FunctionName="TabangHubModel.Store.sp_CancelRequest" />
+    <FunctionImportMapping FunctionImportName="sp_LeaveEvent" FunctionName="TabangHubModel.Store.sp_LeaveEvent" />
   </EntityContainerMapping>
 </Mapping>

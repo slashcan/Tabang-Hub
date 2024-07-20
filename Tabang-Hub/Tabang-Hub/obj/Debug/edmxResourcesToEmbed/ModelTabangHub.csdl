@@ -454,11 +454,11 @@
     <FunctionImport Name="sp_OtherEvent" ReturnType="Collection(TabangHubModel.sp_OtherEvent_Result)">
       <Parameter Name="userId" Mode="In" Type="Int32" />
     </FunctionImport>
-    <FunctionImport Name="sp_UpdateVolunteerStatus">
+    <FunctionImport Name="sp_CancelRequest">
       <Parameter Name="eventId" Mode="In" Type="Int32" />
       <Parameter Name="userId" Mode="In" Type="Int32" />
     </FunctionImport>
-    <FunctionImport Name="sp_CancelRequest">
+    <FunctionImport Name="sp_LeaveEvent">
       <Parameter Name="eventId" Mode="In" Type="Int32" />
       <Parameter Name="userId" Mode="In" Type="Int32" />
     </FunctionImport>
