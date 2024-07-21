@@ -173,6 +173,32 @@ warning 6002: The table/view 'TabangHub.dbo.vw_ListOfEvent' does not have a prim
           <Property Name="Location" Type="nvarchar" MaxLength="255" />
         </EntityType>
         <!--Errors Found During Generation:
+warning 6002: The table/view 'TabangHub.dbo.vw_OrganizationAccounts' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="vw_OrganizationAccounts">
+          <Key>
+            <PropertyRef Name="User_Id" />
+            <PropertyRef Name="Email" />
+            <PropertyRef Name="Password" />
+            <PropertyRef Name="Status" />
+            <PropertyRef Name="Role_Id" />
+          </Key>
+          <Property Name="User_Id" Type="int" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="Password" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="User_Info" Type="int" />
+          <Property Name="Status" Type="smallint" Nullable="false" />
+          <Property Name="Role_Id" Type="int" Nullable="false" />
+          <Property Name="Org_Name" Type="nvarchar" MaxLength="255" />
+          <Property Name="Org_Type" Type="nvarchar" MaxLength="255" />
+          <Property Name="Description" Type="text" />
+          <Property Name="Contact_No" Type="nvarchar" MaxLength="255" />
+          <Property Name="Street" Type="nvarchar" MaxLength="255" />
+          <Property Name="City" Type="nvarchar" MaxLength="255" />
+          <Property Name="Province" Type="nvarchar" MaxLength="255" />
+          <Property Name="Zip_Code" Type="nvarchar" MaxLength="255" />
+          <Property Name="Profile_Id" Type="int" />
+        </EntityType>
+        <!--Errors Found During Generation:
 warning 6002: The table/view 'TabangHub.dbo.vw_UserRoles' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="vw_UserRoles">
           <Key>
@@ -186,6 +212,35 @@ warning 6002: The table/view 'TabangHub.dbo.vw_UserRoles' does not have a primar
           <Property Name="roleName" Type="nvarchar" MaxLength="50" />
           <Property Name="userId" Type="int" Nullable="false" />
           <Property Name="email" Type="nvarchar" MaxLength="255" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'TabangHub.dbo.vw_VolunteerAccounts' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="vw_VolunteerAccounts">
+          <Key>
+            <PropertyRef Name="User_Id" />
+            <PropertyRef Name="Email" />
+            <PropertyRef Name="Password" />
+            <PropertyRef Name="Status" />
+            <PropertyRef Name="Role_Id" />
+          </Key>
+          <Property Name="User_Id" Type="int" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="Password" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="User_Info" Type="int" />
+          <Property Name="Status" Type="smallint" Nullable="false" />
+          <Property Name="Role_Id" Type="int" Nullable="false" />
+          <Property Name="Last_Name" Type="nvarchar" MaxLength="255" />
+          <Property Name="First_Name" Type="nvarchar" MaxLength="255" />
+          <Property Name="Birthday" Type="date" />
+          <Property Name="Gender" Type="nvarchar" MaxLength="255" />
+          <Property Name="Contact_No" Type="nvarchar" MaxLength="255" />
+          <Property Name="Street" Type="nvarchar" MaxLength="255" />
+          <Property Name="City" Type="nvarchar" MaxLength="255" />
+          <Property Name="Province" Type="nvarchar" MaxLength="255" />
+          <Property Name="Zip_Code" Type="nvarchar" MaxLength="255" />
+          <Property Name="Profile" Type="int" />
+          <Property Name="Availability" Type="nvarchar" MaxLength="25" />
+          <Property Name="About_Me" Type="text" />
         </EntityType>
         <Association Name="FK_OrgEventImage_OrgEvents">
           <End Role="OrgEvents" Type="Self.OrgEvents" Multiplicity="0..1" />
@@ -399,6 +454,25 @@ warning 6002: The table/view 'TabangHub.dbo.vw_UserRoles' does not have a primar
 [vw_ListOfEvent].[Location] AS [Location]
 FROM [dbo].[vw_ListOfEvent] AS [vw_ListOfEvent]</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="vw_OrganizationAccounts" EntityType="Self.vw_OrganizationAccounts" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+[vw_OrganizationAccounts].[User_Id] AS [User_Id], 
+[vw_OrganizationAccounts].[Email] AS [Email], 
+[vw_OrganizationAccounts].[Password] AS [Password], 
+[vw_OrganizationAccounts].[User_Info] AS [User_Info], 
+[vw_OrganizationAccounts].[Status] AS [Status], 
+[vw_OrganizationAccounts].[Role_Id] AS [Role_Id], 
+[vw_OrganizationAccounts].[Org_Name] AS [Org_Name], 
+[vw_OrganizationAccounts].[Org_Type] AS [Org_Type], 
+[vw_OrganizationAccounts].[Description] AS [Description], 
+[vw_OrganizationAccounts].[Contact_No] AS [Contact_No], 
+[vw_OrganizationAccounts].[Street] AS [Street], 
+[vw_OrganizationAccounts].[City] AS [City], 
+[vw_OrganizationAccounts].[Province] AS [Province], 
+[vw_OrganizationAccounts].[Zip_Code] AS [Zip_Code], 
+[vw_OrganizationAccounts].[Profile_Id] AS [Profile_Id]
+FROM [dbo].[vw_OrganizationAccounts] AS [vw_OrganizationAccounts]</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="vw_UserRoles" EntityType="Self.vw_UserRoles" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
 [vw_UserRoles].[userRoleId] AS [userRoleId], 
@@ -407,6 +481,28 @@ FROM [dbo].[vw_ListOfEvent] AS [vw_ListOfEvent]</DefiningQuery>
 [vw_UserRoles].[userId] AS [userId], 
 [vw_UserRoles].[email] AS [email]
 FROM [dbo].[vw_UserRoles] AS [vw_UserRoles]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="vw_VolunteerAccounts" EntityType="Self.vw_VolunteerAccounts" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+[vw_VolunteerAccounts].[User_Id] AS [User_Id], 
+[vw_VolunteerAccounts].[Email] AS [Email], 
+[vw_VolunteerAccounts].[Password] AS [Password], 
+[vw_VolunteerAccounts].[User_Info] AS [User_Info], 
+[vw_VolunteerAccounts].[Status] AS [Status], 
+[vw_VolunteerAccounts].[Role_Id] AS [Role_Id], 
+[vw_VolunteerAccounts].[Last_Name] AS [Last_Name], 
+[vw_VolunteerAccounts].[First_Name] AS [First_Name], 
+[vw_VolunteerAccounts].[Birthday] AS [Birthday], 
+[vw_VolunteerAccounts].[Gender] AS [Gender], 
+[vw_VolunteerAccounts].[Contact_No] AS [Contact_No], 
+[vw_VolunteerAccounts].[Street] AS [Street], 
+[vw_VolunteerAccounts].[City] AS [City], 
+[vw_VolunteerAccounts].[Province] AS [Province], 
+[vw_VolunteerAccounts].[Zip_Code] AS [Zip_Code], 
+[vw_VolunteerAccounts].[Profile] AS [Profile], 
+[vw_VolunteerAccounts].[Availability] AS [Availability], 
+[vw_VolunteerAccounts].[About_Me] AS [About_Me]
+FROM [dbo].[vw_VolunteerAccounts] AS [vw_VolunteerAccounts]</DefiningQuery>
           </EntitySet>
           <AssociationSet Name="FK_OrgEventImage_OrgEvents" Association="Self.FK_OrgEventImage_OrgEvents">
             <End Role="OrgEvents" EntitySet="OrgEvents" />
@@ -500,6 +596,7 @@ FROM [dbo].[vw_UserRoles] AS [vw_UserRoles]</DefiningQuery>
           <EntitySet Name="VolunteerSkill" EntityType="TabangHubModel.VolunteerSkill" />
           <EntitySet Name="vw_ListOfEvent" EntityType="TabangHubModel.vw_ListOfEvent" />
           <EntitySet Name="vw_UserRoles" EntityType="TabangHubModel.vw_UserRoles" />
+          <EntitySet Name="vw_VolunteerAccounts" EntityType="TabangHubModel.vw_VolunteerAccounts" />
           <AssociationSet Name="FK_OrgEventImage_OrgEvents" Association="TabangHubModel.FK_OrgEventImage_OrgEvents">
             <End Role="OrgEvents" EntitySet="OrgEvents" />
             <End Role="OrgEventImage" EntitySet="OrgEventImage" />
@@ -556,7 +653,8 @@ FROM [dbo].[vw_UserRoles] AS [vw_UserRoles]</DefiningQuery>
             <End Role="UserAccount" EntitySet="UserAccount" />
             <End Role="Volunteers" EntitySet="Volunteers" />
           </AssociationSet>
-        </EntityContainer>
+          <EntitySet Name="vw_OrganizationAccounts" EntityType="TabangHubModel.vw_OrganizationAccounts" />
+          </EntityContainer>
         <ComplexType Name="sp_GetSkills_Result">
           <Property Type="Int32" Name="skillId" Nullable="false" />
           <Property Type="String" Name="skillName" Nullable="true" MaxLength="255" />
@@ -781,6 +879,33 @@ FROM [dbo].[vw_UserRoles] AS [vw_UserRoles]</DefiningQuery>
           <Property Name="userId" Type="Int32" Nullable="false" />
           <Property Name="email" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
         </EntityType>
+        <EntityType Name="vw_VolunteerAccounts">
+          <Key>
+            <PropertyRef Name="User_Id" />
+            <PropertyRef Name="Email" />
+            <PropertyRef Name="Password" />
+            <PropertyRef Name="Status" />
+            <PropertyRef Name="Role_Id" />
+          </Key>
+          <Property Name="User_Id" Type="Int32" Nullable="false" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Password" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="User_Info" Type="Int32" />
+          <Property Name="Status" Type="Int16" Nullable="false" />
+          <Property Name="Role_Id" Type="Int32" Nullable="false" />
+          <Property Name="Last_Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="First_Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Birthday" Type="DateTime" Precision="0" />
+          <Property Name="Gender" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Contact_No" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Street" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="City" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Province" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Zip_Code" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Profile" Type="Int32" />
+          <Property Name="Availability" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
+          <Property Name="About_Me" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+        </EntityType>
         <Association Name="FK_OrgEventImage_OrgEvents">
           <End Type="TabangHubModel.OrgEvents" Role="OrgEvents" Multiplicity="0..1" />
           <End Type="TabangHubModel.OrgEventImage" Role="OrgEventImage" Multiplicity="*" />
@@ -949,7 +1074,31 @@ FROM [dbo].[vw_UserRoles] AS [vw_UserRoles]</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
-      </Schema>
+        <EntityType Name="vw_OrganizationAccounts">
+          <Key>
+            <PropertyRef Name="User_Id" />
+            <PropertyRef Name="Email" />
+            <PropertyRef Name="Password" />
+            <PropertyRef Name="Status" />
+            <PropertyRef Name="Role_Id" />
+          </Key>
+          <Property Name="User_Id" Type="Int32" Nullable="false" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Password" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="User_Info" Type="Int32" />
+          <Property Name="Status" Type="Int16" Nullable="false" />
+          <Property Name="Role_Id" Type="Int32" Nullable="false" />
+          <Property Name="Org_Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Org_Type" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Contact_No" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Street" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="City" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Province" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Zip_Code" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Profile_Id" Type="Int32" />
+        </EntityType>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
@@ -1174,7 +1323,52 @@ FROM [dbo].[vw_UserRoles] AS [vw_UserRoles]</DefiningQuery>
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-        </EntityContainerMapping>
+          <EntitySetMapping Name="vw_VolunteerAccounts">
+            <EntityTypeMapping TypeName="TabangHubModel.vw_VolunteerAccounts">
+              <MappingFragment StoreEntitySet="vw_VolunteerAccounts">
+                <ScalarProperty Name="About_Me" ColumnName="About_Me" />
+                <ScalarProperty Name="Availability" ColumnName="Availability" />
+                <ScalarProperty Name="Profile" ColumnName="Profile" />
+                <ScalarProperty Name="Zip_Code" ColumnName="Zip_Code" />
+                <ScalarProperty Name="Province" ColumnName="Province" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="Street" ColumnName="Street" />
+                <ScalarProperty Name="Contact_No" ColumnName="Contact_No" />
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="Birthday" ColumnName="Birthday" />
+                <ScalarProperty Name="First_Name" ColumnName="First_Name" />
+                <ScalarProperty Name="Last_Name" ColumnName="Last_Name" />
+                <ScalarProperty Name="Role_Id" ColumnName="Role_Id" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="User_Info" ColumnName="User_Info" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="User_Id" ColumnName="User_Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="vw_OrganizationAccounts">
+            <EntityTypeMapping TypeName="TabangHubModel.vw_OrganizationAccounts">
+              <MappingFragment StoreEntitySet="vw_OrganizationAccounts">
+                <ScalarProperty Name="Profile_Id" ColumnName="Profile_Id" />
+                <ScalarProperty Name="Zip_Code" ColumnName="Zip_Code" />
+                <ScalarProperty Name="Province" ColumnName="Province" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="Street" ColumnName="Street" />
+                <ScalarProperty Name="Contact_No" ColumnName="Contact_No" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Org_Type" ColumnName="Org_Type" />
+                <ScalarProperty Name="Org_Name" ColumnName="Org_Name" />
+                <ScalarProperty Name="Role_Id" ColumnName="Role_Id" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="User_Info" ColumnName="User_Info" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="User_Id" ColumnName="User_Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
   </edmx:Runtime>

@@ -31,6 +31,7 @@
     <EntitySet Name="VolunteerSkill" EntityType="TabangHubModel.VolunteerSkill" />
     <EntitySet Name="vw_ListOfEvent" EntityType="TabangHubModel.vw_ListOfEvent" />
     <EntitySet Name="vw_UserRoles" EntityType="TabangHubModel.vw_UserRoles" />
+    <EntitySet Name="vw_VolunteerAccounts" EntityType="TabangHubModel.vw_VolunteerAccounts" />
     <AssociationSet Name="FK_OrgEventImage_OrgEvents" Association="TabangHubModel.FK_OrgEventImage_OrgEvents">
       <End Role="OrgEvents" EntitySet="OrgEvents" />
       <End Role="OrgEventImage" EntitySet="OrgEventImage" />
@@ -87,6 +88,7 @@
       <End Role="UserAccount" EntitySet="UserAccount" />
       <End Role="Volunteers" EntitySet="Volunteers" />
     </AssociationSet>
+    <EntitySet Name="vw_OrganizationAccounts" EntityType="TabangHubModel.vw_OrganizationAccounts" />
   </EntityContainer>
   <ComplexType Name="sp_GetSkills_Result">
     <Property Type="Int32" Name="skillId" Nullable="false" />
@@ -312,6 +314,33 @@
     <Property Name="userId" Type="Int32" Nullable="false" />
     <Property Name="email" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
   </EntityType>
+  <EntityType Name="vw_VolunteerAccounts">
+    <Key>
+      <PropertyRef Name="User_Id" />
+      <PropertyRef Name="Email" />
+      <PropertyRef Name="Password" />
+      <PropertyRef Name="Status" />
+      <PropertyRef Name="Role_Id" />
+    </Key>
+    <Property Name="User_Id" Type="Int32" Nullable="false" />
+    <Property Name="Email" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="Password" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="User_Info" Type="Int32" />
+    <Property Name="Status" Type="Int16" Nullable="false" />
+    <Property Name="Role_Id" Type="Int32" Nullable="false" />
+    <Property Name="Last_Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="First_Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="Birthday" Type="DateTime" Precision="0" />
+    <Property Name="Gender" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="Contact_No" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="Street" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="City" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="Province" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="Zip_Code" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="Profile" Type="Int32" />
+    <Property Name="Availability" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
+    <Property Name="About_Me" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+  </EntityType>
   <Association Name="FK_OrgEventImage_OrgEvents">
     <End Type="TabangHubModel.OrgEvents" Role="OrgEvents" Multiplicity="0..1" />
     <End Type="TabangHubModel.OrgEventImage" Role="OrgEventImage" Multiplicity="*" />
@@ -480,4 +509,28 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <EntityType Name="vw_OrganizationAccounts">
+    <Key>
+      <PropertyRef Name="User_Id" />
+      <PropertyRef Name="Email" />
+      <PropertyRef Name="Password" />
+      <PropertyRef Name="Status" />
+      <PropertyRef Name="Role_Id" />
+    </Key>
+    <Property Name="User_Id" Type="Int32" Nullable="false" />
+    <Property Name="Email" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="Password" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="User_Info" Type="Int32" />
+    <Property Name="Status" Type="Int16" Nullable="false" />
+    <Property Name="Role_Id" Type="Int32" Nullable="false" />
+    <Property Name="Org_Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="Org_Type" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="Contact_No" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="Street" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="City" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="Province" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="Zip_Code" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="Profile_Id" Type="Int32" />
+  </EntityType>
 </Schema>

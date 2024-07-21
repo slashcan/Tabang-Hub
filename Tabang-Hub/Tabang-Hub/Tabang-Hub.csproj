@@ -184,6 +184,7 @@
       <DependentUpon>ModelTabangHub.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repository\AdminManager.cs" />
     <Compile Include="Repository\BaseRepository.cs" />
     <Compile Include="Repository\MailManager.cs" />
     <Compile Include="Repository\OrganizationManager.cs" />
@@ -224,7 +225,13 @@
     <Compile Include="vw_ListOfEvent.cs">
       <DependentUpon>ModelTabangHub.tt</DependentUpon>
     </Compile>
+    <Compile Include="vw_OrganizationAccounts.cs">
+      <DependentUpon>ModelTabangHub.tt</DependentUpon>
+    </Compile>
     <Compile Include="vw_UserRoles.cs">
+      <DependentUpon>ModelTabangHub.tt</DependentUpon>
+    </Compile>
+    <Compile Include="vw_VolunteerAccounts.cs">
       <DependentUpon>ModelTabangHub.tt</DependentUpon>
     </Compile>
   </ItemGroup>
@@ -253,6 +260,9 @@
     <Content Include="Views\Organization\VolunteerDetails.cshtml" />
     <Content Include="Views\Shared\_Admin.cshtml" />
     <Content Include="Views\Admin\Index.cshtml" />
+    <Content Include="Views\Admin\VolunteerAccounts.cshtml" />
+    <Content Include="Views\Admin\OrganizationAccounts.cshtml" />
+    <Content Include="Views\Admin\UserDetails.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

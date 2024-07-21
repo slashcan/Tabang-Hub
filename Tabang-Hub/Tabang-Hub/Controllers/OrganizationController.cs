@@ -23,7 +23,7 @@ namespace Tabang_Hub.Controllers
         {
             var orgInfo = _organizationManager.GetOrgInfoByUserId(UserId);
 
-            var indexModdel = new Utils.Lists()
+            var indexModdel = new Lists()
             {
                 OrgInfo = orgInfo,
             };

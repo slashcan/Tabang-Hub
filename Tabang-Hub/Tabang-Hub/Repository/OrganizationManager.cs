@@ -11,13 +11,13 @@ namespace Tabang_Hub.Repository
         private BaseRepository<OrgEvents> _orgEvents;
         private BaseRepository<OrgSkillRequirement> _orgSkillRequirements;
         private BaseRepository<OrgEventImage> _orgEventsImage;
-        public BaseRepository<vw_ListOfEvent> _listOfEvents;
-        public BaseRepository<OrgInfo> _orgInfo;
-        public BaseRepository<ProfilePicture> _profilePic;
-        public BaseRepository<UserDonated> _userDonated;
-        public BaseRepository<Volunteers> _eventVolunteers;
-        public BaseRepository<VolunteerSkill> _volunteerSkills;
-        public BaseRepository<UserAccount> _userAccount;
+        private BaseRepository<vw_ListOfEvent> _listOfEvents;
+        private BaseRepository<OrgInfo> _orgInfo;
+        private BaseRepository<ProfilePicture> _profilePic;
+        private BaseRepository<UserDonated> _userDonated;
+        private BaseRepository<Volunteers> _eventVolunteers;
+        private BaseRepository<VolunteerSkill> _volunteerSkills;
+        private BaseRepository<UserAccount> _userAccount;
 
         public OrganizationManager()
         {
