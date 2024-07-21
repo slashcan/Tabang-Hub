@@ -45,24 +45,6 @@ namespace Tabang_Hub
         public DbSet<vw_ListOfEvent> vw_ListOfEvent { get; set; }
         public DbSet<vw_UserRoles> vw_UserRoles { get; set; }
     
-        public virtual ObjectResult<sp_GetSkills_Result> sp_GetSkills(Nullable<int> userId)
-        {
-            var userIdParameter = userId.HasValue ?
-                new ObjectParameter("userId", userId) :
-                new ObjectParameter("userId", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_GetSkills_Result>("sp_GetSkills", userIdParameter);
-        }
-    
-        public virtual ObjectResult<sp_OtherEvent_Result> sp_OtherEvent(Nullable<int> userId)
-        {
-            var userIdParameter = userId.HasValue ?
-                new ObjectParameter("userId", userId) :
-                new ObjectParameter("userId", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_OtherEvent_Result>("sp_OtherEvent", userIdParameter);
-        }
-    
         public virtual int sp_CancelRequest(Nullable<int> eventId, Nullable<int> userId)
         {
             var eventIdParameter = eventId.HasValue ?
@@ -76,6 +58,15 @@ namespace Tabang_Hub
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_CancelRequest", eventIdParameter, userIdParameter);
         }
     
+        public virtual ObjectResult<sp_GetSkills_Result> sp_GetSkills(Nullable<int> userId)
+        {
+            var userIdParameter = userId.HasValue ?
+                new ObjectParameter("userId", userId) :
+                new ObjectParameter("userId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_GetSkills_Result>("sp_GetSkills", userIdParameter);
+        }
+    
         public virtual int sp_LeaveEvent(Nullable<int> eventId, Nullable<int> userId)
         {
             var eventIdParameter = eventId.HasValue ?
@@ -87,6 +78,15 @@ namespace Tabang_Hub
                 new ObjectParameter("userId", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_LeaveEvent", eventIdParameter, userIdParameter);
+        }
+    
+        public virtual ObjectResult<sp_OtherEvent_Result> sp_OtherEvent(Nullable<int> userId)
+        {
+            var userIdParameter = userId.HasValue ?
+                new ObjectParameter("userId", userId) :
+                new ObjectParameter("userId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_OtherEvent_Result>("sp_OtherEvent", userIdParameter);
         }
     }
 }

@@ -39,7 +39,7 @@ namespace Tabang_Hub.Controllers
                         };
                         return View(indexModel);
                     case 2:
-                        return RedirectToAction("EventsManagement", "Organization");
+                        return RedirectToAction("Index", "Organization");
                     case 3:
                         return RedirectToAction("Index", "Admin");
                 }
@@ -199,11 +199,11 @@ namespace Tabang_Hub.Controllers
                 }
                 else if (user.roleId == 2)
                 {
-                    return RedirectToAction("EventsManagement", "Organization");
+                    return RedirectToAction("Index", "Organization");
                 }
                 else if (user.roleId == 3)
                 {
-                    //Redirect to Admin
+                    return RedirectToAction("Index", "Admin");
                 }
             }
             ViewBag.Error = ErrorMessage;

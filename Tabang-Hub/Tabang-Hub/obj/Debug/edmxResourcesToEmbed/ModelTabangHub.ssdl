@@ -157,16 +157,15 @@ warning 6002: The table/view 'TabangHub.dbo.vw_ListOfEvent' does not have a prim
     </Key>
     <Property Name="Event_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="User_Id" Type="int" />
-    <Property Name="Event_Title" Type="nvarchar" MaxLength="255" />
-    <Property Name="Event_Description" Type="text" />
+    <Property Name="Event_Name" Type="nvarchar" MaxLength="255" />
+    <Property Name="Description" Type="text" />
+    <Property Name="Total Donation" Type="decimal" Precision="38" Scale="2" />
     <Property Name="Target_Amount" Type="decimal" Precision="10" Scale="2" />
-    <Property Name="Maximum_Volunteer" Type="int" />
-    <Property Name="Date_Started" Type="datetime" />
-    <Property Name="Date_Ended" Type="datetime" />
+    <Property Name="Total_Volunteer" Type="int" />
+    <Property Name="Max_Volunteer" Type="int" />
+    <Property Name="Start_Date" Type="datetime" />
+    <Property Name="End_Date" Type="datetime" />
     <Property Name="Location" Type="nvarchar" MaxLength="255" />
-    <Property Name="Event_Type" Type="int" />
-    <Property Name="Total_Image" Type="int" />
-    <Property Name="Total_Skills" Type="int" />
   </EntityType>
   <!--Errors Found During Generation:
 warning 6002: The table/view 'TabangHub.dbo.vw_UserRoles' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -384,16 +383,15 @@ warning 6002: The table/view 'TabangHub.dbo.vw_UserRoles' does not have a primar
       <DefiningQuery>SELECT 
 [vw_ListOfEvent].[Event_Id] AS [Event_Id], 
 [vw_ListOfEvent].[User_Id] AS [User_Id], 
-[vw_ListOfEvent].[Event_Title] AS [Event_Title], 
-[vw_ListOfEvent].[Event_Description] AS [Event_Description], 
+[vw_ListOfEvent].[Event_Name] AS [Event_Name], 
+[vw_ListOfEvent].[Description] AS [Description], 
+[vw_ListOfEvent].[Total Donation] AS [Total Donation], 
 [vw_ListOfEvent].[Target_Amount] AS [Target_Amount], 
-[vw_ListOfEvent].[Maximum_Volunteer] AS [Maximum_Volunteer], 
-[vw_ListOfEvent].[Date_Started] AS [Date_Started], 
-[vw_ListOfEvent].[Date_Ended] AS [Date_Ended], 
-[vw_ListOfEvent].[Location] AS [Location], 
-[vw_ListOfEvent].[Event_Type] AS [Event_Type], 
-[vw_ListOfEvent].[Total_Image] AS [Total_Image], 
-[vw_ListOfEvent].[Total_Skills] AS [Total_Skills]
+[vw_ListOfEvent].[Total_Volunteer] AS [Total_Volunteer], 
+[vw_ListOfEvent].[Max_Volunteer] AS [Max_Volunteer], 
+[vw_ListOfEvent].[Start_Date] AS [Start_Date], 
+[vw_ListOfEvent].[End_Date] AS [End_Date], 
+[vw_ListOfEvent].[Location] AS [Location]
 FROM [dbo].[vw_ListOfEvent] AS [vw_ListOfEvent]</DefiningQuery>
     </EntitySet>
     <EntitySet Name="vw_UserRoles" EntityType="Self.vw_UserRoles" store:Type="Views" store:Schema="dbo">

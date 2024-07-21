@@ -1,0 +1,410 @@
+﻿@model Tabang_Hub.Utils.Lists
+
+@{
+    ViewBag.Title = "EventsList";
+    Layout = "~/Views/Shared/_Organization.cshtml";
+}
+
+<style>
+    .input-error {
+        border-color: #dc3545 !important;
+        color: #dc3545 !important;
+    }
+
+    .error {
+        color: #dc3545 !important;
+    }
+
+    .preview-image {
+        max-width: 100px;
+        margin-right: 10px;
+    }
+
+    .truncate {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 150px;
+    }
+</style>
+
+<div class="container mt-4">
+    <div class="mb-3 d-flex justify-content-between">
+        <button type="button" class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#createEventModal">Create Event</button>
+        <input type="text" class="form-control w-25" placeholder="Search" />
+    </div>
+    <div class="table-responsive border rounded p-2">
+        <table class="table table-striped table-hover">
+            <thead class="table-dark">
+                <tr class="text-nowrap text-center">
+                    <th class="small">Event Name</th>
+                    <th class="small">Description</th>
+                    <th class="small">Total Donation</th>
+                    <th class="small">Target Amount</th>
+                    <th class="small">Total Volunteers</th>
+                    <th class="small">Maximum Volunteers</th>
+                    <th class="small">Date Started</th>
+                    <th class="small">Date Ended</th>
+                    <th class="small">Location</th>
+                    <th class="small">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach (var list in Model.listOfEvents)
+                {
+                    <tr class="text-center" data-event-id="@list.Event_Id" style="cursor: pointer;">
+                        <td>@list.Event_Name</td>
+                        <td class="truncate">@list.Description</td>
+                        @if (list.Target_Amount != null && list.Target_Amount != 0)
+                        {
+                            <td>@list.Total_Donation</td>
+                            <td>@list.Target_Amount</td>
+                        }
+                        else
+                        {
+                            <td></td>
+                            <td></td>
+                        }
+                        <td>@list.Total_Volunteer</td>
+                        <td>@list.Max_Volunteer</td>
+                        <td>@list.Start_Date</td>
+                        <td>@list.End_Date</td>
+                        <td>@list.Location</td>
+                        <td>
+                            <form class="delete-form" data-event-id="@list.Event_Id">
+                                <button type="button" class="btn btn-sm btn-danger delete-button">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Create Event Modal -->
+<div class="modal fade" id="createEventModal" tabindex="-1" aria-labelledby="createEventModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="createEventModalLabel">Create Event</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="create-event-form" action="/Organization/CreateEvents" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
+                    <div class="mb-3">
+                        <label for="CreateEvents_eventTitle" class="form-label">Event Title</label>
+                        <input type="text" class="form-control" id="CreateEvents_eventTitle" name="CreateEvents.eventTitle" placeholder="Enter event title">
+                        <span class="error" id="CreateEvents_eventTitle_error"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label for="CreateEvents_eventDescription" class="form-label">Event Description</label>
+                        <textarea class="form-control" id="CreateEvents_eventDescription" name="CreateEvents.eventDescription" rows="4" placeholder="Enter event description"></textarea>
+                        <span class="error" id="CreateEvents_eventDescription_error"></span>
+                    </div>
+                    <div class="mb-3">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
+                            <label class="form-check-label" for="flexSwitchCheckDefault">Enable Target Amount</label>
+                        </div>
+                        <input type="number" class="form-control mt-2" id="CreateEvents_targetAmount" name="CreateEvents.targetAmount" placeholder="Enter target amount" disabled>
+                        <span class="error" id="CreateEvents_targetAmount_error"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label for="CreateEvents_maxVolunteer" class="form-label">Maximum Volunteers</label>
+                        <input type="number" class="form-control" id="CreateEvents_maxVolunteer" name="CreateEvents.maxVolunteer" placeholder="Enter maximum number of volunteers">
+                        <span class="error" id="CreateEvents_maxVolunteer_error"></span>
+                    </div>
+                    <div class="mb-3 row">
+                        <div class="col">
+                            <label for="CreateEvents_dateStart" class="form-label">Start Date and Time</label>
+                            <input type="datetime-local" class="form-control" id="CreateEvents_dateStart" name="CreateEvents.dateStart">
+                            <span class="error" id="CreateEvents_dateStart_error"></span>
+                        </div>
+                        <div class="col">
+                            <label for="CreateEvents_dateEnd" class="form-label">End Date and Time</label>
+                            <input type="datetime-local" class="form-control" id="CreateEvents_dateEnd" name="CreateEvents.dateEnd">
+                            <span class="error" id="CreateEvents_dateEnd_error"></span>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="CreateEvents_location" class="form-label">Location</label>
+                        <input type="text" class="form-control" id="CreateEvents_location" name="CreateEvents.location" placeholder="Enter location">
+                        <span class="error" id="CreateEvents_location_error"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label>Volunteer Skills Requirements</label>
+                        <div class="added-skills" id="added-skills"></div>
+                        <span class="error" id="CreateEvents_skills_error"></span>
+                    </div>
+                    <div class="skills-container">
+                        <button type="button" class="btn btn-outline-primary skill-button" onclick="addSkill('Mason')">Mason</button>
+                        <button type="button" class="btn btn-outline-primary skill-button" onclick="addSkill('Panday')">Panday</button>
+                        <button type="button" class="btn btn-outline-primary skill-button" onclick="addSkill('GRO')">GRO</button>
+                        <button type="button" class="btn btn-outline-primary skill-button" onclick="addSkill('Mangawatay')">Mangawatay</button>
+                        <button type="button" class="btn btn-outline-primary skill-button" onclick="addSkill('Matcho Dancer')">Matcho Dancer</button>
+                    </div>
+                    <div class="mb-3">
+                        <label for="CreateEvents_uploadImage" class="form-label">Upload Images</label>
+                        <input type="file" class="form-control" id="CreateEvents_uploadImage" name="images" multiple onchange="previewImages()">
+                        <span class="error" id="CreateEvents_uploadImage_error"></span>
+                        <div class="preview-container" id="image-preview"></div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Create Event</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('flexSwitchCheckDefault').addEventListener('change', function () {
+        const targetAmountInput = document.getElementById('CreateEvents_targetAmount');
+        if (this.checked) {
+            targetAmountInput.removeAttribute('disabled');
+        } else {
+            targetAmountInput.setAttribute('disabled', 'disabled');
+            targetAmountInput.value = ''; // Clear the input value if disabled
+        }
+    });
+
+    document.getElementById('create-event-form').addEventListener('submit', function (event) {
+        event.preventDefault();
+        if (validateForm()) {
+            var form = event.target;
+            var formData = new FormData(form);
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", form.action, true);
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    Swal.fire({
+                        title: 'Successfully Created!',
+                        text: 'Your event has been successfully created.',
+                        icon: 'success'
+                    }).then(() => {
+                        window.location.reload();
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error!',
+                        text: 'There was an error creating the event. Please try again.'
+                    });
+                }
+            };
+            xhr.send(formData);
+        }
+    });
+
+    function validateForm() {
+        const allowedExtensions = ['jpg', 'jpeg', 'png', 'gif'];
+        const files = document.getElementById('CreateEvents_uploadImage').files;
+        const startDate = new Date(document.getElementById('CreateEvents_dateStart').value);
+        const endDate = new Date(document.getElementById('CreateEvents_dateEnd').value);
+        const now = new Date();
+
+        let isValid = true;
+
+        const title = document.getElementById('CreateEvents_eventTitle');
+        const description = document.getElementById('CreateEvents_eventDescription');
+        const maxVolunteers = document.getElementById('CreateEvents_maxVolunteer');
+        const location = document.getElementById('CreateEvents_location');
+        const skills = document.getElementById('added-skills').children;
+        const startDateError = document.getElementById('CreateEvents_dateStart_error');
+        const endDateError = document.getElementById('CreateEvents_dateEnd_error');
+        const targetAmountSwitch = document.getElementById('flexSwitchCheckDefault');
+        const targetAmount = document.getElementById('CreateEvents_targetAmount');
+
+        // Clear previous errors
+        document.querySelectorAll('.error').forEach(error => error.textContent = '');
+        document.querySelectorAll('.input-error').forEach(input => input.classList.remove('input-error'));
+
+        if (title.value.trim() === '') {
+            document.getElementById('CreateEvents_eventTitle_error').textContent = 'Event Title is required.';
+            title.classList.add('input-error');
+            isValid = false;
+        }
+        if (description.value.trim() === '') {
+            document.getElementById('CreateEvents_eventDescription_error').textContent = 'Event Description is required.';
+            description.classList.add('input-error');
+            isValid = false;
+        }
+        if (targetAmountSwitch.checked && (targetAmount.value.trim() === '' || targetAmount.value <= 0)) {
+            document.getElementById('CreateEvents_targetAmount_error').textContent = 'Target Amount must be greater than 0.';
+            targetAmount.classList.add('input-error');
+            isValid = false;
+        }
+        if (maxVolunteers.value <= 0) {
+            document.getElementById('CreateEvents_maxVolunteer_error').textContent = 'Maximum Volunteers must be greater than 0.';
+            maxVolunteers.classList.add('input-error');
+            isValid = false;
+        }
+        if (location.value.trim() === '') {
+            document.getElementById('CreateEvents_location_error').textContent = 'Location is required.';
+            location.classList.add('input-error');
+            isValid = false;
+        }
+        if (startDate < now) {
+            startDateError.textContent = 'Start date and time cannot be before the current date and time.';
+            document.getElementById('CreateEvents_dateStart').classList.add('input-error');
+            isValid = false;
+        }
+        if (endDate < startDate) {
+            endDateError.textContent = 'End date and time cannot be before the start date and time.';
+            document.getElementById('CreateEvents_dateEnd').classList.add('input-error');
+            isValid = false;
+        }
+        if (skills.length === 0) {
+            document.getElementById('CreateEvents_skills_error').textContent = 'You must add at least one skill requirement.';
+            document.getElementById('added-skills').classList.add('input-error');
+            isValid = false;
+        }
+        if (files.length === 0) {
+            document.getElementById('CreateEvents_uploadImage_error').textContent = 'You must upload at least one image.';
+            document.getElementById('CreateEvents_uploadImage').classList.add('input-error');
+            isValid = false;
+        } else {
+            for (let i = 0; i < files.length; i++) {
+                const fileExtension = files[i].name.split('.').pop().toLowerCase();
+                if (!allowedExtensions.includes(fileExtension)) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Invalid File Type',
+                        text: 'Invalid file type. Only JPG, JPEG, PNG, and GIF files are allowed.',
+                        allowOutsideClick: false,
+                        allowEscapeKey: false
+                    });
+                    isValid = false;
+                }
+            }
+        }
+        return isValid;
+    }
+
+    function addSkill(skill) {
+        const addedSkillsContainer = document.getElementById('added-skills');
+
+        // Check if the skill is already added
+        if (Array.from(addedSkillsContainer.children).some(child => child.textContent.includes(skill))) {
+            return;
+        }
+
+        // Create skill tag
+        const skillTag = document.createElement('span');
+        skillTag.className = 'skill-tag btn btn-outline-secondary';
+        skillTag.textContent = skill;
+
+        // Create hidden input for the skill
+        const skillInput = document.createElement('input');
+        skillInput.type = 'hidden';
+        skillInput.name = 'Skills';
+        skillInput.value = skill;
+
+        // Append the hidden input and skill tag
+        skillTag.appendChild(skillInput);
+
+        // Create remove button
+        const removeButton = document.createElement('span');
+        removeButton.className = 'remove-skill';
+        removeButton.textContent = ' x';
+        removeButton.onclick = function () {
+            removeSkill(skillTag);
+        };
+
+        skillTag.appendChild(removeButton);
+        addedSkillsContainer.appendChild(skillTag);
+    }
+
+    function removeSkill(skillTag) {
+        const addedSkillsContainer = document.getElementById('added-skills');
+        addedSkillsContainer.removeChild(skillTag);
+    }
+
+    function previewImages() {
+        const previewContainer = document.getElementById('image-preview');
+        previewContainer.innerHTML = ''; // Clear previous previews
+        const files = document.getElementById('CreateEvents_uploadImage').files;
+
+        Array.from(files).forEach(file => {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.className = 'preview-image';
+                previewContainer.appendChild(img);
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+
+    document.querySelectorAll('.truncate').forEach(element => {
+        if (element.textContent.length > 100) { // Adjust length as per your requirement
+            element.setAttribute('title', element.textContent);
+            element.textContent = element.textContent.substring(0, 97) + '...';
+        }
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var deleteUrl = '@Url.Action("Delete", "Organization")';
+
+        // Event listener for row click
+        document.querySelectorAll('tr[data-event-id]').forEach(row => {
+            row.addEventListener('click', function () {
+                var eventId = this.getAttribute('data-event-id');
+                window.location.href = '/Organization/Details/' + eventId;
+            });
+        });
+
+        // Event listener for delete button click
+        document.querySelectorAll('.delete-button').forEach(button => {
+            button.addEventListener('click', function (event) {
+                event.stopPropagation();  // Stop the click event from propagating to the row
+                var form = this.closest('.delete-form');
+                var eventId = form.getAttribute('data-event-id');
+
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!',
+                    allowOutsideClick: false,
+                    allowEscapeKey: false
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Submit the form to delete the event
+                        var xhr = new XMLHttpRequest();
+                        xhr.open("POST", deleteUrl, true);
+                        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                        xhr.onload = function() {
+                            if (xhr.status === 200) {
+                                Swal.fire({
+                                    title: 'Deleted!',
+                                    text: 'Your event has been deleted.',
+                                    icon: 'success',
+                                    allowOutsideClick: false,
+                                    allowEscapeKey: false
+                                });
+
+                                // Remove the deleted event row from the table
+                                form.closest('tr').remove();
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Error!',
+                                    text: 'There was an error deleting the event. Please try again.',
+                                    allowOutsideClick: false,
+                                    allowEscapeKey: false
+                                });
+                            }
+                        };
+                        xhr.send("eventId=" + eventId);
+                    }
+                });
+            });
+        });
+    });
+</script>

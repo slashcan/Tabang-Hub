@@ -140,6 +140,7 @@
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Contracts\IBaseRepository.cs" />
+    <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\MessageController.cs" />
     <Compile Include="Controllers\OrganizationController.cs" />
@@ -240,10 +241,6 @@
     <Content Include="Views\Page\Verify.cshtml" />
     <Content Include="Views\Shared\_Organization.cshtml" />
     <Content Include="Views\Organization\Index.cshtml" />
-    <Content Include="Views\Organization\VolunteerManagement.cshtml" />
-    <Content Include="Views\Organization\EventsManagement.cshtml" />
-    <Content Include="Views\Organization\DonationsManagement.cshtml" />
-    <Content Include="Views\Organization\ReportsManagement.cshtml" />
     <Content Include="Views\Organization\Details.cshtml" />
     <Content Include="Views\Organization\OrgProfile.cshtml" />
     <Content Include="Views\Volunteer\VolunteerProfile.cshtml" />
@@ -252,6 +249,10 @@
     <Content Include="Views\Volunteer\DonationDetails.cshtml" />
     <Content Include="Views\Message\Message.cshtml" />
     <Content Include="Views\Volunteer\Participate.cshtml" />
+    <Content Include="Views\Organization\EventsList.cshtml" />
+    <Content Include="Views\Organization\VolunteerDetails.cshtml" />
+    <Content Include="Views\Shared\_Admin.cshtml" />
+    <Content Include="Views\Admin\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -16,15 +16,14 @@ namespace Tabang_Hub
     {
         public int Event_Id { get; set; }
         public Nullable<int> User_Id { get; set; }
-        public string Event_Title { get; set; }
-        public string Event_Description { get; set; }
+        public string Event_Name { get; set; }
+        public string Description { get; set; }
+        public Nullable<decimal> Total_Donation { get; set; }
         public Nullable<decimal> Target_Amount { get; set; }
-        public Nullable<int> Maximum_Volunteer { get; set; }
-        public Nullable<System.DateTime> Date_Started { get; set; }
-        public Nullable<System.DateTime> Date_Ended { get; set; }
+        public Nullable<int> Total_Volunteer { get; set; }
+        public Nullable<int> Max_Volunteer { get; set; }
+        public Nullable<System.DateTime> Start_Date { get; set; }
+        public Nullable<System.DateTime> End_Date { get; set; }
         public string Location { get; set; }
-        public Nullable<int> Event_Type { get; set; }
-        public Nullable<int> Total_Image { get; set; }
-        public Nullable<int> Total_Skills { get; set; }
     }
 }

@@ -180,7 +180,7 @@
                     <div style="margin-top: 50px; color: dimgray" class="org-info">
                         <div class="d-flex align-items-center mb-2">
                             <i class="bi bi-calendar me-2" style="font-size:16px;"></i>
-                            <span>@location.Date_Started <strong>-</strong> @location.Date_Ended</span>
+                            <span>@location.Start_Date <strong>-</strong> @location.End_Date</span>
                         </div>
                     </div>
 
@@ -189,11 +189,11 @@
                         @{
                             double? Vol = Model.volunteers.Where(m => m.Status == 1).Count();
 
-                            Vol = (Vol / location.Maximum_Volunteer) * location.Maximum_Volunteer;
+                            Vol = (Vol / location.Max_Volunteer) * location.Max_Volunteer;
                             Console.Write(Vol);
                         }
-                        <div class="progress-bar" role="progressbar" style="width: @Html.Raw(Vol)%;" aria-valuenow="@location.Maximum_Volunteer" aria-valuemin="0" aria-valuemax="100"></div>
-                        <div class="progress-label">@Model.volunteers.Where(m => m.Status == 1).Count()/@location.Maximum_Volunteer</div>
+                        <div class="progress-bar" role="progressbar" style="width: @Html.Raw(Vol)%;" aria-valuenow="@location.Max_Volunteer" aria-valuemin="0" aria-valuemax="100"></div>
+                        <div class="progress-label">@Model.volunteers.Where(m => m.Status == 1).Count()/@location.Max_Volunteer</div>
                     </div>
                 }
                 <hr />

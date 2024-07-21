@@ -17,6 +17,7 @@ namespace Tabang_Hub.Repository
         public BaseRepository<UserDonated> _userDonated;
         public BaseRepository<Volunteers> _eventVolunteers;
         public BaseRepository<VolunteerSkill> _volunteerSkills;
+        public BaseRepository<UserAccount> _userAccount;
 
         public OrganizationManager()
         {
@@ -29,75 +30,48 @@ namespace Tabang_Hub.Repository
             _userDonated = new BaseRepository<UserDonated>();
             _eventVolunteers = new BaseRepository<Volunteers>();
             _volunteerSkills = new BaseRepository<VolunteerSkill>();
+            _userAccount = new BaseRepository<UserAccount>();
         }
 
 
         public ErrorCode CreateEvents(OrgEvents orgEvents, List<string> imageFileNames, string[] skills, ref string errMsg)
         {
             // Create the event
-            if (orgEvents.eventType == 1)
+            if (_orgEvents.Create(orgEvents, out errMsg) != ErrorCode.Success)
             {
-                if (_orgEvents.Create(orgEvents, out errMsg) != ErrorCode.Success)
+                return ErrorCode.Error;
+            }
+
+            // Get the eventId of the newly created event
+            int eventId = orgEvents.eventId;
+
+            // Add each skill associated with the eventId            
+            foreach (var skill in skills)
+            {
+                var skillRequirement = new OrgSkillRequirement
+                {
+                    eventId = eventId,
+                    skillName = skill
+                };
+
+                if (_orgSkillRequirements.Create(skillRequirement, out errMsg) != ErrorCode.Success)
                 {
                     return ErrorCode.Error;
-                }
-
-                // Get the eventId of the newly created event
-                int eventId = orgEvents.eventId;
-
-                // Add each skill associated with the eventId            
-                foreach (var skill in skills)
-                {
-                    var skillRequirement = new OrgSkillRequirement
-                    {
-                        eventId = eventId,
-                        skillName = skill
-                    };
-
-                    if (_orgSkillRequirements.Create(skillRequirement, out errMsg) != ErrorCode.Success)
-                    {
-                        return ErrorCode.Error;
-                    }
-                }
-
-                // Add each image associated with the eventId
-                foreach (var fileName in imageFileNames)
-                {
-                    var orgEventImage = new OrgEventImage
-                    {
-                        eventId = eventId,
-                        eventImage = fileName
-                    };
-
-                    if (_orgEventsImage.Create(orgEventImage, out errMsg) != ErrorCode.Success)
-                    {
-                        return ErrorCode.Error;
-                    }
                 }
             }
-            else
+
+            // Add each image associated with the eventId
+            foreach (var fileName in imageFileNames)
             {
-                if (_orgEvents.Create(orgEvents, out errMsg) != ErrorCode.Success)
+                var orgEventImage = new OrgEventImage
+                {
+                    eventId = eventId,
+                    eventImage = fileName
+                };
+
+                if (_orgEventsImage.Create(orgEventImage, out errMsg) != ErrorCode.Success)
                 {
                     return ErrorCode.Error;
-                }
-
-                // Get the eventId of the newly created event
-                int eventId = orgEvents.eventId;
-
-                // Add each image associated with the eventId
-                foreach (var fileName in imageFileNames)
-                {
-                    var orgEventImage = new OrgEventImage
-                    {
-                        eventId = eventId,
-                        eventImage = fileName
-                    };
-
-                    if (_orgEventsImage.Create(orgEventImage, out errMsg) != ErrorCode.Success)
-                    {
-                        return ErrorCode.Error;
-                    }
                 }
             }
             return ErrorCode.Success;
@@ -145,9 +119,9 @@ namespace Tabang_Hub.Repository
             return ErrorCode.Success;
         }
 
-        public List<vw_ListOfEvent> ListOfEvents(int userId, int eventType)
+        public List<vw_ListOfEvent> ListOfEvents(int userId)
         {
-            return _listOfEvents.GetAll().Where(m => m.User_Id == userId && m.Event_Type == eventType).ToList();
+            return _listOfEvents.GetAll().Where(m => m.User_Id == userId).ToList();
         }
         public Volunteers GetVolunteerById(int id)
         {
@@ -187,11 +161,16 @@ namespace Tabang_Hub.Repository
         {
             return _volunteerSkills.GetAll();
         }
+        public UserAccount GetUserByUserId(int userId)
+        {
+            return _userAccount._table.Where(m => m.userId == userId).FirstOrDefault();
+        }
         public ErrorCode DeleteEvent(int eventId)
         {
             var skillsRequirement = listOfSkillRequirement(eventId);
             var eventImage = listOfEventImage(eventId);
             var eventVolunteers = ListOfEventVolunteers(eventId);
+            var userDonated = ListOfUserDonated(eventId);
 
             if (skillsRequirement != null)
             {
@@ -210,6 +189,17 @@ namespace Tabang_Hub.Repository
                 foreach (var eventImages in eventImage)
                 {
                     var result = _orgEventsImage.Delete(eventImages.eventImageId);
+                    if (result != ErrorCode.Success)
+                    {
+                        return ErrorCode.Error;
+                    }
+                }
+            }
+            if (userDonated != null)
+            {
+                foreach (var userDonate in userDonated)
+                {
+                    var result = _userDonated.Delete(userDonate.orgUserDonatedId);
                     if (result != ErrorCode.Success)
                     {
                         return ErrorCode.Error;
