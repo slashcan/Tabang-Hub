@@ -209,6 +209,27 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="vw_OrganizationAccounts">
+      <EntityTypeMapping TypeName="TabangHubModel.vw_OrganizationAccounts">
+        <MappingFragment StoreEntitySet="vw_OrganizationAccounts">
+          <ScalarProperty Name="Profile_Id" ColumnName="Profile_Id" />
+          <ScalarProperty Name="Zip_Code" ColumnName="Zip_Code" />
+          <ScalarProperty Name="Province" ColumnName="Province" />
+          <ScalarProperty Name="City" ColumnName="City" />
+          <ScalarProperty Name="Street" ColumnName="Street" />
+          <ScalarProperty Name="Contact_No" ColumnName="Contact_No" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="Org_Type" ColumnName="Org_Type" />
+          <ScalarProperty Name="Org_Name" ColumnName="Org_Name" />
+          <ScalarProperty Name="Role_Id" ColumnName="Role_Id" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="User_Info" ColumnName="User_Info" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="User_Id" ColumnName="User_Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="vw_UserRoles">
       <EntityTypeMapping TypeName="TabangHubModel.vw_UserRoles">
         <MappingFragment StoreEntitySet="vw_UserRoles">
@@ -235,27 +256,6 @@
           <ScalarProperty Name="Birthday" ColumnName="Birthday" />
           <ScalarProperty Name="First_Name" ColumnName="First_Name" />
           <ScalarProperty Name="Last_Name" ColumnName="Last_Name" />
-          <ScalarProperty Name="Role_Id" ColumnName="Role_Id" />
-          <ScalarProperty Name="Status" ColumnName="Status" />
-          <ScalarProperty Name="User_Info" ColumnName="User_Info" />
-          <ScalarProperty Name="Password" ColumnName="Password" />
-          <ScalarProperty Name="Email" ColumnName="Email" />
-          <ScalarProperty Name="User_Id" ColumnName="User_Id" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="vw_OrganizationAccounts">
-      <EntityTypeMapping TypeName="TabangHubModel.vw_OrganizationAccounts">
-        <MappingFragment StoreEntitySet="vw_OrganizationAccounts">
-          <ScalarProperty Name="Profile_Id" ColumnName="Profile_Id" />
-          <ScalarProperty Name="Zip_Code" ColumnName="Zip_Code" />
-          <ScalarProperty Name="Province" ColumnName="Province" />
-          <ScalarProperty Name="City" ColumnName="City" />
-          <ScalarProperty Name="Street" ColumnName="Street" />
-          <ScalarProperty Name="Contact_No" ColumnName="Contact_No" />
-          <ScalarProperty Name="Description" ColumnName="Description" />
-          <ScalarProperty Name="Org_Type" ColumnName="Org_Type" />
-          <ScalarProperty Name="Org_Name" ColumnName="Org_Name" />
           <ScalarProperty Name="Role_Id" ColumnName="Role_Id" />
           <ScalarProperty Name="Status" ColumnName="Status" />
           <ScalarProperty Name="User_Info" ColumnName="User_Info" />

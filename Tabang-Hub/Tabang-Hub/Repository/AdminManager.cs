@@ -16,6 +16,14 @@ namespace Tabang_Hub.Repository
         private BaseRepository<Volunteers> _joinedEvent;
         private BaseRepository<VolunteerSkill> _volunteerSkill;
         private BaseRepository<UserRoles> _userRoles;
+        private BaseRepository<OrgSkillRequirement> _orgSkillRequirement;
+        private BaseRepository<OrgEventImage> _orgEventImage;
+        private BaseRepository<UserDonated> _userDonated;
+        private BaseRepository<Volunteers> _volunteers;
+        private BaseRepository<OrgEvents> _orgEvents;
+        private BaseRepository<OrgValidation> _orgValidation;
+        private BaseRepository<OrgInfo> _orgInfo;
+
         public AdminManager()
         {
             _volunteerAccounts = new BaseRepository<vw_VolunteerAccounts>();
@@ -25,7 +33,14 @@ namespace Tabang_Hub.Repository
             _profilePic = new BaseRepository<ProfilePicture>();
             _joinedEvent = new BaseRepository<Volunteers>();
             _volunteerSkill = new BaseRepository<VolunteerSkill>();
-            _userRoles = new BaseRepository<UserRoles>();           
+            _userRoles = new BaseRepository<UserRoles>();
+            _orgSkillRequirement = new BaseRepository<OrgSkillRequirement>();
+            _orgEventImage = new BaseRepository<OrgEventImage>();
+            _userDonated = new BaseRepository<UserDonated>();
+            _volunteers = new BaseRepository<Volunteers>();
+            _orgEvents = new BaseRepository<OrgEvents>();
+            _orgValidation = new BaseRepository<OrgValidation>();
+            _orgInfo = new BaseRepository<OrgInfo>();
         }
 
         public List<vw_VolunteerAccounts> GetVolunteerAccounts()
@@ -59,6 +74,35 @@ namespace Tabang_Hub.Repository
         public List<UserRoles> GetRolesByUserId(int userId)
         {
             return _userRoles.GetAll().Where(m => m.userId == userId).ToList();
+        }
+        public List<OrgSkillRequirement> GetSkillsRequirementByEventId(int eventId)
+        {
+            return _orgSkillRequirement.GetAll().Where(m => m.eventId == eventId).ToList();
+        }
+        public List<OrgEventImage> GetEventImagesByEventId(int eventId)
+        {
+            return _orgEventImage.GetAll().Where(m => m.eventId == eventId).ToList();
+        }
+        public List<UserDonated> GetUserDonatedByEventId(int eventId)
+        {
+            return _userDonated.GetAll().Where(m => m.eventId == eventId).ToList();
+        }
+        public List<Volunteers> GetVolunteersByEventId(int eventId)
+        {
+            return _volunteers.GetAll().Where(m => m.eventId == eventId).ToList();
+        }
+
+        public List<OrgValidation> GetOrgValidationsByUserId(int userId)
+        {
+            return _orgValidation.GetAll().Where(m => m.userId == userId).ToList();
+        }
+        public OrgInfo GetOrgInfoByUserId(int userId)
+        {
+            return _orgInfo._table.Where(m => m.userId == userId).FirstOrDefault();
+        }
+        public List<OrgEvents> GetEventsByUserId(int userId)
+        {
+            return _orgEvents.GetAll().Where(m => m.userId == userId).ToList();
         }
 
         public ErrorCode DeleteUser(int userId)
@@ -132,6 +176,108 @@ namespace Tabang_Hub.Repository
             }
             var deleteUserResult = _userAccount.Delete(user.userId);
             if (deleteUserResult != ErrorCode.Success)
+            {
+                return ErrorCode.Error;
+            }
+
+            return ErrorCode.Success;
+        }
+        public ErrorCode DeleteOrganization(int userId)
+        {
+            var user = GetUserById(userId);
+            if (user == null)
+            {
+                return ErrorCode.Error;
+            }
+
+            var events = GetEventsByUserId(user.userId);
+            var validation = GetOrgValidationsByUserId(user.userId);
+            var profile = GetProfileByUserId(user.userId);
+            var orgInfo = GetOrgInfoByUserId(user.userId);
+            var userRoles = GetRolesByUserId(user.userId);
+            var userAcc = GetUserById(user.userId);
+
+            foreach (var orgEvent in events)
+            { 
+                var skillRequirements = GetSkillsRequirementByEventId(orgEvent.eventId);
+                var orgEventImage = GetEventImagesByEventId(orgEvent.eventId);
+                var userDonate = GetUserDonatedByEventId(orgEvent.eventId);
+                var volunteer = GetVolunteersByEventId(orgEvent.eventId);
+                
+                
+                foreach (var skillRequirement in skillRequirements)
+                {
+                    var result = _orgSkillRequirement.Delete(skillRequirement.skillRequirementId);
+                    if (result != ErrorCode.Success)
+                    {
+                        return ErrorCode.Error;
+                    }
+                }
+
+                foreach (var eventImage in orgEventImage)
+                {
+                    var result = _orgEventImage.Delete(eventImage.eventImageId);
+                    if (result != ErrorCode.Success)
+                    {
+                        return ErrorCode.Error;
+                    }
+                }
+
+                foreach (var donated in userDonate)
+                {
+                    var result = _userDonated.Delete(donated.orgUserDonatedId);
+                    if (result != ErrorCode.Success)
+                    {
+                        return ErrorCode.Error;
+                    }
+                }
+
+                foreach (var volunteers in volunteer)
+                {
+                    var result = _volunteers.Delete(volunteers.applyVolunteerId);
+                    if (result != ErrorCode.Success)
+                    {
+                        return ErrorCode.Error;
+                    }
+                }
+
+                var results = _orgEvents.Delete(orgEvent.eventId);
+                if (results != ErrorCode.Success)
+                {
+                    return ErrorCode.Error;
+                }
+            }
+            foreach (var valid in validation)
+            {
+                var result = _orgValidation.Delete(valid.orgValidationId);
+                if (result != ErrorCode.Success)
+                {
+                    return ErrorCode.Error;
+                }
+            }
+            foreach (var profiles in profile)
+            {
+                var result = _profilePic.Delete(profiles.profileId);
+                if (result != ErrorCode.Success)
+                {
+                    return ErrorCode.Error;
+                }
+            }
+            var deleteInf = _orgInfo.Delete(user.userId);
+            if (deleteInf != ErrorCode.Success)
+            {
+                return ErrorCode.Error;
+            }
+            foreach (var roles in userRoles)
+            { 
+                var result = _userRoles.Delete(roles.userId);
+                if (result != ErrorCode.Success)
+                {
+                    return ErrorCode.Error;
+                }
+            }
+            var deleteOrg = _userAccount.Delete(user.userId);
+            if (deleteOrg != ErrorCode.Success)
             {
                 return ErrorCode.Error;
             }
