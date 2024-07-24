@@ -97,6 +97,16 @@ namespace Tabang_Hub.Repository
                 errMsg = "Email Already Exist";
                 return ErrorCode.Error;
             }
+            if (ov.idPicture1 == null)
+            {
+                errMsg = "Please provide Id picture";
+                return ErrorCode.Error;
+            }
+            if (ov.idPicture2 == null)
+            {
+                errMsg = "Please provide Id picture";
+                return ErrorCode.Error;
+            }
 
             if (_userAcc.Create(u, out errMsg) != ErrorCode.Success)
             {

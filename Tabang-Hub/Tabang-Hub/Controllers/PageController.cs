@@ -87,7 +87,8 @@ namespace Tabang_Hub.Controllers
             }
             if (_userManager.OrgRegister(u, o, ov, r, ref ErrorMessage) != ErrorCode.Success)
             {
-                ModelState.AddModelError(String.Empty, ErrorMessage);
+                TempData["ErrorMessage"] = ErrorMessage;
+                return View();
             }
 
             TempData["email"] = u.email;
@@ -128,16 +129,16 @@ namespace Tabang_Hub.Controllers
             {
                 if (!u.password.Equals(ConfirmPass))
                 {
-                    ModelState.AddModelError(String.Empty, "Password not match");
+                    TempData["ErrorMessage"] = "Passwords do not match.";
                     return View(u);
                 }
 
                 if (_userManager.Register(u, v, r, ref ErrorMessage) != ErrorCode.Success)
                 {
-                    ModelState.AddModelError(String.Empty, ErrorMessage);
-
-                    return View(u);
+                    TempData["ErrorMessage"] = ErrorMessage;
+                    return View();
                 }
+
                 TempData["email"] = u.email;
                 Session["email"] = u.email;
                 Session["NewAccountId"] = u.userId;
@@ -161,7 +162,7 @@ namespace Tabang_Hub.Controllers
             }
             catch (Exception ex)
             {
-                TempData["msg"] = $"Error! " + ex.Message;
+                TempData["ErrorMessage"] = "Error! " + ex.Message;
                 return RedirectToAction("Register");
             }
 
@@ -187,8 +188,26 @@ namespace Tabang_Hub.Controllers
 
                 if (user.status != (Int32)Status.Active)
                 {
-                    TempData["email"] = email;
-                    return RedirectToAction("Index");
+                    TempData["email"] = user.email;
+                    Session["email"] = user.email;
+                    Session["NewAccountId"] = user.userId;
+
+                    Random random = new Random();
+                    int randomOTP = random.Next(1000, 10000);
+                    Session["randomOTP"] = randomOTP;
+
+                    MailManager sendOTP = new MailManager();
+                    string subject = "Welcome to our website!";
+                    string userEmail = user.email;
+                    string body = $"Welcome to Mobile Legend {randomOTP}";
+
+                    string errorResponse = "";
+
+                    bool isOTPSent = sendOTP.SendEmail(userEmail, subject, body, ref errorResponse);
+                    if (isOTPSent)
+                    {
+                        return RedirectToAction("Verify");
+                    }
                 }
 
                 FormsAuthentication.SetAuthCookie(email, false);

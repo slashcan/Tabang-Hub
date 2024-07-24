@@ -16,6 +16,12 @@
                         <div class="col-md-8">
                             <h2>Register Organization</h2>
                             <p>Fill in the details to create organization.</p>
+                            @if (TempData["ErrorMessage"] != null)
+                            {
+                                <div class="alert alert-danger">
+                                    @TempData["ErrorMessage"]
+                                </div>
+                            }
                             <form action="~/Page/RegisterOrg" method="post" enctype="multipart/form-data">
                                 <div class="mb-3">
                                     <label for="email" class="form-label">Email Address</label>
