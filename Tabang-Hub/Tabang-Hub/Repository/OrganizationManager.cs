@@ -18,6 +18,7 @@ namespace Tabang_Hub.Repository
         private BaseRepository<Volunteers> _eventVolunteers;
         private BaseRepository<VolunteerSkill> _volunteerSkills;
         private BaseRepository<UserAccount> _userAccount;
+        private BaseRepository<Skills> _skills;
 
         public OrganizationManager()
         {
@@ -31,6 +32,7 @@ namespace Tabang_Hub.Repository
             _eventVolunteers = new BaseRepository<Volunteers>();
             _volunteerSkills = new BaseRepository<VolunteerSkill>();
             _userAccount = new BaseRepository<UserAccount>();
+            _skills = new BaseRepository<Skills>();
         }
 
 
@@ -122,6 +124,14 @@ namespace Tabang_Hub.Repository
         public List<vw_ListOfEvent> ListOfEvents(int userId)
         {
             return _listOfEvents.GetAll().Where(m => m.User_Id == userId).ToList();
+        }
+        public ProfilePicture GetProfileByProfileId(int? id)
+        { 
+            return _profilePic._table.Where(m => m.profileId == id).FirstOrDefault();
+        }
+        public List<Skills> ListOfSkills()
+        { 
+            return _skills.GetAll().ToList();
         }
         public Volunteers GetVolunteerById(int id)
         {

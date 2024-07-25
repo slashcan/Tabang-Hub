@@ -1,0 +1,104 @@
+﻿@model Tabang_Hub.Utils.Lists
+
+@{
+    ViewBag.Title = "Reports";
+    Layout = "~/Views/Shared/_Organization.cshtml";
+}
+
+<link rel="stylesheet" href="~/Content/vendors/iconly/bold.css">
+
+<div id="main">
+    <header class="mb-3">
+        <a href="#" class="burger-btn d-block d-xl-none">
+            <i class="bi bi-justify fs-3"></i>
+        </a>
+    </header>
+
+    <div class="page-heading">
+        <h3>Reports</h3>
+    </div>
+    <div class="page-content">
+        <section class="row">
+            <div class="col-12 col-lg-9">
+                <div class="row">
+                    <div class="col-6 col-lg-3 col-md-6">
+                        <div class="card">
+                            <div class="card-body px-3 py-4-5">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="stats-icon purple">
+                                            <i class="iconly-boldShow"></i>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <h6 class="text-muted font-semibold">Total Events</h6>
+                                        <h6 class="font-extrabold mb-0">112.000</h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-lg-3 col-md-6">
+                        <div class="card">
+                            <div class="card-body px-3 py-4-5">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="stats-icon blue">
+                                            <i class="iconly-boldProfile"></i>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <h6 class="text-muted font-semibold" style="font-size: 0.85rem;">Total Volunteers</h6>
+                                        <h6 class="font-extrabold mb-0">183.000</h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-lg-3 col-md-6">
+                        <div class="card">
+                            <div class="card-body px-3 py-4-5">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="stats-icon green">
+                                            <i class="iconly-boldAdd-User"></i>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <h6 class="text-muted font-semibold" style="font-size: 0.85rem;">Total Donations</h6>
+                                        <h6 class="font-extrabold mb-0">80.000</h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h4>Tabang Tulong</h4>
+                                <div class="dropdown">
+                                    <button class="btn btn-secondary dropdown-toggle" type="button" id="eventsDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Events
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="eventsDropdown">
+                                        <li><a class="dropdown-item" href="#">Event 1</a></li>
+                                        <li><a class="dropdown-item" href="#">Event 2</a></li>
+                                        <li><a class="dropdown-item" href="#">Event 3</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div id="chart-profile-visit"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+
+<script src="~/Content/vendors/apexcharts/apexcharts.js"></script>
+<script src="~/Content/js1/pages/dashboard.js"></script>

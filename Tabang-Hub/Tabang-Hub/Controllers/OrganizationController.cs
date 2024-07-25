@@ -17,15 +17,25 @@ namespace Tabang_Hub.Controllers
         // GET: Organization
         public ActionResult Index()
         {
-            return View();
+            var orgInfo = _organizationManager.GetOrgInfoByUserId(UserId);
+            var profile = _organizationManager.GetProfileByProfileId(orgInfo.profileId);
+
+            var indexModel = new Lists()
+            { 
+                OrgInfo = orgInfo,
+                profilePic = profile,
+            };
+            return View(indexModel);
         }
         public ActionResult OrgProfile()
         {
             var orgInfo = _organizationManager.GetOrgInfoByUserId(UserId);
+            var profile = _organizationManager.GetProfileByProfileId(orgInfo.profileId);
 
             var indexModdel = new Lists()
             {
                 OrgInfo = orgInfo,
+                profilePic = profile,
             };
             return View(indexModdel);
         }
@@ -61,12 +71,18 @@ namespace Tabang_Hub.Controllers
         public ActionResult EventsList()
         {
             var lists = _organizationManager.ListOfEvents(UserId);
+            var listOfSkill = _organizationManager.ListOfSkills();
             var listofUserDonated = _organizationManager.ListOfUserDonated(UserId);
+            var orgInfo = _organizationManager.GetOrgInfoByUserId(UserId);
+            var profile = _organizationManager.GetProfileByProfileId(orgInfo.profileId);
 
             var indexModel = new Lists()
             {
                 listOfEvents = lists,
+                listOfSkills = listOfSkill,
                 listofUserDonated = listofUserDonated,
+                OrgInfo = orgInfo,
+                profilePic = profile,
             };
 
             return View(indexModel);
@@ -184,6 +200,7 @@ namespace Tabang_Hub.Controllers
             var orgInfo = _organizationManager.GetOrgInfoByUserId(UserId);
             var listOfEventVolunteers = _organizationManager.ListOfEventVolunteers(id);
             var volunteerSkills = _organizationManager.ListOfEventVolunteerSkills();
+            var profile = _organizationManager.GetProfileByProfileId(orgInfo.profileId);
 
             var indexModel = new Lists()
             {
@@ -194,6 +211,7 @@ namespace Tabang_Hub.Controllers
                 listOfEventVolunteers = listOfEventVolunteers,
                 volunteersSkills = volunteerSkills,
                 listofUserDonated = listofUserDonated,
+                profilePic = profile,
             };
 
             if (events != null)
@@ -236,16 +254,44 @@ namespace Tabang_Hub.Controllers
             var getVolunteerInfo = db.VolunteerInfo.Where(m => m.userId == userId).ToList();
             var getVolunteerSkills = db.VolunteerSkill.Where(m => m.userId == userId).ToList();
             var getProfile = db.ProfilePicture.Where(m => m.userId == userId).ToList();
+            var orgInfo = _organizationManager.GetOrgInfoByUserId(UserId);
+            var profile = _organizationManager.GetProfileByProfileId(orgInfo.profileId);
 
             var listModel = new Lists()
             {
+                OrgInfo = orgInfo,
                 userAccount = getUserAccount,
                 volunteersInfo = getVolunteerInfo,
                 volunteersSkills = getVolunteerSkills,
-                picture = getProfile
+                picture = getProfile,
+                profilePic = profile,
             };
 
             return View(listModel);
+        }
+        public ActionResult Reports()
+        {
+            var orgInfo = _organizationManager.GetOrgInfoByUserId(UserId);
+            var profile = _organizationManager.GetProfileByProfileId(orgInfo.profileId);
+
+            var indexModdel = new Lists()
+            {
+                OrgInfo = orgInfo,
+                profilePic = profile,
+            };
+            return View(indexModdel);
+        }
+        public ActionResult History()
+        {
+            var orgInfo = _organizationManager.GetOrgInfoByUserId(UserId);
+            var profile = _organizationManager.GetProfileByProfileId(orgInfo.profileId);
+
+            var indexModdel = new Lists()
+            {
+                OrgInfo = orgInfo,
+                profilePic = profile,
+            };
+            return View(indexModdel);
         }
     }
 }
