@@ -3,10 +3,7 @@
     ViewBag.Title = "VolunteerProfile";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
-<h2>VolunteerProfile</h2>
-
-<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+@*<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">*@
 
 <div class="container mt-5">
     <div class="card">
@@ -88,7 +85,7 @@
                     <div id="skillsDisplay">
                         @foreach (var UserSkill in Model.volunteersSkills)
                         {
-                            <span class="badge badge-secondary skill-badge" data-skill-id="@UserSkill.skillId">
+                            <span style="background-color: mediumseagreen; cursor: pointer" class="badge badge-secondary skill-badge" data-skill-id="@UserSkill.skillId">
                                 @UserSkill.skillName
                                 <span class="remove-skill d-none" onclick="removeSkill(this)">x</span>
                             </span>
@@ -109,37 +106,26 @@
             </div>
         </div>
     </div>
-    <div class="card mt-3">
-        <div class="card-body">
-            <h5 class="text-center">Activity History</h5>
-            <div class="row">
-                <div class="col-md-4">
-                    <h6>Top 1 Activity</h6>
-                    <p>June 2019 - March 2020</p>
-                    <h6>Top 2 Activity</h6>
-                    <p>June 2019 - March 2020</p>
-                    <h6>Top 3 Activity</h6>
-                    <p>June 2019 - March 2020</p>
-                </div>
-                <div class="col-md-4">
-                    <h6>Top 4 Activity</h6>
-                    <p>June 2019 - March 2020</p>
-                    <h6>Top 5 Activity</h6>
-                    <p>June 2019 - March 2020</p>
-                    <h6>Top 6 Activity</h6>
-                    <p>June 2019 - March 2020</p>
-                </div>
-                <div class="col-md-4">
-                    <h6>Top 7 Activity</h6>
-                    <p>June 2019 - March 2020</p>
-                    <h6>Top 8 Activity</h6>
-                    <p>June 2019 - March 2020</p>
-                    <h6>Top 9 Activity</h6>
-                    <p>June 2019 - March 2020</p>
-                </div>
+    @*<div class="card mt-3">
+            <div class="card-body">
+                <h5>Volunteer Impact</h5>
+                <ul>
+                    <li>
+                        Total hours volunteered
+                    </li>
+                    <li>
+                        Number of events participated
+                    </li>
+                </ul>
             </div>
         </div>
-    </div>
+
+        <div class="card mt-3">
+        <div class="card-body">
+            <h5>Feedback and Ratings</h5>
+            <p>Feedback from the past events</p>
+        </div>*@
+</div>
 </div>
 <br />
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

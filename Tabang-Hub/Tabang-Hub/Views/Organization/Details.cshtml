@@ -334,11 +334,16 @@
                                         </div>
                                         <div class="ms-auto">
                                             <a href="@Url.Action("VolunteerDetails", "Organization", new { userId = volunteer.userId })" class="btn btn-outline-primary btn-sm">View</a>
-                                            <form action="@Url.Action("ConfirmApplicants", "Organization")" method="post" style="display: inline;">
+                                            <form action="@Url.Action("ConfirmApplicants", "Organization")" method="post" class="confirm-form" data-volunteer-id="@volunteer.userId" data-event-id="@volunteer.eventId" style="display: inline;">
                                                 <input type="hidden" name="id" value="@volunteer.userId" />
-                                                <button type="submit" class="btn btn-outline-success btn-sm">Confirm</button>
+                                                <input type="hidden" name="eventId" value="@volunteer.eventId" />
+                                                <button type="button" class="btn btn-outline-success btn-sm confirm-button">Confirm</button>
                                             </form>
-                                            <a href="@Url.Action("ConfirmApplicants", "Organization", new { id = volunteer.userId })" class="btn btn-outline-danger btn-sm">Decline</a>
+                                            <form action="@Url.Action("DeclineApplicants", "Organization")" method="post" class="decline-form" data-volunteer-id="@volunteer.userId" data-event-id="@volunteer.eventId" style="display: inline;">
+                                                <input type="hidden" name="id" value="@volunteer.userId" />
+                                                <input type="hidden" name="eventId" value="@volunteer.eventId" />
+                                                <button type="button" class="btn btn-outline-danger btn-sm decline-button">Decline</button>
+                                            </form>
                                         </div>
                                     </div>
                                 }
@@ -351,6 +356,7 @@
     </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     function showSection(sectionId, event) {
         event.preventDefault();
@@ -362,4 +368,52 @@
         // Show the selected section
         document.getElementById(sectionId).classList.add('active');
     }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.confirm-button').forEach(button => {
+            button.addEventListener('click', function () {
+                const form = this.closest('.confirm-form');
+                const volunteerId = form.getAttribute('data-volunteer-id');
+                const eventId = form.getAttribute('data-event-id');
+
+                Swal.fire({
+                    title: 'Confirm Volunteer?',
+                    text: "Are you sure you want to confirm this volunteer?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, confirm it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Submit the form to confirm the volunteer
+                        form.submit();
+                    }
+                });
+            });
+        });
+
+        document.querySelectorAll('.decline-button').forEach(button => {
+            button.addEventListener('click', function () {
+                const form = this.closest('.decline-form');
+                const volunteerId = form.getAttribute('data-volunteer-id');
+                const eventId = form.getAttribute('data-event-id');
+
+                Swal.fire({
+                    title: 'Decline Volunteer?',
+                    text: "Are you sure you want to decline this volunteer?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, decline it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Submit the form to decline the volunteer
+                        form.submit();
+                    }
+                });
+            });
+        });
+    });
 </script>

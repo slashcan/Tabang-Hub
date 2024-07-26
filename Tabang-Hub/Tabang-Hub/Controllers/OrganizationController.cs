@@ -237,11 +237,11 @@ namespace Tabang_Hub.Controllers
             return RedirectToAction("EventsList");
         }
         [HttpPost]
-        public ActionResult ConfirmApplicants(int id)
+        public ActionResult ConfirmApplicants(int id, int eventId)
         {
             string errMsg = string.Empty;
 
-            if (_organizationManager.ConfirmApplicants(id, ref errMsg) != ErrorCode.Success)
+            if (_organizationManager.ConfirmApplicants(id, eventId, ref errMsg) != ErrorCode.Success)
             {
                 ModelState.AddModelError(String.Empty, errMsg);
                 return RedirectToAction("EventsList");

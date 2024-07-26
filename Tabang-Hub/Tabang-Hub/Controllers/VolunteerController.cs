@@ -41,7 +41,7 @@ namespace Tabang_Hub.Controllers
         }
 
         [HttpPost]
-        public JsonResult EditBasicInfo(string phone, string street, string city, string province, string email)
+        public JsonResult EditBasicInfo(string phone, string street, string city, string province, string email, string availability)
         {
             try
             {
@@ -52,7 +52,7 @@ namespace Tabang_Hub.Controllers
                 VolunteerUpdate.phoneNum = phone;
                 VolunteerUpdate.city = city;
                 VolunteerUpdate.province = province;
-
+                VolunteerUpdate.availability = availability;
                 UserUpdate.email = email;
 
                 db.SaveChanges();
@@ -96,7 +96,7 @@ namespace Tabang_Hub.Controllers
                             db.VolunteerSkill.Remove(removeSkill);
                         }
                     }
-                    if (skills != null && skills.Count > 0)
+                    if (skills != null)
                     {
 
                         foreach (var skillId in skills)
@@ -106,6 +106,13 @@ namespace Tabang_Hub.Controllers
 
                             if (existSkill == null)
                             {
+                                var skillToRemove = db.VolunteerSkill.Where(m => !skills.Contains(m.skillId) && m.userId == UserId).ToList();
+
+                                foreach (var removeSkill in skillToRemove)
+                                {
+                                    db.VolunteerSkill.Remove(removeSkill);
+                                }
+
                                 var newVolSkill = new VolunteerSkill
                                 {
                                     userId = UserId,
@@ -261,7 +268,7 @@ namespace Tabang_Hub.Controllers
                 };
 
                 //var updateVolunteerNeeded = db.OrgEvents.Where(m => m.eventId == eventId).FirstOrDefault();
-                
+
                 if (checkVolunteer == null)
                 {
                     //updateVolunteerNeeded.maxVolunteer = updateVolunteerNeeded.maxVolunteer - 1;

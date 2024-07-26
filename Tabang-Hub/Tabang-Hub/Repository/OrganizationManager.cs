@@ -133,9 +133,9 @@ namespace Tabang_Hub.Repository
         { 
             return _skills.GetAll().ToList();
         }
-        public Volunteers GetVolunteerById(int id)
+        public Volunteers GetVolunteerById(int id, int eventId)
         {
-            return _eventVolunteers._table.Where(m => m.userId == id).FirstOrDefault();
+            return _eventVolunteers._table.Where(m => m.userId == id && m.eventId == eventId).FirstOrDefault();
         }
         public OrgInfo GetOrgInfoByUserId(int? id)
         {
@@ -237,9 +237,9 @@ namespace Tabang_Hub.Repository
 
             return ErrorCode.Success;
         }
-        public ErrorCode ConfirmApplicants(int id, ref string errMsg)
+        public ErrorCode ConfirmApplicants(int id, int eventId, ref string errMsg)
         {
-            var user = GetVolunteerById(id);
+            var user = GetVolunteerById(id, eventId);
 
             user.Status = 1;
 
