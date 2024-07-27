@@ -18,6 +18,7 @@ namespace Tabang_Hub.Repository
         private BaseRepository<Volunteers> _eventVolunteers;
         private BaseRepository<VolunteerSkill> _volunteerSkills;
         private BaseRepository<UserAccount> _userAccount;
+        private BaseRepository<Skills> _skills;
 
         public OrganizationManager()
         {
@@ -31,6 +32,7 @@ namespace Tabang_Hub.Repository
             _eventVolunteers = new BaseRepository<Volunteers>();
             _volunteerSkills = new BaseRepository<VolunteerSkill>();
             _userAccount = new BaseRepository<UserAccount>();
+            _skills = new BaseRepository<Skills>();
         }
 
 
@@ -123,9 +125,17 @@ namespace Tabang_Hub.Repository
         {
             return _listOfEvents.GetAll().Where(m => m.User_Id == userId).ToList();
         }
-        public Volunteers GetVolunteerById(int id)
+        public ProfilePicture GetProfileByProfileId(int? id)
+        { 
+            return _profilePic._table.Where(m => m.profileId == id).FirstOrDefault();
+        }
+        public List<Skills> ListOfSkills()
+        { 
+            return _skills.GetAll().ToList();
+        }
+        public Volunteers GetVolunteerById(int id, int eventId)
         {
-            return _eventVolunteers._table.Where(m => m.userId == id).FirstOrDefault();
+            return _eventVolunteers._table.Where(m => m.userId == id && m.eventId == eventId).FirstOrDefault();
         }
         public OrgInfo GetOrgInfoByUserId(int? id)
         {
@@ -227,9 +237,9 @@ namespace Tabang_Hub.Repository
 
             return ErrorCode.Success;
         }
-        public ErrorCode ConfirmApplicants(int id, ref string errMsg)
+        public ErrorCode ConfirmApplicants(int id, int eventId, ref string errMsg)
         {
-            var user = GetVolunteerById(id);
+            var user = GetVolunteerById(id, eventId);
 
             user.Status = 1;
 
