@@ -103,6 +103,67 @@
     <Content Include="Content\Css\popup.css" />
     <Content Include="Content\Css\progress.css" />
     <Content Include="Content\Css\Style.css" />
+<<<<<<< Updated upstream
+=======
+    <Content Include="Content\images1\bg\4853433.jpg" />
+    <Content Include="Content\images1\faces\1.jpg" />
+    <Content Include="Content\images1\faces\2.jpg" />
+    <Content Include="Content\images1\faces\3.jpg" />
+    <Content Include="Content\images1\faces\4.jpg" />
+    <Content Include="Content\images1\faces\5.jpg" />
+    <Content Include="Content\images1\faces\6.jpg" />
+    <Content Include="Content\images1\faces\7.jpg" />
+    <Content Include="Content\images1\faces\8.jpg" />
+    <Content Include="Content\images1\logo\logo.png" />
+    <Content Include="Content\images1\samples\1.png" />
+    <Content Include="Content\images1\samples\2.png" />
+    <Content Include="Content\images1\samples\3.png" />
+    <Content Include="Content\images1\samples\4.png" />
+    <Content Include="Content\images1\samples\architecture1.jpg" />
+    <Content Include="Content\images1\samples\banana.jpg" />
+    <Content Include="Content\images1\samples\bg-mountain.jpg" />
+    <Content Include="Content\images1\samples\building.jpg" />
+    <Content Include="Content\images1\samples\error-403.png" />
+    <Content Include="Content\images1\samples\error-404.png" />
+    <Content Include="Content\images1\samples\error-500.png" />
+    <Content Include="Content\images1\samples\jump.jpg" />
+    <Content Include="Content\images1\samples\motorcycle.jpg" />
+    <Content Include="Content\images1\samples\origami.jpg" />
+    <Content Include="Content\images1\samples\water.jpg" />
+    <Content Include="Content\images2\avatar\portrait-beautiful-young-woman-standing-grey-wall.jpg" />
+    <Content Include="Content\images2\avatar\portrait-young-beautiful-woman-gesticulating.jpg" />
+    <Content Include="Content\images2\avatar\portrait-young-redhead-bearded-male.jpg" />
+    <Content Include="Content\images2\avatar\pretty-blonde-woman-wearing-white-t-shirt.jpg" />
+    <Content Include="Content\images2\avatar\studio-portrait-emotional-happy-funny.jpg" />
+    <Content Include="Content\images2\causes\african-woman-pouring-water-recipient-outdoors.jpg" />
+    <Content Include="Content\images2\causes\Basak.jpg" />
+    <Content Include="Content\images2\causes\Feeding.jpg" />
+    <Content Include="Content\images2\causes\group-african-kids-paying-attention-class.jpg" />
+    <Content Include="Content\images2\causes\poor-child-landfill-looks-forward-with-hope.jpg" />
+    <Content Include="Content\images2\causes\power-of-red-cross.jpg" />
+    <Content Include="Content\images2\different-people-doing-volunteer-work.jpg" />
+    <Content Include="Content\images2\group-people-volunteering-foodbank-poor-people.jpg" />
+    <Content Include="Content\images2\icons\hands.png" />
+    <Content Include="Content\images2\icons\heart.png" />
+    <Content Include="Content\images2\icons\receive.png" />
+    <Content Include="Content\images2\icons\scholarship.png" />
+    <Content Include="Content\images2\logo.png" />
+    <Content Include="Content\images2\news\africa-humanitarian-aid-doctor.jpg" />
+    <Content Include="Content\images2\news\close-up-happy-people-working-together.jpg" />
+    <Content Include="Content\images2\news\close-up-volunteer-oganizing-stuff-donation.jpg" />
+    <Content Include="Content\images2\news\medium-shot-people-collecting-foodstuff.jpg" />
+    <Content Include="Content\images2\news\medium-shot-volunteers-with-clothing-donations.jpg" />
+    <Content Include="Content\images2\organization.png" />
+    <Content Include="Content\images2\portrait-volunteer-who-organized-donations-charity.jpg" />
+    <Content Include="Content\images2\slide\medium-shot-people-collecting-donations.jpg" />
+    <Content Include="Content\images2\slide\volunteer-helping-with-donation-box.jpg" />
+    <Content Include="Content\images2\slide\volunteer-selecting-organizing-clothes-donations-charity.jpg" />
+    <Content Include="Content\images2\smiling-casual-woman-dressed-volunteer-t-shirt-with-badge.jpg" />
+    <Content Include="Content\images2\tabanghub3-No-Background.png" />
+    <Content Include="Content\images2\tabanghub3.png" />
+    <Content Include="Content\images2\volunteer.png" />
+    <Content Include="Content\images\default.jpg" />
+>>>>>>> Stashed changes
     <Content Include="Content\images\organization.png" />
     <Content Include="Content\images\tabanghub3.png" />
     <Content Include="Content\images\volunteer.png" />
@@ -202,6 +263,9 @@
     <Compile Include="sp_OtherEvent_Result.cs">
       <DependentUpon>ModelTabangHub.tt</DependentUpon>
     </Compile>
+    <Compile Include="sp_UserListEvent_Result.cs">
+      <DependentUpon>ModelTabangHub.tt</DependentUpon>
+    </Compile>
     <Compile Include="UserAccount.cs">
       <DependentUpon>ModelTabangHub.tt</DependentUpon>
     </Compile>
@@ -246,12 +310,10 @@
     <Content Include="Views\Page\ChooseRegister.cshtml" />
     <Content Include="Views\Page\RegisterOrg.cshtml" />
     <Content Include="Views\Page\Verify.cshtml" />
-    <Content Include="Views\Shared\_Organization.cshtml" />
     <Content Include="Views\Organization\Index.cshtml" />
     <Content Include="Views\Organization\Details.cshtml" />
     <Content Include="Views\Organization\OrgProfile.cshtml" />
     <Content Include="Views\Volunteer\VolunteerProfile.cshtml" />
-    <Content Include="Views\Volunteer\EventDetails.cshtml" />
     <Content Include="Views\Volunteer\GeneralSkill.cshtml" />
     <Content Include="Views\Volunteer\DonationDetails.cshtml" />
     <Content Include="Views\Message\Message.cshtml" />
@@ -263,6 +325,14 @@
     <Content Include="Views\Admin\VolunteerAccounts.cshtml" />
     <Content Include="Views\Admin\OrganizationAccounts.cshtml" />
     <Content Include="Views\Admin\UserDetails.cshtml" />
+<<<<<<< Updated upstream
+=======
+    <Content Include="Views\Organization\Reports.cshtml" />
+    <Content Include="Views\Organization\History.cshtml" />
+    <Content Include="Views\Shared\_Organization.cshtml" />
+    <Content Include="Views\Volunteer\OrganizationProfile.cshtml" />
+    <Content Include="Views\Volunteer\EventDetails.cshtml" />
+>>>>>>> Stashed changes
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

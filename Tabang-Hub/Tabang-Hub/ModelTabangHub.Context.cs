@@ -90,5 +90,14 @@ namespace Tabang_Hub
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_OtherEvent_Result>("sp_OtherEvent", userIdParameter);
         }
+    
+        public virtual ObjectResult<sp_UserListEvent_Result> sp_UserListEvent(Nullable<int> userId)
+        {
+            var userIdParameter = userId.HasValue ?
+                new ObjectParameter("userId", userId) :
+                new ObjectParameter("userId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_UserListEvent_Result>("sp_UserListEvent", userIdParameter);
+        }
     }
 }

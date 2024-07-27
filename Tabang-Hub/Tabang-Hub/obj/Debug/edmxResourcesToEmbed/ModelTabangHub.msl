@@ -265,5 +265,18 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="sp_UserListEvent" FunctionName="TabangHubModel.Store.sp_UserListEvent">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="TabangHubModel.sp_UserListEvent_Result">
+          <ScalarProperty Name="applyVolunteerId" ColumnName="applyVolunteerId" />
+          <ScalarProperty Name="userId" ColumnName="userId" />
+          <ScalarProperty Name="eventId" ColumnName="eventId" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="appliedAt" ColumnName="appliedAt" />
+          <ScalarProperty Name="dateStart" ColumnName="dateStart" />
+          <ScalarProperty Name="dateEnd" ColumnName="dateEnd" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
   </EntityContainerMapping>
 </Mapping>

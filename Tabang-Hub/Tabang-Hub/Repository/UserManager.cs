@@ -91,6 +91,7 @@ namespace Tabang_Hub.Repository
         {
             u.roleId = 2;
             u.status = 0;
+            var profile = new ProfilePicture();          
 
             if (GetUserByEmail(u.email) != null)
             {
@@ -113,23 +114,33 @@ namespace Tabang_Hub.Repository
             {
                 return ErrorCode.Error;
             }
+            profile.userId = u.userId;
+            profile.profilePath = "~/Content/IdPicture/download (1).jpg";
+            if (_profilePic.Create(profile, out errMsg) != ErrorCode.Success)
+            {
+                return ErrorCode.Error;
+            }
             o.userId = u.userId;
+            o.profileId = profile.profileId;
             if (_orgInfo.Create(o, out errMsg) != ErrorCode.Success)
             {
                 return ErrorCode.Error;
-            }          
+            }
             return ErrorCode.Success;
         }
         public ErrorCode UpdateUserStatus(int userId, short newStatus, ref string errMsg)
         {
             // First, retrieve the user account by its ID
             var user = _userAcc.Get(userId);
+            var uInfo = _volunteerInfo.GetAll().Where(m => m.userId == userId).FirstOrDefault();
 
-            if (user != null)
+            if (user != null && uInfo != null)
             {
                 // Update the status field
                 user.status = newStatus;
-
+                uInfo.fName = " ";
+                uInfo.lName = " ";
+                _volunteerInfo.Update(userId, uInfo, out errMsg);
                 // Now, call the Update method to save the changes
                 return (ErrorCode)_userAcc.Update(userId, user, out errMsg);
             }

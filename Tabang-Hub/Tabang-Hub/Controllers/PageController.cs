@@ -30,12 +30,24 @@ namespace Tabang_Hub.Controllers
                         var getSkills = _skills.GetAll().ToList();
                         var getProfile = db.ProfilePicture.Where(m => m.userId == UserId).ToList();
 
+                        var orgEventsSelectId = _orgEvents.GetAll().Where(m => m.targetAmount != null).Select(m => m.eventId).ToList();
+                        var orgEvents = _orgEvents.GetAll().Where(m => m.targetAmount != null).ToList();
+
+                        var getUserDonated = new List<UserDonated>();
+                        foreach (var eventId in orgEventsSelectId)
+                        {
+                            getUserDonated = _userDonated.GetAll().Where(m => m.eventId == eventId).ToList();
+                        }
+
                         var indexModel = new Lists()
                         {
                             volunteersInfo = getInfo,
                             volunteersSkills = getVolunteerSkills,
                             skills = getSkills,
-                            picture = getProfile
+                            picture = getProfile,
+                            listOfEvents = getEvents,
+                            volunteers = getVolunteers,
+                            orgInfos = getOrgInfo
                         };
                         return View(indexModel);
                     case 2:
