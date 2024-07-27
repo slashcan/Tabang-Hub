@@ -91,11 +91,20 @@ namespace Tabang_Hub.Repository
         {
             u.roleId = 2;
             u.status = 0;
-            var profile = new ProfilePicture();          
 
             if (GetUserByEmail(u.email) != null)
             {
                 errMsg = "Email Already Exist";
+                return ErrorCode.Error;
+            }
+            if (ov.idPicture1 == null)
+            {
+                errMsg = "Please provide Id picture";
+                return ErrorCode.Error;
+            }
+            if (ov.idPicture2 == null)
+            {
+                errMsg = "Please provide Id picture";
                 return ErrorCode.Error;
             }
 
@@ -114,18 +123,11 @@ namespace Tabang_Hub.Repository
             {
                 return ErrorCode.Error;
             }
-            profile.userId = u.userId;
-            profile.profilePath = "~/Content/IdPicture/download (1).jpg";
-            if (_profilePic.Create(profile, out errMsg) != ErrorCode.Success)
-            {
-                return ErrorCode.Error;
-            }
             o.userId = u.userId;
-            o.profileId = profile.profileId;
             if (_orgInfo.Create(o, out errMsg) != ErrorCode.Success)
             {
                 return ErrorCode.Error;
-            }
+            }          
             return ErrorCode.Success;
         }
         public ErrorCode UpdateUserStatus(int userId, short newStatus, ref string errMsg)

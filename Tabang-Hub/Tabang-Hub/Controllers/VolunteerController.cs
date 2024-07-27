@@ -28,7 +28,7 @@ namespace Tabang_Hub.Controllers
             var getProfile = db.ProfilePicture.Where(m => m.userId == UserId).ToList();
 
             var getUniqueSkill = db.sp_GetSkills(UserId).ToList();
-            if(getProfile.Count() <= 0)
+            if (getProfile.Count() <= 0)
             {
                 var defaultPicture = new ProfilePicture
                 {
@@ -52,11 +52,7 @@ namespace Tabang_Hub.Controllers
         }
 
         [HttpPost]
-<<<<<<< Updated upstream
-        public JsonResult EditBasicInfo(string phone, string street, string city, string province, string email)
-=======
         public JsonResult EditBasicInfo(string phone, string street, string city, string province, string email, string availability, HttpPostedFileBase profilePic)
->>>>>>> Stashed changes
         {
             try
             {
@@ -124,7 +120,7 @@ namespace Tabang_Hub.Controllers
                             db.VolunteerSkill.Remove(removeSkill);
                         }
                     }
-                    if (skills != null && skills.Count > 0)
+                    if (skills != null)
                     {
 
                         foreach (var skillId in skills)
@@ -134,6 +130,13 @@ namespace Tabang_Hub.Controllers
 
                             if (existSkill == null)
                             {
+                                var skillToRemove = db.VolunteerSkill.Where(m => !skills.Contains(m.skillId) && m.userId == UserId).ToList();
+
+                                foreach (var removeSkill in skillToRemove)
+                                {
+                                    db.VolunteerSkill.Remove(removeSkill);
+                                }
+
                                 var newVolSkill = new VolunteerSkill
                                 {
                                     userId = UserId,
@@ -302,7 +305,7 @@ namespace Tabang_Hub.Controllers
 
                     if (!(checkEventEndDate < userEventStartDate || checkEventStartDate > userEventEndDate))
                     {
-                        if(checkVolunteer.Status == 0)
+                        if (checkVolunteer.Status == 0)
                         {
                             return Json(new { success = false, message = "Conflict with another applied event" });
                         }
@@ -331,33 +334,27 @@ namespace Tabang_Hub.Controllers
                     appliedAt = DateTime.Now
                 };
 
-<<<<<<< Updated upstream
                 //var updateVolunteerNeeded = db.OrgEvents.Where(m => m.eventId == eventId).FirstOrDefault();
-                
+
                 if (checkVolunteer == null)
                 {
                     //updateVolunteerNeeded.maxVolunteer = updateVolunteerNeeded.maxVolunteer - 1;
                     //db.SaveChanges();
                     _volunteers.Create(apply);
 
-                    return Json(new { success = true, message = "Application sent." });
+                    return Json(new { success = true, message = "Application sent" });
                 }
                 else
                 {
-                    return Json(new { success = false, message = "Already apply." });
+                    return Json(new { success = false, message = "Already apply" });
                 }
-=======
-                _volunteers.Create(apply);
-
-                return Json(new { success = true, message = "Application sent" });
->>>>>>> Stashed changes
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return Json(new { success = false, message = "Error: " + ex.Message });
+
+                return Json(new { success = false, message = "Error !" });
             }
         }
-
         public ActionResult DonationDetails(int eventId)
         {
             var getOrgInfo = db.OrgEvents.Where(m => m.eventId == eventId).FirstOrDefault();
@@ -444,7 +441,7 @@ namespace Tabang_Hub.Controllers
                 {
                     db.sp_LeaveEvent(updateVol.eventId, updateVol.userId);
 
-                    return Json(new { success = true, message = "Leave successfully." });
+                    return Json(new { success = true, message = "Leave successfully" });
                 }
                 else
                 {

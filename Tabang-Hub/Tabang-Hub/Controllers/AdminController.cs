@@ -145,11 +145,11 @@ namespace Tabang_Hub.Controllers
             }
         }
         [HttpPost]
-        public ActionResult DeleteOrg(int orgId)
+        public ActionResult DeleteOrg(int userId)
         {
             try
             {
-                var user = _adminManager.DeleteOrganization(orgId);
+                var user = _adminManager.DeleteOrganization(userId);
                 if (user != ErrorCode.Success)
                 {
                     return Json(new { success = false, message = "User not found" });

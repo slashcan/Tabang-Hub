@@ -34,7 +34,7 @@
     }
 
     .event-details {
-        margin-top: 20px;
+        margin: 18px 0px 18px 0px;
     }
 
     .org-description {
@@ -65,7 +65,7 @@
 
     .progress-bar {
         height: 100%;
-        background-color: mediumseagreen;
+        background-color: #007bff;
     }
 
     .progress-label {
@@ -100,10 +100,6 @@
         -webkit-line-clamp: 1; /* Limit to 1 line */
         -webkit-box-orient: vertical;
     }
-    .orgName:hover {
-        color: blue; /* Change to your desired hover color */
-        text-decoration: underline; /* Underline text on hover */
-    }
 </style>
 
 <div class="container mt-5">
@@ -119,32 +115,7 @@
             }
         </div>
         <hr />
-<<<<<<< Updated upstream
-        <div class="row">
-            @*<div class="col-md-8">
-                    <div id="carouselExampleControls" class="carousel slide carousel-container" data-ride="carousel">
-                        <div class="carousel-inner">
-                            @for (int i = 0; i < Model.detailsEventImage.Count; i++)
-                            {
-                                var pic = Model.detailsEventImage[i];
-                                <div class="carousel-item @(i == 0 ? "active" : "")">
-                                    <img src="~/Content/IdPicture/@pic.eventImage" class="d-block w-100" alt="Event Image">
-                                </div>
-                            }
-                        </div>
-                        <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
-                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                            <span class="sr-only">Previous</span>
-                        </a>
-                        <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
-                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                            <span class="sr-only">Next</span>
-                        </a>
-                    </div>
-                </div>*@
-=======
         <div class="row" style="background-color: #F0F8FF; margin: 0">
->>>>>>> Stashed changes
             <div class="col-md-8">
                 <div id="carouselExampleDark" class="carousel carousel-dark slide" data-bs-ride="carousel">
                     <div class="carousel-indicators">
@@ -157,7 +128,7 @@
                         @for (int i = 0; i < Model.detailsEventImage.Count; i++)
                         {
                             <div class="carousel-item @(i == 0 ? "active" : "")">
-                                <img src="@Url.Content("~/Content/IdPicture/" + Model.detailsEventImage[i].eventImage)" class="d-block w-100 img-fluid fixed-size-img border border-primary" alt="Event Image">
+                                <img src="@Url.Content("~/Content/IdPicture/" + Model.detailsEventImage[i].eventImage)" class="d-block w-100 img-fluid fixed-size-img" alt="Event Image" style="border-radius: 1rem; margin: 15px 0px 15px 0px;">
                             </div>
                         }
                     </div>
@@ -171,16 +142,16 @@
                     </button>
                 </div>
             </div>
-            <div class="col-md-4 event-details">
+            <div class="col-md-4 event-details" style="border-radius: 1rem; background-color: #FFFF">
                 @foreach (var location in Model.listOfEvents)
                 {
                     <i class="bi bi-geo-alt" style="font-size:24px;"></i> @location.Location
 
                     <div class="skills-required">
-                        <h4>Skills Required</h4>
+                        <h5>Skills Required</h5>
                         @foreach (var rk in Model.detailsSkillRequirement)
                         {
-                            <span id="badge" class="badge badge-secondary skill-badge">
+                            <span style="background-color: mediumseagreen" id="badge" class="badge badge-secondary skill-badge">
                                 @rk.skillName
                             </span>
                         }
@@ -188,11 +159,11 @@
                     <div style="margin-top: 50px; color: dimgray" class="org-info">
                         <div class="d-flex align-items-center mb-2">
                             <i class="bi bi-calendar me-2" style="font-size:16px;"></i>
-                            <span><strong>Start date:&nbsp;&nbsp;&nbsp;</strong>@location.Start_Date<strong></strong><br /><strong>End date:&nbsp;&nbsp;&nbsp;&nbsp;</strong>@location.End_Date</span>
+                            <span>@location.Start_Date <strong>-</strong> @location.End_Date</span>
                         </div>
                     </div>
 
-                    <label class="mt-sm-5" id="counter">Number of volunteers joined</label>
+                    <label id="counter">Volunteer counter</label>
                     <div class="progress">
                         @{
                             double? Vol = Model.volunteers.Where(m => m.Status == 1).Count();
@@ -200,18 +171,14 @@
                             Vol = (Vol / location.Max_Volunteer) * location.Max_Volunteer;
                             Console.Write(Vol);
                         }
-                        <div class="progress-bar" role="progressbar" style="width: @Html.Raw(Vol)%;" aria-valuenow="@location.Max_Volunteer" aria-valuemin="0" aria-valuemax="100"></div>
+                        <div class="progress-bar" role="progressbar" style="width: @Html.Raw(Vol)%; background-color: mediumseagreen;" aria-valuenow="@location.Max_Volunteer" aria-valuemin="0" aria-valuemax="100"></div>
                         <div class="progress-label">@Model.volunteers.Where(m => m.Status == 1).Count()/@location.Max_Volunteer</div>
                     </div>
                 }
-<<<<<<< Updated upstream
                 <hr />
 
 
-                <div class="apply-button mt-3">
-=======
                 <div class="apply-button mt-2">
->>>>>>> Stashed changes
                     @foreach (var orgDetails in Model.orgEvents)
                     {
                         <button style="width: 100%" onclick="applyEvent('@orgDetails.eventId')" class="btn btn-primary btn-block">
@@ -234,7 +201,7 @@
 
                                             var percentage = (raisedAmount / evnt.Target_Amount) * 100;
                                         }
-                                        <div class="progress-bar" role="progressbar" style="width: @percentage%" aria-valuenow="@raisedAmount" aria-valuemin="0" aria-valuemax="@evnt.Target_Amount"></div>
+                                        <div class="progress-bar" role="progressbar" style="width: @percentage%; background-color: mediumseagreen;" aria-valuenow="@raisedAmount" aria-valuemin="0" aria-valuemax="@evnt.Target_Amount"></div>
                                         <div class="progress-label">@($"{raisedAmount:₱#,##0.00}") / @($"{evnt.Target_Amount:₱#,##0.00}")</div>
                                     </div>
                                 </div>
@@ -274,6 +241,7 @@
                         }
                     }
                 </div>
+                <br />
             </div>
         </div>
     </div>
@@ -321,7 +289,7 @@
     </div>
 </div>
 
-<div class="similar-opportunities-container">
+<div class="similar-opportunities-container" style="background-color: #F0F8FF;">
     <div class="header">
         <h2>Be Involved</h2>
         @*<a href="#" class="see-all">See all</a>*@
@@ -335,9 +303,9 @@
             @foreach (var lstEvent in Model.orgOtherEvent)
             {
                 <div class="opportunity-card">
-                    <img src="~/Content/images/tabanghub3.png" alt="Tech Systems Set Up">
+                    <img src="~/Content/images/tabanghub3.png" alt="">
                     <div class="card-content">
-                        <p>PROJECT | 6-7 WEEKS</p>
+                        @*<p>PROJECT | 6-7 WEEKS</p>*@
                         <h3 class="card-title">@lstEvent.Event_Title</h3>
                         <p class="card-text">@lstEvent.Event_Description</p>
                     </div>
