@@ -11,7 +11,19 @@
         padding-right: 10px;
         white-space: nowrap;
         font-size: 14px;
+        position: relative;
     }
+
+        .navbar-nav .nav-link.active::after {
+            content: "";
+            display: block;
+            width: 100%;
+            height: 2px;
+            background-color: #5BC1AC;
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+        }
 
     .content-section {
         display: none;
@@ -29,8 +41,8 @@
 
     .fixed-size-img {
         width: 100%;
-        max-height: 450px; /* Set the maximum height you want */
-        object-fit: cover; /* Ensure the image covers the area */
+        max-height: 450px;
+        object-fit: cover;
     }
 
     .profile-img {
@@ -45,18 +57,19 @@
         border: 1px solid #ced4da;
         border-radius: 5px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        background-color: white;
     }
 
     .skills-container {
         display: flex;
         flex-wrap: wrap;
-        gap: 5px; /* Smaller gap between buttons */
+        gap: 5px;
         margin-top: 10px;
     }
 
     .skill-button {
-        padding: 3px 8px; /* Smaller padding */
-        font-size: 12px; /* Smaller font size */
+        padding: 3px 8px;
+        font-size: 12px;
         border: 1px solid #ced4da;
         border-radius: 5px;
         background-color: #f8f9fa;
@@ -112,12 +125,18 @@
         align-items: center;
         justify-content: center;
         font-weight: bold;
-        color: black; /* Changed color to black for visibility */
-        z-index: 2; /* Ensures text is above the progress bar */
+        color: black;
+        z-index: 2;
     }
 
     .progress-bar-container {
         position: relative;
+    }
+
+    .edit-button {
+        position: absolute;
+        top: 10px;
+        right: 10px;
     }
 </style>
 
@@ -130,100 +149,101 @@
             </button>
             <div class="collapse navbar-collapse navbar-center" id="navbarNav">
                 <ul class="navbar-nav">
-                    <li class="nav-item"><a class="nav-link" href="#details" onclick="showSection('details', event)">Details</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="#organization-details" onclick="showSection('organization-details', event)">Details</a></li>
                     <li class="nav-item"><a class="nav-link" href="#volunteer-list" onclick="showSection('volunteer-list', event)">Volunteer List</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#volunteer-list" onclick="showSection('applied-volunteer-list', event)">Applied Volunteer List</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#applied-volunteer-list" onclick="showSection('applied-volunteer-list', event)">Applied Volunteer List</a></li>
                 </ul>
             </div>
         </div>
     </nav>
 
     <!-- Organization Profile Section -->
-    <div id="details" class="content-section active">
+    <div id="organization-details" class="content-section active">
         <div class="row mb-4">
             <div class="col-md-12">
-                <div class="profile-card">
-                    <div class="d-flex align-items-center">
-                        <img src="@Url.Content("~/Content/images/tabanghub3.png")" class="profile-img me-3" alt="Organization Profile">
-                        <div>
-                            <h4>@Model.OrgInfo.orgName</h4>
-                            <p>@Model.OrgInfo.orgDescription.</p>
-                            <a href="#" class="btn btn-primary mt-2">Visit Organization</a>
-                        </div>
+                <div class="profile-card d-flex align-items-center">
+                    <img src="@Url.Content("~/Content/images/tabanghub3.png")" class="profile-img me-3" alt="Organization Profile">
+                    <div>
+                        <h4>@Model.OrgInfo.orgName</h4>
+                        <p>@Model.OrgInfo.orgDescription</p>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Event Images Carousel -->
-        <div class="row">
-            <div class="col-md-6">
-                <div id="carouselExampleDark" class="carousel carousel-dark slide" data-bs-ride="carousel">
-                    <div class="carousel-indicators">
-                        @for (int i = 0; i < Model.detailsEventImage.Count; i++)
-                        {
-                            <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="@i" class="@(i == 0 ? "active" : "")" aria-current="@(i == 0 ? "true" : "false")" aria-label="Slide @i"></button>
-                        }
-                    </div>
-                    <div class="carousel-inner">
-                        @for (int i = 0; i < Model.detailsEventImage.Count; i++)
-                        {
-                            <div class="carousel-item @(i == 0 ? "active" : "")">
-                                <img src="@Url.Content("~/Content/IdPicture/" + Model.detailsEventImage[i].eventImage)" class="d-block w-100 img-fluid fixed-size-img border border-primary" alt="Event Image">
+        <!-- Event Details -->
+        <div id="event-details" class="content-section active col-md-12">
+            <div class="row d-flex align-items-stretch">
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body d-flex flex-column">
+                            <div id="carouselExampleFade" class="carousel slide carousel-fade flex-grow-1" data-bs-ride="carousel">
+                                <ol class="carousel-indicators">
+                                    @for (int i = 0; i < Model.detailsEventImage.Count; i++)
+                                    {
+                                        <li data-bs-target="#carouselExampleFade" data-bs-slide-to="@i" class="@(i == 0 ? "active" : "")"></li>
+                                    }
+                                </ol>
+                                <div class="carousel-inner h-100">
+                                    @for (int i = 0; i < Model.detailsEventImage.Count; i++)
+                                    {
+                                        <div class="carousel-item @(i == 0 ? "active" : "") h-100">
+                                            <img src="@Url.Content("~/Content/IdPicture/" + Model.detailsEventImage[i].eventImage)" class="d-block w-100 h-100" alt="Event Image @i" style="object-fit: cover;" />
+                                        </div>
+                                    }
+                                </div>
+                                <a class="carousel-control-prev" href="#carouselExampleFade" role="button" data-bs-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Previous</span>
+                                </a>
+                                <a class="carousel-control-next" href="#carouselExampleFade" role="button" data-bs-slide="next">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Next</span>
+                                </a>
                             </div>
-                        }
+                        </div>
                     </div>
-                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Previous</span>
-                    </button>
-                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="visually-hidden">Next</span>
-                    </button>
                 </div>
-            </div>
-
-            <!-- Event Details -->
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="card-title">Event Details</h5>
-                    </div>
-                    @if (Model.eventDetails.Target_Amount != null)
-                    {
-                        <div class="card-body">
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item"><i class="bi bi-calendar-event me-2"></i><strong>Event Name:</strong> @Model.eventDetails.Event_Name</li>
-                                <li class="list-group-item"><i class="bi bi-file-earmark-text me-2"></i><strong>Description:</strong> @Model.eventDetails.Description</li>
+                <div class="col-md-6">
+                    <div class="card h-100">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="card-title mb-0">Event Details</h5>
+                            <button class="btn btn-outline-primary edit-button" data-bs-toggle="modal" data-bs-target="#editEventModal">Edit</button>
+                        </div>
+                        <div class="card-body d-flex flex-column">
+                            <ul class="list-group list-group-flush flex-grow-1">
+                                <h5 class="card-title">@Model.eventDetails.Event_Name</h5>
+                                <p class="card-text">@Model.eventDetails.Description</p>
                                 <li class="list-group-item"><i class="bi bi-people me-2"></i><strong>Max Volunteer:</strong> @Model.eventDetails.Max_Volunteer</li>
                                 <li class="list-group-item"><i class="bi bi-calendar me-2"></i><strong>Date Started:</strong> @Model.eventDetails.Start_Date</li>
                                 <li class="list-group-item"><i class="bi bi-calendar me-2"></i><strong>Date Ended:</strong> @Model.eventDetails.End_Date</li>
                                 <li class="list-group-item"><i class="bi bi-geo-alt me-2"></i><strong>Location:</strong> @Model.eventDetails.Location</li>
                             </ul>
                         </div>
-                        <div class="card-body">
-                            <h5 class="card-title">Target Amount</h5>
-                            @{
-                                decimal? raisedAmount = 0;
+                        @if (Model.eventDetails.Target_Amount != null)
+                        {
+                            <div class="card-body">
+                                <h5 class="card-title">Target Amount</h5>
+                                @{
+                                    decimal? raisedAmount = 0;
 
-                                foreach (var donated in Model.listofUserDonated)
-                                {
-                                    raisedAmount += donated.amount;
+                                    foreach (var donated in Model.listofUserDonated)
+                                    {
+                                        raisedAmount += donated.amount;
+                                    }
+
+                                    var percentage = (raisedAmount / Model.eventDetails.Target_Amount) * 100;
                                 }
-
-                                var percentage = (raisedAmount / Model.eventDetails.Target_Amount) * 100;
-                            }
-                            <div class="progress-bar-container">
-                                <div class="progress">
-                                    <div class="progress-bar" role="progressbar" style="width: @percentage%" aria-valuenow="@raisedAmount" aria-valuemin="0" aria-valuemax="@Model.eventDetails.Target_Amount"></div>
-                                    <div class="progress-text">
-                                        @($"{raisedAmount:₱#,##0.00}") / @($"{Model.eventDetails.Target_Amount:₱#,##0.00}")
-
+                                <div class="progress-bar-container">
+                                    <div class="progress">
+                                        <div class="progress-bar" role="progressbar" style="width: @percentage%" aria-valuenow="@raisedAmount" aria-valuemin="0" aria-valuemax="@Model.eventDetails.Target_Amount"></div>
+                                        <div class="progress-text">
+                                            @($"{raisedAmount:₱#,##0.00}") / @($"{Model.eventDetails.Target_Amount:₱#,##0.00}")
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                                    }
                         <div class="card-body">
                             <h5 class="card-title">Skills Needed</h5>
                             <div class="skills-container" id="skills-container">
@@ -233,69 +253,100 @@
                                 }
                             </div>
                         </div>
-                    }
-                    else
-                    {
-                        <div class="card-body">
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item"><i class="bi bi-calendar-event me-2"></i><strong>Event Name:</strong> @Model.eventDetails.Event_Name</li>
-                                <li class="list-group-item"><i class="bi bi-file-earmark-text me-2"></i><strong>Description:</strong> @Model.eventDetails.Description</li>
-                                <li class="list-group-item"><i class="bi bi-people me-2"></i><strong>Max Volunteer:</strong> @Model.eventDetails.Max_Volunteer</li>
-                                <li class="list-group-item"><i class="bi bi-calendar me-2"></i><strong>Date Started:</strong> @Model.eventDetails.Start_Date</li>
-                                <li class="list-group-item"><i class="bi bi-calendar me-2"></i><strong>Date Ended:</strong> @Model.eventDetails.End_Date</li>
-                                <li class="list-group-item"><i class="bi bi-geo-alt me-2"></i><strong>Location:</strong> @Model.eventDetails.Location</li>
-                            </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Volunteer List Section -->
+        <div id="volunteer-list" class="content-section">
+            <div class="row mb-4">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title">Volunteer List</h5>
                         </div>
                         <div class="card-body">
-                            <h5 class="card-title">Skills Needed</h5>
-                            <div class="skills-container" id="skills-container">
-                                @foreach (var skill in Model.detailsSkillRequirement)
+                            <div class="list-group">
+                                @foreach (var volunteer in Model.listOfEventVolunteers)
                                 {
-                                    <button type="button" class="skill-button" data-skill-id="@skill.skillRequirementId">@skill.skillName</button>
+                                    if (volunteer.Status == 1)
+                                    {
+                                        <div class="list-group-item list-group-item-action d-flex align-items-center">
+                                            <img src="@Url.Content("~/Content/images/organization.png")" class="profile-img me-3" alt="Volunteer Image">
+                                            <div class="flex-grow-1">
+                                                <p class="mb-0"><strong>Email:</strong> @volunteer.UserAccount.email</p>
+                                                <p class="mb-0">
+                                                    <strong>Skills:</strong>
+                                                    @foreach (var skill in Model.volunteersSkills)
+                                                    {
+                                                        if (skill.userId == volunteer.userId)
+                                                        {
+                                                            <span class="badge bg-secondary me-1">@skill.skillName</span>
+                                                        }
+                                                    }
+                                                </p>
+                                            </div>
+                                            <div class="ms-auto">
+                                                <a href="@Url.Action("VolunteerDetails", "Organization", new { userId = volunteer.userId })" class="btn btn-outline-primary btn-sm">View</a>
+                                            </div>
+                                        </div>
+                                    }
                                 }
                             </div>
                         </div>
-                    }
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Volunteer List Section -->
-    <div id="volunteer-list" class="content-section">
-        <div class="row mb-4">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="card-title">Volunteer List</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="list-group">
-                            @foreach (var volunteer in Model.listOfEventVolunteers)
-                            {
-                                if (volunteer.Status == 1)
+        <!-- Applied Volunteer List Section -->
+        <div id="applied-volunteer-list" class="content-section">
+            <div class="row mb-4">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title">Applied Volunteer List</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="list-group">
+                                @foreach (var volunteer in Model.listOfEventVolunteers)
                                 {
-                                    <div class="list-group-item list-group-item-action d-flex align-items-center">
-                                        <img src="@Url.Content("~/Content/images/organization.png")" class="profile-img me-3" alt="Volunteer Image">
-                                        <div class="flex-grow-1">
-                                            <p class="mb-0"><strong>Email:</strong> @volunteer.UserAccount.email</p>
-                                            <p class="mb-0">
-                                                <strong>Skills:</strong>
-                                                @foreach (var skill in Model.volunteersSkills)
-                                                {
-                                                    if (skill.userId == volunteer.userId)
+                                    if (volunteer.Status == 0)
+                                    {
+                                        <div class="list-group-item list-group-item-action d-flex align-items-center">
+                                            <img src="@Url.Content("~/Content/images/organization.png")" class="profile-img me-3" alt="Volunteer Image">
+                                            <div class="flex-grow-1">
+                                                <p class="mb-0"><strong>Email:</strong> @volunteer.UserAccount.email</p>
+                                                <p class="mb-0">
+                                                    <strong>Skills:</strong>
+                                                    @foreach (var skill in Model.volunteersSkills)
                                                     {
-                                                        <span class="badge bg-secondary me-1">@skill.skillName</span>
+                                                        if (skill.userId == volunteer.userId)
+                                                        {
+                                                            <span class="badge bg-secondary me-1">@skill.skillName</span>
+                                                        }
                                                     }
-                                                }
-                                            </p>
+                                                </p>
+                                            </div>
+                                            <div class="ms-auto">
+                                                <a href="@Url.Action("VolunteerDetails", "Organization", new { userId = volunteer.userId })" class="btn btn-outline-primary btn-sm">View</a>
+                                                <form action="@Url.Action("ConfirmApplicants", "Organization")" method="post" class="confirm-form" data-volunteer-id="@volunteer.userId" data-event-id="@volunteer.eventId" style="display: inline;">
+                                                    <input type="hidden" name="id" value="@volunteer.userId" />
+                                                    <input type="hidden" name="eventId" value="@volunteer.eventId" />
+                                                    <button type="button" class="btn btn-outline-success btn-sm confirm-button">Confirm</button>
+                                                </form>
+                                                <form action="@Url.Action("DeclineApplicants", "Organization")" method="post" class="decline-form" data-volunteer-id="@volunteer.userId" data-event-id="@volunteer.eventId" style="display: inline;">
+                                                    <input type="hidden" name="id" value="@volunteer.userId" />
+                                                    <input type="hidden" name="eventId" value="@volunteer.eventId" />
+                                                    <button type="button" class="btn btn-outline-danger btn-sm decline-button">Decline</button>
+                                                </form>
+                                            </div>
                                         </div>
-                                        <div class="ms-auto">
-                                            <a href="@Url.Action("VolunteerDetails", "Organization", new { userId = volunteer.userId })" class="btn btn-outline-primary btn-sm">View</a>
-                                        </div>
-                                    </div>
+                                    }
                                 }
-                            }
+                                }
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -303,53 +354,85 @@
         </div>
     </div>
 
-    <!-- Applied Volunteer List Section -->
-    <div id="applied-volunteer-list" class="content-section">
-        <div class="row mb-4">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="card-title">Applied Volunteer List</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="list-group">
-                            @foreach (var volunteer in Model.listOfEventVolunteers)
-                            {
-                                if (volunteer.Status == 0)
-                                {
-                                    <div class="list-group-item list-group-item-action d-flex align-items-center">
-                                        <img src="@Url.Content("~/Content/images/organization.png")" class="profile-img me-3" alt="Volunteer Image">
-                                        <div class="flex-grow-1">
-                                            <p class="mb-0"><strong>Email:</strong> @volunteer.UserAccount.email</p>
-                                            <p class="mb-0">
-                                                <strong>Skills:</strong>
-                                                @foreach (var skill in Model.volunteersSkills)
-                                                {
-                                                    if (skill.userId == volunteer.userId)
-                                                    {
-                                                        <span class="badge bg-secondary me-1">@skill.skillName</span>
-                                                    }
-                                                }
-                                            </p>
-                                        </div>
-                                        <div class="ms-auto">
-                                            <a href="@Url.Action("VolunteerDetails", "Organization", new { userId = volunteer.userId })" class="btn btn-outline-primary btn-sm">View</a>
-                                            <form action="@Url.Action("ConfirmApplicants", "Organization")" method="post" class="confirm-form" data-volunteer-id="@volunteer.userId" data-event-id="@volunteer.eventId" style="display: inline;">
-                                                <input type="hidden" name="id" value="@volunteer.userId" />
-                                                <input type="hidden" name="eventId" value="@volunteer.eventId" />
-                                                <button type="button" class="btn btn-outline-success btn-sm confirm-button">Confirm</button>
-                                            </form>
-                                            <form action="@Url.Action("DeclineApplicants", "Organization")" method="post" class="decline-form" data-volunteer-id="@volunteer.userId" data-event-id="@volunteer.eventId" style="display: inline;">
-                                                <input type="hidden" name="id" value="@volunteer.userId" />
-                                                <input type="hidden" name="eventId" value="@volunteer.eventId" />
-                                                <button type="button" class="btn btn-outline-danger btn-sm decline-button">Decline</button>
-                                            </form>
-                                        </div>
-                                    </div>
+    <!-- Edit Event Modal -->
+    <div class="modal fade" id="editEventModal" tabindex="-1" aria-labelledby="editEventModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editEventModalLabel">Edit Event</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" enctype="multipart/form-data" action="@Url.Action("EditEvent", "Organization")">   
+                        <input type="hidden" name="eventId" value="@Model.eventDetails.Event_Id" />
+                        <div class="mb-3">
+                            <label for="EditEvent_eventTitle" class="form-label">Event Title</label>
+                            <input type="text" class="form-control" id="EditEvent_eventTitle" name="CreateEvents.eventTitle" value="@Model.eventDetails.Event_Name" placeholder="Enter event title">
+                            <span class="error" id="EditEvent_eventTitle_error"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label for="EditEvent_eventDescription" class="form-label">Event Description</label>
+                            <textarea class="form-control" id="EditEvent_eventDescription" name="CreateEvents.eventDescription" rows="4" placeholder="Enter event description">@Model.eventDetails.Description</textarea>
+                            <span class="error" id="EditEvent_eventDescription_error"></span>
+                        </div>
+                        <div class="mb-3">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="editSwitchCheckDefault" onchange="toggleTargetAmount(this)" @(Model.eventDetails.Target_Amount != null ? "checked" : "")>
+                                <label class="form-check-label" for="editSwitchCheckDefault">Enable Target Amount</label>
+                            </div>
+                            <input type="text" class="form-control mt-2" id="EditEvent_targetAmount" name="CreateEvents.targetAmount" value="@Model.eventDetails.Target_Amount" placeholder="Enter target amount in Peso" @(Model.eventDetails.Target_Amount == null ? "disabled" : "")>
+                            <span class="error" id="EditEvent_targetAmount_error"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label for="EditEvent_maxVolunteer" class="form-label">Maximum Volunteers</label>
+                            <input type="text" class="form-control" id="EditEvent_maxVolunteer" name="CreateEvents.maxVolunteer" value="@Model.eventDetails.Max_Volunteer" placeholder="Enter maximum volunteers">
+                            <span class="error" id="EditEvent_maxVolunteer_error"></span>
+                        </div>
+                        <div class="mb-3 row">
+                            <div class="col">
+                                @{
+                                    var strtdate = Model.eventDetails.Start_Date.ToString();
+
+                                    <label for="EditEvent_dateStart" class="form-label">Start Date and Time</label>
+                                    <input type="datetime-local" class="form-control" id="EditEvent_dateStart" name="CreateEvents.dateStart">
                                 }
+                                <span class="error" id="EditEvent_dateStart_error"></span>
+                            </div>
+                            <div class="col">
+                                <label for="EditEvent_dateEnd" class="form-label">End Date and Time</label>
+                                <input type="datetime-local" class="form-control" id="EditEvent_dateEnd" name="CreateEvents.dateEnd">
+                                <span class="error" id="EditEvent_dateEnd_error"></span>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="EditEvent_location" class="form-label">Location</label>
+                            <input type="text" class="form-control" id="EditEvent_location" name="CreateEvents.location" value="@Model.eventDetails.Location" placeholder="Enter location">
+                            <span class="error" id="EditEvent_location_error"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label>Volunteer Skills Requirements</label>
+                            <div class="added-skills" id="edit-added-skills">
+                                @foreach (var skill in Model.detailsSkillRequirement)
+                                {
+                                    <button type="button" class="skill-button selected" onclick="removeEditSkill('@skill.skillName', this, document.getElementById('edit-skill-@skill.skillName'))">@skill.skillName <span class="remove-skill">x</span></button>
+                                }
+                            </div>
+                            <span class="error" id="EditEvent_skills_error"></span>
+                        </div>
+                        <div class="skills-container mb-3">
+                            @foreach (var skills in Model.listOfSkills)
+                            {
+                                <button type="button" class="btn btn-outline-primary skill-button" onclick="addEditSkill('@skills.skillName')" id="edit-skill-@skills.skillName" @(Model.detailsSkillRequirement.Any(s => s.skillName == skills.skillName) ? "disabled" : "")>@skills.skillName</button>
                             }
                         </div>
-                    </div>
+                        <div class="mb-3">
+                            <label for="EditEvent_uploadImage" class="form-label">Upload Images</label>
+                            <input type="file" class="form-control" id="EditEvent_uploadImage" name="images" multiple onchange="previewEditImages()">
+                            <span class="error" id="EditEvent_uploadImage_error"></span>
+                            <div class="preview-container" id="edit-image-preview"></div>
+                        </div>
+                        <button class="btn btn-primary" type="submit">Save Changes</button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -367,6 +450,10 @@
 
         // Show the selected section
         document.getElementById(sectionId).classList.add('active');
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.classList.remove('active');
+        });
+        event.target.classList.add('active');
     }
 
     document.addEventListener('DOMContentLoaded', function () {
@@ -415,5 +502,209 @@
                 });
             });
         });
+
+        // Real-time validation for date and time inputs
+        document.getElementById('EditEvent_dateStart').addEventListener('input', function () {
+            const dateStart = new Date(this.value);
+            const now = new Date();
+            if (dateStart < now) {
+                document.getElementById('EditEvent_dateStart_error').innerText = 'Start date and time must be in the future.';
+                this.value = '';
+            } else {
+                document.getElementById('EditEvent_dateStart_error').innerText = '';
+            }
+            validateEditEventDuration();
+        });
+
+        document.getElementById('EditEvent_dateEnd').addEventListener('input', function () {
+            validateEditEventDuration();
+        });
+
+        function validateEditEventDuration() {
+            const dateStart = new Date(document.getElementById('EditEvent_dateStart').value);
+            const dateEnd = new Date(document.getElementById('EditEvent_dateEnd').value);
+            const now = new Date();
+
+            if (dateEnd < now) {
+                document.getElementById('EditEvent_dateEnd_error').innerText = 'End date and time must be in the future.';
+                document.getElementById('EditEvent_dateEnd').value = '';
+                return;
+            } else {
+                document.getElementById('EditEvent_dateEnd_error').innerText = '';
+            }
+
+            if (dateEnd <= dateStart) {
+                document.getElementById('EditEvent_dateEnd_error').innerText = 'End date and time must be after start date and time.';
+                document.getElementById('EditEvent_dateEnd').value = '';
+                return;
+            }
+
+            const hoursDifference = (dateEnd - dateStart) / (1000 * 60 * 60);
+            if (hoursDifference < 3) {
+                document.getElementById('EditEvent_dateEnd_error').innerText = 'Event duration must be at least 3 hours.';
+                document.getElementById('EditEvent_dateEnd').value = '';
+            } else {
+                document.getElementById('EditEvent_dateEnd_error').innerText = '';
+            }
+        }
+
+        // Add event listeners to ensure only numbers are entered
+        function onlyNumbers(input, errorId) {
+            input.addEventListener('input', function (e) {
+                this.value = this.value.replace(/[^0-9]/g, '');
+                if (isNaN(this.value) || this.value === '') {
+                    document.getElementById(errorId).innerText = 'Please enter a valid number.';
+                } else {
+                    document.getElementById(errorId).innerText = '';
+                }
+            });
+        }
+
+        onlyNumbers(document.getElementById('EditEvent_targetAmount'), 'EditEvent_targetAmount_error');
+        onlyNumbers(document.getElementById('EditEvent_maxVolunteer'), 'EditEvent_maxVolunteer_error');
     });
+
+    function toggleTargetAmount(checkbox) {
+        const targetAmountInput = document.getElementById('EditEvent_targetAmount');
+        targetAmountInput.disabled = !checkbox.checked;
+    }
+
+    function addEditSkill(skillName) {
+        const addedSkillsContainer = document.getElementById('edit-added-skills');
+        const skillButton = document.getElementById(`edit-skill-${skillName}`);
+        skillButton.disabled = true;
+
+        const skillBadge = document.createElement('button');
+        skillBadge.type = 'button';
+        skillBadge.className = 'skill-button selected';
+        skillBadge.innerHTML = `${skillName} <span class="remove-skill">x</span>`;
+        skillBadge.onclick = function () {
+            removeEditSkill(skillName, skillBadge, skillButton);
+        };
+
+        addedSkillsContainer.appendChild(skillBadge);
+
+        // Create a hidden input to hold the skill value
+        const skillInput = document.createElement('input');
+        skillInput.type = 'hidden';
+        skillInput.name = 'skills';
+        skillInput.value = skillName;
+        addedSkillsContainer.appendChild(skillInput);
+    }
+
+    function removeEditSkill(skillName, skillBadge, skillButton) {
+        const skillsContainer = document.getElementById('edit-added-skills');
+
+        if (skillsContainer.contains(skillBadge)) {
+            skillsContainer.removeChild(skillBadge);
+        }
+
+        // Remove the hidden input when the skill is removed
+        const skillInput = document.querySelector(`input[name="skills"][value="${skillName}"]`);
+        if (skillInput && skillsContainer.contains(skillInput)) {
+            skillsContainer.removeChild(skillInput);
+        }
+
+        // Enable the skill button when the skill is removed
+        if (skillButton) {
+            skillButton.disabled = false;
+        }
+    }
+
+    function previewImages() {
+        const previewContainer = document.getElementById('image-preview');
+        const files = document.getElementById('CreateEvents_uploadImage').files;
+        previewContainer.innerHTML = '';
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.classList.add('img-thumbnail', 'me-2', 'mb-2');
+                previewContainer.appendChild(img);
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+
+    function previewEditImages() {
+        const previewContainer = document.getElementById('edit-image-preview');
+        const files = document.getElementById('EditEvent_uploadImage').files;
+        previewContainer.innerHTML = '';
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.classList.add('img-thumbnail', 'me-2', 'mb-2');
+                previewContainer.appendChild(img);
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+
+    function validateEditForm() {
+        let isValid = true;
+        const form = document.getElementById('edit-event-form');
+        const title = form['EditEvent.eventTitle'].value.trim();
+        const description = form['EditEvent.eventDescription'].value.trim();
+        const maxVolunteer = form['EditEvent.maxVolunteer'].value.trim();
+        const dateStart = form['EditEvent.dateStart'].value.trim();
+        const dateEnd = form['EditEvent.dateEnd'].value.trim();
+        const location = form['EditEvent.location'].value.trim();
+        const targetAmount = form['EditEvent.targetAmount'].value.trim();
+
+        if (title === '') {
+            document.getElementById('EditEvent_eventTitle_error').textContent = 'Title is required';
+            isValid = false;
+        } else {
+            document.getElementById('EditEvent_eventTitle_error').textContent = '';
+        }
+
+        if (description === '') {
+            document.getElementById('EditEvent_eventDescription_error').textContent = 'Description is required';
+            isValid = false;
+        } else {
+            document.getElementById('EditEvent_eventDescription_error').textContent = '';
+        }
+
+        if (maxVolunteer === '' || isNaN(maxVolunteer) || parseInt(maxVolunteer) <= 0) {
+            document.getElementById('EditEvent_maxVolunteer_error').textContent = 'Enter a valid number for max volunteers';
+            isValid = false;
+        } else {
+            document.getElementById('EditEvent_maxVolunteer_error').textContent = '';
+        }
+
+        if (dateStart === '') {
+            document.getElementById('EditEvent_dateStart_error').textContent = 'Start date is required';
+            isValid = false;
+        } else {
+            document.getElementById('EditEvent_dateStart_error').textContent = '';
+        }
+
+        if (dateEnd === '') {
+            document.getElementById('EditEvent_dateEnd_error').textContent = 'End date is required';
+            isValid = false;
+        } else {
+            document.getElementById('EditEvent_dateEnd_error').textContent = '';
+        }
+
+        if (location === '') {
+            document.getElementById('EditEvent_location_error').textContent = 'Location is required';
+            isValid = false;
+        } else {
+            document.getElementById('EditEvent_location_error').textContent = '';
+        }
+
+        if (document.getElementById('editSwitchCheckDefault').checked && (targetAmount === '' || isNaN(targetAmount) || parseInt(targetAmount) <= 0)) {
+            document.getElementById('EditEvent_targetAmount_error').textContent = 'Enter a valid target amount';
+            isValid = false;
+        } else {
+            document.getElementById('EditEvent_targetAmount_error').textContent = '';
+        }
+
+        return isValid;
+    }
 </script>

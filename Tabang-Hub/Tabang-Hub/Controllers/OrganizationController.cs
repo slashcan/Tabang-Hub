@@ -40,7 +40,7 @@ namespace Tabang_Hub.Controllers
             return View(indexModdel);
         }
         [HttpPost]
-        public ActionResult EditOrgProfile(Utils.Lists orgProfile, ProfilePicture profilePicture, HttpPostedFileBase profilePic)
+        public ActionResult EditOrgProfile(Lists orgProfile, ProfilePicture profilePicture, HttpPostedFileBase profilePic)
         {
             string errMsg = string.Empty;
             profilePicture.userId = UserId;
@@ -201,11 +201,13 @@ namespace Tabang_Hub.Controllers
             var listOfEventVolunteers = _organizationManager.ListOfEventVolunteers(id);
             var volunteerSkills = _organizationManager.ListOfEventVolunteerSkills();
             var profile = _organizationManager.GetProfileByProfileId(orgInfo.profileId);
+            var listOfSkill = _organizationManager.ListOfSkills();
 
             var indexModel = new Lists()
             {
                 OrgInfo = orgInfo,
                 eventDetails = events,
+                listOfSkills = listOfSkill,
                 detailsEventImage = listofImage,
                 detailsSkillRequirement = listOfSkills,
                 listOfEventVolunteers = listOfEventVolunteers,
@@ -220,6 +222,72 @@ namespace Tabang_Hub.Controllers
             }
             return RedirectToAction("EventsManagement");
         }
+        [HttpPost]
+        public ActionResult EditEvent(Lists events, String[] skills, HttpPostedFileBase[] images, int eventId)
+        {
+            string errMsg = string.Empty;
+            var allowedExtensions = new List<string> { ".jpg", ".jpeg", ".png", ".gif" };
+            List<string> uploadedFiles = new List<string>();
+
+            if (images != null && images.Length > 0)
+            {
+                foreach (var image in images)
+                {
+                    if (image != null && image.ContentLength > 0)
+                    {
+                        var extension = Path.GetExtension(image.FileName).ToLower();
+
+                        if (!allowedExtensions.Contains(extension))
+                        {
+                            ModelState.AddModelError(String.Empty, "Invalid file type. Only JPG, JPEG, PNG, and GIF files are allowed.");
+                            return RedirectToAction("Details", new { id = eventId });
+                        }
+
+                        var inputFileName = Path.GetFileName(image.FileName);
+                        var serverSavePath = Path.Combine(Server.MapPath("~/Content/IdPicture/"), inputFileName);
+
+                        if (!Directory.Exists(Server.MapPath("~/Content/IdPicture/")))
+                            Directory.CreateDirectory(Server.MapPath("~/Content/IdPicture/"));
+
+                        try
+                        {
+                            using (var srcImage = Image.FromStream(image.InputStream))
+                            {
+                                var newWidth = 400;
+                                var newHeight = 300;
+                                var resizedImage = new Bitmap(newWidth, newHeight);
+
+                                using (var graphics = Graphics.FromImage(resizedImage))
+                                {
+                                    graphics.CompositingQuality = CompositingQuality.HighQuality;
+                                    graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                                    graphics.SmoothingMode = SmoothingMode.HighQuality;
+                                    graphics.DrawImage(srcImage, 0, 0, newWidth, newHeight);
+                                }
+
+                                resizedImage.Save(serverSavePath, ImageFormat.Jpeg);
+                            }
+
+                            uploadedFiles.Add(inputFileName);
+                        }
+                        catch (Exception ex)
+                        {
+                            ModelState.AddModelError(String.Empty, $"Error processing file {inputFileName}: {ex.Message}");
+                            return RedirectToAction("Details", new { id = eventId });
+                        }
+                    }
+                }
+            }
+
+            if (_organizationManager.EditEvent(events.CreateEvents, skills, uploadedFiles, eventId, ref errMsg) != ErrorCode.Success)
+            {
+                ModelState.AddModelError(String.Empty, errMsg);
+                return RedirectToAction("Details", new { id = eventId });
+            }
+
+            return RedirectToAction("Details", new { id = eventId });
+        }
+
         [HttpPost]
         public ActionResult Delete(int eventId)
         {

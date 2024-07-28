@@ -121,6 +121,77 @@ namespace Tabang_Hub.Repository
             return ErrorCode.Success;
         }
 
+        public ErrorCode EditEvent(OrgEvents orgEvents, string[] skills, List<string> imageFileNames, int eventId, ref string errMsg)
+        {
+            var oldSkills = listOfSkillRequirement(eventId);
+
+            // Create a dictionary of existing skill names for quick lookup
+            var oldSkillDict = oldSkills.ToDictionary(s => s.skillName, s => s.skillRequirementId);
+
+            var skillsToUpdate = new HashSet<string>(skills);
+
+            // Update or delete old skills
+            foreach (var oldSkill in oldSkills)
+            {
+                if (skillsToUpdate.Contains(oldSkill.skillName))
+                {
+                    // Skill exists in the new list, so we update it (if needed)
+                    var updatedSkill = new OrgSkillRequirement()
+                    {
+                        skillName = oldSkill.skillName
+                    };
+                    _orgSkillRequirements.Update(oldSkill.skillRequirementId, updatedSkill, out errMsg);
+                    skillsToUpdate.Remove(oldSkill.skillName); // Remove it from the update list
+                }
+                else
+                {
+                    // Skill no longer exists in the new list, so we delete it
+                    _orgSkillRequirements.Delete(oldSkill.skillRequirementId);
+                }
+            }
+
+            // Create new skills that are not already in the old skills
+            foreach (var newSkill in skillsToUpdate)
+            {
+                var newSkillRequirement = new OrgSkillRequirement()
+                {
+                    eventId = eventId,
+                    skillName = newSkill
+                };
+                _orgSkillRequirements.Create(newSkillRequirement, out errMsg);
+            }
+
+            foreach (var fileName in imageFileNames)
+            {
+                var orgEventImage = new OrgEventImage
+                {
+                    eventId = eventId,
+                    eventImage = fileName
+                };
+
+                if (_orgEventsImage.Create(orgEventImage, out errMsg) != ErrorCode.Success)
+                {
+                    return ErrorCode.Error;
+                }
+            }
+
+            var oldObj = GetEventsById(eventId);
+            oldObj.eventTitle = orgEvents.eventTitle;
+            oldObj.eventDescription = orgEvents.eventDescription;
+            oldObj.targetAmount = orgEvents.targetAmount;
+            oldObj.maxVolunteer = orgEvents.maxVolunteer;
+            oldObj.dateStart = orgEvents.dateStart;
+            oldObj.dateEnd = orgEvents.dateEnd;
+            oldObj.location = orgEvents.location;
+
+            if (_orgEvents.Update(eventId, oldObj, out errMsg) != ErrorCode.Success)
+            {
+                return ErrorCode.Error;
+            }
+
+            return ErrorCode.Success;
+        }
+
         public List<vw_ListOfEvent> ListOfEvents(int userId)
         {
             return _listOfEvents.GetAll().Where(m => m.User_Id == userId).ToList();
@@ -149,7 +220,10 @@ namespace Tabang_Hub.Repository
         {
             return _listOfEvents._table.Where(m => m.Event_Id == id).FirstOrDefault();
         }
-
+        public OrgEvents GetEventsById(int id)
+        {
+            return _orgEvents._table.Where(m => m.eventId == id).FirstOrDefault();
+        }
         public List<OrgEventImage> listOfEventImage(int id)
         {
             return _orgEventsImage.GetAll().Where(m => m.eventId == id).ToList();

@@ -112,8 +112,16 @@
                                         <td class="text-bold-500">@list.Event_Name</td>
                                         @if (list.Target_Amount != null && list.Target_Amount != 0)
                                         {
-                                            <td>₱@list.Total_Donation</td>
-                                            <td>₱@list.Target_Amount</td>
+                                            if (list.Total_Donation != null && list.Total_Donation != 0)
+                                            {
+                                                <td>₱@list.Total_Donation</td>
+                                                <td>₱@list.Target_Amount</td>
+                                            }
+                                            else
+                                            {
+                                                <td></td>
+                                                <td>₱@list.Target_Amount</td>
+                                            }
                                         }
                                         else
                                         {
@@ -167,12 +175,12 @@
                                 <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
                                 <label class="form-check-label" for="flexSwitchCheckDefault">Enable Target Amount</label>
                             </div>
-                            <input type="number" class="form-control mt-2" id="CreateEvents_targetAmount" name="CreateEvents.targetAmount" placeholder="Enter target amount" disabled>
+                            <input type="text" class="form-control mt-2" id="CreateEvents_targetAmount" name="CreateEvents.targetAmount" placeholder="Enter target amount in Peso" disabled>
                             <span class="error" id="CreateEvents_targetAmount_error"></span>
                         </div>
                         <div class="mb-3">
                             <label for="CreateEvents_maxVolunteer" class="form-label">Maximum Volunteers</label>
-                            <input type="number" class="form-control" id="CreateEvents_maxVolunteer" name="CreateEvents.maxVolunteer" placeholder="Enter maximum number of volunteers">
+                            <input type="text" class="form-control" id="CreateEvents_maxVolunteer" name="CreateEvents.maxVolunteer" placeholder="Enter maximum volunteers">
                             <span class="error" id="CreateEvents_maxVolunteer_error"></span>
                         </div>
                         <div class="mb-3 row">
@@ -209,7 +217,7 @@
                             <span class="error" id="CreateEvents_uploadImage_error"></span>
                             <div class="preview-container" id="image-preview"></div>
                         </div>
-                        <button type="submit" class="btn btn-primary">Create Event</button>
+                        <button class="btn btn-primary" type="submit">Create Event</button>
                     </form>
                 </div>
             </div>
@@ -235,9 +243,96 @@
     });
 
     function validateForm() {
-        // Add your validation logic here
-        return true;
+        let isValid = true;
+
+        // Clear previous errors
+        document.querySelectorAll('.error').forEach(e => e.innerHTML = '');
+
+        // Validate event title
+        const eventTitle = document.getElementById('CreateEvents_eventTitle');
+        if (eventTitle.value.trim() === '') {
+            document.getElementById('CreateEvents_eventTitle_error').innerText = 'Event title is required.';
+            isValid = false;
+        }
+
+        // Validate event description
+        const eventDescription = document.getElementById('CreateEvents_eventDescription');
+        if (eventDescription.value.trim() === '') {
+            document.getElementById('CreateEvents_eventDescription_error').innerText = 'Event description is required.';
+            isValid = false;
+        }
+
+        // Validate start and end dates
+        const dateStart = new Date(document.getElementById('CreateEvents_dateStart').value);
+        const dateEnd = new Date(document.getElementById('CreateEvents_dateEnd').value);
+        const now = new Date();
+
+        if (dateStart < now) {
+            document.getElementById('CreateEvents_dateStart_error').innerText = 'Start date and time must be in the future.';
+            document.getElementById('CreateEvents_dateStart').value = '';
+            isValid = false;
+        }
+
+        if (dateEnd <= dateStart) {
+            document.getElementById('CreateEvents_dateEnd_error').innerText = 'End date and time must be after start date and time.';
+            document.getElementById('CreateEvents_dateEnd').value = '';
+            isValid = false;
+        }
+
+        const hoursDifference = (dateEnd - dateStart) / (1000 * 60 * 60);
+        if (hoursDifference < 3) {
+            document.getElementById('CreateEvents_dateEnd_error').innerText = 'Event duration must be at least 3 hours.';
+            document.getElementById('CreateEvents_dateEnd').value = '';
+            isValid = false;
+        } else {
+            document.getElementById('CreateEvents_dateEnd_error').innerText = '';
+        }
+
+        // Validate location
+        const location = document.getElementById('CreateEvents_location');
+        if (location.value.trim() === '') {
+            document.getElementById('CreateEvents_location_error').innerText = 'Location is required.';
+            isValid = false;
+        }
+
+        // Validate target amount is a number if not disabled
+        const targetAmountInput = document.getElementById('CreateEvents_targetAmount');
+        if (!targetAmountInput.disabled && isNaN(targetAmountInput.value)) {
+            document.getElementById('CreateEvents_targetAmount_error').innerText = 'Target amount must be a number.';
+            isValid = false;
+        }
+
+        // Validate maximum volunteers is a number
+        const maxVolunteerInput = document.getElementById('CreateEvents_maxVolunteer');
+        if (isNaN(maxVolunteerInput.value) || maxVolunteerInput.value.trim() === '') {
+            document.getElementById('CreateEvents_maxVolunteer_error').innerText = 'Maximum volunteers must be a number.';
+            isValid = false;
+        }
+
+        // Validate skills
+        const addedSkills = document.getElementById('added-skills').querySelectorAll('.skill-badge');
+        if (addedSkills.length === 0) {
+            document.getElementById('CreateEvents_skills_error').innerText = 'At least one skill is required.';
+            isValid = false;
+        }
+
+        return isValid;
     }
+
+    // Add event listeners to ensure only numbers are entered
+    function onlyNumbers(input, errorId) {
+        input.addEventListener('input', function (e) {
+            this.value = this.value.replace(/[^0-9]/g, '');
+            if (isNaN(this.value) || this.value === '') {
+                document.getElementById(errorId).innerText = 'Please enter a valid number.';
+            } else {
+                document.getElementById(errorId).innerText = '';
+            }
+        });
+    }
+
+    onlyNumbers(document.getElementById('CreateEvents_targetAmount'), 'CreateEvents_targetAmount_error');
+    onlyNumbers(document.getElementById('CreateEvents_maxVolunteer'), 'CreateEvents_maxVolunteer_error');
 
     function addSkill(skill) {
         const skillsContainer = document.getElementById('added-skills');
@@ -347,5 +442,39 @@
                 });
             });
         });
+
+        // Real-time validation for date and time inputs
+        document.getElementById('CreateEvents_dateStart').addEventListener('input', function() {
+            const dateStart = new Date(this.value);
+            const now = new Date();
+            if (dateStart < now) {
+                document.getElementById('CreateEvents_dateStart_error').innerText = 'Start date and time must be in the future.';
+                this.value = '';
+            } else {
+                document.getElementById('CreateEvents_dateStart_error').innerText = '';
+            }
+            validateEventDuration();
+        });
+
+        document.getElementById('CreateEvents_dateEnd').addEventListener('input', function() {
+            validateEventDuration();
+        });
+
+        function validateEventDuration() {
+            const dateStart = new Date(document.getElementById('CreateEvents_dateStart').value);
+            const dateEnd = new Date(document.getElementById('CreateEvents_dateEnd').value);
+            if (dateEnd <= dateStart) {
+                document.getElementById('CreateEvents_dateEnd_error').innerText = 'End date and time must be after start date and time.';
+                document.getElementById('CreateEvents_dateEnd').value = '';
+                return;
+            }
+            const hoursDifference = (dateEnd - dateStart) / (1000 * 60 * 60);
+            if (hoursDifference < 3) {
+                document.getElementById('CreateEvents_dateEnd_error').innerText = 'Event duration must be at least 3 hours.';
+                document.getElementById('CreateEvents_dateEnd').value = '';
+            } else {
+                document.getElementById('CreateEvents_dateEnd_error').innerText = '';
+            }
+        }
     });
 </script>
