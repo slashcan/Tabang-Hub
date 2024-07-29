@@ -100,6 +100,21 @@
         -webkit-line-clamp: 1; /* Limit to 1 line */
         -webkit-box-orient: vertical;
     }
+
+    :root {
+        --primary-danger-request: red;
+        --secondary-danger-request: #de0a26;
+
+        --main-color: white;
+    }
+    .btnRequest{
+        background-color: var(--primary-danger-request);
+        color: var(--main-color);
+    }
+        .btnRequest:hover {
+            background-color: var(--secondary-danger-request);
+            color: var(--main-color);
+        }
 </style>
 
 <div class="container mt-5">
@@ -175,32 +190,32 @@
                         <div class="progress-label">@Model.volunteers.Where(m => m.Status == 1).Count()/@location.Max_Volunteer</div>
                     </div>
                 }
-                <hr />
-
-                @{
-                    var status = Model.volunteersStatusEvent.Where(m => m.Status == 1).Select(m => m.Status);
-                    Console.Write(status);
-                }
 
                 <div class="apply-button mt-2">
                     @foreach (var orgDetails in Model.orgEvents)
                     {
-                        if (@status.Equals(null))
+                        if (!Model.volunteersStatusEvent.Count().Equals(0))
+                        {
+                            foreach (var status in Model.volunteersStatusEvent)
+                            {
+                                if (status.Status.Equals(1) && Model.volunteersStatusEvent.Count() != 0)
+                                {
+                                    <button style="width: 100%" onclick="leaveEvent('@orgDetails.eventId')" class="btn btnRequest">
+                                        Leave event
+                                    </button>
+                                }
+                                else if (status.Status.Equals(0) && Model.volunteersStatusEvent.Count() != 0)
+                                {
+                                    <button style="width: 100%" onclick="cancelEvent('@orgDetails.eventId')" class="btn btnRequest">
+                                        Cancel application
+                                    </button>
+                                }
+                            }
+                        }
+                        if (Model.volunteersStatusEvent.Count().Equals(0))
                         {
                             <button style="width: 100%" onclick="applyEvent('@orgDetails.eventId')" class="btn btn-primary btn-block">
                                 Join now
-                            </button>
-                        }
-                        else if (@status.Equals(1))
-                        {
-                            <button style="width: 100%" onclick="applyEvent('@orgDetails.eventId')" class="btn btn-primary btn-block">
-                                Leave event
-                            </button>
-                        }
-                        else
-                        {
-                            <button style="width: 100%" onclick="applyEvent('@orgDetails.eventId')" class="btn btn-primary btn-block">
-                                Cancel application
                             </button>
                         }
 
@@ -422,6 +437,82 @@
     })
     }
 
+    function cancelEvent(eventId) {
+        Swal.fire({
+            title: 'Confirm Cancel',
+            text: 'Are you sure you want to cancel this request?',
+            icon: 'info',
+            showCancelButton: true,
+            confirmButtonText: 'Yes',
+            cancelButtonText: 'No'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: '@Url.Action("CancelRequest", "Volunteer")',
+                    type: 'POST',
+                    data: { eventId: eventId },
+                    success: function (response) {
+                        if (response.success) {
+                            Swal.fire({
+                                title: response.message,
+                                text: '',
+                                icon: 'success',
+                                confirmButtonText: 'OK'
+                            }).then(() => {
+                                location.reload();
+                            });
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        Swal.fire({
+                            title: 'Error',
+                            text: 'An error occurred. Please try again.',
+                            icon: 'error',
+                            confirmButtonText: 'Ok'
+                        });
+                    }
+                });
+            }
+        });
+    }
+    function leaveEvent(eventId) {
+        Swal.fire({
+            title: 'Confirm Leave',
+            text: 'Are you sure you want to leave this event?',
+            icon: 'info',
+            showCancelButton: true,
+            confirmButtonText: 'Yes',
+            cancelButtonText: 'No'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: '@Url.Action("LeaveEvent", "Volunteer")',
+                    type: 'POST',
+                    data: { eventId: eventId },
+                    success: function (response) {
+                        if (response.success) {
+                            Swal.fire({
+                                title: response.message,
+                                text: '',
+                                icon: 'success',
+                                confirmButtonText: 'OK'
+                            }).then(() => {
+                                location.reload();
+                            });
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        Swal.fire({
+                            title: 'Error',
+                            text: 'An error occurred. Please try again.',
+                            icon: 'error',
+                            confirmButtonText: 'Ok'
+                        });
+                    }
+                });
+            }
+        });
+    }
 
     const track = document.querySelector('.carousel-track-opportunities');
     const prevButton = document.querySelector('.prev-button-opportunities');

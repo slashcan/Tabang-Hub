@@ -251,8 +251,8 @@
                     success: function (response) {
                         if (response.success) {
                             Swal.fire({
-                                title: 'Confirmed',
-                                text: response.message,
+                                title: response.message,
+                                text: '',
                                 icon: 'success',
                                 confirmButtonText: 'OK'
                             }).then(() => {
@@ -290,8 +290,8 @@
                     success: function (response) {
                         if (response.success) {
                             Swal.fire({
-                                title: 'Confirmed',
-                                text: response.message,
+                                title: response.message,
+                                text: '',
                                 icon: 'success',
                                 confirmButtonText: 'OK'
                             }).then(() => {
