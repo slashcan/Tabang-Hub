@@ -34,6 +34,7 @@ namespace Tabang_Hub.Utils
         public List<OrgEvents> orgEvents { get; set; }
         public List<OrgEvents> pendingOrgDetails { get; set; }
         public List<Volunteers> volunteers { get; set; }
+        public List<Volunteers> volunteersStatusEvent { get; set; }
         public UserDonated userDonated { get; set; }
         public List<UserDonated> listofUserDonated { get; set; }
         public List<Volunteers> listOfEventVolunteers { get; set; }

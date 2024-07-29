@@ -245,6 +245,7 @@ namespace Tabang_Hub.Controllers
                     var getEvents = _listsOfEvent.GetAll().Where(m => m.Event_Id == getOrgInfo.eventId).ToList();
                     var getVolunteers = _volunteers.GetAll().Where(m => m.eventId == eventId).ToList();
                     var listofUserDonated = db.UserDonated.Where(m => m.eventId == eventId).ToList();
+                    var volunteerStatusEvent = _volunteersStatusEvent.GetAll().Where(m => m.userId == UserId && m.eventId == eventId).ToList();
 
                     var indexModel = new Lists()
                     {
@@ -257,7 +258,8 @@ namespace Tabang_Hub.Controllers
                         orgOtherEvent = getOrgOtherEvent,
                         listOfEvents = getEvents,
                         volunteers = getVolunteers,
-                        listofUserDonated = listofUserDonated
+                        listofUserDonated = listofUserDonated,
+                        volunteersStatusEvent = volunteerStatusEvent
                     };
                     return View(indexModel);
                 }

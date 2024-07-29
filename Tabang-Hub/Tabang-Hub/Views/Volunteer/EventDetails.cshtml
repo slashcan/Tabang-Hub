@@ -177,13 +177,33 @@
                 }
                 <hr />
 
+                @{
+                    var status = Model.volunteersStatusEvent.Where(m => m.Status == 1).Select(m => m.Status);
+                    Console.Write(status);
+                }
 
                 <div class="apply-button mt-2">
                     @foreach (var orgDetails in Model.orgEvents)
                     {
-                        <button style="width: 100%" onclick="applyEvent('@orgDetails.eventId')" class="btn btn-primary btn-block">
-                            Join now
-                        </button>
+                        if (@status.Equals(null))
+                        {
+                            <button style="width: 100%" onclick="applyEvent('@orgDetails.eventId')" class="btn btn-primary btn-block">
+                                Join now
+                            </button>
+                        }
+                        else if (@status.Equals(1))
+                        {
+                            <button style="width: 100%" onclick="applyEvent('@orgDetails.eventId')" class="btn btn-primary btn-block">
+                                Leave event
+                            </button>
+                        }
+                        else
+                        {
+                            <button style="width: 100%" onclick="applyEvent('@orgDetails.eventId')" class="btn btn-primary btn-block">
+                                Cancel application
+                            </button>
+                        }
+
                         if (orgDetails.targetAmount != null)
                         {
                             foreach (var evnt in Model.listOfEvents)
