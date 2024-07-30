@@ -386,6 +386,11 @@ namespace Tabang_Hub.Controllers
         {
             try
             {
+                if (amount <= 0)
+                {
+                    return Json(new { success = false, message = "Donation amount must be greater than zero." });
+                }
+
                 var donation = new UserDonated
                 {
                     userId = UserId,
@@ -397,7 +402,7 @@ namespace Tabang_Hub.Controllers
                 db.UserDonated.Add(donation);
                 db.SaveChanges();
 
-                return Json(new { success = true });
+                return Json(new { success = true, message = "Thank you for your donation!" });
             }
             catch (Exception ex)
             {

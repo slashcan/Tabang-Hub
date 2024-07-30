@@ -104,13 +104,14 @@
     :root {
         --primary-danger-request: red;
         --secondary-danger-request: #de0a26;
-
         --main-color: white;
     }
-    .btnRequest{
+
+    .btnRequest {
         background-color: var(--primary-danger-request);
         color: var(--main-color);
     }
+
         .btnRequest:hover {
             background-color: var(--secondary-danger-request);
             color: var(--main-color);
@@ -357,42 +358,45 @@
 
 <script>
     function submitDonation(eventId) {
-        var donationAmount = document.getElementById('donationAmount').value;
+    var donationAmount = document.getElementById('donationAmount').value;
 
-        $.ajax({
-            url: '@Url.Action("DonateNow", "Volunteer")',
-            type: 'POST',
-            data: {
-                eventId: eventId,
-                amount: donationAmount
-            },
-            success: function (response) {
-                if (response.success) {
-                    Swal.fire({
-                        title: '',
-                        text: 'Your donation has been sent.',
-                        icon: 'success',
-                        confirmButtonText: 'OK'
-                    }).then(() => {
-                        //$('#donationModal').modal('hide');
-                        //document.getElementById('donationForm').reset();
-                        location.reload();
-                    });
-                } else {
-                    Swal.fire({
-                        title: '',
-                        text: 'ERRRRROOOOORRR',
-                        icon: 'warning',
-                        confirmButtonText: 'OK'
-                    })
-                    console.log(userId);
-                }
-            },
-            error: function (xhr, status, error) {
-                console.log("Error: " + error);
+    $.ajax({
+        url: '@Url.Action("DonateNow", "Volunteer")',
+        type: 'POST',
+        data: {
+            eventId: eventId,
+            amount: donationAmount
+        },
+        success: function (response) {
+            if (response.success) {
+                Swal.fire({
+                    title: '',
+                    text: response.message,
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                }).then(() => {
+                    location.reload();
+                });
+            } else {
+                Swal.fire({
+                    title: 'Error',
+                    text: response.message,
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
             }
-        });
-    }
+        },
+        error: function (xhr, status, error) {
+            Swal.fire({
+                title: 'Error',
+                text: 'An unexpected error occurred. Please try again later.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+        }
+    });
+}
+
 
     function applyEvent(eventId) {
         $.ajax({
