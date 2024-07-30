@@ -151,9 +151,9 @@
                                         <img src="~/Content/images2/slide/volunteer-helping-with-donation-box.jpg" class="carousel-image img-fluid" alt="...">
 
                                         <div class="carousel-caption d-flex flex-column justify-content-end">
-                                            <h1>be a Kind Heart</h1>
+                                            <h1>Tabang Heart</h1>
 
-                                            <p>Professional charity theme based on Bootstrap 5.2.2</p>
+                                            <p>Bringing help to where it's needed.</p>
                                         </div>
                                     </div>
 
@@ -161,9 +161,9 @@
                                         <img src="~/Content/images2/slide/volunteer-selecting-organizing-clothes-donations-charity.jpg" class="carousel-image img-fluid" alt="...">
 
                                         <div class="carousel-caption d-flex flex-column justify-content-end">
-                                            <h1>Non-profit</h1>
+                                            <h1>Join Our Mission</h1>
 
-                                            <p>You can support us to grow more</p>
+                                            <p>Help us empower more communities.</p>
                                         </div>
                                     </div>
 
@@ -237,12 +237,12 @@
                                             {
                                                 <div class="progress mt-4">
                                                     @{
-                                                        decimal? raisedAmount = 0;
+                                                        decimal? raisedAmount = evt.Total_Donation;
 
-                                                        foreach (var donated in Model.listofUserDonated)
-                                                        {
-                                                            raisedAmount += donated.amount;
-                                                        }
+                                                        //foreach (var donated in Model.listofUserDonated.Where(m => m.eventId == evt.Event_Id))
+                                                        //{
+                                                        //    raisedAmount += donated.amount;
+                                                        //}
 
                                                         var percentage = (raisedAmount / evt.Target_Amount) * 100;
                                                     }
@@ -282,7 +282,7 @@
 
                                 <h5 class="mb-3">Tabang Hub, Volunteering Community</h5>
 
-                                <p class="mb-0">This is a Bootstrap 5.2.2 CSS template for charity organization websites. You can feel free to use it. Please tell your friends about TemplateMo website. Thank you. HTML CSS files updated on 20 Oct 2022.</p>
+                                <p class="mb-0">Founded in 2024, Tabang Hub connects skilled volunteers with meaningful opportunities. We focus on using skills-based volunteering to address community challenges and create lasting impacts. Join us in making a difference.</p>
                             </div>
 
                             <div class="row">
@@ -290,17 +290,22 @@
                                     <div class="custom-text-box mb-lg-0">
                                         <h5 class="mb-3">Our Mission</h5>
 
-                                        <p>Sed leo nisl, posuere at molestie ac, suscipit auctor quis metus</p>
+                                        <p>Connect the right volunteers, empower them to make a difference, and support organizations in finding the perfect fit.</p>
 
                                         <ul class="custom-list mt-2">
                                             <li class="custom-list-item d-flex">
                                                 <i class="bi-check custom-text-box-icon me-2"></i>
-                                                Charity Theme
+                                                <strong>Connect</strong>
                                             </li>
 
                                             <li class="custom-list-item d-flex">
                                                 <i class="bi-check custom-text-box-icon me-2"></i>
-                                                Semantic HTML
+                                                <strong>Empower</strong>
+                                            </li>
+
+                                            <li class="custom-list-item d-flex">
+                                                <i class="bi-check custom-text-box-icon me-2"></i>
+                                                <strong>Support</strong>
                                             </li>
                                         </ul>
                                     </div>
@@ -385,7 +390,7 @@
                         <div class="col-lg-5 col-12">
                             <a href="#" class="me-4">Make a donation</a>
 
-                            <a href="#section_4" class="custom-btn btn smoothscroll">Become a volunteer</a>
+                            <a href="#section_1" class="custom-btn btn smoothscroll">Become a volunteer</a>
                         </div>
 
                     </div>

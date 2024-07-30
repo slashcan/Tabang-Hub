@@ -370,7 +370,7 @@
                 if (response.success) {
                     Swal.fire({
                         title: '',
-                        text: 'Your donation has been received.',
+                        text: 'Your donation has been sent.',
                         icon: 'success',
                         confirmButtonText: 'OK'
                     }).then(() => {
@@ -439,8 +439,8 @@
 
     function cancelEvent(eventId) {
         Swal.fire({
-            title: 'Confirm Cancel',
-            text: 'Are you sure you want to cancel this request?',
+            title: '',
+            text: 'Do you really want to cancel this application?',
             icon: 'info',
             showCancelButton: true,
             confirmButtonText: 'Yes',
