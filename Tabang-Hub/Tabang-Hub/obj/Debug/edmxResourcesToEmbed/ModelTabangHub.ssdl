@@ -47,6 +47,7 @@
     <Property Name="skillRequirementId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="eventId" Type="int" />
     <Property Name="skillName" Type="nvarchar" MaxLength="255" />
+    <Property Name="totalNeeded" Type="int" />
   </EntityType>
   <EntityType Name="OrgValidation">
     <Key>

@@ -52,6 +52,7 @@
           <Property Name="skillRequirementId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="eventId" Type="int" />
           <Property Name="skillName" Type="nvarchar" MaxLength="255" />
+          <Property Name="totalNeeded" Type="int" />
         </EntityType>
         <EntityType Name="OrgValidation">
           <Key>
@@ -583,6 +584,9 @@ FROM [dbo].[vw_VolunteerAccounts] AS [vw_VolunteerAccounts]</DefiningQuery>
           <FunctionImport Name="sp_OtherEvent" ReturnType="Collection(TabangHubModel.sp_OtherEvent_Result)">
           <Parameter Name="userId" Mode="In" Type="Int32" />
           </FunctionImport>
+          <FunctionImport Name="sp_UserListEvent" ReturnType="Collection(TabangHubModel.sp_UserListEvent_Result)">
+          <Parameter Name="userId" Mode="In" Type="Int32" />
+          </FunctionImport>
           <EntitySet Name="OrgEventImage" EntityType="TabangHubModel.OrgEventImage" />
           <EntitySet Name="OrgEvents" EntityType="TabangHubModel.OrgEvents" />
           <EntitySet Name="OrgInfo" EntityType="TabangHubModel.OrgInfo" />
@@ -657,9 +661,6 @@ FROM [dbo].[vw_VolunteerAccounts] AS [vw_VolunteerAccounts]</DefiningQuery>
             <End Role="UserAccount" EntitySet="UserAccount" />
             <End Role="Volunteers" EntitySet="Volunteers" />
           </AssociationSet>
-          <FunctionImport Name="sp_UserListEvent" ReturnType="Collection(TabangHubModel.sp_UserListEvent_Result)">
-          <Parameter Name="userId" Mode="In" Type="Int32" />
-          </FunctionImport>
           </EntityContainer>
         <ComplexType Name="sp_GetSkills_Result">
           <Property Type="Int32" Name="skillId" Nullable="false" />
@@ -678,6 +679,15 @@ FROM [dbo].[vw_VolunteerAccounts] AS [vw_VolunteerAccounts]</DefiningQuery>
           <Property Type="Int32" Name="Event_Type" Nullable="true" />
           <Property Type="Int32" Name="Total_Image" Nullable="true" />
           <Property Type="Int32" Name="Total_Skills" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="sp_UserListEvent_Result">
+          <Property Type="Int32" Name="applyVolunteerId" Nullable="false" />
+          <Property Type="Int32" Name="userId" Nullable="true" />
+          <Property Type="Int32" Name="eventId" Nullable="true" />
+          <Property Type="Int32" Name="Status" Nullable="true" />
+          <Property Type="DateTime" Name="appliedAt" Nullable="true" />
+          <Property Type="DateTime" Name="dateStart" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="dateEnd" Nullable="true" Precision="23" />
         </ComplexType>
         <EntityType Name="OrgEventImage">
           <Key>
@@ -734,6 +744,7 @@ FROM [dbo].[vw_VolunteerAccounts] AS [vw_VolunteerAccounts]</DefiningQuery>
           <Property Name="skillRequirementId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="eventId" Type="Int32" />
           <Property Name="skillName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="totalNeeded" Type="Int32" />
           <NavigationProperty Name="OrgEvents" Relationship="TabangHubModel.FK_OrgSkillRequirement_OrgEvents" FromRole="OrgSkillRequirement" ToRole="OrgEvents" />
         </EntityType>
         <EntityType Name="OrgValidation">
@@ -1104,15 +1115,6 @@ FROM [dbo].[vw_VolunteerAccounts] AS [vw_VolunteerAccounts]</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <ComplexType Name="sp_UserListEvent_Result">
-          <Property Type="Int32" Name="applyVolunteerId" Nullable="false" />
-          <Property Type="Int32" Name="userId" Nullable="true" />
-          <Property Type="Int32" Name="eventId" Nullable="true" />
-          <Property Type="Int32" Name="Status" Nullable="true" />
-          <Property Type="DateTime" Name="appliedAt" Nullable="true" />
-          <Property Type="DateTime" Name="dateStart" Nullable="true" Precision="23" />
-          <Property Type="DateTime" Name="dateEnd" Nullable="true" Precision="23" />
-        </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1144,6 +1146,19 @@ FROM [dbo].[vw_VolunteerAccounts] AS [vw_VolunteerAccounts]</DefiningQuery>
                 <ScalarProperty Name="Event_Type" ColumnName="Event_Type" />
                 <ScalarProperty Name="Total_Image" ColumnName="Total_Image" />
                 <ScalarProperty Name="Total_Skills" ColumnName="Total_Skills" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_UserListEvent" FunctionName="TabangHubModel.Store.sp_UserListEvent">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="TabangHubModel.sp_UserListEvent_Result">
+                <ScalarProperty Name="applyVolunteerId" ColumnName="applyVolunteerId" />
+                <ScalarProperty Name="userId" ColumnName="userId" />
+                <ScalarProperty Name="eventId" ColumnName="eventId" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="appliedAt" ColumnName="appliedAt" />
+                <ScalarProperty Name="dateStart" ColumnName="dateStart" />
+                <ScalarProperty Name="dateEnd" ColumnName="dateEnd" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -1193,6 +1208,7 @@ FROM [dbo].[vw_VolunteerAccounts] AS [vw_VolunteerAccounts]</DefiningQuery>
           <EntitySetMapping Name="OrgSkillRequirement">
             <EntityTypeMapping TypeName="TabangHubModel.OrgSkillRequirement">
               <MappingFragment StoreEntitySet="OrgSkillRequirement">
+                <ScalarProperty Name="totalNeeded" ColumnName="totalNeeded" />
                 <ScalarProperty Name="skillName" ColumnName="skillName" />
                 <ScalarProperty Name="eventId" ColumnName="eventId" />
                 <ScalarProperty Name="skillRequirementId" ColumnName="skillRequirementId" />
@@ -1383,19 +1399,6 @@ FROM [dbo].[vw_VolunteerAccounts] AS [vw_VolunteerAccounts]</DefiningQuery>
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="sp_UserListEvent" FunctionName="TabangHubModel.Store.sp_UserListEvent">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="TabangHubModel.sp_UserListEvent_Result">
-                <ScalarProperty Name="applyVolunteerId" ColumnName="applyVolunteerId" />
-                <ScalarProperty Name="userId" ColumnName="userId" />
-                <ScalarProperty Name="eventId" ColumnName="eventId" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="appliedAt" ColumnName="appliedAt" />
-                <ScalarProperty Name="dateStart" ColumnName="dateStart" />
-                <ScalarProperty Name="dateEnd" ColumnName="dateEnd" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

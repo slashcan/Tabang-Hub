@@ -17,6 +17,7 @@ namespace Tabang_Hub
         public int skillRequirementId { get; set; }
         public Nullable<int> eventId { get; set; }
         public string skillName { get; set; }
+        public Nullable<int> totalNeeded { get; set; }
     
         public virtual OrgEvents OrgEvents { get; set; }
     }

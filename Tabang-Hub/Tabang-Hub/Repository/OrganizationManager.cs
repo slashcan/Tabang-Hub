@@ -36,7 +36,7 @@ namespace Tabang_Hub.Repository
         }
 
 
-        public ErrorCode CreateEvents(OrgEvents orgEvents, List<string> imageFileNames, string[] skills, ref string errMsg)
+        public ErrorCode CreateEvents(OrgEvents orgEvents, List<string> imageFileNames, Dictionary<string, int> skills, ref string errMsg)
         {
             // Create the event
             if (_orgEvents.Create(orgEvents, out errMsg) != ErrorCode.Success)
@@ -53,7 +53,8 @@ namespace Tabang_Hub.Repository
                 var skillRequirement = new OrgSkillRequirement
                 {
                     eventId = eventId,
-                    skillName = skill
+                    skillName = skill.Key,
+                    totalNeeded = skill.Value
                 };
 
                 if (_orgSkillRequirements.Create(skillRequirement, out errMsg) != ErrorCode.Success)

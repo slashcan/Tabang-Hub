@@ -149,17 +149,17 @@
     </div>
 </section>
 
-<!-- Create Event Modal -->
+<!-- Create Event Modal (Phase 1) -->
 <div class="container mt-5">
     <div class="modal fade" id="createEventModal" tabindex="-1" aria-labelledby="createEventModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="createEventModalLabel">Create Event</h5>
+                    <h5 class="modal-title" id="createEventModalLabel">Create Event - Phase 1</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="create-event-form" action="/Organization/CreateEvents" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
+                    <form id="create-event-form-phase1" onsubmit="return moveToPhase2(event)">
                         <div class="mb-3">
                             <label for="CreateEvents_eventTitle" class="form-label">Event Title</label>
                             <input type="text" class="form-control" id="CreateEvents_eventTitle" name="CreateEvents.eventTitle" placeholder="Enter event title">
@@ -217,6 +217,37 @@
                             <span class="error" id="CreateEvents_uploadImage_error"></span>
                             <div class="preview-container" id="image-preview"></div>
                         </div>
+                        <button class="btn btn-primary" type="submit">Next</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Skill Specific Volunteer Requirement Modal (Phase 2) -->
+<div class="container mt-5">
+    <div class="modal fade" id="skillRequirementModal" tabindex="-1" aria-labelledby="skillRequirementModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="skillRequirementModalLabel">Specify Skill Requirements - Phase 2</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="create-event-form-phase2" action="/Organization/CreateEvents" method="post" onsubmit="return validatePhase2()">
+                        <!-- Hidden fields for event details -->
+                        <input type="hidden" name="CreateEvents.eventTitle" id="eventTitle" />
+                        <input type="hidden" name="CreateEvents.eventDescription" id="eventDescription" />
+                        <input type="hidden" name="CreateEvents.targetAmount" id="targetAmount" />
+                        <input type="hidden" name="CreateEvents.maxVolunteer" id="maxVolunteer" />
+                        <input type="hidden" name="CreateEvents.dateStart" id="dateStart" />
+                        <input type="hidden" name="CreateEvents.dateEnd" id="dateEnd" />
+                        <input type="hidden" name="CreateEvents.location" id="location" />
+
+                        <div class="mb-3" id="skill-requirement-container">
+                            <!-- Skill inputs will be dynamically inserted here -->
+                        </div>
                         <button class="btn btn-primary" type="submit">Create Event</button>
                     </form>
                 </div>
@@ -227,6 +258,7 @@
 
 <!-- SweetAlert JS -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="~/Content/js/bootstrap.bundle.min.js"></script>
 <script src="~/Content/vendors/perfect-scrollbar/perfect-scrollbar.min.js"></script>
 <script src="~/Content/js/main.js"></script>
@@ -241,6 +273,73 @@
             targetAmountInput.value = ''; // Clear the input value if disabled
         }
     });
+
+    function moveToPhase2(event) {
+        event.preventDefault();
+
+        // Validate the first phase and collect data
+        if (!validateForm()) {
+            return false;
+        }
+
+        // Transfer data to phase 2 form
+        document.getElementById('eventTitle').value = document.getElementById('CreateEvents_eventTitle').value;
+        document.getElementById('eventDescription').value = document.getElementById('CreateEvents_eventDescription').value;
+        document.getElementById('targetAmount').value = document.getElementById('CreateEvents_targetAmount').value;
+        document.getElementById('maxVolunteer').value = document.getElementById('CreateEvents_maxVolunteer').value;
+        document.getElementById('dateStart').value = document.getElementById('CreateEvents_dateStart').value;
+        document.getElementById('dateEnd').value = document.getElementById('CreateEvents_dateEnd').value;
+        document.getElementById('location').value = document.getElementById('CreateEvents_location').value;
+
+        // Populate skill-specific requirements in the second phase modal
+        const skillsContainer = document.getElementById('added-skills');
+        const skillRequirementContainer = document.getElementById('skill-requirement-container');
+        skillRequirementContainer.innerHTML = '';
+
+        skillsContainer.querySelectorAll('.skill-badge').forEach(skillBadge => {
+            const skillName = skillBadge.textContent.trim();
+            const skillInput = document.createElement('div');
+            skillInput.classList.add('mb-3');
+            skillInput.innerHTML = `
+                <label for="skill-${skillName}" class="form-label">${skillName} Volunteers Needed</label>
+                <input type="number" class="form-control" name="skills[${skillName}]" id="skill-${skillName}" placeholder="Enter number of volunteers" min="1" required>
+            `;
+            skillRequirementContainer.appendChild(skillInput);
+        });
+
+        // Show the second modal
+        $('#createEventModal').modal('hide');
+        $('#skillRequirementModal').modal('show');
+    }
+
+    function validatePhase2() {
+        let isValid = true;
+        let totalVolunteers = 0;
+        const maxVolunteers = parseInt(document.getElementById('maxVolunteer').value);
+        const skillInputs = document.getElementById('skill-requirement-container').querySelectorAll('input[type="number"]');
+
+        skillInputs.forEach(input => {
+            if (input.value.trim() === '' || parseInt(input.value) <= 0) {
+                isValid = false;
+                input.classList.add('is-invalid');
+            } else {
+                input.classList.remove('is-invalid');
+                totalVolunteers += parseInt(input.value);
+            }
+        });
+
+        if (totalVolunteers !== maxVolunteers) {
+            isValid = false;
+            Swal.fire({
+                title: 'Error',
+                text: 'Total volunteers assigned to skills must equal the maximum number of volunteers.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+        }
+
+        return isValid;
+    }
 
     function validateForm() {
         let isValid = true;
@@ -475,6 +574,19 @@
             } else {
                 document.getElementById('CreateEvents_dateEnd_error').innerText = '';
             }
+        }
+    });
+$(document).ready(function () {
+        @if (TempData["Success"] != null && (bool)TempData["Success"])
+        {
+            <text>
+            Swal.fire({
+                title: 'Success!',
+                text: 'The event has been created successfully.',
+                icon: 'success',
+                confirmButtonText: 'OK'
+            });
+            </text>
         }
     });
 </script>

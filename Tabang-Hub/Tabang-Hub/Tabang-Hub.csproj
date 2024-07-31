@@ -1994,6 +1994,7 @@
     <Content Include="Views\Organization\Reports.cshtml" />
     <Content Include="Views\Organization\History.cshtml" />
     <Content Include="Views\Volunteer\OrganizationProfile.cshtml" />
+    <Content Include="Views\Shared\_Verify.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
