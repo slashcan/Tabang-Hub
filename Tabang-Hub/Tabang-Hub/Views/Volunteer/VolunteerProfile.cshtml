@@ -38,12 +38,11 @@
                         </div>
 
                         <p class="mb-1"><strong>Contact number: </strong><span id="phone">@VolInfo.phoneNum</span></p>
-                        <input type="text" id="phoneInput" class="form-control d-none" value="@VolInfo.phoneNum" required pattern="^09[0-9]{9}$" title="Phone number should start with 09 and contain 11 digits">
+                        <input type="text" id="phoneInput" class="form-control d-none" value="@VolInfo.phoneNum" pattern="^09[0-9]{9}$" title="Phone number should start with 09 and contain 11 digits" maxlength="11" required>
                         <span class="error-message text-danger"></span>
 
                         <p class="mb-1"><strong>Email: </strong><span id="email">@VolInfo.UserAccount.email</span></p>
-                        <input type="email" id="emailInput" class="form-control d-none" value="@VolInfo.UserAccount.email" required>
-                        <span class="error-message text-danger"></span>
+                        <!-- Email input removed from editing -->
 
                         <p class="mb-1"><strong>Availability: </strong><span id="availability">@VolInfo.availability</span></p>
                         <div id="availabilityInput" class="d-none">
@@ -58,6 +57,7 @@
                         </div>
                     </div>
                 }
+
                 <div class="col-md-2 text-right">
                     <button id="editButton" class="btn btn-outline-success" onclick="toggleEdit()">Edit</button>
                     <button id="cancelButton" class="btn btn-outline-danger d-none" onclick="cancelEdit()">Cancel</button>
@@ -108,7 +108,7 @@
     </div>
     <div class="card mt-3">
             <div class="card-body">
-                <h5>Volunteer Impact</h5>
+                <h5>Volunteer Summary</h5>
                 <ul>
                     <li>
                         Total hours volunteered

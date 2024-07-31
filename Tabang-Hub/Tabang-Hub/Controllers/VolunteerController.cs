@@ -52,7 +52,7 @@ namespace Tabang_Hub.Controllers
         }
 
         [HttpPost]
-        public JsonResult EditBasicInfo(string phone, string street, string city, string province, string email, string availability, HttpPostedFileBase profilePic)
+        public JsonResult EditBasicInfo(string phone, string street, string city, string province, string availability, HttpPostedFileBase profilePic)
         {
             try
             {
@@ -64,7 +64,7 @@ namespace Tabang_Hub.Controllers
                 VolunteerUpdate.city = city;
                 VolunteerUpdate.province = province;
 
-                UserUpdate.email = email;
+                //UserUpdate.email = email;
 
                 if (profilePic != null)
                 {
@@ -80,7 +80,7 @@ namespace Tabang_Hub.Controllers
                 }
 
                 db.SaveChanges();
-                FormsAuthentication.SetAuthCookie(email, false);
+                //FormsAuthentication.SetAuthCookie(email, false);
 
                 return Json(new { success = true, message = "Success !" });
             }

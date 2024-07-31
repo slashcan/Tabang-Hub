@@ -4,7 +4,14 @@
     ViewBag.Title = "Login";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
+<style>
+    .registerHere{
+        color: blue;
+    }
+    .registerHere:hover{
+        text-decoration: underline;
+    }
+</style>
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-lg-8 col-md-10 col-sm-12">
@@ -16,7 +23,7 @@
                         </div>
                         <div class="col-md-8">
                             <h2>Login to your Account</h2>
-                            <p>Enter your details to login.</p>
+                            @*<p>Enter your details to login.</p>*@
                             <form action="#" method="post">
                                 <div class="mb-3">
                                     <label for="email" class="form-label">Email Address</label>
@@ -41,7 +48,7 @@
                                 <button class="btn btn-danger w-100" type="submit">Login</button>
                             </form>
                             <p class="mt-3 text-center">By clicking login, you agree to our <a href="#">Terms & Conditions!</a></p>
-                            <p class="mt-3 text-center">Don't have an account? <a href="~/Page/Register">Register here</a></p>
+                            <p class="mt-3 text-center">Don't have an account? <a class="registerHere" href="~/Page/Register">Register here</a></p>
                         </div>
                     </div>
                 </div>

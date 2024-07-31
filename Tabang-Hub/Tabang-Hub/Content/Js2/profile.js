@@ -19,7 +19,6 @@ function enterEditMode() {
     originalValues.city = document.getElementById('cityInput').value;
     originalValues.province = document.getElementById('provinceInput').value;
     originalValues.phone = document.getElementById('phoneInput').value;
-    originalValues.email = document.getElementById('emailInput').value;
     originalValues.availability = document.querySelector('input[name="availability"]:checked').value;
     originalProfilePicSrc = document.getElementById('profilePicPreview').src;
 
@@ -36,11 +35,10 @@ function saveChanges() {
         var city = document.getElementById('cityInput').value;
         var province = document.getElementById('provinceInput').value;
         var phone = document.getElementById('phoneInput').value;
-        var email = document.getElementById('emailInput').value;
         var availability = document.querySelector('input[name="availability"]:checked').value;
         var profilePic = document.getElementById('profilePic').files[0];
 
-        SaveChanges(street, city, province, phone, email, availability, profilePic);
+        SaveChanges(street, city, province, phone, availability, profilePic);
     } else {
         console.log("Validation error.");
         return;
@@ -53,9 +51,6 @@ function toggleInputs(isEditing) {
 
     document.getElementById('phone').classList.toggle('d-none', isEditing);
     document.getElementById('phoneInput').classList.toggle('d-none', !isEditing);
-
-    document.getElementById('email').classList.toggle('d-none', isEditing);
-    document.getElementById('emailInput').classList.toggle('d-none', !isEditing);
 
     document.getElementById('availability').classList.toggle('d-none', isEditing);
     document.getElementById('availabilityInput').classList.toggle('d-none', !isEditing);
@@ -88,7 +83,7 @@ function toggleEdit() {
 }
 
 function validateInputs() {
-    var inputs = ['streetInput', 'cityInput', 'provinceInput', 'phoneInput', 'emailInput'];
+    var inputs = ['streetInput', 'cityInput', 'provinceInput', 'phoneInput'];
     var isValid = true;
 
     inputs.forEach(function (inputId) {
@@ -103,10 +98,6 @@ function validateInputs() {
             input.classList.add('border-danger');
             errorMessage.textContent = 'Phone number should start with 09 and contain 11 digits';
             isValid = false;
-        } else if (inputId === 'emailInput' && !/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(input.value)) {
-            input.classList.add('border-danger');
-            errorMessage.textContent = 'Please enter a valid email address';
-            isValid = false;
         } else {
             input.classList.remove('border-danger');
             errorMessage.textContent = '';
@@ -120,7 +111,6 @@ function cancelEdit() {
     document.getElementById('cityInput').value = originalValues.city;
     document.getElementById('provinceInput').value = originalValues.province;
     document.getElementById('phoneInput').value = originalValues.phone;
-    document.getElementById('emailInput').value = originalValues.email;
 
     var availabilityRadios = document.getElementsByName('availability');
     for (var i = 0; i < availabilityRadios.length; i++) {
@@ -131,7 +121,7 @@ function cancelEdit() {
 
     document.getElementById('profilePicPreview').src = originalProfilePicSrc;
 
-    var inputs = ['streetInput', 'cityInput', 'provinceInput', 'phoneInput', 'emailInput'];
+    var inputs = ['streetInput', 'cityInput', 'provinceInput', 'phoneInput'];
     inputs.forEach(function (inputId) {
         var input = document.getElementById(inputId);
         var errorMessage = input.nextElementSibling;
@@ -142,13 +132,12 @@ function cancelEdit() {
     toggleInputs(false);
 }
 
-function SaveChanges(street, city, province, phone, email, availability, profilePic) {
+function SaveChanges(street, city, province, phone, availability, profilePic) {
     var formData = new FormData();
     formData.append('street', street);
     formData.append('city', city);
     formData.append('province', province);
     formData.append('phone', phone);
-    formData.append('email', email);
     formData.append('availability', availability);
     if (profilePic) {
         formData.append('profilePic', profilePic);
@@ -165,7 +154,6 @@ function SaveChanges(street, city, province, phone, email, availability, profile
                 console.log("Updated");
                 $('#address').text(street + ', ' + city + ' City, ' + province);
                 $('#phone').text(phone);
-                $('#email').text(email);
                 $('#availability').text(availability);
                 if (profilePic) {
                     $('#profilePicPreview').attr('src', URL.createObjectURL(profilePic));
