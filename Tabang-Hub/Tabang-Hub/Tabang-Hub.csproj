@@ -1995,6 +1995,7 @@
     <Content Include="Views\Organization\History.cshtml" />
     <Content Include="Views\Volunteer\OrganizationProfile.cshtml" />
     <Content Include="Views\Shared\_Verify.cshtml" />
+    <Content Include="Views\Admin\ManageSkill.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

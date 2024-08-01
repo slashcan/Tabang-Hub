@@ -23,6 +23,7 @@ namespace Tabang_Hub.Repository
         private BaseRepository<OrgEvents> _orgEvents;
         private BaseRepository<OrgValidation> _orgValidation;
         private BaseRepository<OrgInfo> _orgInfo;
+        private BaseRepository<Skills> _skills;
 
         public AdminManager()
         {
@@ -41,6 +42,7 @@ namespace Tabang_Hub.Repository
             _orgEvents = new BaseRepository<OrgEvents>();
             _orgValidation = new BaseRepository<OrgValidation>();
             _orgInfo = new BaseRepository<OrgInfo>();
+            _skills = new BaseRepository<Skills>();
         }
 
         public List<vw_VolunteerAccounts> GetVolunteerAccounts()
@@ -104,7 +106,14 @@ namespace Tabang_Hub.Repository
         {
             return _orgEvents.GetAll().Where(m => m.userId == userId).ToList();
         }
-
+        public List<Skills> GetSkills()
+        { 
+            return _skills.GetAll();
+        }
+        public Skills GetSkillById(int skillId)
+        { 
+            return _skills._table.Where(m => m.skillId == skillId).FirstOrDefault();
+        }
         public ErrorCode DeleteUser(int userId)
         {
             var user = GetUserById(userId);
@@ -282,6 +291,46 @@ namespace Tabang_Hub.Repository
                 return ErrorCode.Error;
             }
 
+            return ErrorCode.Success;
+        }
+        public ErrorCode AddSkills(Skills skill, ref string errMsg)
+        {
+            if (skill == null)
+            {
+                errMsg = "Skill information is required.";
+                return ErrorCode.Error;
+            }
+
+            if (_skills.Create(skill, out errMsg) != ErrorCode.Success)
+            {
+                return ErrorCode.Error;
+            }
+            return ErrorCode.Success;
+        }
+        public ErrorCode DeleteSkill(int skillId)
+        {
+            var skill = GetSkillById(skillId);
+            if (skill != null)
+            {
+                if (_skills.Delete(skill.skillId) != ErrorCode.Success)
+                {
+                    return ErrorCode.Error;
+                }
+            }
+            return ErrorCode.Success;
+        }
+        public ErrorCode DeactivateAccount(int userId, ref string errMsg)
+        { 
+            var user = GetUserById(userId);
+            user.status = 0;
+
+            if (user != null)
+            {
+                if (_userAccount.Update(user.userId, user, out errMsg) != ErrorCode.Success)
+                {
+                    return ErrorCode.Error;
+                }
+            }
             return ErrorCode.Success;
         }
     }

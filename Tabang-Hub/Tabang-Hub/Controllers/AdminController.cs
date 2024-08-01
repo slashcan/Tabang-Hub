@@ -166,5 +166,79 @@ namespace Tabang_Hub.Controllers
                 return Json(new { success = false, message = ex.Message });
             }
         }
+        public ActionResult ManageSkill()
+        { 
+            var skills = _adminManager.GetSkills();
+
+            var indexModel = new Lists()
+            { 
+                allSkill = skills,
+            };
+            return View(indexModel);
+        }
+        [HttpPost]
+        public ActionResult AddSkills(Skills skill, HttpPostedFileBase skillImage)
+        {
+            if (skillImage != null && skillImage.ContentLength > 0)
+            {
+                // Define the directory path
+                var directoryPath = Server.MapPath("~/Content/SkillImages/");
+
+                // Check if the directory exists
+                if (!Directory.Exists(directoryPath))
+                {
+                    // Create the directory if it doesn't exist
+                    Directory.CreateDirectory(directoryPath);
+                }
+
+                // Get the file name and full path
+                var fileName = Path.GetFileName(skillImage.FileName);
+                var path = Path.Combine(directoryPath, fileName);
+
+                // Save the file
+                skillImage.SaveAs(path);
+
+                // Set the image file name in the skill object
+                skill.skillImage = fileName;
+
+                string errMsg = string.Empty;
+                if (_adminManager.AddSkills(skill, ref errMsg) == ErrorCode.Success)
+                {
+                    TempData["SuccessMessage"] = "Skill added successfully!";
+                    return RedirectToAction("ManageSkill");
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, errMsg);
+                }
+            }
+
+            TempData["ErrorMessage"] = "An error occurred while adding the skill.";
+            return View("ManageSkill");
+        }
+
+        // Action to handle the deletion of a skill
+        [HttpPost]
+        public JsonResult DeleteSkill(int skillId)
+        {
+            string errMsg = string.Empty;
+            if (_adminManager.DeleteSkill(skillId) == ErrorCode.Success)
+            {
+                return Json(new { success = true, message = "Skill deleted successfully." });
+            }
+
+            return Json(new { success = false, message = errMsg });
+        }
+        [HttpPost]
+        public ActionResult Deactivate(int userId)
+        {
+            string errMsg = string.Empty;
+            if (_adminManager.DeactivateAccount(userId, ref errMsg) != ErrorCode.Success)
+            {
+                return Json(new { success = false, message = errMsg });
+            }
+            return Json(new { success = true });
+        }
+
     }
 }

@@ -94,12 +94,10 @@ namespace Tabang_Hub.Controllers
             var sanitizedSkills = new Dictionary<string, int>();
             foreach (var skill in skills)
             {
-                // Remove any " x" from the skill name
                 var sanitizedSkillName = skill.Key.Replace(" x", "").Trim();
                 sanitizedSkills[sanitizedSkillName] = skill.Value;
             }
 
-            // Now use sanitizedSkills instead of skills
             events.CreateEvents.userId = UserId;
             string errMsg = string.Empty;
             List<string> uploadedFiles = new List<string>();
@@ -151,16 +149,32 @@ namespace Tabang_Hub.Controllers
 
             if (totalVolunteers != events.CreateEvents.maxVolunteer)
             {
-                ModelState.AddModelError(String.Empty, "Total volunteers assigned to skills must equal the maximum number of volunteers.");
+                ModelState.AddModelError(string.Empty, "Total volunteers assigned to skills must equal the maximum number of volunteers.");
                 return RedirectToAction("EventsList");
             }
 
-            // Image processing and other logic remain the same...
+            // Image processing
+            if (images != null && images.Length > 0)
+            {
+                var imagePath = Server.MapPath("~/Images/Events");
+                Directory.CreateDirectory(imagePath); // Create directory if it doesn't exist
+
+                foreach (var image in images)
+                {
+                    if (image != null && image.ContentLength > 0)
+                    {
+                        var fileName = Path.GetFileName(image.FileName);
+                        var filePath = Path.Combine(imagePath, fileName);
+                        image.SaveAs(filePath);
+                        uploadedFiles.Add(fileName);
+                    }
+                }
+            }
 
             // Store the event and associated skill requirements
             if (_organizationManager.CreateEvents(events.CreateEvents, uploadedFiles, sanitizedSkills, ref errMsg) != ErrorCode.Success)
             {
-                ModelState.AddModelError(String.Empty, errMsg);
+                ModelState.AddModelError(string.Empty, errMsg);
                 return RedirectToAction("EventsList");
             }
 
