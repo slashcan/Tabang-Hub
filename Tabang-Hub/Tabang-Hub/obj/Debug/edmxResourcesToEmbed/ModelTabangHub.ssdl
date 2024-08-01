@@ -139,6 +139,7 @@
     <Property Name="userId" Type="int" />
     <Property Name="eventId" Type="int" />
     <Property Name="Status" Type="int" />
+    <Property Name="AppliedSkill" Type="nvarchar" MaxLength="50" />
     <Property Name="appliedAt" Type="date" />
   </EntityType>
   <EntityType Name="VolunteerSkill">

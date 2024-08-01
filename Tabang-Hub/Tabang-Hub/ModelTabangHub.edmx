@@ -144,6 +144,7 @@
           <Property Name="userId" Type="int" />
           <Property Name="eventId" Type="int" />
           <Property Name="Status" Type="int" />
+          <Property Name="AppliedSkill" Type="nvarchar" MaxLength="50" />
           <Property Name="appliedAt" Type="date" />
         </EntityType>
         <EntityType Name="VolunteerSkill">
@@ -856,6 +857,7 @@ FROM [dbo].[vw_VolunteerAccounts] AS [vw_VolunteerAccounts]</DefiningQuery>
           <Property Name="appliedAt" Type="DateTime" Precision="0" />
           <NavigationProperty Name="OrgEvents" Relationship="TabangHubModel.FK_Volunteers_OrgEvents" FromRole="Volunteers" ToRole="OrgEvents" />
           <NavigationProperty Name="UserAccount" Relationship="TabangHubModel.FK_Volunteers_UserAccount" FromRole="Volunteers" ToRole="UserAccount" />
+          <Property Name="AppliedSkill" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="VolunteerSkill">
           <Key>
@@ -1308,6 +1310,7 @@ FROM [dbo].[vw_VolunteerAccounts] AS [vw_VolunteerAccounts]</DefiningQuery>
           <EntitySetMapping Name="Volunteers">
             <EntityTypeMapping TypeName="TabangHubModel.Volunteers">
               <MappingFragment StoreEntitySet="Volunteers">
+                <ScalarProperty Name="AppliedSkill" ColumnName="AppliedSkill" />
                 <ScalarProperty Name="appliedAt" ColumnName="appliedAt" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="eventId" ColumnName="eventId" />

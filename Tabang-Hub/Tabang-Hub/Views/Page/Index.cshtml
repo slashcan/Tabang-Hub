@@ -16,6 +16,11 @@
 
     @*<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">*@
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <link href="~/Content/css2/CustomeStyle.css" rel="stylesheet" />
     <style>
         html, body {
@@ -202,11 +207,15 @@
                             <h2 class="mb-5">Welcome to Tabang Hub Volunteering Community</h2>
                         </div>
 
-                        @foreach (var evt in Model.listOfEvents)
+                        @foreach (var evt in Model.listOfEvents.Where(m => m.End_Date >= DateTime.Now))
                         {
                             <div class="col-lg-4 col-md-6 mt-2 col-12 mb-4 mb-lg-0">
                                 <div class="custom-block-wrap">
-                                    <img src="~/Content/images2/causes/Basak.jpg" class="custom-block-image img-fluid" alt="">
+                                    @*<img src="~/Content/images2/causes/Basak.jpg" class="custom-block-image img-fluid" alt="">*@
+                                    @{ 
+                                        var imgs = Model.detailsEventImage.Where(m => m.eventId == evt.Event_Id).Select(m => m.eventImage).FirstOrDefault();
+                                    }
+                                    <img src="@Url.Content("~/Content/IdPicture/" + imgs)" class="custom-block-image img-fluid" alt="">
                                     <div class="custom-block">
                                         <div class="custom-block-body">
                                             <h5 class="mb-3">@evt.Event_Name</h5>

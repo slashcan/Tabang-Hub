@@ -35,6 +35,7 @@ namespace Tabang_Hub.Controllers
                         var getOrgInfo = _orgInfo.GetAll().ToList();
                         var getVolunteers = _volunteers.GetAll().ToList();
                         var getEvents = _listsOfEvent.GetAll().ToList();
+                        var getOrgImages = _eventImages.GetAll().ToList();
 
                         var orgEventsSelectId = _orgEvents.GetAll().Where(m => m.targetAmount != null).Select(m => m.eventId).ToList();
                         var orgEvents = _orgEvents.GetAll().Where(m => m.targetAmount != null).ToList();
@@ -54,7 +55,8 @@ namespace Tabang_Hub.Controllers
                             listOfEvents = getEvents,
                             volunteers = getVolunteers,
                             orgInfos = getOrgInfo,
-                            listofUserDonated = getUserDonated
+                            listofUserDonated = getUserDonated,
+                            detailsEventImage = getOrgImages,
                         };
                         return View(indexModel);
                     case 2:
@@ -465,13 +467,20 @@ namespace Tabang_Hub.Controllers
         [HttpPost]
         public ActionResult Login(string email, string password)
         {
-            if (_userManager.Login(email, password, ref ErrorMessage) == ErrorCode.Success)
-            {
-                var user = _userManager.GetUserByEmail(email);
+            var user = _userManager.GetUserByEmail(email);
 
+            if (user == null)
+            {
+                ViewBag.Error = "Email does not exist.";
+                return View();
+            }
+
+            if (_userManager.Login(email, password, ref ErrorMessage) == ErrorCode.Success)
+            {               
                 if (user.status != (int)Status.Active)
                 {
                     TempData["email"] = user.email;
+                    TempData["login"] = 1;
                     Session["email"] = user.email;
                     Session["NewAccountId"] = user.userId;
 
@@ -594,9 +603,14 @@ namespace Tabang_Hub.Controllers
                     return RedirectToAction("Index", "Admin");
                 }
             }
-            ViewBag.Error = ErrorMessage;
+            else
+            {
+                ViewBag.Error = "Incorrect password. Please try again.";
+            }
+
             return View();
         }
+
         [AllowAnonymous]
         public ActionResult Verify()
         {
@@ -628,16 +642,38 @@ namespace Tabang_Hub.Controllers
             // Check if the entered OTP matches the expected OTP
             if (enteredOTP == expectedOTP)
             {
-                // Update user status to Active if OTP is correct
+                // Update user status to Active if OTP is correct            
                 _userManager.UpdateUserStatus(user.userId, (int)Status.Active, ref ErrorMessage);
-                return Json(new { success = true, message = "Email has been verified!" });
+                if (TempData["login"] != null)
+                {
+                    FormsAuthentication.SetAuthCookie(user.email, false);
+
+                    string redirectUrl = string.Empty;
+                    if (user.roleId == 1)
+                    {
+                        redirectUrl = Url.Action("Index", "User");
+                    }
+                    else if (user.roleId == 2)
+                    {
+                        redirectUrl = Url.Action("Index", "Organization");
+                    }
+                    else if (user.roleId == 3)
+                    {
+                        redirectUrl = Url.Action("Index", "Admin");
+                    }
+                    return Json(new { success = true, message = "Email has been verified!", redirectUrl });
+                }
             }
             else
             {
                 // Return error message if OTP is incorrect
                 return Json(new { success = false, message = "Incorrect OTP. Please try again!" });
             }
+
+            // This return statement is needed to ensure that all code paths return a value
+            return Json(new { success = false, message = "Unexpected error occurred. Please try again later." });
         }
+
 
         [AllowAnonymous]
         public ActionResult Logout()

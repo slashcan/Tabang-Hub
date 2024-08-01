@@ -274,7 +274,7 @@ namespace Tabang_Hub.Controllers
             }
         }
         [HttpPost]
-        public JsonResult ApplyVolunteer(int eventId)
+        public JsonResult ApplyVolunteer(int eventId, string skill)
         {
             try
             {
@@ -307,7 +307,7 @@ namespace Tabang_Hub.Controllers
 
                     if (!(checkEventEndDate < userEventStartDate || checkEventStartDate > userEventEndDate))
                     {
-                        if (checkVolunteer.Status == 0)
+                        if (userEvent.Status == 0)
                         {
                             return Json(new { success = false, message = "Conflict with another applied event" });
                         }
@@ -333,6 +333,7 @@ namespace Tabang_Hub.Controllers
                     userId = UserId,
                     eventId = eventId,
                     Status = 0,
+                    AppliedSkill = skill,
                     appliedAt = DateTime.Now
                 };
 

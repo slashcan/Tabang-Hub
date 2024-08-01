@@ -45,11 +45,23 @@ function SaveDatas(formData, storeSkill) {
             volunteerSkill: storeSkill
         }),
         success: function (response) {
-            console.log("Response is: ", response);
-            location.reload();
+            
+            Swal.fire({
+                title: '',
+                text: 'Your information has been saved successfully.',
+                icon: 'success',
+                confirmButtonText: 'Ok'
+            }).then(() => {
+                location.reload();
+            });
         },
         error: function (xhr, status, error) {
-            console.log("Error response is: ", error);
+            Swal.fire({
+                title: 'Error!',
+                text: 'There was a problem saving your information. Please try again.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
         }
     });
 }

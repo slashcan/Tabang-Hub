@@ -211,12 +211,6 @@
                                 <button type="button" class="btn btn-outline-primary skill-button" onclick="addSkill('@skills.skillName')" id="skill-@skills.skillName">@skills.skillName</button>
                             }
                         </div>
-                        <div class="mb-3">
-                            <label for="CreateEvents_uploadImage" class="form-label">Upload Images</label>
-                            <input type="file" class="form-control" id="CreateEvents_uploadImage" name="images" multiple onchange="previewImages()">
-                            <span class="error" id="CreateEvents_uploadImage_error"></span>
-                            <div class="preview-container" id="image-preview"></div>
-                        </div>
                         <button class="btn btn-primary" type="submit">Next</button>
                     </form>
                 </div>
@@ -235,7 +229,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="create-event-form-phase2" action="/Organization/CreateEvents" method="post" onsubmit="return validatePhase2()">
+                    <form id="create-event-form-phase2" action="/Organization/CreateEvents" method="post" enctype="multipart/form-data" onsubmit="return validatePhase2()">
                         <!-- Hidden fields for event details -->
                         <input type="hidden" name="CreateEvents.eventTitle" id="eventTitle" />
                         <input type="hidden" name="CreateEvents.eventDescription" id="eventDescription" />
@@ -248,6 +242,14 @@
                         <div class="mb-3" id="skill-requirement-container">
                             <!-- Skill inputs will be dynamically inserted here -->
                         </div>
+
+                        <div class="mb-3">
+                            <label for="CreateEvents_uploadImage" class="form-label">Upload Images</label>
+                            <input type="file" class="form-control" id="CreateEvents_uploadImage" name="images" multiple onchange="previewImages()">
+                            <span class="error" id="CreateEvents_uploadImage_error"></span>
+                            <div class="preview-container" id="image-preview"></div>
+                        </div>
+
                         <button class="btn btn-primary" type="submit">Create Event</button>
                     </form>
                 </div>
@@ -312,33 +314,89 @@
         $('#skillRequirementModal').modal('show');
     }
 
-    function validatePhase2() {
-        let isValid = true;
-        let totalVolunteers = 0;
-        const maxVolunteers = parseInt(document.getElementById('maxVolunteer').value);
-        const skillInputs = document.getElementById('skill-requirement-container').querySelectorAll('input[type="number"]');
+    function validatePhase2(event) {
+        event.preventDefault();
 
+        let isValid = true;
+        // Collect form data
+        const formData = new FormData();
+
+        // Append text fields
+        formData.append('CreateEvents.eventTitle', document.getElementById('eventTitle').value);
+        formData.append('CreateEvents.eventDescription', document.getElementById('eventDescription').value);
+        formData.append('CreateEvents.targetAmount', document.getElementById('targetAmount').value);
+        formData.append('CreateEvents.maxVolunteer', document.getElementById('maxVolunteer').value);
+        formData.append('CreateEvents.dateStart', document.getElementById('dateStart').value);
+        formData.append('CreateEvents.dateEnd', document.getElementById('dateEnd').value);
+        formData.append('CreateEvents.location', document.getElementById('location').value);
+
+        // Append skills
+        const skillInputs = document.getElementById('skill-requirement-container').querySelectorAll('input[type="number"]');
         skillInputs.forEach(input => {
             if (input.value.trim() === '' || parseInt(input.value) <= 0) {
                 isValid = false;
                 input.classList.add('is-invalid');
             } else {
+                formData.append(`skills[${input.name}]`, parseInt(input.value));
                 input.classList.remove('is-invalid');
-                totalVolunteers += parseInt(input.value);
             }
         });
 
+        // Append images
+        const images = document.getElementById('CreateEvents_uploadImage').files;
+        for (let i = 0; i < images.length; i++) {
+            formData.append('images', images[i]);
+        }
+
+        if (!isValid) {
+            Swal.fire({
+                title: 'Error',
+                text: 'Please correct the errors in the form.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+            return false;
+        }
+
+        // Validate total volunteers
+        let totalVolunteers = 0;
+        for (let input of skillInputs) {
+            totalVolunteers += parseInt(input.value);
+        }
+        const maxVolunteers = parseInt(document.getElementById('maxVolunteer').value);
         if (totalVolunteers !== maxVolunteers) {
-            isValid = false;
             Swal.fire({
                 title: 'Error',
                 text: 'Total volunteers assigned to skills must equal the maximum number of volunteers.',
                 icon: 'error',
                 confirmButtonText: 'OK'
             });
+            return false;
         }
 
-        return isValid;
+        // Submit form data
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', '/Organization/CreateEvents', true);
+        xhr.onload = function () {
+            if (xhr.status === 200) {
+                Swal.fire({
+                    title: 'Success!',
+                    text: 'The event has been created successfully.',
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                }).then(() => {
+                    window.location.href = '/Organization/EventsList';
+                });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error!',
+                    text: 'There was an error creating the event. Please try again.',
+                    confirmButtonText: 'OK'
+                });
+            }
+        };
+        xhr.send(formData);
     }
 
     function validateForm() {
@@ -576,7 +634,8 @@
             }
         }
     });
-$(document).ready(function () {
+
+    $(document).ready(function () {
         @if (TempData["Success"] != null && (bool)TempData["Success"])
         {
             <text>
