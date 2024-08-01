@@ -146,7 +146,7 @@ namespace Tabang_Hub.Controllers
             {
                 totalVolunteers += skillCount;
             }
-
+            events.CreateEvents.maxVolunteer = totalVolunteers;
             if (totalVolunteers != events.CreateEvents.maxVolunteer)
             {
                 ModelState.AddModelError(string.Empty, "Total volunteers assigned to skills must equal the maximum number of volunteers.");
@@ -181,7 +181,6 @@ namespace Tabang_Hub.Controllers
             TempData["Success"] = true;
             return RedirectToAction("EventsList");
         }
-
         public ActionResult Details(int id)
         {
             var events = _organizationManager.GetEventById(id);

@@ -70,7 +70,7 @@ namespace Tabang_Hub.Repository
             return _joinedEvent.GetAll().Where(m => m.userId == userId).ToList();
         }
         public List<VolunteerSkill> GetVolunteerSkillsByUserId(int userId)
-        { 
+        {
             return _volunteerSkill.GetAll().Where(m => m.userId == userId).ToList();
         }
         public List<UserRoles> GetRolesByUserId(int userId)
@@ -107,11 +107,11 @@ namespace Tabang_Hub.Repository
             return _orgEvents.GetAll().Where(m => m.userId == userId).ToList();
         }
         public List<Skills> GetSkills()
-        { 
+        {
             return _skills.GetAll();
         }
         public Skills GetSkillById(int skillId)
-        { 
+        {
             return _skills._table.Where(m => m.skillId == skillId).FirstOrDefault();
         }
         public ErrorCode DeleteUser(int userId)
@@ -207,13 +207,13 @@ namespace Tabang_Hub.Repository
             var userAcc = GetUserById(user.userId);
 
             foreach (var orgEvent in events)
-            { 
+            {
                 var skillRequirements = GetSkillsRequirementByEventId(orgEvent.eventId);
                 var orgEventImage = GetEventImagesByEventId(orgEvent.eventId);
                 var userDonate = GetUserDonatedByEventId(orgEvent.eventId);
                 var volunteer = GetVolunteersByEventId(orgEvent.eventId);
-                
-                
+
+
                 foreach (var skillRequirement in skillRequirements)
                 {
                     var result = _orgSkillRequirement.Delete(skillRequirement.skillRequirementId);
@@ -278,7 +278,7 @@ namespace Tabang_Hub.Repository
                 return ErrorCode.Error;
             }
             foreach (var roles in userRoles)
-            { 
+            {
                 var result = _userRoles.Delete(roles.userId);
                 if (result != ErrorCode.Success)
                 {
@@ -320,7 +320,7 @@ namespace Tabang_Hub.Repository
             return ErrorCode.Success;
         }
         public ErrorCode DeactivateAccount(int userId, ref string errMsg)
-        { 
+        {
             var user = GetUserById(userId);
             user.status = 0;
 

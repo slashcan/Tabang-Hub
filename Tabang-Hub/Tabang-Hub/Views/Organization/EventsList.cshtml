@@ -56,25 +56,48 @@
     }
 
     .added-skills {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
         margin-bottom: 10px;
     }
 
         .added-skills .skill-badge {
-            background-color: #5BC1AC;
-            color: #fff;
-            padding: 5px 10px;
-            border-radius: 20px;
-            margin-right: 5px;
-            margin-bottom: 5px;
+            background-color: #f0f0f0;
+            color: #333;
+            padding: 5px 15px;
+            border-radius: 50px;
             display: inline-block;
-            cursor: pointer;
+            position: relative;
         }
 
-            .added-skills .skill-badge .remove-skill {
-                margin-left: 5px;
-                color: #fff;
-                cursor: pointer;
-            }
+    .skill-badge .remove-skill {
+        color: #ff5a5f;
+        margin-left: 10px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+        .skill-badge .remove-skill:hover {
+            color: #d9534f;
+        }
+
+    .skill-count {
+        width: 60px;
+        margin-left: 10px;
+        text-align: center;
+    }
+
+    .skills-container .skill-button {
+        border-color: #5BC1AC;
+        color: #5BC1AC;
+        margin: 5px;
+    }
+
+        .skills-container .skill-button:hover {
+            background-color: #5BC1AC;
+            color: white;
+        }
 </style>
 
 <section class="section">
@@ -98,7 +121,6 @@
                                     <th>Total Donation</th>
                                     <th>Target Amount</th>
                                     <th>Total Volunteers</th>
-                                    <th>Maximum Volunteers</th>
                                     <th>Date Started</th>
                                     <th>Date Ended</th>
                                     <th>Location</th>
@@ -129,7 +151,6 @@
                                             <td></td>
                                         }
                                         <td>@list.Total_Volunteer</td>
-                                        <td>@list.Max_Volunteer</td>
                                         <td>@list.Start_Date</td>
                                         <td>@list.End_Date</td>
                                         <td>@list.Location</td>
@@ -149,17 +170,17 @@
     </div>
 </section>
 
-<!-- Create Event Modal (Phase 1) -->
+<!-- Create Event Modal -->
 <div class="container mt-5">
     <div class="modal fade" id="createEventModal" tabindex="-1" aria-labelledby="createEventModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="createEventModalLabel">Create Event - Phase 1</h5>
+                    <h5 class="modal-title" id="createEventModalLabel">Create Event</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="create-event-form-phase1" onsubmit="return moveToPhase2(event)">
+                    <form id="create-event-form" action="/Organization/CreateEvents" method="post" enctype="multipart/form-data" onsubmit="return validateForm(event)">
                         <div class="mb-3">
                             <label for="CreateEvents_eventTitle" class="form-label">Event Title</label>
                             <input type="text" class="form-control" id="CreateEvents_eventTitle" name="CreateEvents.eventTitle" placeholder="Enter event title">
@@ -177,11 +198,6 @@
                             </div>
                             <input type="text" class="form-control mt-2" id="CreateEvents_targetAmount" name="CreateEvents.targetAmount" placeholder="Enter target amount in Peso" disabled>
                             <span class="error" id="CreateEvents_targetAmount_error"></span>
-                        </div>
-                        <div class="mb-3">
-                            <label for="CreateEvents_maxVolunteer" class="form-label">Maximum Volunteers</label>
-                            <input type="text" class="form-control" id="CreateEvents_maxVolunteer" name="CreateEvents.maxVolunteer" placeholder="Enter maximum volunteers">
-                            <span class="error" id="CreateEvents_maxVolunteer_error"></span>
                         </div>
                         <div class="mb-3 row">
                             <div class="col">
@@ -211,38 +227,6 @@
                                 <button type="button" class="btn btn-outline-primary skill-button" onclick="addSkill('@skills.skillName')" id="skill-@skills.skillName">@skills.skillName</button>
                             }
                         </div>
-                        <button class="btn btn-primary" type="submit">Next</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Skill Specific Volunteer Requirement Modal (Phase 2) -->
-<div class="container mt-5">
-    <div class="modal fade" id="skillRequirementModal" tabindex="-1" aria-labelledby="skillRequirementModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="skillRequirementModalLabel">Specify Skill Requirements - Phase 2</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="create-event-form-phase2" action="/Organization/CreateEvents" method="post" enctype="multipart/form-data" onsubmit="return validatePhase2()">
-                        <!-- Hidden fields for event details -->
-                        <input type="hidden" name="CreateEvents.eventTitle" id="eventTitle" />
-                        <input type="hidden" name="CreateEvents.eventDescription" id="eventDescription" />
-                        <input type="hidden" name="CreateEvents.targetAmount" id="targetAmount" />
-                        <input type="hidden" name="CreateEvents.maxVolunteer" id="maxVolunteer" />
-                        <input type="hidden" name="CreateEvents.dateStart" id="dateStart" />
-                        <input type="hidden" name="CreateEvents.dateEnd" id="dateEnd" />
-                        <input type="hidden" name="CreateEvents.location" id="location" />
-
-                        <div class="mb-3" id="skill-requirement-container">
-                            <!-- Skill inputs will be dynamically inserted here -->
-                        </div>
-
                         <div class="mb-3">
                             <label for="CreateEvents_uploadImage" class="form-label">Upload Images</label>
                             <input type="file" class="form-control" id="CreateEvents_uploadImage" name="images" multiple onchange="previewImages()">
@@ -276,130 +260,8 @@
         }
     });
 
-    function moveToPhase2(event) {
+    function validateForm(event) {
         event.preventDefault();
-
-        // Validate the first phase and collect data
-        if (!validateForm()) {
-            return false;
-        }
-
-        // Transfer data to phase 2 form
-        document.getElementById('eventTitle').value = document.getElementById('CreateEvents_eventTitle').value;
-        document.getElementById('eventDescription').value = document.getElementById('CreateEvents_eventDescription').value;
-        document.getElementById('targetAmount').value = document.getElementById('CreateEvents_targetAmount').value;
-        document.getElementById('maxVolunteer').value = document.getElementById('CreateEvents_maxVolunteer').value;
-        document.getElementById('dateStart').value = document.getElementById('CreateEvents_dateStart').value;
-        document.getElementById('dateEnd').value = document.getElementById('CreateEvents_dateEnd').value;
-        document.getElementById('location').value = document.getElementById('CreateEvents_location').value;
-
-        // Populate skill-specific requirements in the second phase modal
-        const skillsContainer = document.getElementById('added-skills');
-        const skillRequirementContainer = document.getElementById('skill-requirement-container');
-        skillRequirementContainer.innerHTML = '';
-
-        skillsContainer.querySelectorAll('.skill-badge').forEach(skillBadge => {
-            const skillName = skillBadge.textContent.trim();
-            const skillInput = document.createElement('div');
-            skillInput.classList.add('mb-3');
-            skillInput.innerHTML = `
-                <label for="skill-${skillName}" class="form-label">${skillName} Volunteers Needed</label>
-                <input type="number" class="form-control" name="skills[${skillName}]" id="skill-${skillName}" placeholder="Enter number of volunteers" min="1" required>
-            `;
-            skillRequirementContainer.appendChild(skillInput);
-        });
-
-        // Show the second modal
-        $('#createEventModal').modal('hide');
-        $('#skillRequirementModal').modal('show');
-    }
-
-    function validatePhase2(event) {
-        event.preventDefault();
-
-        let isValid = true;
-        // Collect form data
-        const formData = new FormData();
-
-        // Append text fields
-        formData.append('CreateEvents.eventTitle', document.getElementById('eventTitle').value);
-        formData.append('CreateEvents.eventDescription', document.getElementById('eventDescription').value);
-        formData.append('CreateEvents.targetAmount', document.getElementById('targetAmount').value);
-        formData.append('CreateEvents.maxVolunteer', document.getElementById('maxVolunteer').value);
-        formData.append('CreateEvents.dateStart', document.getElementById('dateStart').value);
-        formData.append('CreateEvents.dateEnd', document.getElementById('dateEnd').value);
-        formData.append('CreateEvents.location', document.getElementById('location').value);
-
-        // Append skills
-        const skillInputs = document.getElementById('skill-requirement-container').querySelectorAll('input[type="number"]');
-        skillInputs.forEach(input => {
-            if (input.value.trim() === '' || parseInt(input.value) <= 0) {
-                isValid = false;
-                input.classList.add('is-invalid');
-            } else {
-                formData.append(`skills[${input.name}]`, parseInt(input.value));
-                input.classList.remove('is-invalid');
-            }
-        });
-
-        // Append images
-        const images = document.getElementById('CreateEvents_uploadImage').files;
-        for (let i = 0; i < images.length; i++) {
-            formData.append('images', images[i]);
-        }
-
-        if (!isValid) {
-            Swal.fire({
-                title: 'Error',
-                text: 'Please correct the errors in the form.',
-                icon: 'error',
-                confirmButtonText: 'OK'
-            });
-            return false;
-        }
-
-        // Validate total volunteers
-        let totalVolunteers = 0;
-        for (let input of skillInputs) {
-            totalVolunteers += parseInt(input.value);
-        }
-        const maxVolunteers = parseInt(document.getElementById('maxVolunteer').value);
-        if (totalVolunteers !== maxVolunteers) {
-            Swal.fire({
-                title: 'Error',
-                text: 'Total volunteers assigned to skills must equal the maximum number of volunteers.',
-                icon: 'error',
-                confirmButtonText: 'OK'
-            });
-            return false;
-        }
-
-        // Submit form data
-        const xhr = new XMLHttpRequest();
-        xhr.open('POST', '/Organization/CreateEvents', true);
-        xhr.onload = function () {
-            if (xhr.status === 200) {
-                Swal.fire({
-                    title: 'Success!',
-                    text: 'The event has been created successfully.',
-                    icon: 'success',
-                    confirmButtonText: 'OK'
-                }).then(() => {
-                    window.location.href = '/Organization/EventsList';
-                });
-            } else {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error!',
-                    text: 'There was an error creating the event. Please try again.',
-                    confirmButtonText: 'OK'
-                });
-            }
-        };
-        xhr.send(formData);
-    }
-
-    function validateForm() {
         let isValid = true;
 
         // Clear previous errors
@@ -440,7 +302,6 @@
         if (hoursDifference < 3) {
             document.getElementById('CreateEvents_dateEnd_error').innerText = 'Event duration must be at least 3 hours.';
             document.getElementById('CreateEvents_dateEnd').value = '';
-            isValid = false;
         } else {
             document.getElementById('CreateEvents_dateEnd_error').innerText = '';
         }
@@ -459,13 +320,6 @@
             isValid = false;
         }
 
-        // Validate maximum volunteers is a number
-        const maxVolunteerInput = document.getElementById('CreateEvents_maxVolunteer');
-        if (isNaN(maxVolunteerInput.value) || maxVolunteerInput.value.trim() === '') {
-            document.getElementById('CreateEvents_maxVolunteer_error').innerText = 'Maximum volunteers must be a number.';
-            isValid = false;
-        }
-
         // Validate skills
         const addedSkills = document.getElementById('added-skills').querySelectorAll('.skill-badge');
         if (addedSkills.length === 0) {
@@ -473,23 +327,51 @@
             isValid = false;
         }
 
-        return isValid;
-    }
-
-    // Add event listeners to ensure only numbers are entered
-    function onlyNumbers(input, errorId) {
-        input.addEventListener('input', function (e) {
-            this.value = this.value.replace(/[^0-9]/g, '');
-            if (isNaN(this.value) || this.value === '') {
-                document.getElementById(errorId).innerText = 'Please enter a valid number.';
-            } else {
-                document.getElementById(errorId).innerText = '';
-            }
+        // Check if total volunteers match maximum volunteers
+        let totalVolunteers = 0;
+        document.querySelectorAll('input[name^="skills"]').forEach(input => {
+            totalVolunteers += parseInt(input.value);
         });
-    }
 
-    onlyNumbers(document.getElementById('CreateEvents_targetAmount'), 'CreateEvents_targetAmount_error');
-    onlyNumbers(document.getElementById('CreateEvents_maxVolunteer'), 'CreateEvents_maxVolunteer_error');
+        // Display an error if total volunteers doesn't match max volunteers
+        const maxVolunteers = totalVolunteers; // For this example, assuming max volunteers should match total volunteers
+        if (totalVolunteers === 0) {
+            document.getElementById('CreateEvents_skills_error').innerText = 'Total volunteers cannot be zero.';
+            isValid = false;
+        } else if (totalVolunteers !== maxVolunteers) {
+            document.getElementById('CreateEvents_skills_error').innerText = `Total volunteers assigned (${totalVolunteers}) must equal the maximum number of volunteers (${maxVolunteers}).`;
+            isValid = false;
+        }
+
+        if (!isValid) {
+            return false;
+        }
+
+        // Prepare form data and submit
+        const formData = new FormData(document.getElementById('create-event-form'));
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', '/Organization/CreateEvents', true);
+        xhr.onload = function () {
+            if (xhr.status === 200) {
+                Swal.fire({
+                    title: 'Success!',
+                    text: 'The event has been created successfully.',
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                }).then(() => {
+                    window.location.href = '/Organization/EventsList';
+                });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error!',
+                    text: 'There was an error creating the event. Please try again.',
+                    confirmButtonText: 'OK'
+                });
+            }
+        };
+        xhr.send(formData);
+    }
 
     function addSkill(skill) {
         const skillsContainer = document.getElementById('added-skills');
@@ -498,38 +380,57 @@
         // Disable the button once the skill is added
         skillButton.disabled = true;
 
+        const skillItem = document.createElement('div');
+        skillItem.className = 'skill-item';
+
         const skillBadge = document.createElement('span');
         skillBadge.className = 'skill-badge';
         skillBadge.innerText = skill;
 
         const removeButton = document.createElement('span');
         removeButton.className = 'remove-skill';
-        removeButton.innerText = ' x';
+        removeButton.innerText = ' ×';
         removeButton.onclick = function () {
-            removeSkill(skill, skillBadge, skillButton);
+            removeSkill(skill, skillItem, skillButton);
         };
 
         skillBadge.appendChild(removeButton);
-        skillsContainer.appendChild(skillBadge);
+        skillItem.appendChild(skillBadge);
 
-        // Create a hidden input to hold the skill value
+        // Create an input for the skill count
         const skillInput = document.createElement('input');
-        skillInput.type = 'hidden';
-        skillInput.name = 'skills';
-        skillInput.value = skill;
-        skillsContainer.appendChild(skillInput);
+        skillInput.type = 'number';
+        skillInput.name = `skills[${skill}]`;
+        skillInput.value = 1; // Default value
+        skillInput.min = 1;
+        skillInput.className = 'form-control skill-count';
+        skillInput.onchange = updateTotalVolunteers;
+        skillItem.appendChild(skillInput);
+
+        skillsContainer.appendChild(skillItem);
+
+        // Update the total volunteers count
+        updateTotalVolunteers();
     }
 
-    function removeSkill(skill, skillBadge, skillButton) {
+    function removeSkill(skill, skillItem, skillButton) {
         const skillsContainer = document.getElementById('added-skills');
-        skillsContainer.removeChild(skillBadge);
-
-        // Remove the hidden input when the skill is removed
-        const skillInput = document.querySelector(`input[name="skills"][value="${skill}"]`);
-        skillsContainer.removeChild(skillInput);
+        skillsContainer.removeChild(skillItem);
 
         // Enable the skill button when the skill is removed
         skillButton.disabled = false;
+
+        // Update the total volunteers count
+        updateTotalVolunteers();
+    }
+
+    function updateTotalVolunteers() {
+        let totalVolunteers = 0;
+        document.querySelectorAll('input[name^="skills"]').forEach(input => {
+            totalVolunteers += parseInt(input.value);
+        });
+
+        document.getElementById('CreateEvents_skills_error').innerText = totalVolunteers === 0 ? 'Total volunteers cannot be zero.' : '';
     }
 
     function previewImages() {

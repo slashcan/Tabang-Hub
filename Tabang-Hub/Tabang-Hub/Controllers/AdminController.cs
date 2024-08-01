@@ -71,14 +71,14 @@ namespace Tabang_Hub.Controllers
                 if (!u.password.Equals(ConfirmPass))
                 {
                     ModelState.AddModelError(String.Empty, "Password not match");
-                    return View(u);
+                    return RedirectToAction("VolunteerAccounts");
                 }
 
                 if (_userManager.Register(u, v, r, ref ErrorMessage) != ErrorCode.Success)
                 {
                     ModelState.AddModelError(String.Empty, ErrorMessage);
 
-                    return View(u);
+                    return RedirectToAction("VolunteerAccounts");
                 }              
             }
             catch (Exception ex)
