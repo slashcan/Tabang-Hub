@@ -5,171 +5,38 @@
     Layout = "~/Views/Shared/_Organization.cshtml";
 }
 
-<style>
-    .profile-head {
-        transform: translateY(7rem);
-    }
-
-    .cover {
-        background-image: url(https://images.unsplash.com/photo-1530305408560-82d13781b33a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1352&q=80);
-        background-size: cover;
-        background-repeat: no-repeat;
-        height: 300px;
-        position: relative;
-    }
-
-    .profile-img {
-        width: 150px;
-        height: 150px;
-        object-fit: cover;
-        border-radius: 50%;
-        border: 5px solid white;
-        margin-bottom: -75px;
-        z-index: 1;
-        position: relative;
-    }
-
-    .edit-profile-btn {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-    }
-
-    body {
-        background: #ffffff;
-        min-height: 100vh;
-        overflow-x: hidden;
-    }
-
-    .img-preview {
-        width: 150px;
-        height: 150px;
-        object-fit: cover;
-        border-radius: 50%;
-        margin-bottom: 10px;
-    }
-</style>
-
-<div class="container py-5 px-4">
-    <div class="col-md-10 mx-auto">
-        <!-- Profile widget -->
-        <div class="bg-white shadow rounded overflow-hidden">
-            <div class="px-4 pt-0 pb-4 cover">
-                <button type="button" class="btn btn-outline-primary btn-sm edit-profile-btn" data-bs-toggle="modal" data-bs-target="#editProfileModal">Edit profile</button>
-                <div class="media align-items-end profile-head">
-                    <div class="profile mr-3">
-                        <img src="~/Content/images/tabanghub3.png" alt="..." class="rounded mb-2 img-thumbnail profile-img">
-                    </div>
-                    <div class="media-body mb-5 text-white">
-                        <h4 class="mt-0 mb-0">TabangHub</h4>
-                        <p class="small mb-4"><i class="fas fa-map-marker-alt mr-2"></i>Ibo, Lapu - Lapu City, Cebu, 6015</p>
-                    </div>
+<div class="container">
+    <div class="card mb-4">
+        <img src="https://via.placeholder.com/1500x400" class="card-img-top" alt="Cover Image" style="height: 400px; object-fit: cover;">
+        <div class="card-body">
+            <div class="d-flex align-items-center">
+                <img src="https://via.placeholder.com/150" class="rounded-circle border border-light me-3" alt="Profile Image" style="width: 200px; height: 200px;">
+                <div>
+                    <h2 class="card-title mb-1">John Doe</h2>
+                    <p class="text-muted mb-1">johndoe</p>
                 </div>
-            </div>
-            <div class="px-4 py-3 mt-5">
-                <h5 class="mb-0">About</h5>
-                <div class="p-4 rounded shadow-sm bg-light">
-                    <p class="font-italic mb-0">Description: ajkshdjkashkdjashd</p>
-                    <p class="font-italic mb-0">Phone: 09060680427</p>
-                    <p class="font-italic mb-0">Email: dosadoa45@gmail.com</p>
-                    <p class="font-italic mb-0">Type: Wala ko balo</p>
-                </div>
-            </div>
-            <div class="py-4 px-4">
-                <div class="d-flex align-items-center justify-content-between mb-3">
-                    <h5 class="mb-0">Upcoming Events</h5>
-                    <a href="#" class="btn btn-link text-muted">Show all</a>
-                </div>
-                <div class="row">
-                    @*@foreach (var event in Model.upcomingEvents)
-                        {*@
-                    <div class="col-lg-6 mb-2 pr-lg-1">
-                        <div class="card shadow-sm">
-                            <div class="card-body">
-                                <h5 class="card-title">asdasdasd</h5>
-                                <p class="card-text">asdasdasdasdasd</p>
-                                <p class="card-text"><small class="text-muted">January 15, 2024</small></p>
-                                @*<a href="@Url.Action("EventDetails", "Events", new { id = event.Id })" class="btn btn-primary btn-sm">View Details</a>*@
-                            </div>
-                        </div>
-                    </div>
-                    @*}*@
-                </div>
+                <button class="btn btn-primary ms-auto">Edit Profile</button>
             </div>
         </div>
     </div>
-</div>
 
-<!-- Edit Profile Modal -->
-<div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="editProfileModalLabel">Edit Profile</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <form method="post" enctype="multipart/form-data" action="@Url.Action("EditOrgProfile", "Organization")">
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label for="orgName">Organization Name</label>
-                        <input type="text" class="form-control" id="orgName" name="OrgInfo.orgName" value="@Model.OrgInfo.orgName" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="orgDescription">Description</label>
-                        <textarea class="form-control" id="orgDescription" name="OrgInfo.orgDescription" rows="3" required>@Model.OrgInfo.orgDescription</textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="orgPhone">Phone</label>
-                        <input type="text" class="form-control" id="orgPhone" name="OrgInfo.phoneNum" value="@Model.OrgInfo.phoneNum" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="orgEmail">Email</label>
-                        <input type="email" class="form-control" id="orgEmail" name="OrgInfo.orgEmail" value="@Model.OrgInfo.orgEmail" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="orgType">Type</label>
-                        <input type="text" class="form-control" id="orgType" name="OrgInfo.orgType" value="@Model.OrgInfo.orgType" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="street">Street</label>
-                        <input type="text" class="form-control" id="street" name="OrgInfo.street" value="@Model.OrgInfo.street" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="city">City</label>
-                        <input type="text" class="form-control" id="city" name="OrgInfo.city" value="@Model.OrgInfo.city" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="province">Province</label>
-                        <input type="text" class="form-control" id="province" name="OrgInfo.province" value="@Model.OrgInfo.province" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="zipCode">Zip Code</label>
-                        <input type="text" class="form-control" id="zipCode" name="OrgInfo.zipCode" value="@Model.OrgInfo.zipCode" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="profilePic">Profile Picture</label>
-                        <input type="file" class="form-control" id="profilePic" name="profilePic" accept="image/*" onchange="previewImage(event)">
-                        <img id="profilePicPreview" class="img-preview mt-2" alt="Profile Picture">
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Save changes</button>
-                </div>
-            </form>
+    <!-- Static Container 1 -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <h3 class="card-title">About Me</h3>
+            <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
+        </div>
+    </div>
+
+    <!-- Static Container 2 -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <h3 class="card-title">Projects & Contributions</h3>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">Project A - Description of the project and the role played.</li>
+                <li class="list-group-item">Project B - Description of the project and the role played.</li>
+                <li class="list-group-item">Project C - Description of the project and the role played.</li>
+            </ul>
         </div>
     </div>
 </div>
-
-<script>
-    function previewImage(event) {
-        var reader = new FileReader();
-        reader.onload = function () {
-            var output = document.getElementById('profilePicPreview');
-            output.src = reader.result;
-        };
-        reader.readAsDataURL(event.target.files[0]);
-    }
-</script>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
