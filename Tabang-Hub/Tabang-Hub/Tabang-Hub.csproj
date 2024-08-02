@@ -125,6 +125,20 @@
     <Content Include="Content\Css\popup.css" />
     <Content Include="Content\Css\progress.css" />
     <Content Include="Content\Css\Style.css" />
+    <Content Include="Content\IdPicture\cats dogs 3.jpg" />
+    <Content Include="Content\IdPicture\cats dogs.jpg" />
+    <Content Include="Content\IdPicture\cats dogs2.jpg" />
+    <Content Include="Content\IdPicture\FEEDING PROGRAM.jpg" />
+    <Content Include="Content\IdPicture\MURAL PAINTING EVENT.jpg" />
+    <Content Include="Content\IdPicture\programming 1.jpg" />
+    <Content Include="Content\IdPicture\programming 2.jpg" />
+    <Content Include="Content\IdPicture\programming 3.jpg" />
+    <Content Include="Content\IdPicture\Recruitement.drawio %281%29.png" />
+    <Content Include="Content\IdPicture\tabanghub2.png" />
+    <Content Include="Content\IdPicture\typhoon 1.jpg" />
+    <Content Include="Content\IdPicture\typhoon 2.jpg" />
+    <Content Include="Content\IdPicture\typhoon 3.jpg" />
+    <Content Include="Content\IdPicture\WIN_20240801_17_30_17_Pro.jpg" />
     <Content Include="Content\images1\bg\4853433.jpg" />
     <Content Include="Content\images1\faces\1.jpg" />
     <Content Include="Content\images1\faces\2.jpg" />
@@ -2005,7 +2019,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Content\IdPicture\" />
+    <Folder Include="Content\Events\" />
     <Folder Include="Models\" />
     <Folder Include="Views\Base\" />
     <Folder Include="Views\Data\" />

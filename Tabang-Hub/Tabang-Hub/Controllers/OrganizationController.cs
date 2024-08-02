@@ -156,7 +156,7 @@ namespace Tabang_Hub.Controllers
             // Image processing
             if (images != null && images.Length > 0)
             {
-                var imagePath = Server.MapPath("~/Images/Events");
+                var imagePath = Server.MapPath("~/Content/Events");
                 Directory.CreateDirectory(imagePath); // Create directory if it doesn't exist
 
                 foreach (var image in images)

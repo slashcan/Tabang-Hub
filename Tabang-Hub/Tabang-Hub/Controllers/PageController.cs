@@ -665,6 +665,7 @@ namespace Tabang_Hub.Controllers
             }
             else
             {
+                FormsAuthentication.SetAuthCookie(user.email, false);
                 // Return error message if OTP is incorrect
                 return Json(new { success = false, message = "Incorrect OTP. Please try again!" });
             }
