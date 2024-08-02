@@ -19,6 +19,11 @@ namespace Tabang_Hub.Repository
         private BaseRepository<VolunteerSkill> _volunteerSkills;
         private BaseRepository<UserAccount> _userAccount;
         private BaseRepository<Skills> _skills;
+        private BaseRepository<UserDonatedHistory> _userDonatedHistory;
+        private BaseRepository<VolunteersHistory> _volunteersHistory;
+        private BaseRepository<SkillRequirementHistory> _skillRequirementsHistory;
+        private BaseRepository<OrgEventImageHistory> _orgEventImageHistory;
+        private BaseRepository<OrgEventHistory> _orgEventHistory;
 
         public OrganizationManager()
         {
@@ -33,6 +38,11 @@ namespace Tabang_Hub.Repository
             _volunteerSkills = new BaseRepository<VolunteerSkill>();
             _userAccount = new BaseRepository<UserAccount>();
             _skills = new BaseRepository<Skills>();
+            _userDonatedHistory = new BaseRepository<UserDonatedHistory>();
+            _volunteersHistory = new BaseRepository<VolunteersHistory>();
+            _skillRequirementsHistory = new BaseRepository<SkillRequirementHistory>();
+            _orgEventImageHistory = new BaseRepository<OrgEventImageHistory>();
+            _orgEventHistory = new BaseRepository<OrgEventHistory>();
         }
 
 
@@ -198,11 +208,11 @@ namespace Tabang_Hub.Repository
             return _listOfEvents.GetAll().Where(m => m.User_Id == userId).ToList();
         }
         public ProfilePicture GetProfileByProfileId(int? id)
-        { 
+        {
             return _profilePic._table.Where(m => m.profileId == id).FirstOrDefault();
         }
         public List<Skills> ListOfSkills()
-        { 
+        {
             return _skills.GetAll().ToList();
         }
         public Volunteers GetVolunteerById(int id, int eventId)
@@ -249,6 +259,10 @@ namespace Tabang_Hub.Repository
         public UserAccount GetUserByUserId(int userId)
         {
             return _userAccount._table.Where(m => m.userId == userId).FirstOrDefault();
+        }
+        public List<OrgEventHistory> GetEventHistoryByUserId(int userId)
+        {
+            return _orgEventHistory.GetAll().Where(m => m.userId == userId).ToList();
         }
         public ErrorCode DeleteEvent(int eventId)
         {
@@ -323,6 +337,113 @@ namespace Tabang_Hub.Repository
                 return ErrorCode.Error;
             }
 
+            return ErrorCode.Success;
+        }
+        public ErrorCode TransferToHistory(int userId, ref string errMsg)
+        {
+            var toTransfer = ListOfEvents(userId);
+
+            foreach (var transfer in toTransfer)
+            {
+                var userDonate = ListOfUserDonated(transfer.Event_Id);
+                var volunteers = ListOfEventVolunteers(transfer.Event_Id);
+                var skillRequirements = listOfSkillRequirement(transfer.Event_Id);
+                var orgImage = listOfEventImage(transfer.Event_Id);
+                if (transfer.End_Date <= DateTime.Now)
+                {
+                    foreach (var donated in userDonate)
+                    {
+                        var donateHistory = new UserDonatedHistory()
+                        {
+                            eventId = (int)donated.eventId,
+                            userId = (int)donated.userId,
+                            amount = donated.amount,
+                        };
+                        if (_userDonatedHistory.Create(donateHistory, out errMsg) != ErrorCode.Success)
+                        {
+                            return ErrorCode.Error;
+                        }
+
+                        if (_userDonated.Delete(donated.orgUserDonatedId) != ErrorCode.Success)
+                        {
+                            return ErrorCode.Error;
+                        }
+                    }
+                    foreach (var volunteer in volunteers)
+                    {
+                        var volunteersHistory = new VolunteersHistory()
+                        {
+                            eventId = volunteer.eventId,
+                            userId = volunteer?.userId,
+                            appliedAt = volunteer?.appliedAt,
+                            AppliedSkill = volunteer.AppliedSkill,
+                            Status = volunteer?.Status,
+                        };
+
+                        if (_volunteersHistory.Create(volunteersHistory, out errMsg) != ErrorCode.Success)
+                        {
+                            return ErrorCode.Error;
+                        }
+                        if (_eventVolunteers.Delete(volunteer.applyVolunteerId) != ErrorCode.Success)
+                        {
+                            return ErrorCode.Error;
+                        }
+                    }
+                    foreach (var skillRequire in skillRequirements)
+                    {
+                        var skillRequirementsHistory = new SkillRequirementHistory()
+                        {
+                            eventId = (int)skillRequire.eventId,
+                            skillName = skillRequire.skillName,
+                            totalNeeded = skillRequire.totalNeeded,
+                        };
+                        if (_skillRequirementsHistory.Create(skillRequirementsHistory, out errMsg) != ErrorCode.Success)
+                        {
+                            return ErrorCode.Error;
+                        }
+                        if (_orgSkillRequirements.Delete(skillRequire.skillRequirementId) != ErrorCode.Success)
+                        {
+                            return ErrorCode.Error;
+                        }
+                    }
+                    foreach (var image in orgImage)
+                    {
+                        var imageHistory = new OrgEventImageHistory()
+                        {
+                            eventId = (int)image.eventId,
+                            eventImage = image.eventImage,
+                        };
+                        if (_orgEventImageHistory.Create(imageHistory, out errMsg) != ErrorCode.Success)
+                        {
+                            return ErrorCode.Error;
+                        }
+                        if (_orgEventsImage.Delete(image.eventImageId) != ErrorCode.Success)
+                        {
+                            return ErrorCode.Error;
+                        }
+                    }
+
+                    var eventHistory = new OrgEventHistory()
+                    {
+                        userId = (int)transfer.User_Id,
+                        eventTitle = transfer.Event_Name,
+                        eventDescription = transfer.Description,
+                        targetAmount = transfer.Target_Amount,
+                        maxVolunteer = transfer.Max_Volunteer,
+                        dateStart = transfer.Start_Date,
+                        dateEnd = transfer.End_Date,
+                        location = transfer.Location,
+                    };
+                    if (_orgEventHistory.Create(eventHistory, out errMsg) != ErrorCode.Success)
+                    {
+                        return ErrorCode.Error;
+                    }
+                    if (_orgEvents.Delete(transfer.Event_Id) != ErrorCode.Success)
+                    {
+                        return ErrorCode.Error;
+                    }
+                }
+            }
             return ErrorCode.Success;
         }
     }

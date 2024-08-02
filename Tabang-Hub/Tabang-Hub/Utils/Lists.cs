@@ -7,8 +7,8 @@ namespace Tabang_Hub.Utils
 {
     public class Lists
     {
-        public OrgEvents CreateEvents {  get; set; }
-        public OrgSkillRequirement skillRequirement { get; set; }       
+        public OrgEvents CreateEvents { get; set; }
+        public OrgSkillRequirement skillRequirement { get; set; }
         public vw_ListOfEvent eventDetails { get; set; }
         public UserAccount userAccount { get; set; }
         public OrgInfo OrgInfo { get; set; }
@@ -21,6 +21,7 @@ namespace Tabang_Hub.Utils
         //public List<Skills> skills { get; set; }
         //public List<ProfilePicture> picture { get; set; }
         public List<vw_VolunteerAccounts> volunteerAccounts { get; set; }
+        public List<OrgEventHistory> orgEventHistory { get; set; }
         public List<Skills> allSkill { get; set; }
         public List<Skills> listOfSkills { get; set; }
         public List<vw_OrganizationAccounts> organizationAccounts { get; set; }

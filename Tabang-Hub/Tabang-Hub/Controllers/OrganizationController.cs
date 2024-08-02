@@ -21,7 +21,7 @@ namespace Tabang_Hub.Controllers
             var profile = _organizationManager.GetProfileByProfileId(orgInfo.profileId);
 
             var indexModel = new Lists()
-            { 
+            {
                 OrgInfo = orgInfo,
                 profilePic = profile,
             };
@@ -343,13 +343,29 @@ namespace Tabang_Hub.Controllers
         {
             var orgInfo = _organizationManager.GetOrgInfoByUserId(UserId);
             var profile = _organizationManager.GetProfileByProfileId(orgInfo.profileId);
+            var eventHistory = _organizationManager.GetEventHistoryByUserId(UserId);
 
             var indexModdel = new Lists()
             {
                 OrgInfo = orgInfo,
                 profilePic = profile,
+                orgEventHistory = eventHistory,
             };
             return View(indexModdel);
+        }
+        [HttpPost]
+        public JsonResult TransferToHistory()
+        {
+            var userId = UserId;
+            string errMsg = string.Empty;
+
+            var result = _organizationManager.TransferToHistory(userId, ref errMsg);
+            if (result != ErrorCode.Success)
+            {
+                return Json(new { success = false, message = errMsg });
+            }
+
+            return Json(new { success = true, message = "Events successfully transferred to history." });
         }
     }
 }

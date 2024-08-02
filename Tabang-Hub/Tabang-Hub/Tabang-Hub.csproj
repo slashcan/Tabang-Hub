@@ -1890,7 +1890,13 @@
       <DependentUpon>ModelTabangHub.edmx</DependentUpon>
     </Compile>
     <Compile Include="MyRole.cs" />
+    <Compile Include="OrgEventHistory.cs">
+      <DependentUpon>ModelTabangHub.tt</DependentUpon>
+    </Compile>
     <Compile Include="OrgEventImage.cs">
+      <DependentUpon>ModelTabangHub.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OrgEventImageHistory.cs">
       <DependentUpon>ModelTabangHub.tt</DependentUpon>
     </Compile>
     <Compile Include="OrgEvents.cs">
@@ -1918,6 +1924,9 @@
     <Compile Include="Role.cs">
       <DependentUpon>ModelTabangHub.tt</DependentUpon>
     </Compile>
+    <Compile Include="SkillRequirementHistory.cs">
+      <DependentUpon>ModelTabangHub.tt</DependentUpon>
+    </Compile>
     <Compile Include="Skills.cs">
       <DependentUpon>ModelTabangHub.tt</DependentUpon>
     </Compile>
@@ -1936,6 +1945,9 @@
     <Compile Include="UserDonated.cs">
       <DependentUpon>ModelTabangHub.tt</DependentUpon>
     </Compile>
+    <Compile Include="UserDonatedHistory.cs">
+      <DependentUpon>ModelTabangHub.tt</DependentUpon>
+    </Compile>
     <Compile Include="UserRoles.cs">
       <DependentUpon>ModelTabangHub.tt</DependentUpon>
     </Compile>
@@ -1945,6 +1957,9 @@
       <DependentUpon>ModelTabangHub.tt</DependentUpon>
     </Compile>
     <Compile Include="Volunteers.cs">
+      <DependentUpon>ModelTabangHub.tt</DependentUpon>
+    </Compile>
+    <Compile Include="VolunteersHistory.cs">
       <DependentUpon>ModelTabangHub.tt</DependentUpon>
     </Compile>
     <Compile Include="VolunteerSkill.cs">
