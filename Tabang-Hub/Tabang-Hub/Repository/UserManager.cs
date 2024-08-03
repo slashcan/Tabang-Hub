@@ -91,6 +91,7 @@ namespace Tabang_Hub.Repository
         {
             u.roleId = 2;
             u.status = 0;
+            var profilePic = new ProfilePicture();
 
             if (GetUserByEmail(u.email) != null)
             {
@@ -117,6 +118,12 @@ namespace Tabang_Hub.Repository
             {
                 return ErrorCode.Error;
             }
+            profilePic.profilePath = "~/Content/images/tabanghub3.png";
+            profilePic.userId = u.userId;
+            if (_profilePic.Create(profilePic, out errMsg) != ErrorCode.Success)
+            {
+                return ErrorCode.Error;
+            }
             r.userId = u.userId;
             r.userRole = u.roleId;
             if (_userRoles.Create(r, out errMsg) != ErrorCode.Success)
@@ -124,19 +131,43 @@ namespace Tabang_Hub.Repository
                 return ErrorCode.Error;
             }
             o.userId = u.userId;
+            o.profileId = profilePic.profileId;
             if (_orgInfo.Create(o, out errMsg) != ErrorCode.Success)
             {
                 return ErrorCode.Error;
             }          
             return ErrorCode.Success;
         }
+        //public ErrorCode RegisterUpdateStatus(int userId, ref string errMsg)
+        //{ 
+        //    var user = GetUserById(userId);
+
+        //    if (user != null)
+        //    {
+        //        user.status = 1;
+        //        if (_userAcc.Update(user.userId, user, out errMsg) != ErrorCode.Success)
+        //        {
+        //            return ErrorCode.Error;
+        //        }
+        //    }
+        //    return ErrorCode.Success;
+        //}
         public ErrorCode UpdateUserStatus(int userId, short newStatus, ref string errMsg)
         {
             // First, retrieve the user account by its ID
             var user = _userAcc.Get(userId);
             var uInfo = _volunteerInfo.GetAll().Where(m => m.userId == userId).FirstOrDefault();
 
-            if (user != null && uInfo != null)
+            if (user.roleId == 2)
+            {
+                user.status = newStatus;
+
+                if (_userAcc.Update(user.userId, user, out errMsg) != ErrorCode.Success)
+                {
+                    return ErrorCode.Error;
+                }
+            }
+            else if (user != null && uInfo != null)
             {
                 // Update the status field
                 user.status = newStatus;
@@ -151,6 +182,7 @@ namespace Tabang_Hub.Repository
                 errMsg = "User not found";
                 return ErrorCode.Error;
             }
+            return ErrorCode.Success;
         }
     }
 }

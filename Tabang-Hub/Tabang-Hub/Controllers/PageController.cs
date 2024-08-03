@@ -464,9 +464,9 @@ namespace Tabang_Hub.Controllers
         }
         [AllowAnonymous]
         [HttpPost]
-        public ActionResult Login(string email, string password)
+        public ActionResult Login(string username, string password)
         {
-            var user = _userManager.GetUserByEmail(email);
+            var user = _userManager.GetUserByEmail(username);
 
             if (user == null)
             {
@@ -474,7 +474,7 @@ namespace Tabang_Hub.Controllers
                 return View();
             }
 
-            if (_userManager.Login(email, password, ref ErrorMessage) == ErrorCode.Success)
+            if (_userManager.Login(username, password, ref ErrorMessage) == ErrorCode.Success)
             {               
                 if (user.status != (int)Status.Active)
                 {
@@ -587,7 +587,7 @@ namespace Tabang_Hub.Controllers
                     }
                 }
 
-                FormsAuthentication.SetAuthCookie(email, false);
+                FormsAuthentication.SetAuthCookie(username, false);
 
                 if (user.roleId == 1)
                 {
@@ -662,6 +662,11 @@ namespace Tabang_Hub.Controllers
                     }
                     return Json(new { success = true, message = "Email has been verified!", redirectUrl });
                 }
+                else
+                {
+                    string redirectUrl = Url.Action("Login");
+                    return Json(new { success = true, message = "Email has been verified!", redirectUrl });
+                }
             }
             else
             {
@@ -670,7 +675,7 @@ namespace Tabang_Hub.Controllers
             }
 
             // This return statement is needed to ensure that all code paths return a value
-            return Json(new { success = false, message = "Unexpected error occurred. Please try again later." });
+            //return Json(new { success = false, message = "Unexpected error occurred. Please try again later." });
         }
 
 
