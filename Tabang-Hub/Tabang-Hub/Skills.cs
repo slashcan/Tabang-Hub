@@ -21,7 +21,11 @@ public partial class Skills
     public Skills()
     {
 
+        this.OrgSkillRequirement = new HashSet<OrgSkillRequirement>();
+
         this.VolunteerSkill = new HashSet<VolunteerSkill>();
+
+        this.Volunteers = new HashSet<Volunteers>();
 
     }
 
@@ -34,7 +38,11 @@ public partial class Skills
 
 
 
+    public virtual ICollection<OrgSkillRequirement> OrgSkillRequirement { get; set; }
+
     public virtual ICollection<VolunteerSkill> VolunteerSkill { get; set; }
+
+    public virtual ICollection<Volunteers> Volunteers { get; set; }
 
 }
 

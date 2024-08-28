@@ -54,7 +54,7 @@
     <EntitySetMapping Name="OrgEvents">
       <EntityTypeMapping TypeName="TabangHubModel.OrgEvents">
         <MappingFragment StoreEntitySet="OrgEvents">
-          <ScalarProperty Name="eventType" ColumnName="eventType" />
+          <ScalarProperty Name="eventImage" ColumnName="eventImage" />
           <ScalarProperty Name="location" ColumnName="location" />
           <ScalarProperty Name="dateEnd" ColumnName="dateEnd" />
           <ScalarProperty Name="dateStart" ColumnName="dateStart" />
@@ -70,7 +70,7 @@
     <EntitySetMapping Name="OrgInfo">
       <EntityTypeMapping TypeName="TabangHubModel.OrgInfo">
         <MappingFragment StoreEntitySet="OrgInfo">
-          <ScalarProperty Name="profileId" ColumnName="profileId" />
+          <ScalarProperty Name="profilePath" ColumnName="profilePath" />
           <ScalarProperty Name="zipCode" ColumnName="zipCode" />
           <ScalarProperty Name="province" ColumnName="province" />
           <ScalarProperty Name="city" ColumnName="city" />
@@ -88,8 +88,7 @@
     <EntitySetMapping Name="OrgSkillRequirement">
       <EntityTypeMapping TypeName="TabangHubModel.OrgSkillRequirement">
         <MappingFragment StoreEntitySet="OrgSkillRequirement">
-          <ScalarProperty Name="totalNeeded" ColumnName="totalNeeded" />
-          <ScalarProperty Name="skillName" ColumnName="skillName" />
+          <ScalarProperty Name="skillId" ColumnName="skillId" />
           <ScalarProperty Name="eventId" ColumnName="eventId" />
           <ScalarProperty Name="skillRequirementId" ColumnName="skillRequirementId" />
         </MappingFragment>
@@ -138,7 +137,6 @@
         <MappingFragment StoreEntitySet="UserAccount">
           <ScalarProperty Name="roleId" ColumnName="roleId" />
           <ScalarProperty Name="status" ColumnName="status" />
-          <ScalarProperty Name="userInfo" ColumnName="userInfo" />
           <ScalarProperty Name="password" ColumnName="password" />
           <ScalarProperty Name="email" ColumnName="email" />
           <ScalarProperty Name="userId" ColumnName="userId" />
@@ -170,7 +168,7 @@
         <MappingFragment StoreEntitySet="VolunteerInfo">
           <ScalarProperty Name="aboutMe" ColumnName="aboutMe" />
           <ScalarProperty Name="availability" ColumnName="availability" />
-          <ScalarProperty Name="profileId" ColumnName="profileId" />
+          <ScalarProperty Name="profilePath" ColumnName="profilePath" />
           <ScalarProperty Name="zipCode" ColumnName="zipCode" />
           <ScalarProperty Name="province" ColumnName="province" />
           <ScalarProperty Name="city" ColumnName="city" />
@@ -188,8 +186,8 @@
     <EntitySetMapping Name="Volunteers">
       <EntityTypeMapping TypeName="TabangHubModel.Volunteers">
         <MappingFragment StoreEntitySet="Volunteers">
-          <ScalarProperty Name="AppliedSkill" ColumnName="AppliedSkill" />
           <ScalarProperty Name="appliedAt" ColumnName="appliedAt" />
+          <ScalarProperty Name="skillId" ColumnName="skillId" />
           <ScalarProperty Name="Status" ColumnName="Status" />
           <ScalarProperty Name="eventId" ColumnName="eventId" />
           <ScalarProperty Name="userId" ColumnName="userId" />
@@ -200,7 +198,6 @@
     <EntitySetMapping Name="VolunteerSkill">
       <EntityTypeMapping TypeName="TabangHubModel.VolunteerSkill">
         <MappingFragment StoreEntitySet="VolunteerSkill">
-          <ScalarProperty Name="skillName" ColumnName="skillName" />
           <ScalarProperty Name="skillId" ColumnName="skillId" />
           <ScalarProperty Name="userId" ColumnName="userId" />
           <ScalarProperty Name="volunteerSkillId" ColumnName="volunteerSkillId" />

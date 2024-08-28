@@ -50,7 +50,7 @@ public partial class OrgEvents
 
     public string location { get; set; }
 
-    public Nullable<int> eventType { get; set; }
+    public string eventImage { get; set; }
 
 
 

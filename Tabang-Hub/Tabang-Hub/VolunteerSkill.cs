@@ -24,8 +24,6 @@ public partial class VolunteerSkill
 
     public Nullable<int> skillId { get; set; }
 
-    public string skillName { get; set; }
-
 
 
     public virtual Skills Skills { get; set; }

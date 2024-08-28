@@ -22,13 +22,13 @@ public partial class OrgSkillRequirement
 
     public Nullable<int> eventId { get; set; }
 
-    public string skillName { get; set; }
-
-    public Nullable<int> totalNeeded { get; set; }
+    public Nullable<int> skillId { get; set; }
 
 
 
     public virtual OrgEvents OrgEvents { get; set; }
+
+    public virtual Skills Skills { get; set; }
 
 }
 

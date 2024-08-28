@@ -21,7 +21,7 @@
     <Property Name="dateStart" Type="datetime" />
     <Property Name="dateEnd" Type="datetime" />
     <Property Name="location" Type="nvarchar" MaxLength="255" />
-    <Property Name="eventType" Type="int" />
+    <Property Name="eventImage" Type="nvarchar" MaxLength="255" />
   </EntityType>
   <EntityType Name="OrgInfo">
     <Key>
@@ -38,7 +38,7 @@
     <Property Name="city" Type="nvarchar" MaxLength="255" />
     <Property Name="province" Type="nvarchar" MaxLength="255" />
     <Property Name="zipCode" Type="nvarchar" MaxLength="255" />
-    <Property Name="profileId" Type="int" />
+    <Property Name="profilePath" Type="nvarchar" MaxLength="255" />
   </EntityType>
   <EntityType Name="OrgSkillRequirement">
     <Key>
@@ -46,8 +46,7 @@
     </Key>
     <Property Name="skillRequirementId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="eventId" Type="int" />
-    <Property Name="skillName" Type="nvarchar" MaxLength="255" />
-    <Property Name="totalNeeded" Type="int" />
+    <Property Name="skillId" Type="int" />
   </EntityType>
   <EntityType Name="OrgValidation">
     <Key>
@@ -64,7 +63,7 @@
     <Key>
       <PropertyRef Name="profileId" />
     </Key>
-    <Property Name="profileId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="profileId" Type="nvarchar" MaxLength="255" Nullable="false" />
     <Property Name="userId" Type="int" />
     <Property Name="profilePath" Type="nvarchar" MaxLength="255" />
   </EntityType>
@@ -90,7 +89,6 @@
     <Property Name="userId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="email" Type="nvarchar" MaxLength="255" Nullable="false" />
     <Property Name="password" Type="nvarchar" MaxLength="255" Nullable="false" />
-    <Property Name="userInfo" Type="int" />
     <Property Name="status" Type="smallint" Nullable="false" />
     <Property Name="roleId" Type="int" Nullable="false" />
   </EntityType>
@@ -127,7 +125,7 @@
     <Property Name="city" Type="nvarchar" MaxLength="255" />
     <Property Name="province" Type="nvarchar" MaxLength="255" />
     <Property Name="zipCode" Type="nvarchar" MaxLength="255" />
-    <Property Name="profileId" Type="int" />
+    <Property Name="profilePath" Type="nvarchar" MaxLength="255" />
     <Property Name="availability" Type="nvarchar" MaxLength="25" />
     <Property Name="aboutMe" Type="text" />
   </EntityType>
@@ -139,7 +137,7 @@
     <Property Name="userId" Type="int" />
     <Property Name="eventId" Type="int" />
     <Property Name="Status" Type="int" />
-    <Property Name="AppliedSkill" Type="nvarchar" MaxLength="50" />
+    <Property Name="skillId" Type="int" />
     <Property Name="appliedAt" Type="date" />
   </EntityType>
   <EntityType Name="VolunteerSkill">
@@ -149,7 +147,6 @@
     <Property Name="volunteerSkillId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="userId" Type="int" />
     <Property Name="skillId" Type="int" />
-    <Property Name="skillName" Type="nvarchar" MaxLength="255" />
   </EntityType>
   <!--Errors Found During Generation:
 warning 6002: The table/view 'TabangHub.dbo.vw_ListOfEvent' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -271,7 +268,7 @@ warning 6002: The table/view 'TabangHub.dbo.vw_VolunteerAccounts' does not have 
         <PropertyRef Name="profileId" />
       </Principal>
       <Dependent Role="OrgInfo">
-        <PropertyRef Name="profileId" />
+        <PropertyRef Name="profilePath" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -296,6 +293,18 @@ warning 6002: The table/view 'TabangHub.dbo.vw_VolunteerAccounts' does not have 
       </Principal>
       <Dependent Role="OrgSkillRequirement">
         <PropertyRef Name="eventId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_OrgSkillRequirement_Skills">
+    <End Role="Skills" Type="Self.Skills" Multiplicity="0..1" />
+    <End Role="OrgSkillRequirement" Type="Self.OrgSkillRequirement" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Skills">
+        <PropertyRef Name="skillId" />
+      </Principal>
+      <Dependent Role="OrgSkillRequirement">
+        <PropertyRef Name="skillId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -367,7 +376,7 @@ warning 6002: The table/view 'TabangHub.dbo.vw_VolunteerAccounts' does not have 
         <PropertyRef Name="profileId" />
       </Principal>
       <Dependent Role="VolunteerInfo">
-        <PropertyRef Name="profileId" />
+        <PropertyRef Name="profilePath" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -392,6 +401,18 @@ warning 6002: The table/view 'TabangHub.dbo.vw_VolunteerAccounts' does not have 
       </Principal>
       <Dependent Role="Volunteers">
         <PropertyRef Name="eventId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Volunteers_Skills">
+    <End Role="Skills" Type="Self.Skills" Multiplicity="0..1" />
+    <End Role="Volunteers" Type="Self.Volunteers" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Skills">
+        <PropertyRef Name="skillId" />
+      </Principal>
+      <Dependent Role="Volunteers">
+        <PropertyRef Name="skillId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -524,6 +545,10 @@ FROM [dbo].[vw_VolunteerAccounts] AS [vw_VolunteerAccounts]</DefiningQuery>
       <End Role="OrgEvents" EntitySet="OrgEvents" />
       <End Role="OrgSkillRequirement" EntitySet="OrgSkillRequirement" />
     </AssociationSet>
+    <AssociationSet Name="FK_OrgSkillRequirement_Skills" Association="Self.FK_OrgSkillRequirement_Skills">
+      <End Role="Skills" EntitySet="Skills" />
+      <End Role="OrgSkillRequirement" EntitySet="OrgSkillRequirement" />
+    </AssociationSet>
     <AssociationSet Name="FK_OrgValidation_UserAccount" Association="Self.FK_OrgValidation_UserAccount">
       <End Role="UserAccount" EntitySet="UserAccount" />
       <End Role="OrgValidation" EntitySet="OrgValidation" />
@@ -554,6 +579,10 @@ FROM [dbo].[vw_VolunteerAccounts] AS [vw_VolunteerAccounts]</DefiningQuery>
     </AssociationSet>
     <AssociationSet Name="FK_Volunteers_OrgEvents" Association="Self.FK_Volunteers_OrgEvents">
       <End Role="OrgEvents" EntitySet="OrgEvents" />
+      <End Role="Volunteers" EntitySet="Volunteers" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Volunteers_Skills" Association="Self.FK_Volunteers_Skills">
+      <End Role="Skills" EntitySet="Skills" />
       <End Role="Volunteers" EntitySet="Volunteers" />
     </AssociationSet>
     <AssociationSet Name="FK_Volunteers_UserAccount" Association="Self.FK_Volunteers_UserAccount">

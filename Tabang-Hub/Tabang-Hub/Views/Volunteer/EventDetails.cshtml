@@ -167,8 +167,11 @@
                         <h5>Skills Required</h5>
                         @foreach (var rk in Model.detailsSkillRequirement)
                         {
+                            {
+                                var skillName = Model.skills.Where(m => m.skillId == rk.skillId).FirstOrDefault();
+                            }
                             <span style="background-color: mediumseagreen" id="badge" class="badge badge-secondary skill-badge">
-                                @rk.skillName
+                                Html.Raw(skillName)
                             </span>
                         }
                     </div>
@@ -243,10 +246,13 @@
                                                 <div id="skillSelect">
                                                     @foreach (var skillsR in Model.detailsSkillRequirement)
                                                     {
+                                                        {
+                                                            var skillName = Model.skills.Where(m => m.skillId == skillsR.skillId).FirstOrDefault();
+                                                        }
                                                         <div class="form-check">
-                                                            <input class="form-check-input" type="radio" name="skill" id="skill1" value="@skillsR.skillName" required>
-                                                            <label class="form-check-label" for="@skillsR.skillName">
-                                                                @skillsR.skillName
+                                                            <input class="form-check-input" type="radio" name="skill" id="skill1" value="Html.Raw(skillName)" required>
+                                                            <label class="form-check-label" for="Html.Raw(skillName)">
+                                                                Html.Raw(skillName)
                                                             </label>
                                                         </div>
                                                     }

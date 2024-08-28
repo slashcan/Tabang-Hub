@@ -26,13 +26,15 @@ public partial class Volunteers
 
     public Nullable<int> Status { get; set; }
 
-    public Nullable<System.DateTime> appliedAt { get; set; }
+    public Nullable<int> skillId { get; set; }
 
-    public string AppliedSkill { get; set; }
+    public Nullable<System.DateTime> appliedAt { get; set; }
 
 
 
     public virtual OrgEvents OrgEvents { get; set; }
+
+    public virtual Skills Skills { get; set; }
 
     public virtual UserAccount UserAccount { get; set; }
 
