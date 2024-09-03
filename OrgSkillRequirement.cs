@@ -15,18 +15,18 @@ namespace Tabang_Hub
 using System;
     using System.Collections.Generic;
     
-public partial class VolunteerSkill
+public partial class OrgSkillRequirement
 {
 
-    public int volunteerSkillId { get; set; }
+    public int skillRequirementId { get; set; }
 
-    public Nullable<int> userId { get; set; }
+    public Nullable<int> eventId { get; set; }
 
     public Nullable<int> skillId { get; set; }
 
-    public string skillName { get; set; }
 
 
+    public virtual OrgEvents OrgEvents { get; set; }
 
     public virtual Skills Skills { get; set; }
 

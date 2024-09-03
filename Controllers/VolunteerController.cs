@@ -140,8 +140,7 @@ namespace Tabang_Hub.Controllers
                                 var newVolSkill = new VolunteerSkill
                                 {
                                     userId = UserId,
-                                    skillId = skillId,
-                                    skillName = getSkillName
+                                    skillId = skillId
                                 };
                                 db.VolunteerSkill.Add(newVolSkill);
                                 Console.WriteLine($"Adding Skill ID: {skillId} for User ID: {UserId}");
@@ -188,8 +187,7 @@ namespace Tabang_Hub.Controllers
                     var skll = new VolunteerSkill
                     {
                         userId = UserId,
-                        skillId = getSkill.skillId,
-                        skillName = getSkill.skillName
+                        skillId = getSkill.skillId
                     };
 
                     _volunteerSkills.Create(skll);
@@ -318,8 +316,8 @@ namespace Tabang_Hub.Controllers
                     }
                 }
 
-                var getEventRequiredSkills = _skillRequirement.GetAll().Where(m => m.eventId == eventId).Select(m => m.skillName).ToList();
-                var volSkill = _volunteerSkills.GetAll().Where(m => m.userId == UserId).Select(m => m.skillName).ToList();
+                var getEventRequiredSkills = _skillRequirement.GetAll().Where(m => m.eventId == eventId).Select(m => m.skillId).ToList();
+                var volSkill = _volunteerSkills.GetAll().Where(m => m.userId == UserId).Select(m => m.skillId).ToList();
 
                 bool skillMatch = getEventRequiredSkills.Any(skll => volSkill.Contains(skll));
 
@@ -333,7 +331,7 @@ namespace Tabang_Hub.Controllers
                     userId = UserId,
                     eventId = eventId,
                     Status = 0,
-                    AppliedSkill = skill,
+                    skillId = db.Skills.Where(m => m.skillName == skill).Select(m => m.skillId).FirstOrDefault(),
                     appliedAt = DateTime.Now
                 };
 

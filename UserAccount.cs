@@ -44,8 +44,6 @@ public partial class UserAccount
 
     public string password { get; set; }
 
-    public Nullable<int> userInfo { get; set; }
-
     public short status { get; set; }
 
     public int roleId { get; set; }

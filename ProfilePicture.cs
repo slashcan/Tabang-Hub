@@ -15,20 +15,30 @@ namespace Tabang_Hub
 using System;
     using System.Collections.Generic;
     
-public partial class VolunteerSkill
+public partial class ProfilePicture
 {
 
-    public int volunteerSkillId { get; set; }
+    public ProfilePicture()
+    {
+
+        this.OrgInfo = new HashSet<OrgInfo>();
+
+        this.VolunteerInfo = new HashSet<VolunteerInfo>();
+
+    }
+
+
+    public string profileId { get; set; }
 
     public Nullable<int> userId { get; set; }
 
-    public Nullable<int> skillId { get; set; }
-
-    public string skillName { get; set; }
+    public string profilePath { get; set; }
 
 
 
-    public virtual Skills Skills { get; set; }
+    public virtual ICollection<OrgInfo> OrgInfo { get; set; }
+
+    public virtual ICollection<VolunteerInfo> VolunteerInfo { get; set; }
 
 }
 

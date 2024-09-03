@@ -40,7 +40,7 @@ public partial class VolunteerInfo
 
     public string zipCode { get; set; }
 
-    public Nullable<int> profileId { get; set; }
+    public string profilePath { get; set; }
 
     public string availability { get; set; }
 

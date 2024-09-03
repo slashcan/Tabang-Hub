@@ -28,7 +28,7 @@ public partial class ProfilePicture
     }
 
 
-    public string profileId { get; set; }
+    public int profileId { get; set; }
 
     public Nullable<int> userId { get; set; }
 

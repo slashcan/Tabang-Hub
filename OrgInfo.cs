@@ -15,24 +15,36 @@ namespace Tabang_Hub
 using System;
     using System.Collections.Generic;
     
-public partial class Volunteers
+public partial class OrgInfo
 {
 
-    public int applyVolunteerId { get; set; }
+    public int orgInfoId { get; set; }
 
     public Nullable<int> userId { get; set; }
 
-    public Nullable<int> eventId { get; set; }
+    public string orgName { get; set; }
 
-    public Nullable<int> Status { get; set; }
+    public string orgEmail { get; set; }
 
-    public Nullable<System.DateTime> appliedAt { get; set; }
+    public string orgType { get; set; }
 
-    public string AppliedSkill { get; set; }
+    public string orgDescription { get; set; }
+
+    public string phoneNum { get; set; }
+
+    public string street { get; set; }
+
+    public string city { get; set; }
+
+    public string province { get; set; }
+
+    public string zipCode { get; set; }
+
+    public string profilePath { get; set; }
 
 
 
-    public virtual OrgEvents OrgEvents { get; set; }
+    public virtual ProfilePicture ProfilePicture { get; set; }
 
     public virtual UserAccount UserAccount { get; set; }
 

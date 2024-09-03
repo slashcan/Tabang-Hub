@@ -40,7 +40,7 @@ public partial class OrgInfo
 
     public string zipCode { get; set; }
 
-    public string profilePath { get; set; }
+    public Nullable<int> profileId { get; set; }
 
 
 
