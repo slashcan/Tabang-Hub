@@ -1,0 +1,593 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="TabangHubModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="OrgEventImage">
+    <Key>
+      <PropertyRef Name="eventImageId" />
+    </Key>
+    <Property Name="eventImageId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="eventId" Type="int" />
+    <Property Name="eventImage" Type="nvarchar" MaxLength="255" />
+  </EntityType>
+  <EntityType Name="OrgEvents">
+    <Key>
+      <PropertyRef Name="eventId" />
+    </Key>
+    <Property Name="eventId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="userId" Type="int" />
+    <Property Name="eventTitle" Type="nvarchar" MaxLength="255" />
+    <Property Name="eventDescription" Type="text" />
+    <Property Name="targetAmount" Type="decimal" Precision="10" Scale="2" />
+    <Property Name="maxVolunteer" Type="int" />
+    <Property Name="dateStart" Type="datetime" />
+    <Property Name="dateEnd" Type="datetime" />
+    <Property Name="location" Type="nvarchar" MaxLength="255" />
+    <Property Name="eventImage" Type="nvarchar" MaxLength="255" />
+  </EntityType>
+  <EntityType Name="OrgInfo">
+    <Key>
+      <PropertyRef Name="orgInfoId" />
+    </Key>
+    <Property Name="orgInfoId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="userId" Type="int" />
+    <Property Name="orgName" Type="nvarchar" MaxLength="255" />
+    <Property Name="orgEmail" Type="nvarchar" MaxLength="255" />
+    <Property Name="orgType" Type="nvarchar" MaxLength="255" />
+    <Property Name="orgDescription" Type="text" />
+    <Property Name="phoneNum" Type="nvarchar" MaxLength="255" />
+    <Property Name="street" Type="nvarchar" MaxLength="255" />
+    <Property Name="city" Type="nvarchar" MaxLength="255" />
+    <Property Name="province" Type="nvarchar" MaxLength="255" />
+    <Property Name="zipCode" Type="nvarchar" MaxLength="255" />
+    <Property Name="profilePath" Type="nvarchar" MaxLength="255" />
+  </EntityType>
+  <EntityType Name="OrgSkillRequirement">
+    <Key>
+      <PropertyRef Name="skillRequirementId" />
+    </Key>
+    <Property Name="skillRequirementId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="eventId" Type="int" />
+    <Property Name="skillId" Type="int" />
+  </EntityType>
+  <EntityType Name="OrgValidation">
+    <Key>
+      <PropertyRef Name="orgValidationId" />
+    </Key>
+    <Property Name="orgValidationId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="userId" Type="int" />
+    <Property Name="idPicture1" Type="nvarchar" MaxLength="255" />
+    <Property Name="idNumber1" Type="nvarchar" MaxLength="255" />
+    <Property Name="idPicture2" Type="nvarchar" MaxLength="255" />
+    <Property Name="idNumber2" Type="nvarchar" MaxLength="255" />
+  </EntityType>
+  <EntityType Name="ProfilePicture">
+    <Key>
+      <PropertyRef Name="profileId" />
+    </Key>
+    <Property Name="profileId" Type="nvarchar" MaxLength="255" Nullable="false" />
+    <Property Name="userId" Type="int" />
+    <Property Name="profilePath" Type="nvarchar" MaxLength="255" />
+  </EntityType>
+  <EntityType Name="Role">
+    <Key>
+      <PropertyRef Name="roleId" />
+    </Key>
+    <Property Name="roleId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="roleName" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="Skills">
+    <Key>
+      <PropertyRef Name="skillId" />
+    </Key>
+    <Property Name="skillId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="skillName" Type="nvarchar" MaxLength="255" />
+    <Property Name="skillImage" Type="nvarchar" MaxLength="255" />
+  </EntityType>
+  <EntityType Name="UserAccount">
+    <Key>
+      <PropertyRef Name="userId" />
+    </Key>
+    <Property Name="userId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="email" Type="nvarchar" MaxLength="255" Nullable="false" />
+    <Property Name="password" Type="nvarchar" MaxLength="255" Nullable="false" />
+    <Property Name="status" Type="smallint" Nullable="false" />
+    <Property Name="roleId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="UserDonated">
+    <Key>
+      <PropertyRef Name="orgUserDonatedId" />
+    </Key>
+    <Property Name="orgUserDonatedId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="eventId" Type="int" />
+    <Property Name="userId" Type="int" />
+    <Property Name="amount" Type="decimal" Precision="10" Scale="2" />
+    <Property Name="donatedAt" Type="datetime" />
+  </EntityType>
+  <EntityType Name="UserRoles">
+    <Key>
+      <PropertyRef Name="userRoleId" />
+    </Key>
+    <Property Name="userRoleId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="userId" Type="int" Nullable="false" />
+    <Property Name="userRole" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="VolunteerInfo">
+    <Key>
+      <PropertyRef Name="volunteerId" />
+    </Key>
+    <Property Name="volunteerId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="userId" Type="int" />
+    <Property Name="fName" Type="nvarchar" MaxLength="255" />
+    <Property Name="lName" Type="nvarchar" MaxLength="255" />
+    <Property Name="bDay" Type="date" />
+    <Property Name="gender" Type="nvarchar" MaxLength="255" />
+    <Property Name="phoneNum" Type="nvarchar" MaxLength="255" />
+    <Property Name="street" Type="nvarchar" MaxLength="255" />
+    <Property Name="city" Type="nvarchar" MaxLength="255" />
+    <Property Name="province" Type="nvarchar" MaxLength="255" />
+    <Property Name="zipCode" Type="nvarchar" MaxLength="255" />
+    <Property Name="profilePath" Type="nvarchar" MaxLength="255" />
+    <Property Name="availability" Type="nvarchar" MaxLength="25" />
+    <Property Name="aboutMe" Type="text" />
+  </EntityType>
+  <EntityType Name="Volunteers">
+    <Key>
+      <PropertyRef Name="applyVolunteerId" />
+    </Key>
+    <Property Name="applyVolunteerId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="userId" Type="int" />
+    <Property Name="eventId" Type="int" />
+    <Property Name="Status" Type="int" />
+    <Property Name="skillId" Type="int" />
+    <Property Name="appliedAt" Type="date" />
+  </EntityType>
+  <EntityType Name="VolunteerSkill">
+    <Key>
+      <PropertyRef Name="volunteerSkillId" />
+    </Key>
+    <Property Name="volunteerSkillId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="userId" Type="int" />
+    <Property Name="skillId" Type="int" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'TabangHub.dbo.vw_ListOfEvent' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="vw_ListOfEvent">
+    <Key>
+      <PropertyRef Name="Event_Id" />
+    </Key>
+    <Property Name="Event_Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="User_Id" Type="int" />
+    <Property Name="Event_Name" Type="nvarchar" MaxLength="255" />
+    <Property Name="Description" Type="text" />
+    <Property Name="Total Donation" Type="decimal" Precision="38" Scale="2" />
+    <Property Name="Target_Amount" Type="decimal" Precision="10" Scale="2" />
+    <Property Name="Total_Volunteer" Type="int" />
+    <Property Name="Max_Volunteer" Type="int" />
+    <Property Name="Start_Date" Type="datetime" />
+    <Property Name="End_Date" Type="datetime" />
+    <Property Name="Location" Type="nvarchar" MaxLength="255" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'TabangHub.dbo.vw_OrganizationAccounts' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="vw_OrganizationAccounts">
+    <Key>
+      <PropertyRef Name="User_Id" />
+      <PropertyRef Name="Email" />
+      <PropertyRef Name="Password" />
+      <PropertyRef Name="Status" />
+      <PropertyRef Name="Role_Id" />
+    </Key>
+    <Property Name="User_Id" Type="int" Nullable="false" />
+    <Property Name="Email" Type="nvarchar" MaxLength="255" Nullable="false" />
+    <Property Name="Password" Type="nvarchar" MaxLength="255" Nullable="false" />
+    <Property Name="User_Info" Type="int" />
+    <Property Name="Status" Type="smallint" Nullable="false" />
+    <Property Name="Role_Id" Type="int" Nullable="false" />
+    <Property Name="Org_Name" Type="nvarchar" MaxLength="255" />
+    <Property Name="Org_Type" Type="nvarchar" MaxLength="255" />
+    <Property Name="Description" Type="text" />
+    <Property Name="Contact_No" Type="nvarchar" MaxLength="255" />
+    <Property Name="Street" Type="nvarchar" MaxLength="255" />
+    <Property Name="City" Type="nvarchar" MaxLength="255" />
+    <Property Name="Province" Type="nvarchar" MaxLength="255" />
+    <Property Name="Zip_Code" Type="nvarchar" MaxLength="255" />
+    <Property Name="Profile_Id" Type="int" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'TabangHub.dbo.vw_UserRoles' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="vw_UserRoles">
+    <Key>
+      <PropertyRef Name="userRoleId" />
+      <PropertyRef Name="roleId" />
+      <PropertyRef Name="userId" />
+      <PropertyRef Name="email" />
+    </Key>
+    <Property Name="userRoleId" Type="int" Nullable="false" />
+    <Property Name="roleId" Type="int" Nullable="false" />
+    <Property Name="roleName" Type="nvarchar" MaxLength="50" />
+    <Property Name="userId" Type="int" Nullable="false" />
+    <Property Name="email" Type="nvarchar" MaxLength="255" Nullable="false" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'TabangHub.dbo.vw_VolunteerAccounts' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="vw_VolunteerAccounts">
+    <Key>
+      <PropertyRef Name="User_Id" />
+      <PropertyRef Name="Email" />
+      <PropertyRef Name="Password" />
+      <PropertyRef Name="Status" />
+      <PropertyRef Name="Role_Id" />
+    </Key>
+    <Property Name="User_Id" Type="int" Nullable="false" />
+    <Property Name="Email" Type="nvarchar" MaxLength="255" Nullable="false" />
+    <Property Name="Password" Type="nvarchar" MaxLength="255" Nullable="false" />
+    <Property Name="User_Info" Type="int" />
+    <Property Name="Status" Type="smallint" Nullable="false" />
+    <Property Name="Role_Id" Type="int" Nullable="false" />
+    <Property Name="Last_Name" Type="nvarchar" MaxLength="255" />
+    <Property Name="First_Name" Type="nvarchar" MaxLength="255" />
+    <Property Name="Birthday" Type="date" />
+    <Property Name="Gender" Type="nvarchar" MaxLength="255" />
+    <Property Name="Contact_No" Type="nvarchar" MaxLength="255" />
+    <Property Name="Street" Type="nvarchar" MaxLength="255" />
+    <Property Name="City" Type="nvarchar" MaxLength="255" />
+    <Property Name="Province" Type="nvarchar" MaxLength="255" />
+    <Property Name="Zip_Code" Type="nvarchar" MaxLength="255" />
+    <Property Name="Profile" Type="int" />
+    <Property Name="Availability" Type="nvarchar" MaxLength="25" />
+    <Property Name="About_Me" Type="text" />
+  </EntityType>
+  <Association Name="FK_OrgEventImage_OrgEvents">
+    <End Role="OrgEvents" Type="Self.OrgEvents" Multiplicity="0..1" />
+    <End Role="OrgEventImage" Type="Self.OrgEventImage" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="OrgEvents">
+        <PropertyRef Name="eventId" />
+      </Principal>
+      <Dependent Role="OrgEventImage">
+        <PropertyRef Name="eventId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_OrgEvents_UserAccount">
+    <End Role="UserAccount" Type="Self.UserAccount" Multiplicity="0..1" />
+    <End Role="OrgEvents" Type="Self.OrgEvents" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserAccount">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="OrgEvents">
+        <PropertyRef Name="userId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_OrgInfo_ProfilePicture">
+    <End Role="ProfilePicture" Type="Self.ProfilePicture" Multiplicity="0..1" />
+    <End Role="OrgInfo" Type="Self.OrgInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ProfilePicture">
+        <PropertyRef Name="profileId" />
+      </Principal>
+      <Dependent Role="OrgInfo">
+        <PropertyRef Name="profilePath" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_OrgInfo_UserAccount">
+    <End Role="UserAccount" Type="Self.UserAccount" Multiplicity="0..1" />
+    <End Role="OrgInfo" Type="Self.OrgInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserAccount">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="OrgInfo">
+        <PropertyRef Name="userId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_OrgSkillRequirement_OrgEvents">
+    <End Role="OrgEvents" Type="Self.OrgEvents" Multiplicity="0..1" />
+    <End Role="OrgSkillRequirement" Type="Self.OrgSkillRequirement" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="OrgEvents">
+        <PropertyRef Name="eventId" />
+      </Principal>
+      <Dependent Role="OrgSkillRequirement">
+        <PropertyRef Name="eventId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_OrgSkillRequirement_Skills">
+    <End Role="Skills" Type="Self.Skills" Multiplicity="0..1" />
+    <End Role="OrgSkillRequirement" Type="Self.OrgSkillRequirement" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Skills">
+        <PropertyRef Name="skillId" />
+      </Principal>
+      <Dependent Role="OrgSkillRequirement">
+        <PropertyRef Name="skillId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_OrgValidation_UserAccount">
+    <End Role="UserAccount" Type="Self.UserAccount" Multiplicity="0..1" />
+    <End Role="OrgValidation" Type="Self.OrgValidation" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserAccount">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="OrgValidation">
+        <PropertyRef Name="userId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Skills_UserAccount">
+    <End Role="Skills" Type="Self.Skills" Multiplicity="0..1" />
+    <End Role="VolunteerSkill" Type="Self.VolunteerSkill" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Skills">
+        <PropertyRef Name="skillId" />
+      </Principal>
+      <Dependent Role="VolunteerSkill">
+        <PropertyRef Name="skillId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UserDonated_UserAccount">
+    <End Role="UserAccount" Type="Self.UserAccount" Multiplicity="0..1" />
+    <End Role="UserDonated" Type="Self.UserDonated" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserAccount">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="UserDonated">
+        <PropertyRef Name="userId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UserDonated_UserDonated">
+    <End Role="OrgEvents" Type="Self.OrgEvents" Multiplicity="0..1" />
+    <End Role="UserDonated" Type="Self.UserDonated" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="OrgEvents">
+        <PropertyRef Name="eventId" />
+      </Principal>
+      <Dependent Role="UserDonated">
+        <PropertyRef Name="eventId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_UserRoles_UserAccount">
+    <End Role="UserAccount" Type="Self.UserAccount" Multiplicity="1" />
+    <End Role="UserRoles" Type="Self.UserRoles" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserAccount">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="UserRoles">
+        <PropertyRef Name="userId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_VolunteerInfo_ProfilePicture">
+    <End Role="ProfilePicture" Type="Self.ProfilePicture" Multiplicity="0..1" />
+    <End Role="VolunteerInfo" Type="Self.VolunteerInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ProfilePicture">
+        <PropertyRef Name="profileId" />
+      </Principal>
+      <Dependent Role="VolunteerInfo">
+        <PropertyRef Name="profilePath" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_VolunteerInfo_UserAccount">
+    <End Role="UserAccount" Type="Self.UserAccount" Multiplicity="0..1" />
+    <End Role="VolunteerInfo" Type="Self.VolunteerInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserAccount">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="VolunteerInfo">
+        <PropertyRef Name="userId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Volunteers_OrgEvents">
+    <End Role="OrgEvents" Type="Self.OrgEvents" Multiplicity="0..1" />
+    <End Role="Volunteers" Type="Self.Volunteers" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="OrgEvents">
+        <PropertyRef Name="eventId" />
+      </Principal>
+      <Dependent Role="Volunteers">
+        <PropertyRef Name="eventId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Volunteers_Skills">
+    <End Role="Skills" Type="Self.Skills" Multiplicity="0..1" />
+    <End Role="Volunteers" Type="Self.Volunteers" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Skills">
+        <PropertyRef Name="skillId" />
+      </Principal>
+      <Dependent Role="Volunteers">
+        <PropertyRef Name="skillId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Volunteers_UserAccount">
+    <End Role="UserAccount" Type="Self.UserAccount" Multiplicity="0..1" />
+    <End Role="Volunteers" Type="Self.Volunteers" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserAccount">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="Volunteers">
+        <PropertyRef Name="userId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Function Name="sp_CancelRequest" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="eventId" Type="int" Mode="In" />
+    <Parameter Name="userId" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_GetSkills" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="userId" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_LeaveEvent" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="eventId" Type="int" Mode="In" />
+    <Parameter Name="userId" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_OtherEvent" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="userId" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_UserListEvent" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="userId" Type="int" Mode="In" />
+  </Function>
+  <EntityContainer Name="TabangHubModelStoreContainer">
+    <EntitySet Name="OrgEventImage" EntityType="Self.OrgEventImage" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="OrgEvents" EntityType="Self.OrgEvents" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="OrgInfo" EntityType="Self.OrgInfo" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="OrgSkillRequirement" EntityType="Self.OrgSkillRequirement" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="OrgValidation" EntityType="Self.OrgValidation" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ProfilePicture" EntityType="Self.ProfilePicture" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Skills" EntityType="Self.Skills" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="UserAccount" EntityType="Self.UserAccount" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="UserDonated" EntityType="Self.UserDonated" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="UserRoles" EntityType="Self.UserRoles" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="VolunteerInfo" EntityType="Self.VolunteerInfo" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Volunteers" EntityType="Self.Volunteers" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="VolunteerSkill" EntityType="Self.VolunteerSkill" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="vw_ListOfEvent" EntityType="Self.vw_ListOfEvent" store:Type="Views" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+[vw_ListOfEvent].[Event_Id] AS [Event_Id], 
+[vw_ListOfEvent].[User_Id] AS [User_Id], 
+[vw_ListOfEvent].[Event_Name] AS [Event_Name], 
+[vw_ListOfEvent].[Description] AS [Description], 
+[vw_ListOfEvent].[Total Donation] AS [Total Donation], 
+[vw_ListOfEvent].[Target_Amount] AS [Target_Amount], 
+[vw_ListOfEvent].[Total_Volunteer] AS [Total_Volunteer], 
+[vw_ListOfEvent].[Max_Volunteer] AS [Max_Volunteer], 
+[vw_ListOfEvent].[Start_Date] AS [Start_Date], 
+[vw_ListOfEvent].[End_Date] AS [End_Date], 
+[vw_ListOfEvent].[Location] AS [Location]
+FROM [dbo].[vw_ListOfEvent] AS [vw_ListOfEvent]</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="vw_OrganizationAccounts" EntityType="Self.vw_OrganizationAccounts" store:Type="Views" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+[vw_OrganizationAccounts].[User_Id] AS [User_Id], 
+[vw_OrganizationAccounts].[Email] AS [Email], 
+[vw_OrganizationAccounts].[Password] AS [Password], 
+[vw_OrganizationAccounts].[User_Info] AS [User_Info], 
+[vw_OrganizationAccounts].[Status] AS [Status], 
+[vw_OrganizationAccounts].[Role_Id] AS [Role_Id], 
+[vw_OrganizationAccounts].[Org_Name] AS [Org_Name], 
+[vw_OrganizationAccounts].[Org_Type] AS [Org_Type], 
+[vw_OrganizationAccounts].[Description] AS [Description], 
+[vw_OrganizationAccounts].[Contact_No] AS [Contact_No], 
+[vw_OrganizationAccounts].[Street] AS [Street], 
+[vw_OrganizationAccounts].[City] AS [City], 
+[vw_OrganizationAccounts].[Province] AS [Province], 
+[vw_OrganizationAccounts].[Zip_Code] AS [Zip_Code], 
+[vw_OrganizationAccounts].[Profile_Id] AS [Profile_Id]
+FROM [dbo].[vw_OrganizationAccounts] AS [vw_OrganizationAccounts]</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="vw_UserRoles" EntityType="Self.vw_UserRoles" store:Type="Views" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+[vw_UserRoles].[userRoleId] AS [userRoleId], 
+[vw_UserRoles].[roleId] AS [roleId], 
+[vw_UserRoles].[roleName] AS [roleName], 
+[vw_UserRoles].[userId] AS [userId], 
+[vw_UserRoles].[email] AS [email]
+FROM [dbo].[vw_UserRoles] AS [vw_UserRoles]</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="vw_VolunteerAccounts" EntityType="Self.vw_VolunteerAccounts" store:Type="Views" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+[vw_VolunteerAccounts].[User_Id] AS [User_Id], 
+[vw_VolunteerAccounts].[Email] AS [Email], 
+[vw_VolunteerAccounts].[Password] AS [Password], 
+[vw_VolunteerAccounts].[User_Info] AS [User_Info], 
+[vw_VolunteerAccounts].[Status] AS [Status], 
+[vw_VolunteerAccounts].[Role_Id] AS [Role_Id], 
+[vw_VolunteerAccounts].[Last_Name] AS [Last_Name], 
+[vw_VolunteerAccounts].[First_Name] AS [First_Name], 
+[vw_VolunteerAccounts].[Birthday] AS [Birthday], 
+[vw_VolunteerAccounts].[Gender] AS [Gender], 
+[vw_VolunteerAccounts].[Contact_No] AS [Contact_No], 
+[vw_VolunteerAccounts].[Street] AS [Street], 
+[vw_VolunteerAccounts].[City] AS [City], 
+[vw_VolunteerAccounts].[Province] AS [Province], 
+[vw_VolunteerAccounts].[Zip_Code] AS [Zip_Code], 
+[vw_VolunteerAccounts].[Profile] AS [Profile], 
+[vw_VolunteerAccounts].[Availability] AS [Availability], 
+[vw_VolunteerAccounts].[About_Me] AS [About_Me]
+FROM [dbo].[vw_VolunteerAccounts] AS [vw_VolunteerAccounts]</DefiningQuery>
+    </EntitySet>
+    <AssociationSet Name="FK_OrgEventImage_OrgEvents" Association="Self.FK_OrgEventImage_OrgEvents">
+      <End Role="OrgEvents" EntitySet="OrgEvents" />
+      <End Role="OrgEventImage" EntitySet="OrgEventImage" />
+    </AssociationSet>
+    <AssociationSet Name="FK_OrgEvents_UserAccount" Association="Self.FK_OrgEvents_UserAccount">
+      <End Role="UserAccount" EntitySet="UserAccount" />
+      <End Role="OrgEvents" EntitySet="OrgEvents" />
+    </AssociationSet>
+    <AssociationSet Name="FK_OrgInfo_ProfilePicture" Association="Self.FK_OrgInfo_ProfilePicture">
+      <End Role="ProfilePicture" EntitySet="ProfilePicture" />
+      <End Role="OrgInfo" EntitySet="OrgInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_OrgInfo_UserAccount" Association="Self.FK_OrgInfo_UserAccount">
+      <End Role="UserAccount" EntitySet="UserAccount" />
+      <End Role="OrgInfo" EntitySet="OrgInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_OrgSkillRequirement_OrgEvents" Association="Self.FK_OrgSkillRequirement_OrgEvents">
+      <End Role="OrgEvents" EntitySet="OrgEvents" />
+      <End Role="OrgSkillRequirement" EntitySet="OrgSkillRequirement" />
+    </AssociationSet>
+    <AssociationSet Name="FK_OrgSkillRequirement_Skills" Association="Self.FK_OrgSkillRequirement_Skills">
+      <End Role="Skills" EntitySet="Skills" />
+      <End Role="OrgSkillRequirement" EntitySet="OrgSkillRequirement" />
+    </AssociationSet>
+    <AssociationSet Name="FK_OrgValidation_UserAccount" Association="Self.FK_OrgValidation_UserAccount">
+      <End Role="UserAccount" EntitySet="UserAccount" />
+      <End Role="OrgValidation" EntitySet="OrgValidation" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Skills_UserAccount" Association="Self.FK_Skills_UserAccount">
+      <End Role="Skills" EntitySet="Skills" />
+      <End Role="VolunteerSkill" EntitySet="VolunteerSkill" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UserDonated_UserAccount" Association="Self.FK_UserDonated_UserAccount">
+      <End Role="UserAccount" EntitySet="UserAccount" />
+      <End Role="UserDonated" EntitySet="UserDonated" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UserDonated_UserDonated" Association="Self.FK_UserDonated_UserDonated">
+      <End Role="OrgEvents" EntitySet="OrgEvents" />
+      <End Role="UserDonated" EntitySet="UserDonated" />
+    </AssociationSet>
+    <AssociationSet Name="FK_UserRoles_UserAccount" Association="Self.FK_UserRoles_UserAccount">
+      <End Role="UserAccount" EntitySet="UserAccount" />
+      <End Role="UserRoles" EntitySet="UserRoles" />
+    </AssociationSet>
+    <AssociationSet Name="FK_VolunteerInfo_ProfilePicture" Association="Self.FK_VolunteerInfo_ProfilePicture">
+      <End Role="ProfilePicture" EntitySet="ProfilePicture" />
+      <End Role="VolunteerInfo" EntitySet="VolunteerInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_VolunteerInfo_UserAccount" Association="Self.FK_VolunteerInfo_UserAccount">
+      <End Role="UserAccount" EntitySet="UserAccount" />
+      <End Role="VolunteerInfo" EntitySet="VolunteerInfo" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Volunteers_OrgEvents" Association="Self.FK_Volunteers_OrgEvents">
+      <End Role="OrgEvents" EntitySet="OrgEvents" />
+      <End Role="Volunteers" EntitySet="Volunteers" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Volunteers_Skills" Association="Self.FK_Volunteers_Skills">
+      <End Role="Skills" EntitySet="Skills" />
+      <End Role="Volunteers" EntitySet="Volunteers" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Volunteers_UserAccount" Association="Self.FK_Volunteers_UserAccount">
+      <End Role="UserAccount" EntitySet="UserAccount" />
+      <End Role="Volunteers" EntitySet="Volunteers" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
