@@ -187,7 +187,7 @@
                                 @for (int i = 0; i < Model.detailsEventImage.Count; i++)
                                 {
                                     <div class="carousel-item @(i == 0 ? "active" : "") h-100">
-                                        <img src="@Url.Content("~/Content/IdPicture/" + Model.detailsEventImage[i].eventImage)" class="d-block w-100 h-100" alt="Event Image @i" style="object-fit: cover;" />
+                                        <img src="@Url.Content("~/Content/Events/" + Model.detailsEventImage[i].eventImage)" class="d-block w-100 h-100" alt="Event Image @i" style="object-fit: cover;" />
                                     </div>
                                 }
                             </div>
@@ -248,7 +248,7 @@
                         <div class="skills-container" id="skills-container">
                             @foreach (var skill in Model.detailsSkillRequirement)
                             {
-                                <button type="button" class="skill-button" data-skill-id="@skill.skillRequirementId">@skill.skillName</button>
+                                <button type="button" class="skill-button" data-skill-id="@skill.skillRequirementId">@skill.Skills.skillName</button>
                             }
                         </div>
                     </div>
@@ -281,7 +281,7 @@
                                                 {
                                                     if (skill.userId == volunteer.userId)
                                                     {
-                                                        <span class="badge bg-secondary me-1">@skill.skillName</span>
+                                                        <span class="badge bg-secondary me-1">@skill.Skills.skillName</span>
                                                     }
                                                 }
                                             </p>
@@ -323,7 +323,7 @@
                                                 {
                                                     if (skill.userId == volunteer.userId)
                                                     {
-                                                        <span class="badge bg-secondary me-1">@skill.skillName</span>
+                                                        <span class="badge bg-secondary me-1">@skill.Skills.skillName</span>
                                                     }
                                                 }
                                             </p>
@@ -411,7 +411,7 @@
                             <div class="added-skills" id="edit-added-skills">
                                 @foreach (var skill in Model.detailsSkillRequirement)
                                 {
-                                    <button type="button" class="skill-button selected" onclick="removeEditSkill('@skill.skillName', this, document.getElementById('edit-skill-@skill.skillName'))">@skill.skillName <span class="remove-skill">x</span></button>
+                                    <button type="button" class="skill-button selected" onclick="removeEditSkill('@skill.Skills.skillName', this, document.getElementById('edit-skill-@skill.Skills.skillName'))">@skill.Skills.skillName <span class="remove-skill">x</span></button>
                                 }
                             </div>
                             <span class="error" id="EditEvent_skills_error"></span>
@@ -419,7 +419,7 @@
                         <div class="skills-container mb-3">
                             @foreach (var skills in Model.listOfSkills)
                             {
-                                <button type="button" class="btn btn-outline-primary skill-button" onclick="addEditSkill('@skills.skillName')" id="edit-skill-@skills.skillName" @(Model.detailsSkillRequirement.Any(s => s.skillName == skills.skillName) ? "disabled" : "")>@skills.skillName</button>
+                                <button type="button" class="btn btn-outline-primary skill-button" onclick="addEditSkill('@skills.skillName')" id="edit-skill-@skills.skillName" @(Model.detailsSkillRequirement.Any(s => s.Skills.skillName == skills.skillName) ? "disabled" : "")>@skills.skillName</button>
                             }
                         </div>
                         <div class="mb-3">

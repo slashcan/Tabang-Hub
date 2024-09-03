@@ -118,11 +118,11 @@ namespace Tabang_Hub.Repository
                 return ErrorCode.Error;
             }
             profilePic.profilePath = "~/Content/images/tabanghub3.png";
-            profilePic.userId = u.userId;
-            if (_profilePic.Create(profilePic, out errMsg) != ErrorCode.Success)
-            {
-                return ErrorCode.Error;
-            }
+            //profilePic.userId = u.userId;
+            //if (_profilePic.Create(profilePic, out errMsg) != ErrorCode.Success)
+            //{
+            //    return ErrorCode.Error;
+            //}
             r.userId = u.userId;
             r.userRole = u.roleId;
             if (_userRoles.Create(r, out errMsg) != ErrorCode.Success)
@@ -130,7 +130,8 @@ namespace Tabang_Hub.Repository
                 return ErrorCode.Error;
             }
             o.userId = u.userId;
-            o.profileId = profilePic.profileId;
+
+            //o.profileId = profilePic.profileId;
             if (_orgInfo.Create(o, out errMsg) != ErrorCode.Success)
             {
                 return ErrorCode.Error;

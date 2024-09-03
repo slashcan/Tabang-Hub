@@ -50,13 +50,14 @@ namespace Tabang_Hub.Repository
             // Add each skill associated with the eventId            
             foreach (var skill in skills)
             {
+                var skillId = GetSkillIdBySkillName(skill.Key);
                 var skillRequirement = new OrgSkillRequirement
                 {
                     eventId = eventId,
-                    skillName = skill.Key,
+                    skillId = skillId.skillId,
                     totalNeeded = skill.Value
                 };
-
+                
                 if (_orgSkillRequirements.Create(skillRequirement, out errMsg) != ErrorCode.Success)
                 {
                     return ErrorCode.Error;
@@ -100,7 +101,7 @@ namespace Tabang_Hub.Repository
                 return ErrorCode.Error;
             }
 
-            orgInformation.profileId = profilePic.profileId;
+            orgInformation.profilePath = profilePic.profilePath;
             var orgId = GetOrgInfoByUserId(id);
 
             orgId.userId = id;
@@ -112,7 +113,7 @@ namespace Tabang_Hub.Repository
             orgId.street = orgInformation.street;
             orgId.city = orgInformation.city;
             orgId.province = orgInformation.province;
-            orgId.profileId = profilePic.profileId;
+            orgId.profilePath = profilePic.profilePath;
 
             if (_orgInfo.Update(orgId.orgInfoId, orgId, out errMsg) != ErrorCode.Success)
             {
@@ -127,22 +128,22 @@ namespace Tabang_Hub.Repository
             var oldSkills = listOfSkillRequirement(eventId);
 
             // Create a dictionary of existing skill names for quick lookup
-            var oldSkillDict = oldSkills.ToDictionary(s => s.skillName, s => s.skillRequirementId);
+            var oldSkillDict = oldSkills.ToDictionary(s => s.Skills.skillName, s => s.skillRequirementId);
 
             var skillsToUpdate = new HashSet<string>(skills);
 
             // Update or delete old skills
             foreach (var oldSkill in oldSkills)
             {
-                if (skillsToUpdate.Contains(oldSkill.skillName))
+                if (skillsToUpdate.Contains(oldSkill.skillId.ToString()))
                 {
                     // Skill exists in the new list, so we update it (if needed)
                     var updatedSkill = new OrgSkillRequirement()
                     {
-                        skillName = oldSkill.skillName
+                        skillId = oldSkill.skillId
                     };
                     _orgSkillRequirements.Update(oldSkill.skillRequirementId, updatedSkill, out errMsg);
-                    skillsToUpdate.Remove(oldSkill.skillName); // Remove it from the update list
+                    skillsToUpdate.Remove(oldSkill.ToString()); // Remove it from the update list
                 }
                 else
                 {
@@ -157,7 +158,7 @@ namespace Tabang_Hub.Repository
                 var newSkillRequirement = new OrgSkillRequirement()
                 {
                     eventId = eventId,
-                    skillName = newSkill
+                    //skillName = newSkill
                 };
                 _orgSkillRequirements.Create(newSkillRequirement, out errMsg);
             }
@@ -197,9 +198,9 @@ namespace Tabang_Hub.Repository
         {
             return _listOfEvents.GetAll().Where(m => m.User_Id == userId).ToList();
         }
-        public ProfilePicture GetProfileByProfileId(int? id)
+        public OrgInfo GetProfileByProfileId(int? id)
         { 
-            return _profilePic._table.Where(m => m.profileId == id).FirstOrDefault();
+            return _orgInfo._table.Where(m => m.userId == id).FirstOrDefault();
         }
         public List<Skills> ListOfSkills()
         { 
@@ -212,6 +213,10 @@ namespace Tabang_Hub.Repository
         public OrgInfo GetOrgInfoByUserId(int? id)
         {
             return _orgInfo._table.Where(m => m.userId == id).FirstOrDefault();
+        }
+        public Skills GetSkillIdBySkillName(string name)
+        { 
+            return _skills._table.Where(m => m.skillName == name).FirstOrDefault();
         }
         public OrgInfo GetOrgInfoByUserId(int id)
         {

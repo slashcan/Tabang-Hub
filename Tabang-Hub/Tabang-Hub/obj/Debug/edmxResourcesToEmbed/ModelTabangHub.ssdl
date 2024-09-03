@@ -47,6 +47,7 @@
     <Property Name="skillRequirementId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="eventId" Type="int" />
     <Property Name="skillId" Type="int" />
+    <Property Name="totalNeeded" Type="int" />
   </EntityType>
   <EntityType Name="OrgValidation">
     <Key>
@@ -179,7 +180,6 @@ warning 6002: The table/view 'TabangHub.dbo.vw_OrganizationAccounts' does not ha
     <Property Name="User_Id" Type="int" Nullable="false" />
     <Property Name="Email" Type="nvarchar" MaxLength="255" Nullable="false" />
     <Property Name="Password" Type="nvarchar" MaxLength="255" Nullable="false" />
-    <Property Name="User_Info" Type="int" />
     <Property Name="Status" Type="smallint" Nullable="false" />
     <Property Name="Role_Id" Type="int" Nullable="false" />
     <Property Name="Org_Name" Type="nvarchar" MaxLength="255" />
@@ -190,7 +190,6 @@ warning 6002: The table/view 'TabangHub.dbo.vw_OrganizationAccounts' does not ha
     <Property Name="City" Type="nvarchar" MaxLength="255" />
     <Property Name="Province" Type="nvarchar" MaxLength="255" />
     <Property Name="Zip_Code" Type="nvarchar" MaxLength="255" />
-    <Property Name="Profile_Id" Type="int" />
   </EntityType>
   <!--Errors Found During Generation:
 warning 6002: The table/view 'TabangHub.dbo.vw_UserRoles' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -220,7 +219,6 @@ warning 6002: The table/view 'TabangHub.dbo.vw_VolunteerAccounts' does not have 
     <Property Name="User_Id" Type="int" Nullable="false" />
     <Property Name="Email" Type="nvarchar" MaxLength="255" Nullable="false" />
     <Property Name="Password" Type="nvarchar" MaxLength="255" Nullable="false" />
-    <Property Name="User_Info" Type="int" />
     <Property Name="Status" Type="smallint" Nullable="false" />
     <Property Name="Role_Id" Type="int" Nullable="false" />
     <Property Name="Last_Name" Type="nvarchar" MaxLength="255" />
@@ -232,7 +230,6 @@ warning 6002: The table/view 'TabangHub.dbo.vw_VolunteerAccounts' does not have 
     <Property Name="City" Type="nvarchar" MaxLength="255" />
     <Property Name="Province" Type="nvarchar" MaxLength="255" />
     <Property Name="Zip_Code" Type="nvarchar" MaxLength="255" />
-    <Property Name="Profile" Type="int" />
     <Property Name="Availability" Type="nvarchar" MaxLength="25" />
     <Property Name="About_Me" Type="text" />
   </EntityType>
@@ -257,18 +254,6 @@ warning 6002: The table/view 'TabangHub.dbo.vw_VolunteerAccounts' does not have 
       </Principal>
       <Dependent Role="OrgEvents">
         <PropertyRef Name="userId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_OrgInfo_ProfilePicture">
-    <End Role="ProfilePicture" Type="Self.ProfilePicture" Multiplicity="0..1" />
-    <End Role="OrgInfo" Type="Self.OrgInfo" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="ProfilePicture">
-        <PropertyRef Name="profileId" />
-      </Principal>
-      <Dependent Role="OrgInfo">
-        <PropertyRef Name="profilePath" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -480,7 +465,6 @@ FROM [dbo].[vw_ListOfEvent] AS [vw_ListOfEvent]</DefiningQuery>
 [vw_OrganizationAccounts].[User_Id] AS [User_Id], 
 [vw_OrganizationAccounts].[Email] AS [Email], 
 [vw_OrganizationAccounts].[Password] AS [Password], 
-[vw_OrganizationAccounts].[User_Info] AS [User_Info], 
 [vw_OrganizationAccounts].[Status] AS [Status], 
 [vw_OrganizationAccounts].[Role_Id] AS [Role_Id], 
 [vw_OrganizationAccounts].[Org_Name] AS [Org_Name], 
@@ -490,8 +474,7 @@ FROM [dbo].[vw_ListOfEvent] AS [vw_ListOfEvent]</DefiningQuery>
 [vw_OrganizationAccounts].[Street] AS [Street], 
 [vw_OrganizationAccounts].[City] AS [City], 
 [vw_OrganizationAccounts].[Province] AS [Province], 
-[vw_OrganizationAccounts].[Zip_Code] AS [Zip_Code], 
-[vw_OrganizationAccounts].[Profile_Id] AS [Profile_Id]
+[vw_OrganizationAccounts].[Zip_Code] AS [Zip_Code]
 FROM [dbo].[vw_OrganizationAccounts] AS [vw_OrganizationAccounts]</DefiningQuery>
     </EntitySet>
     <EntitySet Name="vw_UserRoles" EntityType="Self.vw_UserRoles" store:Type="Views" store:Schema="dbo">
@@ -508,7 +491,6 @@ FROM [dbo].[vw_UserRoles] AS [vw_UserRoles]</DefiningQuery>
 [vw_VolunteerAccounts].[User_Id] AS [User_Id], 
 [vw_VolunteerAccounts].[Email] AS [Email], 
 [vw_VolunteerAccounts].[Password] AS [Password], 
-[vw_VolunteerAccounts].[User_Info] AS [User_Info], 
 [vw_VolunteerAccounts].[Status] AS [Status], 
 [vw_VolunteerAccounts].[Role_Id] AS [Role_Id], 
 [vw_VolunteerAccounts].[Last_Name] AS [Last_Name], 
@@ -520,7 +502,6 @@ FROM [dbo].[vw_UserRoles] AS [vw_UserRoles]</DefiningQuery>
 [vw_VolunteerAccounts].[City] AS [City], 
 [vw_VolunteerAccounts].[Province] AS [Province], 
 [vw_VolunteerAccounts].[Zip_Code] AS [Zip_Code], 
-[vw_VolunteerAccounts].[Profile] AS [Profile], 
 [vw_VolunteerAccounts].[Availability] AS [Availability], 
 [vw_VolunteerAccounts].[About_Me] AS [About_Me]
 FROM [dbo].[vw_VolunteerAccounts] AS [vw_VolunteerAccounts]</DefiningQuery>
@@ -532,10 +513,6 @@ FROM [dbo].[vw_VolunteerAccounts] AS [vw_VolunteerAccounts]</DefiningQuery>
     <AssociationSet Name="FK_OrgEvents_UserAccount" Association="Self.FK_OrgEvents_UserAccount">
       <End Role="UserAccount" EntitySet="UserAccount" />
       <End Role="OrgEvents" EntitySet="OrgEvents" />
-    </AssociationSet>
-    <AssociationSet Name="FK_OrgInfo_ProfilePicture" Association="Self.FK_OrgInfo_ProfilePicture">
-      <End Role="ProfilePicture" EntitySet="ProfilePicture" />
-      <End Role="OrgInfo" EntitySet="OrgInfo" />
     </AssociationSet>
     <AssociationSet Name="FK_OrgInfo_UserAccount" Association="Self.FK_OrgInfo_UserAccount">
       <End Role="UserAccount" EntitySet="UserAccount" />

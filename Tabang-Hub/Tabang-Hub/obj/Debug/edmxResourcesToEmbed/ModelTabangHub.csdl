@@ -56,10 +56,6 @@
       <End Role="OrgEvents" EntitySet="OrgEvents" />
       <End Role="Volunteers" EntitySet="Volunteers" />
     </AssociationSet>
-    <AssociationSet Name="FK_OrgInfo_ProfilePicture" Association="TabangHubModel.FK_OrgInfo_ProfilePicture">
-      <End Role="ProfilePicture" EntitySet="ProfilePicture" />
-      <End Role="OrgInfo" EntitySet="OrgInfo" />
-    </AssociationSet>
     <AssociationSet Name="FK_OrgInfo_UserAccount" Association="TabangHubModel.FK_OrgInfo_UserAccount">
       <End Role="UserAccount" EntitySet="UserAccount" />
       <End Role="OrgInfo" EntitySet="OrgInfo" />
@@ -173,7 +169,6 @@
     <Property Name="province" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
     <Property Name="zipCode" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
     <Property Name="profilePath" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-    <NavigationProperty Name="ProfilePicture" Relationship="TabangHubModel.FK_OrgInfo_ProfilePicture" FromRole="OrgInfo" ToRole="ProfilePicture" />
     <NavigationProperty Name="UserAccount" Relationship="TabangHubModel.FK_OrgInfo_UserAccount" FromRole="OrgInfo" ToRole="UserAccount" />
   </EntityType>
   <EntityType Name="OrgSkillRequirement">
@@ -183,6 +178,7 @@
     <Property Name="skillRequirementId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="eventId" Type="Int32" />
     <Property Name="skillId" Type="Int32" />
+    <Property Name="totalNeeded" Type="Int32" />
     <NavigationProperty Name="OrgEvents" Relationship="TabangHubModel.FK_OrgSkillRequirement_OrgEvents" FromRole="OrgSkillRequirement" ToRole="OrgEvents" />
     <NavigationProperty Name="Skills" Relationship="TabangHubModel.FK_OrgSkillRequirement_Skills" FromRole="OrgSkillRequirement" ToRole="Skills" />
   </EntityType>
@@ -205,7 +201,6 @@
     <Property Name="profileId" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
     <Property Name="userId" Type="Int32" />
     <Property Name="profilePath" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-    <NavigationProperty Name="OrgInfo" Relationship="TabangHubModel.FK_OrgInfo_ProfilePicture" FromRole="ProfilePicture" ToRole="OrgInfo" />
     <NavigationProperty Name="VolunteerInfo" Relationship="TabangHubModel.FK_VolunteerInfo_ProfilePicture" FromRole="ProfilePicture" ToRole="VolunteerInfo" />
   </EntityType>
   <EntityType Name="Role">
@@ -335,7 +330,6 @@
     <Property Name="User_Id" Type="Int32" Nullable="false" />
     <Property Name="Email" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
     <Property Name="Password" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
-    <Property Name="User_Info" Type="Int32" />
     <Property Name="Status" Type="Int16" Nullable="false" />
     <Property Name="Role_Id" Type="Int32" Nullable="false" />
     <Property Name="Org_Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
@@ -346,7 +340,6 @@
     <Property Name="City" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
     <Property Name="Province" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
     <Property Name="Zip_Code" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-    <Property Name="Profile_Id" Type="Int32" />
   </EntityType>
   <EntityType Name="vw_UserRoles">
     <Key>
@@ -372,7 +365,6 @@
     <Property Name="User_Id" Type="Int32" Nullable="false" />
     <Property Name="Email" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
     <Property Name="Password" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
-    <Property Name="User_Info" Type="Int32" />
     <Property Name="Status" Type="Int16" Nullable="false" />
     <Property Name="Role_Id" Type="Int32" Nullable="false" />
     <Property Name="Last_Name" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
@@ -384,7 +376,6 @@
     <Property Name="City" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
     <Property Name="Province" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
     <Property Name="Zip_Code" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-    <Property Name="Profile" Type="Int32" />
     <Property Name="Availability" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
     <Property Name="About_Me" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
   </EntityType>
@@ -445,18 +436,6 @@
       </Principal>
       <Dependent Role="Volunteers">
         <PropertyRef Name="eventId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_OrgInfo_ProfilePicture">
-    <End Type="TabangHubModel.ProfilePicture" Role="ProfilePicture" Multiplicity="0..1" />
-    <End Type="TabangHubModel.OrgInfo" Role="OrgInfo" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="ProfilePicture">
-        <PropertyRef Name="profileId" />
-      </Principal>
-      <Dependent Role="OrgInfo">
-        <PropertyRef Name="profilePath" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
