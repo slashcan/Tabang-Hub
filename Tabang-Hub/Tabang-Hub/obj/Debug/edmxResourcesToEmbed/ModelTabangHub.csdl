@@ -111,7 +111,6 @@
     <Property Type="DateTime" Name="Date_Started" Nullable="true" Precision="23" />
     <Property Type="DateTime" Name="Date_Ended" Nullable="true" Precision="23" />
     <Property Type="String" Name="location" Nullable="true" MaxLength="255" />
-    <Property Type="Int32" Name="Event_Type" Nullable="true" />
     <Property Type="Int32" Name="Total_Image" Nullable="true" />
     <Property Type="Int32" Name="Total_Skills" Nullable="true" />
   </ComplexType>

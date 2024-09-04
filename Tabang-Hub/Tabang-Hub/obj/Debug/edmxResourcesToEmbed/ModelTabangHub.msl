@@ -23,7 +23,6 @@
           <ScalarProperty Name="Date_Started" ColumnName="Date_Started" />
           <ScalarProperty Name="Date_Ended" ColumnName="Date_Ended" />
           <ScalarProperty Name="location" ColumnName="location" />
-          <ScalarProperty Name="Event_Type" ColumnName="Event_Type" />
           <ScalarProperty Name="Total_Image" ColumnName="Total_Image" />
           <ScalarProperty Name="Total_Skills" ColumnName="Total_Skills" />
         </ComplexTypeMapping>

@@ -22,7 +22,6 @@ namespace Tabang_Hub
         public Nullable<System.DateTime> Date_Started { get; set; }
         public Nullable<System.DateTime> Date_Ended { get; set; }
         public string location { get; set; }
-        public Nullable<int> Event_Type { get; set; }
         public Nullable<int> Total_Image { get; set; }
         public Nullable<int> Total_Skills { get; set; }
     }

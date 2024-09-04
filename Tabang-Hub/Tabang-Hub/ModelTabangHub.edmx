@@ -687,7 +687,6 @@ FROM [dbo].[vw_VolunteerAccounts] AS [vw_VolunteerAccounts]</DefiningQuery>
           <Property Type="DateTime" Name="Date_Started" Nullable="true" Precision="23" />
           <Property Type="DateTime" Name="Date_Ended" Nullable="true" Precision="23" />
           <Property Type="String" Name="location" Nullable="true" MaxLength="255" />
-          <Property Type="Int32" Name="Event_Type" Nullable="true" />
           <Property Type="Int32" Name="Total_Image" Nullable="true" />
           <Property Type="Int32" Name="Total_Skills" Nullable="true" />
         </ComplexType>
@@ -1163,7 +1162,6 @@ FROM [dbo].[vw_VolunteerAccounts] AS [vw_VolunteerAccounts]</DefiningQuery>
                 <ScalarProperty Name="Date_Started" ColumnName="Date_Started" />
                 <ScalarProperty Name="Date_Ended" ColumnName="Date_Ended" />
                 <ScalarProperty Name="location" ColumnName="location" />
-                <ScalarProperty Name="Event_Type" ColumnName="Event_Type" />
                 <ScalarProperty Name="Total_Image" ColumnName="Total_Image" />
                 <ScalarProperty Name="Total_Skills" ColumnName="Total_Skills" />
               </ComplexTypeMapping>
