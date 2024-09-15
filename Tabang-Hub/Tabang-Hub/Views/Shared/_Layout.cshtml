@@ -51,7 +51,7 @@
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link click-scroll" href="#section_4">
+                            <a class="nav-link click-scroll" href="@Url.Action("Message", "Message")">
                                 <i class="bi bi-chat-right-heart-fill"></i>
                             </a>
                         </li>
@@ -150,7 +150,7 @@
 
     @RenderBody()
 
-    @if (User.Identity.IsAuthenticated)
+    @if (User.Identity.IsAuthenticated && ViewBag.Title != "Message")
     {
         <footer class="site-footer">
             <div class="container">

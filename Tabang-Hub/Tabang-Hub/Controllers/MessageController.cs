@@ -16,7 +16,8 @@ namespace Tabang_Hub.Controllers
 
             var indexModel = new Lists()
             {
-                picture = getProfile
+                picture = getProfile,
+                volunteersInfo = db.VolunteerInfo.Where(m => m.userId == UserId).ToList()
             };
 
             return View(indexModel);

@@ -9,17 +9,17 @@
         <EntityTypeShape EntityType="TabangHubModel.OrgEventImage" Width="1.5" PointX="5.25" PointY="33.625" />
         <EntityTypeShape EntityType="TabangHubModel.OrgEventImageHistory" Width="1.5" PointX="2.75" PointY="0.75" />
         <EntityTypeShape EntityType="TabangHubModel.OrgEvents" Width="1.5" PointX="3" PointY="23" />
-        <EntityTypeShape EntityType="TabangHubModel.OrgInfo" Width="1.5" PointX="3" PointY="18.75" />
+        <EntityTypeShape EntityType="TabangHubModel.OrgInfo" Width="1.5" PointX="3" PointY="8.25" />
         <EntityTypeShape EntityType="TabangHubModel.OrgSkillRequirement" Width="1.5" PointX="5.25" PointY="23.875" />
         <EntityTypeShape EntityType="TabangHubModel.OrgSkillRequirementsHistory" Width="1.5" PointX="2.75" PointY="3.75" />
-        <EntityTypeShape EntityType="TabangHubModel.OrgValidation" Width="1.5" PointX="3" PointY="15.625" />
-        <EntityTypeShape EntityType="TabangHubModel.ProfilePicture" Width="1.5" PointX="3.75" PointY="12.25" />
+        <EntityTypeShape EntityType="TabangHubModel.OrgValidation" Width="1.5" PointX="3" PointY="19.875" />
+        <EntityTypeShape EntityType="TabangHubModel.ProfilePicture" Width="1.5" PointX="3.75" PointY="14.25" />
         <EntityTypeShape EntityType="TabangHubModel.Role" Width="1.5" PointX="4.75" PointY="0.75" />
         <EntityTypeShape EntityType="TabangHubModel.Skills" Width="1.5" PointX="6" PointY="27" />
         <EntityTypeShape EntityType="TabangHubModel.UserAccount" Width="1.5" PointX="0.75" PointY="13.5" />
         <EntityTypeShape EntityType="TabangHubModel.UserDonated" Width="1.5" PointX="5.25" PointY="19" />
         <EntityTypeShape EntityType="TabangHubModel.UserDonatedHistory" Width="1.5" PointX="4.75" PointY="3.75" />
-        <EntityTypeShape EntityType="TabangHubModel.UserRoles" Width="1.5" PointX="3" PointY="8.25" />
+        <EntityTypeShape EntityType="TabangHubModel.UserRoles" Width="1.5" PointX="3" PointY="17.375" />
         <EntityTypeShape EntityType="TabangHubModel.VolunteerInfo" Width="1.5" PointX="6" PointY="13.125" />
         <EntityTypeShape EntityType="TabangHubModel.Volunteers" Width="1.5" PointX="8.25" PointY="18.875" />
         <EntityTypeShape EntityType="TabangHubModel.VolunteersHistory" Width="1.5" PointX="6.75" PointY="0.75" />
