@@ -43,18 +43,29 @@ namespace Tabang_Hub.Repository
             var userLogin = GetUserByEmail(email);
             if (userLogin == null)
             {
-                errMsg = "User not exist!";
+                errMsg = "User does not exist!";
                 return ErrorCode.Error;
             }
 
             if (!userLogin.password.Equals(password))
             {
-                errMsg = "Password is Incorrect";
+                errMsg = "Password is incorrect";
                 return ErrorCode.Error;
             }
 
-            // user exist
-            errMsg = "Login Successful";
+            // Check if roleId is not equal to 3
+            if (userLogin.roleId != 3)
+            {
+                // Ensure the email is a Gmail address
+                if (!email.EndsWith("@gmail.com", StringComparison.OrdinalIgnoreCase))
+                {
+                    errMsg = "Only Gmail addresses are allowed for this role";
+                    return ErrorCode.Error;
+                }
+            }
+
+            // User exists, password is correct, and role/email checks passed
+            errMsg = "Login successful";
             return ErrorCode.Success;
         }
 

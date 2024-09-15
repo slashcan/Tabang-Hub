@@ -24,7 +24,7 @@ namespace Tabang_Hub.Repository
         private BaseRepository<OrgValidation> _orgValidation;
         private BaseRepository<OrgInfo> _orgInfo;
         private BaseRepository<Skills> _skills;
-
+        
         public AdminManager()
         {
             _volunteerAccounts = new BaseRepository<vw_VolunteerAccounts>();
@@ -113,6 +113,10 @@ namespace Tabang_Hub.Repository
         public Skills GetSkillById(int skillId)
         {
             return _skills._table.Where(m => m.skillId == skillId).FirstOrDefault();
+        }
+        public List<VolunteerSkill> GetVolunteerSkillsBySkillId(int skillId)
+        { 
+            return _volunteerSkill._table.Where(m => m.skillId == skillId).ToList();
         }
         public ErrorCode DeleteUser(int userId)
         {
@@ -310,6 +314,18 @@ namespace Tabang_Hub.Repository
         public ErrorCode DeleteSkill(int skillId)
         {
             var skill = GetSkillById(skillId);
+            var volunteerSkill = GetVolunteerSkillsBySkillId(skillId);
+
+            if (volunteerSkill != null)
+            {
+                foreach (var skills in volunteerSkill)
+                {
+                    if (_volunteerSkill.Delete(skills.volunteerSkillId) != ErrorCode.Success)
+                    {
+                        return ErrorCode.Error;
+                    }
+                }
+            }
             if (skill != null)
             {
                 if (_skills.Delete(skill.skillId) != ErrorCode.Success)

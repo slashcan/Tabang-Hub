@@ -1,6 +1,30 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Schema Namespace="TabangHubModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="OrgEventHistory">
+    <Key>
+      <PropertyRef Name="orgEventsHistoryId" />
+    </Key>
+    <Property Name="orgEventsHistoryId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="eventId" Type="int" />
+    <Property Name="userId" Type="int" />
+    <Property Name="eventTitle" Type="nvarchar" MaxLength="255" />
+    <Property Name="eventDescription" Type="text" />
+    <Property Name="targetAmount" Type="decimal" Precision="10" Scale="2" />
+    <Property Name="maxVolunteer" Type="int" />
+    <Property Name="dateStart" Type="datetime" />
+    <Property Name="dateEnd" Type="datetime" />
+    <Property Name="location" Type="nvarchar" MaxLength="255" />
+    <Property Name="eventImage" Type="nvarchar" MaxLength="255" />
+  </EntityType>
   <EntityType Name="OrgEventImage">
+    <Key>
+      <PropertyRef Name="eventImageId" />
+    </Key>
+    <Property Name="eventImageId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="eventId" Type="int" />
+    <Property Name="eventImage" Type="nvarchar" MaxLength="255" />
+  </EntityType>
+  <EntityType Name="OrgEventImageHistory">
     <Key>
       <PropertyRef Name="eventImageId" />
     </Key>
@@ -41,6 +65,15 @@
     <Property Name="profilePath" Type="nvarchar" MaxLength="255" />
   </EntityType>
   <EntityType Name="OrgSkillRequirement">
+    <Key>
+      <PropertyRef Name="skillRequirementId" />
+    </Key>
+    <Property Name="skillRequirementId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="eventId" Type="int" />
+    <Property Name="skillId" Type="int" />
+    <Property Name="totalNeeded" Type="int" />
+  </EntityType>
+  <EntityType Name="OrgSkillRequirementsHistory">
     <Key>
       <PropertyRef Name="skillRequirementId" />
     </Key>
@@ -103,6 +136,16 @@
     <Property Name="amount" Type="decimal" Precision="10" Scale="2" />
     <Property Name="donatedAt" Type="datetime" />
   </EntityType>
+  <EntityType Name="UserDonatedHistory">
+    <Key>
+      <PropertyRef Name="orgUserDonatedId" />
+    </Key>
+    <Property Name="orgUserDonatedId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="eventId" Type="int" />
+    <Property Name="userId" Type="int" />
+    <Property Name="amount" Type="decimal" Precision="10" Scale="2" />
+    <Property Name="donatedAt" Type="datetime" />
+  </EntityType>
   <EntityType Name="UserRoles">
     <Key>
       <PropertyRef Name="userRoleId" />
@@ -141,11 +184,32 @@
     <Property Name="skillId" Type="int" />
     <Property Name="appliedAt" Type="date" />
   </EntityType>
+  <EntityType Name="VolunteersHistory">
+    <Key>
+      <PropertyRef Name="applyVolunteerId" />
+    </Key>
+    <Property Name="applyVolunteerId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="userId" Type="int" />
+    <Property Name="eventId" Type="int" />
+    <Property Name="Status" Type="int" />
+    <Property Name="skillId" Type="int" />
+    <Property Name="appliedAt" Type="date" />
+  </EntityType>
   <EntityType Name="VolunteerSkill">
     <Key>
       <PropertyRef Name="volunteerSkillId" />
     </Key>
     <Property Name="volunteerSkillId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="userId" Type="int" />
+    <Property Name="skillId" Type="int" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'TabangHub.dbo.VolunteerSkillsHistory' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="VolunteerSkillsHistory">
+    <Key>
+      <PropertyRef Name="volunteerSkillId" />
+    </Key>
+    <Property Name="volunteerSkillId" Type="int" Nullable="false" />
     <Property Name="userId" Type="int" />
     <Property Name="skillId" Type="int" />
   </EntityType>
@@ -413,6 +477,18 @@ warning 6002: The table/view 'TabangHub.dbo.vw_VolunteerAccounts' does not have 
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_VolunteerSkillsHistory_Skills">
+    <End Role="Skills" Type="Self.Skills" Multiplicity="0..1" />
+    <End Role="VolunteerSkillsHistory" Type="Self.VolunteerSkillsHistory" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Skills">
+        <PropertyRef Name="skillId" />
+      </Principal>
+      <Dependent Role="VolunteerSkillsHistory">
+        <PropertyRef Name="skillId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Function Name="sp_CancelRequest" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="eventId" Type="int" Mode="In" />
     <Parameter Name="userId" Type="int" Mode="In" />
@@ -431,20 +507,32 @@ warning 6002: The table/view 'TabangHub.dbo.vw_VolunteerAccounts' does not have 
     <Parameter Name="userId" Type="int" Mode="In" />
   </Function>
   <EntityContainer Name="TabangHubModelStoreContainer">
+    <EntitySet Name="OrgEventHistory" EntityType="Self.OrgEventHistory" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="OrgEventImage" EntityType="Self.OrgEventImage" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="OrgEventImageHistory" EntityType="Self.OrgEventImageHistory" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="OrgEvents" EntityType="Self.OrgEvents" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="OrgInfo" EntityType="Self.OrgInfo" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="OrgSkillRequirement" EntityType="Self.OrgSkillRequirement" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="OrgSkillRequirementsHistory" EntityType="Self.OrgSkillRequirementsHistory" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="OrgValidation" EntityType="Self.OrgValidation" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ProfilePicture" EntityType="Self.ProfilePicture" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Skills" EntityType="Self.Skills" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="UserAccount" EntityType="Self.UserAccount" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="UserDonated" EntityType="Self.UserDonated" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="UserDonatedHistory" EntityType="Self.UserDonatedHistory" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="UserRoles" EntityType="Self.UserRoles" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="VolunteerInfo" EntityType="Self.VolunteerInfo" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Volunteers" EntityType="Self.Volunteers" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="VolunteersHistory" EntityType="Self.VolunteersHistory" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="VolunteerSkill" EntityType="Self.VolunteerSkill" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="VolunteerSkillsHistory" EntityType="Self.VolunteerSkillsHistory" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+[VolunteerSkillsHistory].[volunteerSkillId] AS [volunteerSkillId], 
+[VolunteerSkillsHistory].[userId] AS [userId], 
+[VolunteerSkillsHistory].[skillId] AS [skillId]
+FROM [dbo].[VolunteerSkillsHistory] AS [VolunteerSkillsHistory]</DefiningQuery>
+    </EntitySet>
     <EntitySet Name="vw_ListOfEvent" EntityType="Self.vw_ListOfEvent" store:Type="Views" store:Schema="dbo">
       <DefiningQuery>SELECT 
 [vw_ListOfEvent].[Event_Id] AS [Event_Id], 
@@ -565,6 +653,10 @@ FROM [dbo].[vw_VolunteerAccounts] AS [vw_VolunteerAccounts]</DefiningQuery>
     <AssociationSet Name="FK_Volunteers_UserAccount" Association="Self.FK_Volunteers_UserAccount">
       <End Role="UserAccount" EntitySet="UserAccount" />
       <End Role="Volunteers" EntitySet="Volunteers" />
+    </AssociationSet>
+    <AssociationSet Name="FK_VolunteerSkillsHistory_Skills" Association="Self.FK_VolunteerSkillsHistory_Skills">
+      <End Role="Skills" EntitySet="Skills" />
+      <End Role="VolunteerSkillsHistory" EntitySet="VolunteerSkillsHistory" />
     </AssociationSet>
   </EntityContainer>
 </Schema>

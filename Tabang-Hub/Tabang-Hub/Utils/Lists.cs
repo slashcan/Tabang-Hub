@@ -39,6 +39,10 @@ namespace Tabang_Hub.Utils
         public UserDonated userDonated { get; set; }
         public List<UserDonated> listofUserDonated { get; set; }
         public List<Volunteers> listOfEventVolunteers { get; set; }
+        public List<OrgEvents> recentEvents { get; set; }
+        public Dictionary<string, int> totalSkills { get; set; }
+        public List<UserDonated> recentDonators { get; set; }
+        public List<OrgEventHistory> orgEventHistory { get; set; }
 
         //Stored Procedure
         public List<sp_GetSkills_Result> uniqueSkill { get; set; }
@@ -46,5 +50,10 @@ namespace Tabang_Hub.Utils
 
         //View
         public List<vw_ListOfEvent> listOfEvents { get; set; }
+
+        public decimal totalDonation { get; set; }
+        public int totalVolunteer { get; set; }
+
+        public Dictionary<int, int> eventSummary { get; set; }
     }
 }

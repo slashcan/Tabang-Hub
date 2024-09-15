@@ -18,20 +18,26 @@
     <FunctionImport Name="sp_UserListEvent" ReturnType="Collection(TabangHubModel.sp_UserListEvent_Result)">
       <Parameter Name="userId" Mode="In" Type="Int32" />
     </FunctionImport>
+    <EntitySet Name="OrgEventHistory" EntityType="TabangHubModel.OrgEventHistory" />
     <EntitySet Name="OrgEventImage" EntityType="TabangHubModel.OrgEventImage" />
+    <EntitySet Name="OrgEventImageHistory" EntityType="TabangHubModel.OrgEventImageHistory" />
     <EntitySet Name="OrgEvents" EntityType="TabangHubModel.OrgEvents" />
     <EntitySet Name="OrgInfo" EntityType="TabangHubModel.OrgInfo" />
     <EntitySet Name="OrgSkillRequirement" EntityType="TabangHubModel.OrgSkillRequirement" />
+    <EntitySet Name="OrgSkillRequirementsHistory" EntityType="TabangHubModel.OrgSkillRequirementsHistory" />
     <EntitySet Name="OrgValidation" EntityType="TabangHubModel.OrgValidation" />
     <EntitySet Name="ProfilePicture" EntityType="TabangHubModel.ProfilePicture" />
     <EntitySet Name="Role" EntityType="TabangHubModel.Role" />
     <EntitySet Name="Skills" EntityType="TabangHubModel.Skills" />
     <EntitySet Name="UserAccount" EntityType="TabangHubModel.UserAccount" />
     <EntitySet Name="UserDonated" EntityType="TabangHubModel.UserDonated" />
+    <EntitySet Name="UserDonatedHistory" EntityType="TabangHubModel.UserDonatedHistory" />
     <EntitySet Name="UserRoles" EntityType="TabangHubModel.UserRoles" />
     <EntitySet Name="VolunteerInfo" EntityType="TabangHubModel.VolunteerInfo" />
     <EntitySet Name="Volunteers" EntityType="TabangHubModel.Volunteers" />
+    <EntitySet Name="VolunteersHistory" EntityType="TabangHubModel.VolunteersHistory" />
     <EntitySet Name="VolunteerSkill" EntityType="TabangHubModel.VolunteerSkill" />
+    <EntitySet Name="VolunteerSkillsHistory" EntityType="TabangHubModel.VolunteerSkillsHistory" />
     <EntitySet Name="vw_ListOfEvent" EntityType="TabangHubModel.vw_ListOfEvent" />
     <EntitySet Name="vw_OrganizationAccounts" EntityType="TabangHubModel.vw_OrganizationAccounts" />
     <EntitySet Name="vw_UserRoles" EntityType="TabangHubModel.vw_UserRoles" />
@@ -80,6 +86,10 @@
       <End Role="Skills" EntitySet="Skills" />
       <End Role="Volunteers" EntitySet="Volunteers" />
     </AssociationSet>
+    <AssociationSet Name="FK_VolunteerSkillsHistory_Skills" Association="TabangHubModel.FK_VolunteerSkillsHistory_Skills">
+      <End Role="Skills" EntitySet="Skills" />
+      <End Role="VolunteerSkillsHistory" EntitySet="VolunteerSkillsHistory" />
+    </AssociationSet>
     <AssociationSet Name="FK_UserDonated_UserAccount" Association="TabangHubModel.FK_UserDonated_UserAccount">
       <End Role="UserAccount" EntitySet="UserAccount" />
       <End Role="UserDonated" EntitySet="UserDonated" />
@@ -124,6 +134,22 @@
     <Property Type="DateTime" Name="dateStart" Nullable="true" Precision="23" />
     <Property Type="DateTime" Name="dateEnd" Nullable="true" Precision="23" />
   </ComplexType>
+  <EntityType Name="OrgEventHistory">
+    <Key>
+      <PropertyRef Name="orgEventsHistoryId" />
+    </Key>
+    <Property Name="orgEventsHistoryId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="eventId" Type="Int32" />
+    <Property Name="userId" Type="Int32" />
+    <Property Name="eventTitle" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="eventDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="targetAmount" Type="Decimal" Precision="10" Scale="2" />
+    <Property Name="maxVolunteer" Type="Int32" />
+    <Property Name="dateStart" Type="DateTime" Precision="3" />
+    <Property Name="dateEnd" Type="DateTime" Precision="3" />
+    <Property Name="location" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="eventImage" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+  </EntityType>
   <EntityType Name="OrgEventImage">
     <Key>
       <PropertyRef Name="eventImageId" />
@@ -132,6 +158,14 @@
     <Property Name="eventId" Type="Int32" />
     <Property Name="eventImage" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
     <NavigationProperty Name="OrgEvents" Relationship="TabangHubModel.FK_OrgEventImage_OrgEvents" FromRole="OrgEventImage" ToRole="OrgEvents" />
+  </EntityType>
+  <EntityType Name="OrgEventImageHistory">
+    <Key>
+      <PropertyRef Name="eventImageId" />
+    </Key>
+    <Property Name="eventImageId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="eventId" Type="Int32" />
+    <Property Name="eventImage" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
   </EntityType>
   <EntityType Name="OrgEvents">
     <Key>
@@ -182,6 +216,15 @@
     <NavigationProperty Name="OrgEvents" Relationship="TabangHubModel.FK_OrgSkillRequirement_OrgEvents" FromRole="OrgSkillRequirement" ToRole="OrgEvents" />
     <NavigationProperty Name="Skills" Relationship="TabangHubModel.FK_OrgSkillRequirement_Skills" FromRole="OrgSkillRequirement" ToRole="Skills" />
   </EntityType>
+  <EntityType Name="OrgSkillRequirementsHistory">
+    <Key>
+      <PropertyRef Name="skillRequirementId" />
+    </Key>
+    <Property Name="skillRequirementId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="eventId" Type="Int32" />
+    <Property Name="skillId" Type="Int32" />
+    <Property Name="totalNeeded" Type="Int32" />
+  </EntityType>
   <EntityType Name="OrgValidation">
     <Key>
       <PropertyRef Name="orgValidationId" />
@@ -220,6 +263,7 @@
     <NavigationProperty Name="OrgSkillRequirement" Relationship="TabangHubModel.FK_OrgSkillRequirement_Skills" FromRole="Skills" ToRole="OrgSkillRequirement" />
     <NavigationProperty Name="VolunteerSkill" Relationship="TabangHubModel.FK_Skills_UserAccount" FromRole="Skills" ToRole="VolunteerSkill" />
     <NavigationProperty Name="Volunteers" Relationship="TabangHubModel.FK_Volunteers_Skills" FromRole="Skills" ToRole="Volunteers" />
+    <NavigationProperty Name="VolunteerSkillsHistory" Relationship="TabangHubModel.FK_VolunteerSkillsHistory_Skills" FromRole="Skills" ToRole="VolunteerSkillsHistory" />
   </EntityType>
   <EntityType Name="UserAccount">
     <Key>
@@ -249,6 +293,16 @@
     <Property Name="donatedAt" Type="DateTime" Precision="3" />
     <NavigationProperty Name="OrgEvents" Relationship="TabangHubModel.FK_UserDonated_UserDonated" FromRole="UserDonated" ToRole="OrgEvents" />
     <NavigationProperty Name="UserAccount" Relationship="TabangHubModel.FK_UserDonated_UserAccount" FromRole="UserDonated" ToRole="UserAccount" />
+  </EntityType>
+  <EntityType Name="UserDonatedHistory">
+    <Key>
+      <PropertyRef Name="orgUserDonatedId" />
+    </Key>
+    <Property Name="orgUserDonatedId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="eventId" Type="Int32" />
+    <Property Name="userId" Type="Int32" />
+    <Property Name="amount" Type="Decimal" Precision="10" Scale="2" />
+    <Property Name="donatedAt" Type="DateTime" Precision="3" />
   </EntityType>
   <EntityType Name="UserRoles">
     <Key>
@@ -294,6 +348,17 @@
     <NavigationProperty Name="Skills" Relationship="TabangHubModel.FK_Volunteers_Skills" FromRole="Volunteers" ToRole="Skills" />
     <NavigationProperty Name="UserAccount" Relationship="TabangHubModel.FK_Volunteers_UserAccount" FromRole="Volunteers" ToRole="UserAccount" />
   </EntityType>
+  <EntityType Name="VolunteersHistory">
+    <Key>
+      <PropertyRef Name="applyVolunteerId" />
+    </Key>
+    <Property Name="applyVolunteerId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="userId" Type="Int32" />
+    <Property Name="eventId" Type="Int32" />
+    <Property Name="Status" Type="Int32" />
+    <Property Name="skillId" Type="Int32" />
+    <Property Name="appliedAt" Type="DateTime" Precision="0" />
+  </EntityType>
   <EntityType Name="VolunteerSkill">
     <Key>
       <PropertyRef Name="volunteerSkillId" />
@@ -302,6 +367,15 @@
     <Property Name="userId" Type="Int32" />
     <Property Name="skillId" Type="Int32" />
     <NavigationProperty Name="Skills" Relationship="TabangHubModel.FK_Skills_UserAccount" FromRole="VolunteerSkill" ToRole="Skills" />
+  </EntityType>
+  <EntityType Name="VolunteerSkillsHistory">
+    <Key>
+      <PropertyRef Name="volunteerSkillId" />
+    </Key>
+    <Property Name="volunteerSkillId" Type="Int32" Nullable="false" />
+    <Property Name="userId" Type="Int32" />
+    <Property Name="skillId" Type="Int32" />
+    <NavigationProperty Name="Skills" Relationship="TabangHubModel.FK_VolunteerSkillsHistory_Skills" FromRole="VolunteerSkillsHistory" ToRole="Skills" />
   </EntityType>
   <EntityType Name="vw_ListOfEvent">
     <Key>
@@ -507,6 +581,18 @@
         <PropertyRef Name="skillId" />
       </Principal>
       <Dependent Role="Volunteers">
+        <PropertyRef Name="skillId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_VolunteerSkillsHistory_Skills">
+    <End Type="TabangHubModel.Skills" Role="Skills" Multiplicity="0..1" />
+    <End Type="TabangHubModel.VolunteerSkillsHistory" Role="VolunteerSkillsHistory" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Skills">
+        <PropertyRef Name="skillId" />
+      </Principal>
+      <Dependent Role="VolunteerSkillsHistory">
         <PropertyRef Name="skillId" />
       </Dependent>
     </ReferentialConstraint>

@@ -28,20 +28,26 @@ namespace Tabang_Hub
             throw new UnintentionalCodeFirstException();
         }
     
+        public DbSet<OrgEventHistory> OrgEventHistory { get; set; }
         public DbSet<OrgEventImage> OrgEventImage { get; set; }
+        public DbSet<OrgEventImageHistory> OrgEventImageHistory { get; set; }
         public DbSet<OrgEvents> OrgEvents { get; set; }
         public DbSet<OrgInfo> OrgInfo { get; set; }
         public DbSet<OrgSkillRequirement> OrgSkillRequirement { get; set; }
+        public DbSet<OrgSkillRequirementsHistory> OrgSkillRequirementsHistory { get; set; }
         public DbSet<OrgValidation> OrgValidation { get; set; }
         public DbSet<ProfilePicture> ProfilePicture { get; set; }
         public DbSet<Role> Role { get; set; }
         public DbSet<Skills> Skills { get; set; }
         public DbSet<UserAccount> UserAccount { get; set; }
         public DbSet<UserDonated> UserDonated { get; set; }
+        public DbSet<UserDonatedHistory> UserDonatedHistory { get; set; }
         public DbSet<UserRoles> UserRoles { get; set; }
         public DbSet<VolunteerInfo> VolunteerInfo { get; set; }
         public DbSet<Volunteers> Volunteers { get; set; }
+        public DbSet<VolunteersHistory> VolunteersHistory { get; set; }
         public DbSet<VolunteerSkill> VolunteerSkill { get; set; }
+        public DbSet<VolunteerSkillsHistory> VolunteerSkillsHistory { get; set; }
         public DbSet<vw_ListOfEvent> vw_ListOfEvent { get; set; }
         public DbSet<vw_OrganizationAccounts> vw_OrganizationAccounts { get; set; }
         public DbSet<vw_UserRoles> vw_UserRoles { get; set; }
