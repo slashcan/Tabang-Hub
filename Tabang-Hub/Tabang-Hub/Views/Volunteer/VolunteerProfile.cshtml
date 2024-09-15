@@ -85,8 +85,10 @@
                     <div id="skillsDisplay">
                         @foreach (var UserSkill in Model.volunteersSkills)
                         {
+                            var skillName = Model.skills.Where(m => m.skillId == UserSkill.skillId).Select(m => m.skillName).FirstOrDefault();
+
                             <span style="background-color: mediumseagreen; cursor: pointer" class="badge badge-secondary skill-badge" data-skill-id="@UserSkill.skillId">
-                                @UserSkill.skillName
+                                @Html.Raw(skillName)
                                 <span class="remove-skill d-none" onclick="removeSkill(this)">x</span>
                             </span>
                         }

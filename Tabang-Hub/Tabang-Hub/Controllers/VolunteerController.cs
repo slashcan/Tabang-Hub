@@ -45,7 +45,8 @@ namespace Tabang_Hub.Controllers
                 volunteersInfo = getVolunteerInfo,
                 volunteersSkills = getVolunteerSkills,
                 uniqueSkill = getUniqueSkill,
-                picture = getProfile
+                picture = getProfile,
+                skills = _skills.GetAll().ToList(),
             };
 
             return View(listModel);
@@ -202,29 +203,29 @@ namespace Tabang_Hub.Controllers
                 return Json(new { success = false, message = "Error" });
             }
         }
-        public ActionResult GeneralSkill()
-        {
-            var getEventImages = _eventImages.GetAll().ToList();
-            var getSkills = _skills.GetAll().ToList();
-            var getProfile = db.ProfilePicture.Where(m => m.userId == UserId).ToList();
-            var getEvents = _listsOfEvent.GetAll().ToList();
+        //public ActionResult GeneralSkill()
+        //{
+        //    var getEventImages = _eventImages.GetAll().ToList();
+        //    var getSkills = _skills.GetAll().ToList();
+        //    var getProfile = db.ProfilePicture.Where(m => m.userId == UserId).ToList();
+        //    var getEvents = _listsOfEvent.GetAll().ToList();
 
-            var getOrgEvents = _orgEvents.GetAll().FirstOrDefault();
-            var getOrgInfo = db.OrgInfo.Where(m => m.userId == getOrgEvents.userId).ToList();
+        //    var getOrgEvents = _orgEvents.GetAll().FirstOrDefault();
+        //    var getOrgInfo = db.OrgInfo.Where(m => m.userId == getOrgEvents.userId).ToList();
 
-            var getSkillRequirements = _skillRequirement.GetAll().ToList();
+        //    var getSkillRequirements = _skillRequirement.GetAll().ToList();
 
-            var indexModel = new Lists()
-            {
-                skills = getSkills,
-                picture = getProfile,
-                listOfEvents = getEvents,
-                orgInfos = getOrgInfo,
-                detailsSkillRequirement = getSkillRequirements,
-                detailsEventImage = getEventImages
-            };
-            return View(indexModel);
-        }
+        //    var indexModel = new Lists()
+        //    {
+        //        skills = getSkills,
+        //        picture = getProfile,
+        //        listOfEvents = getEvents,
+        //        orgInfos = getOrgInfo,
+        //        detailsSkillRequirement = getSkillRequirements,
+        //        detailsEventImage = getEventImages
+        //    };
+        //    return View(indexModel);
+        //}
         public ActionResult EventDetails(int? eventId)
         {
             try
@@ -251,6 +252,7 @@ namespace Tabang_Hub.Controllers
                         picture = getProfile,
                         orgInfos = getInfo,
                         detailsSkillRequirement = getSkillRequirmenet,
+                        skills = _skills.GetAll().ToList(),
                         detailsEventImage = getOrgImages,
                         orgEvents = getEvent,
                         orgOtherEvent = getOrgOtherEvent,
@@ -263,12 +265,12 @@ namespace Tabang_Hub.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("GeneralSkill"); //Error
+                    return RedirectToAction("../Page/Index"); //Error
                 }
             }
             catch (Exception)
             {
-                return RedirectToAction("GeneralSkill"); //Error
+                return RedirectToAction("../Page/Index"); //Error
             }
         }
         [HttpPost]

@@ -167,11 +167,11 @@
                         <h5>Skills Required</h5>
                         @foreach (var rk in Model.detailsSkillRequirement)
                         {
-                            {
-                                var skillName = Model.skills.Where(m => m.skillId == rk.skillId).FirstOrDefault();
-                            }
+                            
+                            var skillName = Model.skills.Where(m => m.skillId == rk.skillId).Select(m => m.skillName).FirstOrDefault();
+                            
                             <span style="background-color: mediumseagreen" id="badge" class="badge badge-secondary skill-badge">
-                                Html.Raw(skillName)
+                                @Html.Raw(skillName)
                             </span>
                         }
                     </div>
@@ -246,13 +246,12 @@
                                                 <div id="skillSelect">
                                                     @foreach (var skillsR in Model.detailsSkillRequirement)
                                                     {
-                                                        {
-                                                            var skillName = Model.skills.Where(m => m.skillId == skillsR.skillId).FirstOrDefault();
-                                                        }
+                                                        var skillName = Model.skills.Where(m => m.skillId == skillsR.skillId).Select(m => m.skillName).FirstOrDefault();
+                                                        
                                                         <div class="form-check">
-                                                            <input class="form-check-input" type="radio" name="skill" id="skill1" value="Html.Raw(skillName)" required>
-                                                            <label class="form-check-label" for="Html.Raw(skillName)">
-                                                                Html.Raw(skillName)
+                                                            <input class="form-check-input" type="radio" name="skill" id="skill1" value="@Html.Raw(skillName)" required>
+                                                            <label class="form-check-label" for="@Html.Raw(skillName)">
+                                                                @Html.Raw(skillName)
                                                             </label>
                                                         </div>
                                                     }
@@ -603,10 +602,15 @@
     });
 
     function toggleNavButtons() {
-        // Ensure the back button is always visible
-        prevButton.style.visibility = 'visible';
-        // The next button is always visible, no need to hide it
-        nextButton.style.visibility = 'visible';
+        if (cards.length <= 2) {
+            // Hide buttons if there are 2 or fewer cards
+            prevButton.style.display = 'none';
+            nextButton.style.display = 'none';
+        } else {
+            // Show buttons if more than 2 cards
+            prevButton.style.display = 'block';
+            nextButton.style.display = 'block';
+        }
     }
 
     // Initial setup
@@ -622,14 +626,8 @@
             // Recheck visibility on wider screens
             toggleNavButtons();
         }
-    }); prevButton.addEventListener('click', () => {
-        if (currentIndex > 0) {
-            currentIndex--;
-        } else {
-            currentIndex = cards.length - 3; // Reset to the last possible start position
-        }
-        updateCarousel();
     });
 
     updateCarousel(); // Initial update
+
 </script>

@@ -263,7 +263,7 @@
                                                     </p>
                                                     <p class="ms-auto mb-0">
                                                         <!-- <strong>Goal:</strong> -->
-                                                        ₱@evt.Total_Donation/₱@evt.Target_Amount
+                                                        ₱@(evt.Total_Donation.Equals(null) ? "0 " : evt.Total_Donation.ToString()) / ₱@evt.Target_Amount
                                                     </p>
                                                 </div>
                                             }
