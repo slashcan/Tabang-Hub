@@ -5,6 +5,24 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="TabangHubModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="GroupChat">
+          <Key>
+            <PropertyRef Name="groupChatId" />
+          </Key>
+          <Property Name="groupChatId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="eventId" Type="int" />
+          <Property Name="orgInfoId" Type="int" />
+        </EntityType>
+        <EntityType Name="GroupMessages">
+          <Key>
+            <PropertyRef Name="messageId" />
+          </Key>
+          <Property Name="messageId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="groupChatId" Type="int" />
+          <Property Name="userId" Type="int" />
+          <Property Name="message" Type="text" />
+          <Property Name="messageAt" Type="datetime" />
+        </EntityType>
         <EntityType Name="OrgEventHistory">
           <Key>
             <PropertyRef Name="orgEventsHistoryId" />
@@ -102,7 +120,7 @@
           <Key>
             <PropertyRef Name="profileId" />
           </Key>
-          <Property Name="profileId" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="profileId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="userId" Type="int" />
           <Property Name="profilePath" Type="nvarchar" MaxLength="255" />
         </EntityType>
@@ -174,7 +192,7 @@
           <Property Name="city" Type="nvarchar" MaxLength="255" />
           <Property Name="province" Type="nvarchar" MaxLength="255" />
           <Property Name="zipCode" Type="nvarchar" MaxLength="255" />
-          <Property Name="profilePath" Type="nvarchar" MaxLength="255" />
+          <Property Name="profilePath" Type="int" />
           <Property Name="availability" Type="nvarchar" MaxLength="25" />
           <Property Name="aboutMe" Type="text" />
         </EntityType>
@@ -302,6 +320,54 @@ warning 6002: The table/view 'TabangHub.dbo.vw_VolunteerAccounts' does not have 
           <Property Name="Availability" Type="nvarchar" MaxLength="25" />
           <Property Name="About_Me" Type="text" />
         </EntityType>
+        <Association Name="FK_GroupChat_OrgEvents">
+          <End Role="OrgEvents" Type="Self.OrgEvents" Multiplicity="0..1" />
+          <End Role="GroupChat" Type="Self.GroupChat" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OrgEvents">
+              <PropertyRef Name="eventId" />
+            </Principal>
+            <Dependent Role="GroupChat">
+              <PropertyRef Name="eventId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GroupChat_OrgInfo">
+          <End Role="OrgInfo" Type="Self.OrgInfo" Multiplicity="0..1" />
+          <End Role="GroupChat" Type="Self.GroupChat" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OrgInfo">
+              <PropertyRef Name="orgInfoId" />
+            </Principal>
+            <Dependent Role="GroupChat">
+              <PropertyRef Name="orgInfoId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GroupMessages_GroupChat">
+          <End Role="GroupChat" Type="Self.GroupChat" Multiplicity="0..1" />
+          <End Role="GroupMessages" Type="Self.GroupMessages" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GroupChat">
+              <PropertyRef Name="groupChatId" />
+            </Principal>
+            <Dependent Role="GroupMessages">
+              <PropertyRef Name="groupChatId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GroupMessages_UserAccount">
+          <End Role="UserAccount" Type="Self.UserAccount" Multiplicity="0..1" />
+          <End Role="GroupMessages" Type="Self.GroupMessages" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserAccount">
+              <PropertyRef Name="userId" />
+            </Principal>
+            <Dependent Role="GroupMessages">
+              <PropertyRef Name="userId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_OrgEventImage_OrgEvents">
           <End Role="OrgEvents" Type="Self.OrgEvents" Multiplicity="0..1" />
           <End Role="OrgEventImage" Type="Self.OrgEventImage" Multiplicity="*" />
@@ -498,11 +564,17 @@ warning 6002: The table/view 'TabangHub.dbo.vw_VolunteerAccounts' does not have 
           <Parameter Name="eventId" Type="int" Mode="In" />
           <Parameter Name="userId" Type="int" Mode="In" />
         </Function>
+        <Function Name="sp_GetAllMessage" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="groupChatId" Type="int" Mode="In" />
+        </Function>
         <Function Name="sp_GetSkills" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="userId" Type="int" Mode="In" />
         </Function>
         <Function Name="sp_LeaveEvent" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="eventId" Type="int" Mode="In" />
+          <Parameter Name="userId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="sp_ListOfGc" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="userId" Type="int" Mode="In" />
         </Function>
         <Function Name="sp_OtherEvent" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
@@ -512,6 +584,8 @@ warning 6002: The table/view 'TabangHub.dbo.vw_VolunteerAccounts' does not have 
           <Parameter Name="userId" Type="int" Mode="In" />
         </Function>
         <EntityContainer Name="TabangHubModelStoreContainer">
+          <EntitySet Name="GroupChat" EntityType="Self.GroupChat" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="GroupMessages" EntityType="Self.GroupMessages" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OrgEventHistory" EntityType="Self.OrgEventHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OrgEventImage" EntityType="Self.OrgEventImage" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OrgEventImageHistory" EntityType="Self.OrgEventImageHistory" Schema="dbo" store:Type="Tables" />
@@ -599,6 +673,22 @@ FROM [dbo].[vw_UserRoles] AS [vw_UserRoles]</DefiningQuery>
 [vw_VolunteerAccounts].[About_Me] AS [About_Me]
 FROM [dbo].[vw_VolunteerAccounts] AS [vw_VolunteerAccounts]</DefiningQuery>
           </EntitySet>
+          <AssociationSet Name="FK_GroupChat_OrgEvents" Association="Self.FK_GroupChat_OrgEvents">
+            <End Role="OrgEvents" EntitySet="OrgEvents" />
+            <End Role="GroupChat" EntitySet="GroupChat" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GroupChat_OrgInfo" Association="Self.FK_GroupChat_OrgInfo">
+            <End Role="OrgInfo" EntitySet="OrgInfo" />
+            <End Role="GroupChat" EntitySet="GroupChat" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GroupMessages_GroupChat" Association="Self.FK_GroupMessages_GroupChat">
+            <End Role="GroupChat" EntitySet="GroupChat" />
+            <End Role="GroupMessages" EntitySet="GroupMessages" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GroupMessages_UserAccount" Association="Self.FK_GroupMessages_UserAccount">
+            <End Role="UserAccount" EntitySet="UserAccount" />
+            <End Role="GroupMessages" EntitySet="GroupMessages" />
+          </AssociationSet>
           <AssociationSet Name="FK_OrgEventImage_OrgEvents" Association="Self.FK_OrgEventImage_OrgEvents">
             <End Role="OrgEvents" EntitySet="OrgEvents" />
             <End Role="OrgEventImage" EntitySet="OrgEventImage" />
@@ -686,6 +776,8 @@ FROM [dbo].[vw_VolunteerAccounts] AS [vw_VolunteerAccounts]</DefiningQuery>
           <FunctionImport Name="sp_UserListEvent" ReturnType="Collection(TabangHubModel.sp_UserListEvent_Result)">
           <Parameter Name="userId" Mode="In" Type="Int32" />
           </FunctionImport>
+          <EntitySet Name="GroupChat" EntityType="TabangHubModel.GroupChat" />
+          <EntitySet Name="GroupMessages" EntityType="TabangHubModel.GroupMessages" />
           <EntitySet Name="OrgEventHistory" EntityType="TabangHubModel.OrgEventHistory" />
           <EntitySet Name="OrgEventImage" EntityType="TabangHubModel.OrgEventImage" />
           <EntitySet Name="OrgEventImageHistory" EntityType="TabangHubModel.OrgEventImageHistory" />
@@ -710,6 +802,22 @@ FROM [dbo].[vw_VolunteerAccounts] AS [vw_VolunteerAccounts]</DefiningQuery>
           <EntitySet Name="vw_OrganizationAccounts" EntityType="TabangHubModel.vw_OrganizationAccounts" />
           <EntitySet Name="vw_UserRoles" EntityType="TabangHubModel.vw_UserRoles" />
           <EntitySet Name="vw_VolunteerAccounts" EntityType="TabangHubModel.vw_VolunteerAccounts" />
+          <AssociationSet Name="FK_GroupChat_OrgEvents" Association="TabangHubModel.FK_GroupChat_OrgEvents">
+            <End Role="OrgEvents" EntitySet="OrgEvents" />
+            <End Role="GroupChat" EntitySet="GroupChat" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GroupChat_OrgInfo" Association="TabangHubModel.FK_GroupChat_OrgInfo">
+            <End Role="OrgInfo" EntitySet="OrgInfo" />
+            <End Role="GroupChat" EntitySet="GroupChat" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GroupMessages_GroupChat" Association="TabangHubModel.FK_GroupMessages_GroupChat">
+            <End Role="GroupChat" EntitySet="GroupChat" />
+            <End Role="GroupMessages" EntitySet="GroupMessages" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GroupMessages_UserAccount" Association="TabangHubModel.FK_GroupMessages_UserAccount">
+            <End Role="UserAccount" EntitySet="UserAccount" />
+            <End Role="GroupMessages" EntitySet="GroupMessages" />
+          </AssociationSet>
           <AssociationSet Name="FK_OrgEventImage_OrgEvents" Association="TabangHubModel.FK_OrgEventImage_OrgEvents">
             <End Role="OrgEvents" EntitySet="OrgEvents" />
             <End Role="OrgEventImage" EntitySet="OrgEventImage" />
@@ -774,6 +882,12 @@ FROM [dbo].[vw_VolunteerAccounts] AS [vw_VolunteerAccounts]</DefiningQuery>
             <End Role="UserAccount" EntitySet="UserAccount" />
             <End Role="Volunteers" EntitySet="Volunteers" />
           </AssociationSet>
+          <FunctionImport Name="sp_ListOfGc" ReturnType="Collection(TabangHubModel.sp_ListOfGc_Result)">
+          <Parameter Name="userId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_GetAllMessage" ReturnType="Collection(TabangHubModel.sp_GetAllMessage_Result)">
+            <Parameter Name="groupChatId" Mode="In" Type="Int32" />
+          </FunctionImport>
           </EntityContainer>
         <ComplexType Name="sp_GetSkills_Result">
           <Property Type="Int32" Name="skillId" Nullable="false" />
@@ -801,6 +915,29 @@ FROM [dbo].[vw_VolunteerAccounts] AS [vw_VolunteerAccounts]</DefiningQuery>
           <Property Type="DateTime" Name="dateStart" Nullable="true" Precision="23" />
           <Property Type="DateTime" Name="dateEnd" Nullable="true" Precision="23" />
         </ComplexType>
+        <EntityType Name="GroupChat">
+          <Key>
+            <PropertyRef Name="groupChatId" />
+          </Key>
+          <Property Name="groupChatId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="eventId" Type="Int32" />
+          <Property Name="orgInfoId" Type="Int32" />
+          <NavigationProperty Name="OrgEvents" Relationship="TabangHubModel.FK_GroupChat_OrgEvents" FromRole="GroupChat" ToRole="OrgEvents" />
+          <NavigationProperty Name="OrgInfo" Relationship="TabangHubModel.FK_GroupChat_OrgInfo" FromRole="GroupChat" ToRole="OrgInfo" />
+          <NavigationProperty Name="GroupMessages" Relationship="TabangHubModel.FK_GroupMessages_GroupChat" FromRole="GroupChat" ToRole="GroupMessages" />
+        </EntityType>
+        <EntityType Name="GroupMessages">
+          <Key>
+            <PropertyRef Name="messageId" />
+          </Key>
+          <Property Name="messageId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="groupChatId" Type="Int32" />
+          <Property Name="userId" Type="Int32" />
+          <Property Name="message" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="messageAt" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="GroupChat" Relationship="TabangHubModel.FK_GroupMessages_GroupChat" FromRole="GroupMessages" ToRole="GroupChat" />
+          <NavigationProperty Name="UserAccount" Relationship="TabangHubModel.FK_GroupMessages_UserAccount" FromRole="GroupMessages" ToRole="UserAccount" />
+        </EntityType>
         <EntityType Name="OrgEventHistory">
           <Key>
             <PropertyRef Name="orgEventsHistoryId" />
@@ -848,6 +985,7 @@ FROM [dbo].[vw_VolunteerAccounts] AS [vw_VolunteerAccounts]</DefiningQuery>
           <Property Name="dateEnd" Type="DateTime" Precision="3" />
           <Property Name="location" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="eventImage" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="GroupChat" Relationship="TabangHubModel.FK_GroupChat_OrgEvents" FromRole="OrgEvents" ToRole="GroupChat" />
           <NavigationProperty Name="OrgEventImage" Relationship="TabangHubModel.FK_OrgEventImage_OrgEvents" FromRole="OrgEvents" ToRole="OrgEventImage" />
           <NavigationProperty Name="UserAccount" Relationship="TabangHubModel.FK_OrgEvents_UserAccount" FromRole="OrgEvents" ToRole="UserAccount" />
           <NavigationProperty Name="OrgSkillRequirement" Relationship="TabangHubModel.FK_OrgSkillRequirement_OrgEvents" FromRole="OrgEvents" ToRole="OrgSkillRequirement" />
@@ -870,6 +1008,7 @@ FROM [dbo].[vw_VolunteerAccounts] AS [vw_VolunteerAccounts]</DefiningQuery>
           <Property Name="province" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="zipCode" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="profilePath" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="GroupChat" Relationship="TabangHubModel.FK_GroupChat_OrgInfo" FromRole="OrgInfo" ToRole="GroupChat" />
           <NavigationProperty Name="UserAccount" Relationship="TabangHubModel.FK_OrgInfo_UserAccount" FromRole="OrgInfo" ToRole="UserAccount" />
         </EntityType>
         <EntityType Name="OrgSkillRequirement">
@@ -908,7 +1047,7 @@ FROM [dbo].[vw_VolunteerAccounts] AS [vw_VolunteerAccounts]</DefiningQuery>
           <Key>
             <PropertyRef Name="profileId" />
           </Key>
-          <Property Name="profileId" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="profileId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="userId" Type="Int32" />
           <Property Name="profilePath" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="VolunteerInfo" Relationship="TabangHubModel.FK_VolunteerInfo_ProfilePicture" FromRole="ProfilePicture" ToRole="VolunteerInfo" />
@@ -941,6 +1080,7 @@ FROM [dbo].[vw_VolunteerAccounts] AS [vw_VolunteerAccounts]</DefiningQuery>
           <Property Name="password" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="status" Type="Int16" Nullable="false" />
           <Property Name="roleId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="GroupMessages" Relationship="TabangHubModel.FK_GroupMessages_UserAccount" FromRole="UserAccount" ToRole="GroupMessages" />
           <NavigationProperty Name="OrgEvents" Relationship="TabangHubModel.FK_OrgEvents_UserAccount" FromRole="UserAccount" ToRole="OrgEvents" />
           <NavigationProperty Name="OrgInfo" Relationship="TabangHubModel.FK_OrgInfo_UserAccount" FromRole="UserAccount" ToRole="OrgInfo" />
           <NavigationProperty Name="OrgValidation" Relationship="TabangHubModel.FK_OrgValidation_UserAccount" FromRole="UserAccount" ToRole="OrgValidation" />
@@ -995,7 +1135,7 @@ FROM [dbo].[vw_VolunteerAccounts] AS [vw_VolunteerAccounts]</DefiningQuery>
           <Property Name="city" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="province" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="zipCode" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="profilePath" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="profilePath" Type="Int32" />
           <Property Name="availability" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
           <Property Name="aboutMe" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="ProfilePicture" Relationship="TabangHubModel.FK_VolunteerInfo_ProfilePicture" FromRole="VolunteerInfo" ToRole="ProfilePicture" />
@@ -1120,6 +1260,54 @@ FROM [dbo].[vw_VolunteerAccounts] AS [vw_VolunteerAccounts]</DefiningQuery>
           <Property Name="Availability" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
           <Property Name="About_Me" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
+        <Association Name="FK_GroupChat_OrgEvents">
+          <End Type="TabangHubModel.OrgEvents" Role="OrgEvents" Multiplicity="0..1" />
+          <End Type="TabangHubModel.GroupChat" Role="GroupChat" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OrgEvents">
+              <PropertyRef Name="eventId" />
+            </Principal>
+            <Dependent Role="GroupChat">
+              <PropertyRef Name="eventId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GroupChat_OrgInfo">
+          <End Type="TabangHubModel.OrgInfo" Role="OrgInfo" Multiplicity="0..1" />
+          <End Type="TabangHubModel.GroupChat" Role="GroupChat" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OrgInfo">
+              <PropertyRef Name="orgInfoId" />
+            </Principal>
+            <Dependent Role="GroupChat">
+              <PropertyRef Name="orgInfoId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GroupMessages_GroupChat">
+          <End Type="TabangHubModel.GroupChat" Role="GroupChat" Multiplicity="0..1" />
+          <End Type="TabangHubModel.GroupMessages" Role="GroupMessages" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GroupChat">
+              <PropertyRef Name="groupChatId" />
+            </Principal>
+            <Dependent Role="GroupMessages">
+              <PropertyRef Name="groupChatId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GroupMessages_UserAccount">
+          <End Type="TabangHubModel.UserAccount" Role="UserAccount" Multiplicity="0..1" />
+          <End Type="TabangHubModel.GroupMessages" Role="GroupMessages" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserAccount">
+              <PropertyRef Name="userId" />
+            </Principal>
+            <Dependent Role="GroupMessages">
+              <PropertyRef Name="userId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_OrgEventImage_OrgEvents">
           <End Type="TabangHubModel.OrgEvents" Role="OrgEvents" Multiplicity="0..1" />
           <End Type="TabangHubModel.OrgEventImage" Role="OrgEventImage" Multiplicity="*" />
@@ -1312,6 +1500,23 @@ FROM [dbo].[vw_VolunteerAccounts] AS [vw_VolunteerAccounts]</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <ComplexType Name="sp_ListOfGc_Result">
+          <Property Type="Int32" Name="groupChatId" Nullable="false" />
+          <Property Type="Int32" Name="userId" Nullable="true" />
+          <Property Type="Int32" Name="eventImageId" Nullable="false" />
+          <Property Type="String" Name="eventImage" Nullable="true" MaxLength="255" />
+          <Property Type="Int32" Name="eventId" Nullable="true" />
+          <Property Type="String" Name="eventTitle" Nullable="true" MaxLength="255" />
+        </ComplexType>
+        <ComplexType Name="sp_GetAllMessage_Result">
+          <Property Type="Int32" Name="groupChatId" Nullable="false" />
+          <Property Type="Int32" Name="messageId" Nullable="false" />
+          <Property Type="Int32" Name="userId" Nullable="true" />
+          <Property Type="String" Name="fName" Nullable="true" MaxLength="255" />
+          <Property Type="String" Name="lName" Nullable="true" MaxLength="255" />
+          <Property Type="String" Name="message" Nullable="true" MaxLength="Max" />
+          <Property Type="DateTime" Name="messageAt" Nullable="true" Precision="23" />
+        </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1358,6 +1563,26 @@ FROM [dbo].[vw_VolunteerAccounts] AS [vw_VolunteerAccounts]</DefiningQuery>
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <EntitySetMapping Name="GroupChat">
+            <EntityTypeMapping TypeName="TabangHubModel.GroupChat">
+              <MappingFragment StoreEntitySet="GroupChat">
+                <ScalarProperty Name="orgInfoId" ColumnName="orgInfoId" />
+                <ScalarProperty Name="eventId" ColumnName="eventId" />
+                <ScalarProperty Name="groupChatId" ColumnName="groupChatId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="GroupMessages">
+            <EntityTypeMapping TypeName="TabangHubModel.GroupMessages">
+              <MappingFragment StoreEntitySet="GroupMessages">
+                <ScalarProperty Name="messageAt" ColumnName="messageAt" />
+                <ScalarProperty Name="message" ColumnName="message" />
+                <ScalarProperty Name="userId" ColumnName="userId" />
+                <ScalarProperty Name="groupChatId" ColumnName="groupChatId" />
+                <ScalarProperty Name="messageId" ColumnName="messageId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="OrgEventHistory">
             <EntityTypeMapping TypeName="TabangHubModel.OrgEventHistory">
               <MappingFragment StoreEntitySet="OrgEventHistory">
@@ -1658,6 +1883,31 @@ FROM [dbo].[vw_VolunteerAccounts] AS [vw_VolunteerAccounts]</DefiningQuery>
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="sp_ListOfGc" FunctionName="TabangHubModel.Store.sp_ListOfGc">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="TabangHubModel.sp_ListOfGc_Result">
+                <ScalarProperty Name="groupChatId" ColumnName="groupChatId" />
+                <ScalarProperty Name="userId" ColumnName="userId" />
+                <ScalarProperty Name="eventImageId" ColumnName="eventImageId" />
+                <ScalarProperty Name="eventImage" ColumnName="eventImage" />
+                <ScalarProperty Name="eventId" ColumnName="eventId" />
+                <ScalarProperty Name="eventTitle" ColumnName="eventTitle" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_GetAllMessage" FunctionName="TabangHubModel.Store.sp_GetAllMessage">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="TabangHubModel.sp_GetAllMessage_Result">
+                <ScalarProperty Name="groupChatId" ColumnName="groupChatId" />
+                <ScalarProperty Name="messageId" ColumnName="messageId" />
+                <ScalarProperty Name="userId" ColumnName="userId" />
+                <ScalarProperty Name="fName" ColumnName="fName" />
+                <ScalarProperty Name="lName" ColumnName="lName" />
+                <ScalarProperty Name="message" ColumnName="message" />
+                <ScalarProperty Name="messageAt" ColumnName="messageAt" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

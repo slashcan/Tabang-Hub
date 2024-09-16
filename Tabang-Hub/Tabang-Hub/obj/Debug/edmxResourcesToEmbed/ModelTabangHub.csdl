@@ -18,6 +18,8 @@
     <FunctionImport Name="sp_UserListEvent" ReturnType="Collection(TabangHubModel.sp_UserListEvent_Result)">
       <Parameter Name="userId" Mode="In" Type="Int32" />
     </FunctionImport>
+    <EntitySet Name="GroupChat" EntityType="TabangHubModel.GroupChat" />
+    <EntitySet Name="GroupMessages" EntityType="TabangHubModel.GroupMessages" />
     <EntitySet Name="OrgEventHistory" EntityType="TabangHubModel.OrgEventHistory" />
     <EntitySet Name="OrgEventImage" EntityType="TabangHubModel.OrgEventImage" />
     <EntitySet Name="OrgEventImageHistory" EntityType="TabangHubModel.OrgEventImageHistory" />
@@ -42,6 +44,22 @@
     <EntitySet Name="vw_OrganizationAccounts" EntityType="TabangHubModel.vw_OrganizationAccounts" />
     <EntitySet Name="vw_UserRoles" EntityType="TabangHubModel.vw_UserRoles" />
     <EntitySet Name="vw_VolunteerAccounts" EntityType="TabangHubModel.vw_VolunteerAccounts" />
+    <AssociationSet Name="FK_GroupChat_OrgEvents" Association="TabangHubModel.FK_GroupChat_OrgEvents">
+      <End Role="OrgEvents" EntitySet="OrgEvents" />
+      <End Role="GroupChat" EntitySet="GroupChat" />
+    </AssociationSet>
+    <AssociationSet Name="FK_GroupChat_OrgInfo" Association="TabangHubModel.FK_GroupChat_OrgInfo">
+      <End Role="OrgInfo" EntitySet="OrgInfo" />
+      <End Role="GroupChat" EntitySet="GroupChat" />
+    </AssociationSet>
+    <AssociationSet Name="FK_GroupMessages_GroupChat" Association="TabangHubModel.FK_GroupMessages_GroupChat">
+      <End Role="GroupChat" EntitySet="GroupChat" />
+      <End Role="GroupMessages" EntitySet="GroupMessages" />
+    </AssociationSet>
+    <AssociationSet Name="FK_GroupMessages_UserAccount" Association="TabangHubModel.FK_GroupMessages_UserAccount">
+      <End Role="UserAccount" EntitySet="UserAccount" />
+      <End Role="GroupMessages" EntitySet="GroupMessages" />
+    </AssociationSet>
     <AssociationSet Name="FK_OrgEventImage_OrgEvents" Association="TabangHubModel.FK_OrgEventImage_OrgEvents">
       <End Role="OrgEvents" EntitySet="OrgEvents" />
       <End Role="OrgEventImage" EntitySet="OrgEventImage" />
@@ -106,6 +124,12 @@
       <End Role="UserAccount" EntitySet="UserAccount" />
       <End Role="Volunteers" EntitySet="Volunteers" />
     </AssociationSet>
+    <FunctionImport Name="sp_ListOfGc" ReturnType="Collection(TabangHubModel.sp_ListOfGc_Result)">
+      <Parameter Name="userId" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_GetAllMessage" ReturnType="Collection(TabangHubModel.sp_GetAllMessage_Result)">
+      <Parameter Name="groupChatId" Mode="In" Type="Int32" />
+    </FunctionImport>
   </EntityContainer>
   <ComplexType Name="sp_GetSkills_Result">
     <Property Type="Int32" Name="skillId" Nullable="false" />
@@ -133,6 +157,29 @@
     <Property Type="DateTime" Name="dateStart" Nullable="true" Precision="23" />
     <Property Type="DateTime" Name="dateEnd" Nullable="true" Precision="23" />
   </ComplexType>
+  <EntityType Name="GroupChat">
+    <Key>
+      <PropertyRef Name="groupChatId" />
+    </Key>
+    <Property Name="groupChatId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="eventId" Type="Int32" />
+    <Property Name="orgInfoId" Type="Int32" />
+    <NavigationProperty Name="OrgEvents" Relationship="TabangHubModel.FK_GroupChat_OrgEvents" FromRole="GroupChat" ToRole="OrgEvents" />
+    <NavigationProperty Name="OrgInfo" Relationship="TabangHubModel.FK_GroupChat_OrgInfo" FromRole="GroupChat" ToRole="OrgInfo" />
+    <NavigationProperty Name="GroupMessages" Relationship="TabangHubModel.FK_GroupMessages_GroupChat" FromRole="GroupChat" ToRole="GroupMessages" />
+  </EntityType>
+  <EntityType Name="GroupMessages">
+    <Key>
+      <PropertyRef Name="messageId" />
+    </Key>
+    <Property Name="messageId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="groupChatId" Type="Int32" />
+    <Property Name="userId" Type="Int32" />
+    <Property Name="message" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="messageAt" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="GroupChat" Relationship="TabangHubModel.FK_GroupMessages_GroupChat" FromRole="GroupMessages" ToRole="GroupChat" />
+    <NavigationProperty Name="UserAccount" Relationship="TabangHubModel.FK_GroupMessages_UserAccount" FromRole="GroupMessages" ToRole="UserAccount" />
+  </EntityType>
   <EntityType Name="OrgEventHistory">
     <Key>
       <PropertyRef Name="orgEventsHistoryId" />
@@ -180,6 +227,7 @@
     <Property Name="dateEnd" Type="DateTime" Precision="3" />
     <Property Name="location" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
     <Property Name="eventImage" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="GroupChat" Relationship="TabangHubModel.FK_GroupChat_OrgEvents" FromRole="OrgEvents" ToRole="GroupChat" />
     <NavigationProperty Name="OrgEventImage" Relationship="TabangHubModel.FK_OrgEventImage_OrgEvents" FromRole="OrgEvents" ToRole="OrgEventImage" />
     <NavigationProperty Name="UserAccount" Relationship="TabangHubModel.FK_OrgEvents_UserAccount" FromRole="OrgEvents" ToRole="UserAccount" />
     <NavigationProperty Name="OrgSkillRequirement" Relationship="TabangHubModel.FK_OrgSkillRequirement_OrgEvents" FromRole="OrgEvents" ToRole="OrgSkillRequirement" />
@@ -202,6 +250,7 @@
     <Property Name="province" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
     <Property Name="zipCode" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
     <Property Name="profilePath" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="GroupChat" Relationship="TabangHubModel.FK_GroupChat_OrgInfo" FromRole="OrgInfo" ToRole="GroupChat" />
     <NavigationProperty Name="UserAccount" Relationship="TabangHubModel.FK_OrgInfo_UserAccount" FromRole="OrgInfo" ToRole="UserAccount" />
   </EntityType>
   <EntityType Name="OrgSkillRequirement">
@@ -240,7 +289,7 @@
     <Key>
       <PropertyRef Name="profileId" />
     </Key>
-    <Property Name="profileId" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="profileId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="userId" Type="Int32" />
     <Property Name="profilePath" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
     <NavigationProperty Name="VolunteerInfo" Relationship="TabangHubModel.FK_VolunteerInfo_ProfilePicture" FromRole="ProfilePicture" ToRole="VolunteerInfo" />
@@ -273,6 +322,7 @@
     <Property Name="password" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
     <Property Name="status" Type="Int16" Nullable="false" />
     <Property Name="roleId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="GroupMessages" Relationship="TabangHubModel.FK_GroupMessages_UserAccount" FromRole="UserAccount" ToRole="GroupMessages" />
     <NavigationProperty Name="OrgEvents" Relationship="TabangHubModel.FK_OrgEvents_UserAccount" FromRole="UserAccount" ToRole="OrgEvents" />
     <NavigationProperty Name="OrgInfo" Relationship="TabangHubModel.FK_OrgInfo_UserAccount" FromRole="UserAccount" ToRole="OrgInfo" />
     <NavigationProperty Name="OrgValidation" Relationship="TabangHubModel.FK_OrgValidation_UserAccount" FromRole="UserAccount" ToRole="OrgValidation" />
@@ -327,7 +377,7 @@
     <Property Name="city" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
     <Property Name="province" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
     <Property Name="zipCode" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-    <Property Name="profilePath" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="profilePath" Type="Int32" />
     <Property Name="availability" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
     <Property Name="aboutMe" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
     <NavigationProperty Name="ProfilePicture" Relationship="TabangHubModel.FK_VolunteerInfo_ProfilePicture" FromRole="VolunteerInfo" ToRole="ProfilePicture" />
@@ -452,6 +502,54 @@
     <Property Name="Availability" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
     <Property Name="About_Me" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
   </EntityType>
+  <Association Name="FK_GroupChat_OrgEvents">
+    <End Type="TabangHubModel.OrgEvents" Role="OrgEvents" Multiplicity="0..1" />
+    <End Type="TabangHubModel.GroupChat" Role="GroupChat" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="OrgEvents">
+        <PropertyRef Name="eventId" />
+      </Principal>
+      <Dependent Role="GroupChat">
+        <PropertyRef Name="eventId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_GroupChat_OrgInfo">
+    <End Type="TabangHubModel.OrgInfo" Role="OrgInfo" Multiplicity="0..1" />
+    <End Type="TabangHubModel.GroupChat" Role="GroupChat" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="OrgInfo">
+        <PropertyRef Name="orgInfoId" />
+      </Principal>
+      <Dependent Role="GroupChat">
+        <PropertyRef Name="orgInfoId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_GroupMessages_GroupChat">
+    <End Type="TabangHubModel.GroupChat" Role="GroupChat" Multiplicity="0..1" />
+    <End Type="TabangHubModel.GroupMessages" Role="GroupMessages" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="GroupChat">
+        <PropertyRef Name="groupChatId" />
+      </Principal>
+      <Dependent Role="GroupMessages">
+        <PropertyRef Name="groupChatId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_GroupMessages_UserAccount">
+    <End Type="TabangHubModel.UserAccount" Role="UserAccount" Multiplicity="0..1" />
+    <End Type="TabangHubModel.GroupMessages" Role="GroupMessages" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserAccount">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="GroupMessages">
+        <PropertyRef Name="userId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_OrgEventImage_OrgEvents">
     <End Type="TabangHubModel.OrgEvents" Role="OrgEvents" Multiplicity="0..1" />
     <End Type="TabangHubModel.OrgEventImage" Role="OrgEventImage" Multiplicity="*" />
@@ -644,4 +742,21 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <ComplexType Name="sp_ListOfGc_Result">
+    <Property Type="Int32" Name="groupChatId" Nullable="false" />
+    <Property Type="Int32" Name="userId" Nullable="true" />
+    <Property Type="Int32" Name="eventImageId" Nullable="false" />
+    <Property Type="String" Name="eventImage" Nullable="true" MaxLength="255" />
+    <Property Type="Int32" Name="eventId" Nullable="true" />
+    <Property Type="String" Name="eventTitle" Nullable="true" MaxLength="255" />
+  </ComplexType>
+  <ComplexType Name="sp_GetAllMessage_Result">
+    <Property Type="Int32" Name="groupChatId" Nullable="false" />
+    <Property Type="Int32" Name="messageId" Nullable="false" />
+    <Property Type="Int32" Name="userId" Nullable="true" />
+    <Property Type="String" Name="fName" Nullable="true" MaxLength="255" />
+    <Property Type="String" Name="lName" Nullable="true" MaxLength="255" />
+    <Property Type="String" Name="message" Nullable="true" MaxLength="Max" />
+    <Property Type="DateTime" Name="messageAt" Nullable="true" Precision="23" />
+  </ComplexType>
 </Schema>

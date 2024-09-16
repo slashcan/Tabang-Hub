@@ -19,7 +19,7 @@ namespace Tabang_Hub
             this.VolunteerInfo = new HashSet<VolunteerInfo>();
         }
     
-        public string profileId { get; set; }
+        public int profileId { get; set; }
         public Nullable<int> userId { get; set; }
         public string profilePath { get; set; }
     

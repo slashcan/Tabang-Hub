@@ -43,10 +43,13 @@ namespace Tabang_Hub.Utils
         public Dictionary<string, int> totalSkills { get; set; }
         public List<UserDonated> recentDonators { get; set; }
         public List<OrgEventHistory> orgEventHistory { get; set; }
+        public List<GroupChat> groupChats { get; set; }
+        public List<GroupMessages> groupMessages { get; set; }
 
         //Stored Procedure
         public List<sp_GetSkills_Result> uniqueSkill { get; set; }
         public List<sp_OtherEvent_Result> orgOtherEvent { get; set; }
+        public List<sp_ListOfGc_Result> listOfGc { get; set; }
 
         //View
         public List<vw_ListOfEvent> listOfEvents { get; set; }

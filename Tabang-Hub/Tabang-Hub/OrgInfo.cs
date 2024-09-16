@@ -14,6 +14,11 @@ namespace Tabang_Hub
     
     public partial class OrgInfo
     {
+        public OrgInfo()
+        {
+            this.GroupChat = new HashSet<GroupChat>();
+        }
+    
         public int orgInfoId { get; set; }
         public Nullable<int> userId { get; set; }
         public string orgName { get; set; }
@@ -27,6 +32,7 @@ namespace Tabang_Hub
         public string zipCode { get; set; }
         public string profilePath { get; set; }
     
+        public virtual ICollection<GroupChat> GroupChat { get; set; }
         public virtual UserAccount UserAccount { get; set; }
     }
 }

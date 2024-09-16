@@ -16,6 +16,7 @@ namespace Tabang_Hub
     {
         public OrgEvents()
         {
+            this.GroupChat = new HashSet<GroupChat>();
             this.OrgEventImage = new HashSet<OrgEventImage>();
             this.OrgSkillRequirement = new HashSet<OrgSkillRequirement>();
             this.UserDonated = new HashSet<UserDonated>();
@@ -33,6 +34,7 @@ namespace Tabang_Hub
         public string location { get; set; }
         public string eventImage { get; set; }
     
+        public virtual ICollection<GroupChat> GroupChat { get; set; }
         public virtual ICollection<OrgEventImage> OrgEventImage { get; set; }
         public virtual UserAccount UserAccount { get; set; }
         public virtual ICollection<OrgSkillRequirement> OrgSkillRequirement { get; set; }

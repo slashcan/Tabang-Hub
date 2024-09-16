@@ -1,5 +1,23 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Schema Namespace="TabangHubModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="GroupChat">
+    <Key>
+      <PropertyRef Name="groupChatId" />
+    </Key>
+    <Property Name="groupChatId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="eventId" Type="int" />
+    <Property Name="orgInfoId" Type="int" />
+  </EntityType>
+  <EntityType Name="GroupMessages">
+    <Key>
+      <PropertyRef Name="messageId" />
+    </Key>
+    <Property Name="messageId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="groupChatId" Type="int" />
+    <Property Name="userId" Type="int" />
+    <Property Name="message" Type="text" />
+    <Property Name="messageAt" Type="datetime" />
+  </EntityType>
   <EntityType Name="OrgEventHistory">
     <Key>
       <PropertyRef Name="orgEventsHistoryId" />
@@ -97,7 +115,7 @@
     <Key>
       <PropertyRef Name="profileId" />
     </Key>
-    <Property Name="profileId" Type="nvarchar" MaxLength="255" Nullable="false" />
+    <Property Name="profileId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="userId" Type="int" />
     <Property Name="profilePath" Type="nvarchar" MaxLength="255" />
   </EntityType>
@@ -169,7 +187,7 @@
     <Property Name="city" Type="nvarchar" MaxLength="255" />
     <Property Name="province" Type="nvarchar" MaxLength="255" />
     <Property Name="zipCode" Type="nvarchar" MaxLength="255" />
-    <Property Name="profilePath" Type="nvarchar" MaxLength="255" />
+    <Property Name="profilePath" Type="int" />
     <Property Name="availability" Type="nvarchar" MaxLength="25" />
     <Property Name="aboutMe" Type="text" />
   </EntityType>
@@ -297,6 +315,54 @@ warning 6002: The table/view 'TabangHub.dbo.vw_VolunteerAccounts' does not have 
     <Property Name="Availability" Type="nvarchar" MaxLength="25" />
     <Property Name="About_Me" Type="text" />
   </EntityType>
+  <Association Name="FK_GroupChat_OrgEvents">
+    <End Role="OrgEvents" Type="Self.OrgEvents" Multiplicity="0..1" />
+    <End Role="GroupChat" Type="Self.GroupChat" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="OrgEvents">
+        <PropertyRef Name="eventId" />
+      </Principal>
+      <Dependent Role="GroupChat">
+        <PropertyRef Name="eventId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_GroupChat_OrgInfo">
+    <End Role="OrgInfo" Type="Self.OrgInfo" Multiplicity="0..1" />
+    <End Role="GroupChat" Type="Self.GroupChat" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="OrgInfo">
+        <PropertyRef Name="orgInfoId" />
+      </Principal>
+      <Dependent Role="GroupChat">
+        <PropertyRef Name="orgInfoId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_GroupMessages_GroupChat">
+    <End Role="GroupChat" Type="Self.GroupChat" Multiplicity="0..1" />
+    <End Role="GroupMessages" Type="Self.GroupMessages" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="GroupChat">
+        <PropertyRef Name="groupChatId" />
+      </Principal>
+      <Dependent Role="GroupMessages">
+        <PropertyRef Name="groupChatId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_GroupMessages_UserAccount">
+    <End Role="UserAccount" Type="Self.UserAccount" Multiplicity="0..1" />
+    <End Role="GroupMessages" Type="Self.GroupMessages" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserAccount">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="GroupMessages">
+        <PropertyRef Name="userId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_OrgEventImage_OrgEvents">
     <End Role="OrgEvents" Type="Self.OrgEvents" Multiplicity="0..1" />
     <End Role="OrgEventImage" Type="Self.OrgEventImage" Multiplicity="*" />
@@ -493,11 +559,17 @@ warning 6002: The table/view 'TabangHub.dbo.vw_VolunteerAccounts' does not have 
     <Parameter Name="eventId" Type="int" Mode="In" />
     <Parameter Name="userId" Type="int" Mode="In" />
   </Function>
+  <Function Name="sp_GetAllMessage" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="groupChatId" Type="int" Mode="In" />
+  </Function>
   <Function Name="sp_GetSkills" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="userId" Type="int" Mode="In" />
   </Function>
   <Function Name="sp_LeaveEvent" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="eventId" Type="int" Mode="In" />
+    <Parameter Name="userId" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_ListOfGc" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="userId" Type="int" Mode="In" />
   </Function>
   <Function Name="sp_OtherEvent" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
@@ -507,6 +579,8 @@ warning 6002: The table/view 'TabangHub.dbo.vw_VolunteerAccounts' does not have 
     <Parameter Name="userId" Type="int" Mode="In" />
   </Function>
   <EntityContainer Name="TabangHubModelStoreContainer">
+    <EntitySet Name="GroupChat" EntityType="Self.GroupChat" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="GroupMessages" EntityType="Self.GroupMessages" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="OrgEventHistory" EntityType="Self.OrgEventHistory" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="OrgEventImage" EntityType="Self.OrgEventImage" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="OrgEventImageHistory" EntityType="Self.OrgEventImageHistory" Schema="dbo" store:Type="Tables" />
@@ -594,6 +668,22 @@ FROM [dbo].[vw_UserRoles] AS [vw_UserRoles]</DefiningQuery>
 [vw_VolunteerAccounts].[About_Me] AS [About_Me]
 FROM [dbo].[vw_VolunteerAccounts] AS [vw_VolunteerAccounts]</DefiningQuery>
     </EntitySet>
+    <AssociationSet Name="FK_GroupChat_OrgEvents" Association="Self.FK_GroupChat_OrgEvents">
+      <End Role="OrgEvents" EntitySet="OrgEvents" />
+      <End Role="GroupChat" EntitySet="GroupChat" />
+    </AssociationSet>
+    <AssociationSet Name="FK_GroupChat_OrgInfo" Association="Self.FK_GroupChat_OrgInfo">
+      <End Role="OrgInfo" EntitySet="OrgInfo" />
+      <End Role="GroupChat" EntitySet="GroupChat" />
+    </AssociationSet>
+    <AssociationSet Name="FK_GroupMessages_GroupChat" Association="Self.FK_GroupMessages_GroupChat">
+      <End Role="GroupChat" EntitySet="GroupChat" />
+      <End Role="GroupMessages" EntitySet="GroupMessages" />
+    </AssociationSet>
+    <AssociationSet Name="FK_GroupMessages_UserAccount" Association="Self.FK_GroupMessages_UserAccount">
+      <End Role="UserAccount" EntitySet="UserAccount" />
+      <End Role="GroupMessages" EntitySet="GroupMessages" />
+    </AssociationSet>
     <AssociationSet Name="FK_OrgEventImage_OrgEvents" Association="Self.FK_OrgEventImage_OrgEvents">
       <End Role="OrgEvents" EntitySet="OrgEvents" />
       <End Role="OrgEventImage" EntitySet="OrgEventImage" />

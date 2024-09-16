@@ -8,6 +8,8 @@ namespace Tabang_Hub.Repository
 {
     public class OrganizationManager
     {
+        private readonly TabangHubEntities db;
+
         private BaseRepository<OrgEvents> _orgEvents;
         private BaseRepository<OrgSkillRequirement> _orgSkillRequirements;
         private BaseRepository<OrgEventImage> _orgEventsImage;
@@ -25,9 +27,13 @@ namespace Tabang_Hub.Repository
         private BaseRepository<VolunteersHistory> _volunteersHistory;
         private BaseRepository<OrgEventImageHistory> _orgEventImageHistory;
         private BaseRepository<VolunteerSkillsHistory> _volunteerSkillHistory;
+        private BaseRepository<GroupChat> _groupChat;
+        private BaseRepository<GroupMessages> _groupMessages;
 
         public OrganizationManager()
         {
+            db = new TabangHubEntities();
+
             _orgEvents = new BaseRepository<OrgEvents>();
             _orgSkillRequirements = new BaseRepository<OrgSkillRequirement>();
             _orgEventsImage = new BaseRepository<OrgEventImage>();
@@ -45,6 +51,8 @@ namespace Tabang_Hub.Repository
             _volunteersHistory = new BaseRepository<VolunteersHistory>();
             _orgEventImageHistory = new BaseRepository<OrgEventImageHistory>();
             _volunteerSkillHistory = new BaseRepository<VolunteerSkillsHistory>();
+            _groupChat = new BaseRepository<GroupChat>();
+            _groupMessages = new BaseRepository<GroupMessages>();
         }
 
 
@@ -58,6 +66,17 @@ namespace Tabang_Hub.Repository
 
             // Get the eventId of the newly created event
             int eventId = orgEvents.eventId;
+            int orgInfoId = db.OrgInfo.Where(m => m.userId == orgEvents.userId).Select(m => m.orgInfoId).FirstOrDefault();
+
+            var gc = new GroupChat
+            {
+                eventId = eventId,
+                orgInfoId = orgInfoId
+            };
+            if(_groupChat.Create(gc, out errMsg) != ErrorCode.Success)
+            {
+                return ErrorCode.Error;
+            }
 
             // Add each skill associated with the eventId            
             foreach (var skill in skills)

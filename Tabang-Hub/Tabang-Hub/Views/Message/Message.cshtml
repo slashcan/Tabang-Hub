@@ -7,75 +7,71 @@
 <div class="message-body">
     <div class="chat-list">
         <div class="chat-item-head">
-            <h2>Chats</h2>
+            <h2>Group Chats</h2>
         </div>
-        <div class="chat-item">
-            <img src="https://via.placeholder.com/40" alt="Profile">
-            <span>Org chat group1</span>
-        </div>
-        <div class="chat-item">
-            <img src="https://via.placeholder.com/40" alt="Profile">
-            <span>Org chat group2</span>
-        </div>
-        <div class="chat-item">
-            <img src="https://via.placeholder.com/40" alt="Profile">
-            <span>Org chat group3</span>
-        </div>
-        <div class="chat-item">
-            <img src="https://via.placeholder.com/40" alt="Profile">
-            <span>Org chat group4</span>
-        </div>
-        <div class="chat-item">
-            <img src="https://via.placeholder.com/40" alt="Profile">
-            <span>Org chat group5</span>
-        </div>
-        <div class="chat-item">
-            <img src="https://via.placeholder.com/40" alt="Profile">
-            <span>Org chat group6</span>
-        </div>
-        <div class="chat-item">
-            <img src="https://via.placeholder.com/40" alt="Profile">
-            <span>Org chat group7</span>
-        </div>
-        <div class="chat-item">
-            <img src="https://via.placeholder.com/40" alt="Profile">
-            <span>Org chat group8</span>
-        </div>
-        <div class="chat-item">
-            <img src="https://via.placeholder.com/40" alt="Profile">
-            <span>Org chat group9</span>
-        </div>
-        <div class="chat-item">
-            <img src="https://via.placeholder.com/40" alt="Profile">
-            <span>Org chat group10</span>
-        </div>
-        <div class="chat-item">
-            <img src="https://via.placeholder.com/40" alt="Profile">
-            <span>Org chat group11</span>
-        </div>
+        @foreach (var gc in Model.listOfGc)
+        {
+            <div class="chat-item">
+                <img src="https://via.placeholder.com/40" alt="Profile">
+                <span>@gc.eventTitle</span>
+                <input type="hidden" value="@gc.groupChatId" id="groupId" />
+                <input type="hidden" value="@gc.userId" id="userId" />
+            </div>
+        }
     </div>
+
+    <!-- Chat area for displaying messages -->
     <div class="chat-area">
-        <div class="messages">
-            <div class="message received"><span>wabalo</span></div>
-            <div class="message sent"><span>imong nawn wabalo</span></div>
-            <div class="message sent"><span>eyy</span></div>
-            <div class="message received"><span>Mao ni mag capstone, wabaloo</span></div>
-            <div class="message received"><span>Guwang Naman Gani ka ron</span></div>
-            <div class="message sent"><span>Shesshh</span></div>
-            <div class="message sent"><span>Oo</span></div>
-            <div class="message sent"><span>Messaging yarn?</span></div>
-            <div class="message received"><span>hmmmmm</span></div>
-            <div class="message received"><span>bawlang tawn ani</span></div>
-            <div class="message sent"><span>Hahahahaha</span></div>
-            <div class="message sent"><span>kapasar kaha ni?</span></div>
-            <div class="message received"><span>hmmmmm</span></div>
-            <div class="message sent"><span>Hahahahaha</span></div>
-            <div class="message received"><span>hmmmmm</span></div>
-            <div class="message sent"><span>Hahahahaha</span></div>
-        </div>
+        <div class="messages"></div>
         <div class="message-input">
-            <input type="text" placeholder="Type a message">
-            <button>Send</button>
+            <input type="text" id="message" placeholder="Type a message">
+            <button id="sendmessage">Send</button>
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+    $(function () {
+        // Declare a proxy to reference the hub
+        var chat = $.connection.chatHub;
+
+        // Function to display a message (appends to the chat-area)
+        chat.client.broadcastMessage = function (groupId, message, senderId) {
+            var messageClass = senderId === '@ViewBag.UserId' ? 'sent' : 'received';
+            var messageHtml = '<div class="message ' + messageClass + '"><span>' + htmlEncode(message) + '</span></div>';
+            $('.messages').append(messageHtml);
+            $('.messages').scrollTop($('.messages')[0].scrollHeight); // Auto-scroll to the bottom
+        };
+
+        // Function to load all previous messages when the page loads
+        chat.client.loadMessages = function (messages) {
+            $('.messages').empty(); // Clear the current messages
+            $.each(messages, function (index, message) {
+                var messageClass = message.senderId === '@ViewBag.UserId' ? 'sent' : 'received';
+                var messageHtml = '<div class="message ' + messageClass + '"><span>' + htmlEncode(message.message) + '</span></div>';
+                $('.messages').append(messageHtml);
+            });
+            $('.messages').scrollTop($('.messages')[0].scrollHeight); // Auto-scroll to the bottom
+        };
+
+        // Start the SignalR connection
+        $.connection.hub.start().done(function () {
+            // Load existing messages for the group when the connection starts
+            chat.server.getAllMessages($('#groupId').val());
+            // Send a message when the send button is clicked
+            $('#sendmessage').click(function () {
+                //chat.server.setUserInfo(document.getElementById('userId').value);
+                var message = $('#message').val();
+                if (message) {
+                    chat.server.send(document.getElementById('userId').value, $('#groupId').val(), message);
+                    $('#message').val('').focus(); // Clear the input and refocus
+                }
+            });
+        });
+
+        // Utility function to encode HTML special characters
+        function htmlEncode(value) {
+            return $('<div />').text(value).html();
+        }
+    });
+</script>

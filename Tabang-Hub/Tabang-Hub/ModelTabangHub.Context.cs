@@ -28,6 +28,8 @@ namespace Tabang_Hub
             throw new UnintentionalCodeFirstException();
         }
     
+        public DbSet<GroupChat> GroupChat { get; set; }
+        public DbSet<GroupMessages> GroupMessages { get; set; }
         public DbSet<OrgEventHistory> OrgEventHistory { get; set; }
         public DbSet<OrgEventImage> OrgEventImage { get; set; }
         public DbSet<OrgEventImageHistory> OrgEventImageHistory { get; set; }
@@ -104,6 +106,24 @@ namespace Tabang_Hub
                 new ObjectParameter("userId", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_UserListEvent_Result>("sp_UserListEvent", userIdParameter);
+        }
+    
+        public virtual ObjectResult<sp_ListOfGc_Result> sp_ListOfGc(Nullable<int> userId)
+        {
+            var userIdParameter = userId.HasValue ?
+                new ObjectParameter("userId", userId) :
+                new ObjectParameter("userId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_ListOfGc_Result>("sp_ListOfGc", userIdParameter);
+        }
+    
+        public virtual ObjectResult<sp_GetAllMessage_Result> sp_GetAllMessage(Nullable<int> groupChatId)
+        {
+            var groupChatIdParameter = groupChatId.HasValue ?
+                new ObjectParameter("groupChatId", groupChatId) :
+                new ObjectParameter("groupChatId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_GetAllMessage_Result>("sp_GetAllMessage", groupChatIdParameter);
         }
     }
 }
