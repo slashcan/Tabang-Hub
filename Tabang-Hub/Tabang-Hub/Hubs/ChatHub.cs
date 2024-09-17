@@ -16,12 +16,10 @@ namespace Tabang_Hub.Hubs
     public class ChatHub : Hub
     {
         private readonly TabangHubEntities _db;
-        private readonly BaseController _bcontroller;
 
         public ChatHub()
         {
             _db = new TabangHubEntities();
-            _bcontroller = new BaseController();
         }
         public void Send(int userId, int groupId, string message)
         {
@@ -29,6 +27,9 @@ namespace Tabang_Hub.Hubs
             {
                 return;
             }
+
+            var userInfo = _db.VolunteerInfo.Where(m => m.userId == userId).FirstOrDefault();
+            var userName = userInfo != null ? char.ToUpper(userInfo.fName[0]) + userInfo.fName.Substring(1) + ' ' + char.ToUpper(userInfo.lName[0]) + userInfo.lName.Substring(1) : "Unknown User";
 
             var gc = new GroupMessages
             {
@@ -41,7 +42,7 @@ namespace Tabang_Hub.Hubs
             _db.GroupMessages.Add(gc);
             _db.SaveChanges();
 
-            Clients.All.broadcastMessage(userId, message, groupId);
+            Clients.All.broadcastMessage(userName, userId, message, groupId);
         }
 
         public void GetAllMessages(int groupId)

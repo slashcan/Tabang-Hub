@@ -754,8 +754,7 @@
     <Property Type="Int32" Name="groupChatId" Nullable="false" />
     <Property Type="Int32" Name="messageId" Nullable="false" />
     <Property Type="Int32" Name="userId" Nullable="true" />
-    <Property Type="String" Name="fName" Nullable="true" MaxLength="255" />
-    <Property Type="String" Name="lName" Nullable="true" MaxLength="255" />
+    <Property Type="String" Name="userName" Nullable="false" MaxLength="513" />
     <Property Type="String" Name="message" Nullable="true" MaxLength="Max" />
     <Property Type="DateTime" Name="messageAt" Nullable="true" Precision="23" />
   </ComplexType>

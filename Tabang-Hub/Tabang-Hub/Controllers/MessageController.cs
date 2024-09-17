@@ -22,6 +22,8 @@ namespace Tabang_Hub.Controllers
 
             var listOfGC = db.sp_ListOfGc(UserId).ToList();
 
+            ViewBag.UserId = UserId;
+
             var indexModel = new Lists()
             {
                 picture = getProfile,

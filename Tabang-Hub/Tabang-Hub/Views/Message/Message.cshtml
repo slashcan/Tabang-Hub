@@ -11,7 +11,7 @@
         </div>
         @foreach (var gc in Model.listOfGc)
         {
-            <div class="chat-item">
+            <div class="chat-item" onclick="selectGroup('@gc.groupChatId')">
                 <img src="https://via.placeholder.com/40" alt="Profile">
                 <span>@gc.eventTitle</span>
                 <input type="hidden" value="@gc.groupChatId" id="groupId" />
@@ -31,36 +31,77 @@
 </div>
 
 <script type="text/javascript">
+
+    var currentUserId = '@ViewBag.UserId'.toString();
+    console.log("currentUserId: ", currentUserId);
+
+    var selectedGcID = null;
+    function selectGroup(groupId) {
+        console.log("Group ID: ", groupId);
+
+        selectedGcID = groupId;
+    }
+
     $(function () {
         // Declare a proxy to reference the hub
         var chat = $.connection.chatHub;
+        console.log("SELECTED GC: ", selectedGcID);
 
         // Function to display a message (appends to the chat-area)
-        chat.client.broadcastMessage = function (groupId, message, senderId) {
-            var messageClass = senderId === '@ViewBag.UserId' ? 'sent' : 'received';
-            var messageHtml = '<div class="message ' + messageClass + '"><span>' + htmlEncode(message) + '</span></div>';
+        chat.client.broadcastMessage = function (userName, senderId, message, groupId) {
+            console.log("senderId: ", senderId, "currentUserId: ", currentUserId, "groupId: ", groupId);
+            var messageClass = senderId.toString() === currentUserId ? 'sent' : 'received';
+
+            // Create message HTML with conditional userName display
+            var messageHtml = '<div class="message-container ' + messageClass + '">';
+
+            // Only display the name if the message is from another user (i.e., received)
+            if (messageClass === 'received') {
+                messageHtml += '<strong class="user-name">' + userName + '</strong>'; // Display the user's name above the message
+            }
+
+            messageHtml += '<div class="message ' + messageClass + '"><span>' + htmlEncode(message) + '</span></div>';
+            messageHtml += '</div>';
+
+            // Append the message to the chat area
             $('.messages').append(messageHtml);
-            $('.messages').scrollTop($('.messages')[0].scrollHeight); // Auto-scroll to the bottom
+
+            // Auto-scroll to the bottom after adding the message
+            $('.messages').scrollTop($('.messages')[0].scrollHeight);
         };
 
         // Function to load all previous messages when the page loads
         chat.client.loadMessages = function (messages) {
             $('.messages').empty(); // Clear the current messages
             $.each(messages, function (index, message) {
-                var messageClass = message.senderId === '@ViewBag.UserId' ? 'sent' : 'received';
-                var messageHtml = '<div class="message ' + messageClass + '"><span>' + htmlEncode(message.message) + '</span></div>';
+                var messageClass = message.userId.toString() === currentUserId ? 'sent' : 'received';
+
+                // Create message HTML with conditional userName display
+                var messageHtml = '<div class="message-container ' + messageClass + '">';
+
+                // Only display the name if the message is from another user (i.e., received)
+                if (messageClass === 'received') {
+                    messageHtml += '<strong class="user-name">' + message.userName + '</strong>'; // Display the user's name above the message
+                }
+
+                messageHtml += '<div class="message ' + messageClass + '"><span>' + htmlEncode(message.message) + '</span></div>';
+                messageHtml += '</div>';
+
+                // Append the message to the chat area
                 $('.messages').append(messageHtml);
             });
-            $('.messages').scrollTop($('.messages')[0].scrollHeight); // Auto-scroll to the bottom
+
+            // Auto-scroll to the bottom after loading messages
+            $('.messages').scrollTop($('.messages')[0].scrollHeight);
         };
 
         // Start the SignalR connection
         $.connection.hub.start().done(function () {
             // Load existing messages for the group when the connection starts
             chat.server.getAllMessages($('#groupId').val());
+
             // Send a message when the send button is clicked
             $('#sendmessage').click(function () {
-                //chat.server.setUserInfo(document.getElementById('userId').value);
                 var message = $('#message').val();
                 if (message) {
                     chat.server.send(document.getElementById('userId').value, $('#groupId').val(), message);
@@ -75,3 +116,5 @@
         }
     });
 </script>
+
+

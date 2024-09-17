@@ -16,8 +16,7 @@ namespace Tabang_Hub
         public int groupChatId { get; set; }
         public int messageId { get; set; }
         public Nullable<int> userId { get; set; }
-        public string fName { get; set; }
-        public string lName { get; set; }
+        public string userName { get; set; }
         public string message { get; set; }
         public Nullable<System.DateTime> messageAt { get; set; }
     }

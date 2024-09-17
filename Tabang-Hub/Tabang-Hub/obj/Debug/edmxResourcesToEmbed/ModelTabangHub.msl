@@ -379,8 +379,7 @@
           <ScalarProperty Name="groupChatId" ColumnName="groupChatId" />
           <ScalarProperty Name="messageId" ColumnName="messageId" />
           <ScalarProperty Name="userId" ColumnName="userId" />
-          <ScalarProperty Name="fName" ColumnName="fName" />
-          <ScalarProperty Name="lName" ColumnName="lName" />
+          <ScalarProperty Name="userName" ColumnName="userName" />
           <ScalarProperty Name="message" ColumnName="message" />
           <ScalarProperty Name="messageAt" ColumnName="messageAt" />
         </ComplexTypeMapping>
