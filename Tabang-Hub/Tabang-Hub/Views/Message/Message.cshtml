@@ -40,26 +40,43 @@
         console.log("Group ID: ", groupId);
 
         selectedGcID = groupId;
+
+        document.getElementById('message').disabled = false;
+        document.getElementById('sendmessage').disabled = false;
+
+        // Start SignalR connection when a group is selected
+        $.connection.hub.start().done(function () {
+            var chat = $.connection.chatHub;
+
+            // Load existing messages for the selected group
+            chat.server.getAllMessages(selectedGcID);
+
+            // Send a message when the send button is clicked
+            $('#sendmessage').click(function () {
+                var message = $('#message').val();
+                if (message) {
+                    chat.server.send(currentUserId, selectedGcID, message);
+                    $('#message').val('').focus(); // Clear the input and refocus
+                }
+            });
+        });
     }
 
     $(function () {
         // Declare a proxy to reference the hub
         var chat = $.connection.chatHub;
-        console.log("SELECTED GC: ", selectedGcID);
-
+        if (selectedGcID == null) {
+            document.getElementById('message').disabled = true;
+            document.getElementById('sendmessage').disabled = true;
+        }
         // Function to display a message (appends to the chat-area)
         chat.client.broadcastMessage = function (userName, senderId, message, groupId) {
-            console.log("senderId: ", senderId, "currentUserId: ", currentUserId, "groupId: ", groupId);
             var messageClass = senderId.toString() === currentUserId ? 'sent' : 'received';
 
-            // Create message HTML with conditional userName display
             var messageHtml = '<div class="message-container ' + messageClass + '">';
-
-            // Only display the name if the message is from another user (i.e., received)
             if (messageClass === 'received') {
-                messageHtml += '<strong class="user-name">' + userName + '</strong>'; // Display the user's name above the message
+                messageHtml += '<strong class="user-name">' + userName + '</strong>';
             }
-
             messageHtml += '<div class="message ' + messageClass + '"><span>' + htmlEncode(message) + '</span></div>';
             messageHtml += '</div>';
 
@@ -76,14 +93,10 @@
             $.each(messages, function (index, message) {
                 var messageClass = message.userId.toString() === currentUserId ? 'sent' : 'received';
 
-                // Create message HTML with conditional userName display
                 var messageHtml = '<div class="message-container ' + messageClass + '">';
-
-                // Only display the name if the message is from another user (i.e., received)
                 if (messageClass === 'received') {
-                    messageHtml += '<strong class="user-name">' + message.userName + '</strong>'; // Display the user's name above the message
+                    messageHtml += '<strong class="user-name">' + message.userName + '</strong>';
                 }
-
                 messageHtml += '<div class="message ' + messageClass + '"><span>' + htmlEncode(message.message) + '</span></div>';
                 messageHtml += '</div>';
 
@@ -94,21 +107,6 @@
             // Auto-scroll to the bottom after loading messages
             $('.messages').scrollTop($('.messages')[0].scrollHeight);
         };
-
-        // Start the SignalR connection
-        $.connection.hub.start().done(function () {
-            // Load existing messages for the group when the connection starts
-            chat.server.getAllMessages($('#groupId').val());
-
-            // Send a message when the send button is clicked
-            $('#sendmessage').click(function () {
-                var message = $('#message').val();
-                if (message) {
-                    chat.server.send(document.getElementById('userId').value, $('#groupId').val(), message);
-                    $('#message').val('').focus(); // Clear the input and refocus
-                }
-            });
-        });
 
         // Utility function to encode HTML special characters
         function htmlEncode(value) {
