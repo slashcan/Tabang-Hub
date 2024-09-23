@@ -41,6 +41,30 @@
         </ComplexTypeMapping>
       </ResultMapping>
     </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="sp_ListOfGc" FunctionName="TabangHubModel.Store.sp_ListOfGc">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="TabangHubModel.sp_ListOfGc_Result">
+          <ScalarProperty Name="groupChatId" ColumnName="groupChatId" />
+          <ScalarProperty Name="userId" ColumnName="userId" />
+          <ScalarProperty Name="eventImageId" ColumnName="eventImageId" />
+          <ScalarProperty Name="eventImage" ColumnName="eventImage" />
+          <ScalarProperty Name="eventId" ColumnName="eventId" />
+          <ScalarProperty Name="eventTitle" ColumnName="eventTitle" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="sp_GetAllMessage" FunctionName="TabangHubModel.Store.sp_GetAllMessage">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="TabangHubModel.sp_GetAllMessage_Result">
+          <ScalarProperty Name="groupChatId" ColumnName="groupChatId" />
+          <ScalarProperty Name="messageId" ColumnName="messageId" />
+          <ScalarProperty Name="userId" ColumnName="userId" />
+          <ScalarProperty Name="userName" ColumnName="userName" />
+          <ScalarProperty Name="message" ColumnName="message" />
+          <ScalarProperty Name="messageAt" ColumnName="messageAt" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
     <EntitySetMapping Name="GroupChat">
       <EntityTypeMapping TypeName="TabangHubModel.GroupChat">
         <MappingFragment StoreEntitySet="GroupChat">
@@ -298,7 +322,7 @@
           <ScalarProperty Name="Location" ColumnName="Location" />
           <ScalarProperty Name="End_Date" ColumnName="End_Date" />
           <ScalarProperty Name="Start_Date" ColumnName="Start_Date" />
-          <ScalarProperty Name="Max_Volunteer" ColumnName="Max_Volunteer" />
+          <ScalarProperty Name="Maximum_Volunteer" ColumnName="Maximum_Volunteer" />
           <ScalarProperty Name="Total_Volunteer" ColumnName="Total_Volunteer" />
           <ScalarProperty Name="Target_Amount" ColumnName="Target_Amount" />
           <ScalarProperty Name="Total_Donation" ColumnName="Total Donation" />
@@ -361,29 +385,5 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <FunctionImportMapping FunctionImportName="sp_ListOfGc" FunctionName="TabangHubModel.Store.sp_ListOfGc">
-      <ResultMapping>
-        <ComplexTypeMapping TypeName="TabangHubModel.sp_ListOfGc_Result">
-          <ScalarProperty Name="groupChatId" ColumnName="groupChatId" />
-          <ScalarProperty Name="userId" ColumnName="userId" />
-          <ScalarProperty Name="eventImageId" ColumnName="eventImageId" />
-          <ScalarProperty Name="eventImage" ColumnName="eventImage" />
-          <ScalarProperty Name="eventId" ColumnName="eventId" />
-          <ScalarProperty Name="eventTitle" ColumnName="eventTitle" />
-        </ComplexTypeMapping>
-      </ResultMapping>
-    </FunctionImportMapping>
-    <FunctionImportMapping FunctionImportName="sp_GetAllMessage" FunctionName="TabangHubModel.Store.sp_GetAllMessage">
-      <ResultMapping>
-        <ComplexTypeMapping TypeName="TabangHubModel.sp_GetAllMessage_Result">
-          <ScalarProperty Name="groupChatId" ColumnName="groupChatId" />
-          <ScalarProperty Name="messageId" ColumnName="messageId" />
-          <ScalarProperty Name="userId" ColumnName="userId" />
-          <ScalarProperty Name="userName" ColumnName="userName" />
-          <ScalarProperty Name="message" ColumnName="message" />
-          <ScalarProperty Name="messageAt" ColumnName="messageAt" />
-        </ComplexTypeMapping>
-      </ResultMapping>
-    </FunctionImportMapping>
   </EntityContainerMapping>
 </Mapping>

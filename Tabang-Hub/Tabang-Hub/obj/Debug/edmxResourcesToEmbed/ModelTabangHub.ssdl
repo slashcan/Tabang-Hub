@@ -244,7 +244,7 @@ warning 6002: The table/view 'TabangHub.dbo.vw_ListOfEvent' does not have a prim
     <Property Name="Total Donation" Type="decimal" Precision="38" Scale="2" />
     <Property Name="Target_Amount" Type="decimal" Precision="10" Scale="2" />
     <Property Name="Total_Volunteer" Type="int" />
-    <Property Name="Max_Volunteer" Type="int" />
+    <Property Name="Maximum_Volunteer" Type="int" />
     <Property Name="Start_Date" Type="datetime" />
     <Property Name="End_Date" Type="datetime" />
     <Property Name="Location" Type="nvarchar" MaxLength="255" />
@@ -616,7 +616,7 @@ FROM [dbo].[VolunteerSkillsHistory] AS [VolunteerSkillsHistory]</DefiningQuery>
 [vw_ListOfEvent].[Total Donation] AS [Total Donation], 
 [vw_ListOfEvent].[Target_Amount] AS [Target_Amount], 
 [vw_ListOfEvent].[Total_Volunteer] AS [Total_Volunteer], 
-[vw_ListOfEvent].[Max_Volunteer] AS [Max_Volunteer], 
+[vw_ListOfEvent].[Maximum_Volunteer] AS [Maximum_Volunteer], 
 [vw_ListOfEvent].[Start_Date] AS [Start_Date], 
 [vw_ListOfEvent].[End_Date] AS [End_Date], 
 [vw_ListOfEvent].[Location] AS [Location]

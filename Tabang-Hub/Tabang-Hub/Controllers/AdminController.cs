@@ -239,6 +239,34 @@ namespace Tabang_Hub.Controllers
             }
             return Json(new { success = true });
         }
+        public ActionResult Reports()
+        {
+
+            var userId = 35;
+            var orgInfo = _organizationManager.GetOrgInfoByUserId(userId);
+            var profile = _organizationManager.GetProfileByProfileId(userId);
+            var events = _organizationManager.ListOfEvents(userId);
+            var totalDonation = _organizationManager.GetTotalDonationByUserId(userId);
+            var totalVolunteer = _organizationManager.GetTotalVolunteerByUserId(userId);
+            var eventSummary = _organizationManager.GetEventsByUserId(userId);
+            var recentEvents = _organizationManager.GetRecentOngoingEventsByUserId(userId);
+            var totalSkills = _organizationManager.GetAllVolunteerSkills(userId);
+            var userDonated = _organizationManager.GetRecentUserDonationsByUserId(userId);
+
+            var indexModdel = new Lists()
+            {
+                OrgInfo = orgInfo,
+                listOfEvents = events,
+                totalDonation = totalDonation,
+                totalVolunteer = totalVolunteer,
+                eventSummary = eventSummary,
+                recentEvents = recentEvents,
+                totalSkills = totalSkills,
+                recentDonators = userDonated,
+                //profilePic = profile,
+            };
+            return View(indexModdel);
+        }
 
     }
 }

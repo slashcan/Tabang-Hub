@@ -753,3 +753,18 @@ C:\Users\arvie\OneDrive\Desktop\Tabang-Hub\Tabang-Hub\Tabang-Hub\Tabang-Hub\bin\
 C:\Users\arvie\OneDrive\Desktop\Tabang-Hub\Tabang-Hub\Tabang-Hub\Tabang-Hub\bin\Microsoft.Owin.Host.SystemWeb.xml
 C:\Users\arvie\OneDrive\Desktop\Tabang-Hub\Tabang-Hub\Tabang-Hub\Tabang-Hub\bin\Microsoft.Owin.Security.xml
 C:\Users\arvie\OneDrive\Desktop\Tabang-Hub\Tabang-Hub\Tabang-Hub\Tabang-Hub\bin\Newtonsoft.Json.xml
+D:\School Shits\Tabang-Hub\Tabang-Hub\Tabang-Hub\bin\Microsoft.AspNet.SignalR.Core.dll
+D:\School Shits\Tabang-Hub\Tabang-Hub\Tabang-Hub\bin\Microsoft.AspNet.SignalR.SystemWeb.dll
+D:\School Shits\Tabang-Hub\Tabang-Hub\Tabang-Hub\bin\Microsoft.Owin.dll
+D:\School Shits\Tabang-Hub\Tabang-Hub\Tabang-Hub\bin\Microsoft.Owin.Host.SystemWeb.dll
+D:\School Shits\Tabang-Hub\Tabang-Hub\Tabang-Hub\bin\Microsoft.Owin.Security.dll
+D:\School Shits\Tabang-Hub\Tabang-Hub\Tabang-Hub\bin\Newtonsoft.Json.dll
+D:\School Shits\Tabang-Hub\Tabang-Hub\Tabang-Hub\bin\Owin.dll
+D:\School Shits\Tabang-Hub\Tabang-Hub\Tabang-Hub\bin\Microsoft.AspNet.SignalR.Core.pdb
+D:\School Shits\Tabang-Hub\Tabang-Hub\Tabang-Hub\bin\Microsoft.AspNet.SignalR.Core.xml
+D:\School Shits\Tabang-Hub\Tabang-Hub\Tabang-Hub\bin\Microsoft.AspNet.SignalR.SystemWeb.pdb
+D:\School Shits\Tabang-Hub\Tabang-Hub\Tabang-Hub\bin\Microsoft.AspNet.SignalR.SystemWeb.xml
+D:\School Shits\Tabang-Hub\Tabang-Hub\Tabang-Hub\bin\Microsoft.Owin.xml
+D:\School Shits\Tabang-Hub\Tabang-Hub\Tabang-Hub\bin\Microsoft.Owin.Host.SystemWeb.xml
+D:\School Shits\Tabang-Hub\Tabang-Hub\Tabang-Hub\bin\Microsoft.Owin.Security.xml
+D:\School Shits\Tabang-Hub\Tabang-Hub\Tabang-Hub\bin\Newtonsoft.Json.xml

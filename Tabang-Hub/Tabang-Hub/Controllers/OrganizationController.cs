@@ -213,12 +213,20 @@ namespace Tabang_Hub.Controllers
             return RedirectToAction("EventsManagement");
         }
         [HttpPost]
-        public ActionResult EditEvent(Lists events, String[] skills, HttpPostedFileBase[] images, int eventId)
+        public ActionResult EditEvent(Lists events, Dictionary<string, int> skills, string[] skillsToRemove, HttpPostedFileBase[] images, int eventId)
         {
             string errMsg = string.Empty;
             var allowedExtensions = new List<string> { ".jpg", ".jpeg", ".png", ".gif" };
+
+            // Remove the "edit_" prefix from skill names, if present
+            var cleanedSkills = skills.ToDictionary(
+                entry => entry.Key.Replace("edit_", ""),  // This removes "edit_" from the skill name
+                entry => entry.Value
+            );
+
             List<string> uploadedFiles = new List<string>();
 
+            // Handle image uploads
             if (images != null && images.Length > 0)
             {
                 foreach (var image in images)
@@ -234,7 +242,7 @@ namespace Tabang_Hub.Controllers
                         }
 
                         var inputFileName = Path.GetFileName(image.FileName);
-                        var serverSavePath = Path.Combine(Server.MapPath("~/Content/IdPicture/"), inputFileName);
+                        var serverSavePath = Path.Combine(Server.MapPath("~/Content/Events/"), inputFileName);
 
                         if (!Directory.Exists(Server.MapPath("~/Content/Events/")))
                             Directory.CreateDirectory(Server.MapPath("~/Content/Events/"));
@@ -269,7 +277,8 @@ namespace Tabang_Hub.Controllers
                 }
             }
 
-            if (_organizationManager.EditEvent(events.CreateEvents, skills, uploadedFiles, eventId, ref errMsg) != ErrorCode.Success)
+            // Call the organization manager to edit the event, passing the cleaned skills and removed skills
+            if (_organizationManager.EditEvent(events.CreateEvents, cleanedSkills, skillsToRemove, uploadedFiles, eventId, ref errMsg) != ErrorCode.Success)
             {
                 ModelState.AddModelError(String.Empty, errMsg);
                 return RedirectToAction("Details", new { id = eventId });

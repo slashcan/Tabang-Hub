@@ -88,7 +88,7 @@
                         @foreach (var UserSkill in Model.volunteersSkills)
                         {
                             <span class="badge badge-secondary skill-badge" data-skill-id="@UserSkill.skillId">
-                                @UserSkill.skillName
+                                @UserSkill.Skills.skillName
                                 <span class="remove-skill d-none" onclick="removeSkill(this)">x</span>
                             </span>
                         }

@@ -21,7 +21,7 @@ namespace Tabang_Hub
         public Nullable<decimal> Total_Donation { get; set; }
         public Nullable<decimal> Target_Amount { get; set; }
         public Nullable<int> Total_Volunteer { get; set; }
-        public Nullable<int> Max_Volunteer { get; set; }
+        public Nullable<int> Maximum_Volunteer { get; set; }
         public Nullable<System.DateTime> Start_Date { get; set; }
         public Nullable<System.DateTime> End_Date { get; set; }
         public string Location { get; set; }
