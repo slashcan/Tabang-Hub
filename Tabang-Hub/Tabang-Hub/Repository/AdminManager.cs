@@ -24,7 +24,10 @@ namespace Tabang_Hub.Repository
         private BaseRepository<OrgValidation> _orgValidation;
         private BaseRepository<OrgInfo> _orgInfo;
         private BaseRepository<Skills> _skills;
-        
+        private BaseRepository<OrgEventHistory> _orgEventHistory;
+        private BaseRepository<VolunteerSkillsHistory> _volunteerSkillsHistory;
+
+
         public AdminManager()
         {
             _volunteerAccounts = new BaseRepository<vw_VolunteerAccounts>();
@@ -43,6 +46,8 @@ namespace Tabang_Hub.Repository
             _orgValidation = new BaseRepository<OrgValidation>();
             _orgInfo = new BaseRepository<OrgInfo>();
             _skills = new BaseRepository<Skills>();
+            _orgEventHistory = new BaseRepository<OrgEventHistory>();
+            _volunteerSkillsHistory = new BaseRepository<VolunteerSkillsHistory>();
         }
 
         public List<vw_VolunteerAccounts> GetVolunteerAccounts()
@@ -73,6 +78,11 @@ namespace Tabang_Hub.Repository
         {
             return _volunteerSkill.GetAll().Where(m => m.userId == userId).ToList();
         }
+        public List<VolunteerSkillsHistory> GetVolunteerSkillHistoryByUserId(int userId)
+        {
+            return _volunteerSkillsHistory.GetAll().Where(m => m.userId == userId).ToList();
+        }
+        
         public List<UserRoles> GetRolesByUserId(int userId)
         {
             return _userRoles.GetAll().Where(m => m.userId == userId).ToList();
@@ -117,6 +127,136 @@ namespace Tabang_Hub.Repository
         public List<VolunteerSkill> GetVolunteerSkillsBySkillId(int skillId)
         { 
             return _volunteerSkill._table.Where(m => m.skillId == skillId).ToList();
+        }
+        //Admin Reports
+        public List<VolunteerSkill> GetAllSkills()
+        { 
+            return _volunteerSkill.GetAll();
+        }
+        public List<VolunteerSkillsHistory> GetAllHistorySkills()
+        {
+            return _volunteerSkillsHistory.GetAll();
+        }
+        public Dictionary<string, int> GetAllVolunteerSkills()
+        {
+            // Step 1: Get the list of events created by the user (Organization or Event Creator)
+            var allSkills = GetAllSkills(); // Assuming ListOfEvents(userId) returns a list of events
+            var allSkillsHistory = GetAllHistorySkills();
+            // Step 2: Initialize a dictionary to count the frequency of each skill by name
+            Dictionary<string, int> skillFrequency = new Dictionary<string, int>();
+
+                // For each volunteer, get their skills
+                foreach (var volunteer in allSkills)
+                {
+                    // Assuming you have a method GetVolunteerSkillsByUserId to get the skills of a volunteer
+                    var skills = GetVolunteerSkillsByUserId((int)volunteer.userId);
+
+                    // Count the occurrence of each skill by its name
+                    foreach (var skill in skills)
+                    {
+                        if (skillFrequency.ContainsKey(skill.Skills.skillName)) // Assuming SkillName is a string representing the skill's name
+                        {
+                            skillFrequency[skill.Skills.skillName]++; // Increment count if skill already exists
+                        }
+                        else
+                        {
+                            skillFrequency[skill.Skills.skillName] = 1; // Initialize with count 1 if it doesn't exist
+                        }
+                    }
+                }
+
+            // For each volunteer, get their skills
+            foreach (var volunteer in allSkillsHistory)
+            {
+                // Assuming you have a method GetVolunteerSkillsByUserId to get the skills of a volunteer
+                var skills = GetVolunteerSkillHistoryByUserId((int)volunteer.userId);
+
+                // Count the occurrence of each skill by its name
+                foreach (var skill in skills)
+                {
+                    if (skillFrequency.ContainsKey(skill.Skills.skillName)) // Assuming SkillName is a string representing the skill's name
+                    {
+                        skillFrequency[skill.Skills.skillName]++; // Increment count if skill already exists
+                    }
+                    else
+                    {
+                        skillFrequency[skill.Skills.skillName] = 1; // Initialize with count 1 if it doesn't exist
+                    }
+                }
+            }  
+
+            // Step 4: Return the dictionary containing the skills and their counts
+            return skillFrequency;
+        }
+        public List<OrgEvents> GetAllEvents()
+        { 
+            return _orgEvents.GetAll();
+        }
+        public List<OrgEvents> GetAllRecentOrgEvents()
+        {
+            var recentEvents = _orgEvents._table
+                .Where(m => m.dateStart.HasValue && m.dateEnd.HasValue &&
+                            m.dateStart.Value <= DateTime.Now && m.dateEnd.Value > DateTime.Now)
+                // Events that have started but not yet ended
+                .OrderByDescending(m => m.dateStart.Value) // Order by dateStart, most recent first
+                .Take(5) // Get the top 5 most recent events
+                .ToList();
+
+            return recentEvents;
+        }
+        //public List<OrgInfo> GetAllRecentOrganization()
+        //{
+        //    var recentEvents = _orgInfo._table
+        //        .Where(m => m.UserAccount.roleId == 2 && m.createAd.HasValue &&
+        //                    m.dateStart.Value <= DateTime.Now && m.dateEnd.Value > DateTime.Now)
+        //        // Events that have started but not yet ended
+        //        .OrderByDescending(m => m.dateStart.Value) // Order by dateStart, most recent first
+        //        .Take(5) // Get the top 5 most recent events
+        //        .ToList();
+
+        //    return recentEvents;
+        //}
+        public Dictionary<int, int> AllEventSummary()
+        {
+            // Events from the main table
+            var eventSummary = _orgEvents._table
+                .Where(m => m.dateStart.HasValue && m.dateEnd.HasValue && m.dateEnd.Value <= DateTime.Now)
+                .GroupBy(m => m.dateStart.Value.Month)
+                .ToDictionary(
+                    group => group.Key,
+                    group => group.Count()
+                );
+
+            // Events from the history table
+            var historySummary = _orgEventHistory._table
+                .GroupBy(m => m.dateStart.Value.Month)
+                .ToDictionary(
+                    group => group.Key,
+                    group => group.Count()
+                );
+
+            // Merge the two dictionaries
+            foreach (var month in historySummary.Keys)
+            {
+                if (eventSummary.ContainsKey(month))
+                {
+                    eventSummary[month] += historySummary[month];
+                }
+                else
+                {
+                    eventSummary[month] = historySummary[month];
+                }
+            }
+
+            return eventSummary;
+        }
+        public List<VolunteerInfo> GetVolunteerAccount()
+        {
+            return _volunteerInfo.GetAll();
+        }
+        public List<OrgInfo> GetOrganizationAccount()
+        {
+            return _orgInfo.GetAll();
         }
         public ErrorCode DeleteUser(int userId)
         {

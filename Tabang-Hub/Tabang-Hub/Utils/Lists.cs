@@ -45,6 +45,10 @@ namespace Tabang_Hub.Utils
         public List<OrgEventHistory> orgEventHistory { get; set; }
         public List<GroupChat> groupChats { get; set; }
         public List<GroupMessages> groupMessages { get; set; }
+        public List<OrgEvents> getAllOrgEvents { get; set; }
+        public List<OrgInfo> getAllOrgAccounts { get; set; }
+        public List<VolunteerInfo> getAllVolunteerAccounts { get; set; }
+        public List<OrgEvents> getAllOrgEvent { get; set; } 
 
         //Stored Procedure
         public List<sp_GetSkills_Result> uniqueSkill { get; set; }
@@ -58,5 +62,6 @@ namespace Tabang_Hub.Utils
         public int totalVolunteer { get; set; }
 
         public Dictionary<int, int> eventSummary { get; set; }
+        public Dictionary<int, int> allEventSummary { get; set; }
     }
 }

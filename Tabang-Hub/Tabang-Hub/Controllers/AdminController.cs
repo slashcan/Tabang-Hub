@@ -239,30 +239,51 @@ namespace Tabang_Hub.Controllers
             }
             return Json(new { success = true });
         }
-        public ActionResult Reports()
+        public ActionResult Reports(int? organizationId = null)
         {
+            if (organizationId != null && organizationId != 0)
+            {
+                var orgInfo = _organizationManager.GetOrgInfoByUserId(organizationId);
+                var profile = _organizationManager.GetProfileByProfileId(organizationId);
+                var events = _organizationManager.ListOfEvents((int)organizationId);
+                var totalDonation = _organizationManager.GetTotalDonationByUserId((int)organizationId);
+                var totalVolunteer = _organizationManager.GetTotalVolunteerByUserId((int)organizationId);
+                var eventSummary = _organizationManager.GetEventsByUserId((int)organizationId);
+                var recentEvents1 = _organizationManager.GetRecentOngoingEventsByUserId((int)organizationId);
+                var totalSkills1 = _organizationManager.GetAllVolunteerSkills((int)organizationId);
+                var userDonated = _organizationManager.GetRecentUserDonationsByUserId((int)organizationId);
+                var allOrgAcc1 = _adminManager.GetOrganizationAccount();
 
-            var userId = 35;
-            var orgInfo = _organizationManager.GetOrgInfoByUserId(userId);
-            var profile = _organizationManager.GetProfileByProfileId(userId);
-            var events = _organizationManager.ListOfEvents(userId);
-            var totalDonation = _organizationManager.GetTotalDonationByUserId(userId);
-            var totalVolunteer = _organizationManager.GetTotalVolunteerByUserId(userId);
-            var eventSummary = _organizationManager.GetEventsByUserId(userId);
-            var recentEvents = _organizationManager.GetRecentOngoingEventsByUserId(userId);
-            var totalSkills = _organizationManager.GetAllVolunteerSkills(userId);
-            var userDonated = _organizationManager.GetRecentUserDonationsByUserId(userId);
+                var indexModdel1 = new Lists()
+                {
+                    OrgInfo = orgInfo,
+                    listOfEvents = events,
+                    totalDonation = totalDonation,
+                    totalVolunteer = totalVolunteer,
+                    eventSummary = eventSummary,
+                    recentEvents = recentEvents1,
+                    totalSkills = totalSkills1,
+                    recentDonators = userDonated,
+                    getAllOrgAccounts = allOrgAcc1,
+                    //profilePic = profile,
+                };
+                return View(indexModdel1);
+            }
+            var allOrgEvents = _adminManager.GetAllEvents();
+            var allOrgAcc = _adminManager.GetOrganizationAccount();
+            var allVolunteerAccounts = _adminManager.GetVolunteerAccount();
+            var allEvents = _adminManager.AllEventSummary();
+            var recentEvents = _adminManager.GetAllRecentOrgEvents();
+            var totalSkills = _adminManager.GetAllVolunteerSkills();
 
             var indexModdel = new Lists()
             {
-                OrgInfo = orgInfo,
-                listOfEvents = events,
-                totalDonation = totalDonation,
-                totalVolunteer = totalVolunteer,
-                eventSummary = eventSummary,
+                getAllOrgEvents = allOrgEvents,
+                getAllOrgAccounts = allOrgAcc,
+                getAllVolunteerAccounts = allVolunteerAccounts,
+                allEventSummary = allEvents,
                 recentEvents = recentEvents,
                 totalSkills = totalSkills,
-                recentDonators = userDonated,
                 //profilePic = profile,
             };
             return View(indexModdel);
