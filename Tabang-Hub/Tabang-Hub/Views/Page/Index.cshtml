@@ -224,11 +224,11 @@
                                             @{
                                                 double? Vol = Model.volunteers.Where(m => m.Status == 1 && m.eventId == evt.Event_Id).Count();
 
-                                                Vol = (Vol / evt.Max_Volunteer) * evt.Max_Volunteer;
+                                                Vol = (Vol / evt.Maximum_Volunteer) * evt.Maximum_Volunteer;
                                                 Console.Write(Vol);
                                             }
                                             <div class="progress mt-4">
-                                                <div class="progress-bar" style="width: @Html.Raw(Vol)%" role="progressbar" aria-valuenow="@evt.Max_Volunteer" aria-valuemin="0" aria-valuemax="100"></div>
+                                                <div class="progress-bar" style="width: @Html.Raw(Vol)%" role="progressbar" aria-valuenow="@evt.Maximum_Volunteer" aria-valuemin="0" aria-valuemax="100"></div>
                                             </div>
 
                                             <div class="d-flex align-items-center my-2">
@@ -239,7 +239,7 @@
 
                                                 <p class="ms-auto mb-0">
                                                     <!-- <strong>Goal:</strong> -->
-                                                    @Model.volunteers.Where(m => m.Status == 1 && m.eventId == evt.Event_Id).Count()/@evt.Max_Volunteer
+                                                    @Model.volunteers.Where(m => m.Status == 1 && m.eventId == evt.Event_Id).Count()/@evt.Maximum_Volunteer
                                                 </p>
                                             </div>
                                             @if (evt.Target_Amount != null)

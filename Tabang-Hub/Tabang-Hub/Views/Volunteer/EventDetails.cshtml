@@ -187,11 +187,11 @@
                         @{
                             double? Vol = Model.volunteers.Where(m => m.Status == 1).Count();
 
-                            Vol = (Vol / location.Max_Volunteer) * location.Max_Volunteer;
+                            Vol = (Vol / location.Maximum_Volunteer) * location.Maximum_Volunteer;
                             Console.Write(Vol);
                         }
-                        <div class="progress-bar" role="progressbar" style="width: @Html.Raw(Vol)%; background-color: mediumseagreen;" aria-valuenow="@location.Max_Volunteer" aria-valuemin="0" aria-valuemax="100"></div>
-                        <div class="progress-label">@Model.volunteers.Where(m => m.Status == 1).Count()/@location.Max_Volunteer</div>
+                        <div class="progress-bar" role="progressbar" style="width: @Html.Raw(Vol)%; background-color: mediumseagreen;" aria-valuenow="@location.Maximum_Volunteer" aria-valuemin="0" aria-valuemax="100"></div>
+                        <div class="progress-label">@Model.volunteers.Where(m => m.Status == 1).Count()/@location.Maximum_Volunteer</div>
                     </div>
                 }
 

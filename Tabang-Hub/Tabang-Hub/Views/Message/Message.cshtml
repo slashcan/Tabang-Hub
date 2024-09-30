@@ -4,19 +4,40 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <link href="~/Content/Css/message.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <div class="message-body">
     <div class="chat-list">
         <div class="chat-item-head">
             <h2>Group Chats</h2>
         </div>
-        @foreach (var gc in Model.listOfGc)
+        @if (Model.listOfGc == null)
         {
-            <div class="chat-item" onclick="selectGroup('@gc.groupChatId')">
-                <img src="https://via.placeholder.com/40" alt="Profile">
-                <span>@gc.eventTitle</span>
-                <input type="hidden" value="@gc.groupChatId" id="groupId" />
-                <input type="hidden" value="@gc.userId" id="userId" />
-            </div>
+            <script type="text/javascript">
+                Swal.fire({
+                    icon: 'error',
+                    title: 'No Group Chats available!',
+                    allowOutsideClick: false, // Prevent closing by clicking outside
+                    allowEscapeKey: false,    // Prevent closing by pressing escape key
+                    confirmButtonText: 'OK'   // Custom button text
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href = '@Url.Action("Index", "Page")'; // Redirect to Index page
+                    }
+                });
+            </script>
+        }
+        else
+        {
+            foreach (var gc in Model.listOfGc)
+            {
+                <div class="chat-item" onclick="selectGroup('@gc.groupChatId')">
+                    <img src="https://via.placeholder.com/40" alt="Profile">
+                    <span>@gc.eventTitle</span>
+                    <input type="hidden" value="@gc.groupChatId" id="groupId" />
+                    <input type="hidden" value="@gc.userId" id="userId" />
+                </div>
+            }
         }
     </div>
 
@@ -65,6 +86,25 @@
     $(function () {
         // Declare a proxy to reference the hub
         var chat = $.connection.chatHub;
+
+        // Notify when the group chat does not exist
+        chat.client.groupChatNotFound = function () {
+            Swal.fire({
+                icon: 'error',
+                title: 'Group Chat Not Found!',
+                text: 'The group chat you are trying to access does not exist.',
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                confirmButtonText: 'OK'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $('#message').val(''); // Clear the message input
+                    location.reload();
+                }
+            });
+        };
+
+
         if (selectedGcID == null) {
             document.getElementById('message').disabled = true;
             document.getElementById('sendmessage').disabled = true;

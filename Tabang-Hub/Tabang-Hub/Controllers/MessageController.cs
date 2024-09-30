@@ -12,28 +12,44 @@ namespace Tabang_Hub.Controllers
         // GET: Message
         public ActionResult Message()
         {
-            var getProfile = db.ProfilePicture.Where(m => m.userId == UserId).ToList();
-            var getEventProfile = db.OrgEventImage.Select(m => m.eventId).FirstOrDefault();
-
-            var checkVolunteers = db.Volunteers.Where(m => m.userId == UserId).FirstOrDefault();
-
-            var groupChatProfile = db.OrgEventImage.Where(m => m.eventId == checkVolunteers.eventId).ToList();
-            var getOrgEvent = _orgEvents.GetAll().Where(m => m.eventId == checkVolunteers.eventId).ToList();
-
-            var listOfGC = db.sp_ListOfGc(UserId).ToList();
-
-            ViewBag.UserId = UserId;
-
-            var indexModel = new Lists()
+            try
             {
-                picture = getProfile,
-                volunteersInfo = db.VolunteerInfo.Where(m => m.userId == UserId).ToList(),
-                detailsEventImage = groupChatProfile,
-                orgEvents = getOrgEvent,
-                listOfGc = listOfGC
-            };
+                var getProfile = db.ProfilePicture.Where(m => m.userId == UserId).ToList();
+                var getEventProfile = db.OrgEventImage.Select(m => m.eventId).FirstOrDefault();
 
-            return View(indexModel);
+                var checkVolunteers = db.Volunteers.Where(m => m.userId == UserId).FirstOrDefault();
+
+                var groupChatProfile = db.OrgEventImage.Where(m => m.eventId == checkVolunteers.eventId).ToList();
+                var getOrgEvent = _orgEvents.GetAll().Where(m => m.eventId == checkVolunteers.eventId).ToList();
+
+                var listOfGC = db.sp_ListOfGc(UserId).ToList();
+
+                ViewBag.UserId = UserId;
+
+                var indexModel = new Lists()
+                {
+                    picture = getProfile,
+                    volunteersInfo = db.VolunteerInfo.Where(m => m.userId == UserId).ToList(),
+                    detailsEventImage = groupChatProfile,
+                    orgEvents = getOrgEvent,
+                    listOfGc = listOfGC
+                };
+
+                return View(indexModel);
+            }
+            catch (Exception)
+            {
+                var indexModel = new Lists()
+                {
+                    picture = db.ProfilePicture.Where(m => m.userId == UserId).ToList(),
+                    volunteersInfo = db.VolunteerInfo.Where(m => m.userId == UserId).ToList(),
+                    detailsEventImage = null,
+                    orgEvents = null,
+                    listOfGc = null
+                };
+
+                return View(indexModel);
+            }
         }
     }
 }

@@ -31,6 +31,14 @@ namespace Tabang_Hub.Hubs
             var userInfo = _db.VolunteerInfo.Where(m => m.userId == userId).FirstOrDefault();
             var userName = userInfo != null ? char.ToUpper(userInfo.fName[0]) + userInfo.fName.Substring(1) + ' ' + char.ToUpper(userInfo.lName[0]) + userInfo.lName.Substring(1) : "Unknown User";
 
+            var groupChatExists = _db.GroupChat.Any(m => m.groupChatId == groupId);
+            if (!groupChatExists)
+            {
+                Clients.Caller.groupChatNotFound();
+                return;
+            }
+
+
             var gc = new GroupMessages
             {
                 message = message,
@@ -47,6 +55,14 @@ namespace Tabang_Hub.Hubs
 
         public void GetAllMessages(int groupId)
         {
+            var groupChatExists = _db.GroupChat.Any(m => m.groupChatId == groupId);
+
+            if (!groupChatExists)
+            {
+                Clients.Caller.groupChatNotFound();
+                return;
+            }
+
             var messages = _db.sp_GetAllMessage(groupId);
             Clients.Caller.loadMessages(messages);
         }
