@@ -259,7 +259,8 @@ namespace Tabang_Hub.Controllers
                         listOfEvents = getEvents,
                         volunteers = getVolunteers,
                         listofUserDonated = listofUserDonated,
-                        volunteersStatusEvent = volunteerStatusEvent
+                        volunteersStatusEvent = volunteerStatusEvent,
+                        matchSkill = db.sp_matchSkill(UserId).ToList(),
                     };
                     return View(indexModel);
                 }

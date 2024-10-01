@@ -130,6 +130,9 @@
       <End Role="UserAccount" EntitySet="UserAccount" />
       <End Role="Volunteers" EntitySet="Volunteers" />
     </AssociationSet>
+    <FunctionImport Name="sp_matchSkill" ReturnType="Collection(TabangHubModel.sp_matchSkill_Result)">
+      <Parameter Name="userId" Mode="In" Type="Int32" />
+    </FunctionImport>
   </EntityContainer>
   <ComplexType Name="sp_GetSkills_Result">
     <Property Type="Int32" Name="skillId" Nullable="false" />
@@ -758,4 +761,9 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <ComplexType Name="sp_matchSkill_Result">
+    <Property Type="Int32" Name="skillId" Nullable="true" />
+    <Property Type="Int32" Name="userId" Nullable="true" />
+    <Property Type="String" Name="skillName" Nullable="true" MaxLength="255" />
+  </ComplexType>
 </Schema>

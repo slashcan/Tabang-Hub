@@ -125,5 +125,14 @@ namespace Tabang_Hub
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_GetAllMessage_Result>("sp_GetAllMessage", groupChatIdParameter);
         }
+    
+        public virtual ObjectResult<sp_matchSkill_Result> sp_matchSkill(Nullable<int> userId)
+        {
+            var userIdParameter = userId.HasValue ?
+                new ObjectParameter("userId", userId) :
+                new ObjectParameter("userId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_matchSkill_Result>("sp_matchSkill", userIdParameter);
+        }
     }
 }

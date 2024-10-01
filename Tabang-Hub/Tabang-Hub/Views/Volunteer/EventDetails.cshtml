@@ -244,9 +244,9 @@
                                             <div class="form-group">
                                                 <label for="skillSelect">Select Required Skill</label>
                                                 <div id="skillSelect">
-                                                    @foreach (var skillsR in Model.detailsSkillRequirement)
+                                                    @foreach (var mskill in Model.matchSkill)
                                                     {
-                                                        var skillName = Model.skills.Where(m => m.skillId == skillsR.skillId).Select(m => m.skillName).FirstOrDefault();
+                                                        var skillName = Model.skills.Where(m => m.skillId == mskill.skillId).Select(m => m.skillName).FirstOrDefault();
                                                         
                                                         <div class="form-check">
                                                             <input class="form-check-input" type="radio" name="skill" id="skill1" value="@Html.Raw(skillName)" required>

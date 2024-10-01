@@ -1986,6 +1986,9 @@
     <Compile Include="sp_ListOfGc_Result.cs">
       <DependentUpon>ModelTabangHub.tt</DependentUpon>
     </Compile>
+    <Compile Include="sp_matchSkill_Result.cs">
+      <DependentUpon>ModelTabangHub.tt</DependentUpon>
+    </Compile>
     <Compile Include="sp_OtherEvent_Result.cs">
       <DependentUpon>ModelTabangHub.tt</DependentUpon>
     </Compile>
