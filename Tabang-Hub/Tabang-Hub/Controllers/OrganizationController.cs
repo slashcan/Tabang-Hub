@@ -9,6 +9,8 @@ using System.Web;
 using System.Web.Mvc;
 using Tabang_Hub.Repository;
 using Tabang_Hub.Utils;
+using System.Text;
+using Microsoft.AspNet.SignalR.Hubs;
 
 namespace Tabang_Hub.Controllers
 {
@@ -21,7 +23,7 @@ namespace Tabang_Hub.Controllers
             //var profile = _organizationManager.GetProfileByProfileId(orgInfo.profileId);
 
             var indexModel = new Lists()
-            { 
+            {
                 OrgInfo = orgInfo,
                 //profilePic = profile,
             };
@@ -390,5 +392,61 @@ namespace Tabang_Hub.Controllers
 
             return Json(new { success = true, message = "Events successfully transferred to history." });
         }
+        [HttpPost]
+        public ActionResult ExportData()
+        {
+            var csv = new StringBuilder();
+
+            var events = _organizationManager.ListOfEvents(UserId);
+            csv.AppendLine("Events Data");
+            csv.AppendLine("Event ID,User ID,Event Title,Event Description,Target Amount,Max Volunteers,Start Date,End Date,Location");
+            foreach (var evt in events)
+            {
+                csv.AppendLine($"{evt.Event_Id},{evt.User_Id},{evt.Event_Name},{evt.Description},{evt.Target_Amount},{evt.Maximum_Volunteer},{evt.Start_Date},{evt.End_Date},{evt.Location}");
+            }
+            csv.AppendLine();
+
+            csv.AppendLine("Skill Requirements Data");
+            csv.AppendLine("Skill Requirement ID,Event ID,Skill ID,Total Needed");
+            foreach (var evt in events)
+            {
+                var skillRequirements = _organizationManager.listOfSkillRequirement(evt.Event_Id);                
+                foreach (var skillReq in skillRequirements)
+                {
+                    csv.AppendLine($"{skillReq.skillRequirementId},{skillReq.eventId},{skillReq.skillId},{skillReq.totalNeeded}");
+                }               
+            }
+
+            csv.AppendLine();
+
+            csv.AppendLine("User Donations Data");
+            csv.AppendLine("Donation ID,Event ID,User ID,Amount,Donated At");
+            foreach (var evt in events)
+            {
+                var donations = _organizationManager.ListOfUserDonated(evt.Event_Id);
+                foreach (var userDonated in donations)
+                {
+                    csv.AppendLine($"{userDonated.orgUserDonatedId},{userDonated.eventId},{userDonated.userId},{userDonated.amount},{userDonated.donatedAt}");
+                }
+            }
+
+            csv.AppendLine();
+
+            csv.AppendLine("Volunteers");
+            csv.AppendLine("Applicants ID,User ID,Event ID,Status,Skill ID,Applied At");
+            foreach (var evt in events)
+            {
+                var volunteer = _organizationManager.GetVolunteersByEventId(evt.Event_Id);
+                foreach (var vol in volunteer)
+                {
+                    csv.AppendLine($"{vol.applyVolunteerId},{vol.userId},{vol.eventId},{vol.Status},{vol.skillId},{vol.appliedAt}");
+                }
+            }
+
+            byte[] fileBytes = Encoding.UTF8.GetBytes(csv.ToString());
+
+            return File(fileBytes, "text/csv", "OrganizationDataExport.csv");
+        }
+
     }
 }
