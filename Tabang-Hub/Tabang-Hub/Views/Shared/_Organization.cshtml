@@ -117,7 +117,14 @@
                                         </div>
                                         <div class="user-img d-flex align-items-center">
                                             <div class="avatar avatar-md">
-                                                <img src="@Url.Content(Model.OrgInfo.profilePath)">
+                                                @if (Model.OrgInfo.profilePath != null)
+                                                {
+                                                    <img src="@Url.Content(Model.OrgInfo.profilePath)">
+                                                }
+                                                else
+                                                {
+                                                    <img src="~/Content/IdPicture/programming 1.jpg" />
+                                                }
                                             </div>
                                         </div>
                                     </div>

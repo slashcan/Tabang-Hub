@@ -643,7 +643,7 @@ namespace Tabang_Hub.Controllers
             {
                 // Update user status to Active if OTP is correct            
                 _userManager.UpdateUserStatus(user.userId, (int)Status.Active, ref ErrorMessage);
-                if (TempData["login"] != null)
+                if (TempData["login"] == null || TempData["login"] != null)
                 {
                     FormsAuthentication.SetAuthCookie(user.email, false);
 

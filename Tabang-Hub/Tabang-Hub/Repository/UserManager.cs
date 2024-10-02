@@ -155,7 +155,16 @@ namespace Tabang_Hub.Repository
             var user = _userAcc.Get(userId);
             var uInfo = _volunteerInfo.GetAll().Where(m => m.userId == userId).FirstOrDefault();
 
-            if (user != null && uInfo != null)
+            if (user.roleId == 2)
+            {
+                user.status = newStatus;
+
+                if (_userAcc.Update(user.userId, user, out errMsg) != ErrorCode.Success)
+                {
+                    return ErrorCode.Error;
+                }
+            }
+            else if (user != null && uInfo != null)
             {
                 // Update the status field
                 user.status = newStatus;
@@ -170,6 +179,7 @@ namespace Tabang_Hub.Repository
                 errMsg = "User not found";
                 return ErrorCode.Error;
             }
+            return ErrorCode.Success;
         }
     }
 }
