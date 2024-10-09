@@ -37,6 +37,14 @@ namespace Tabang_Hub.Controllers
                         var getEvents = _listsOfEvent.GetAll().ToList();
                         var getOrgImages = _eventImages.GetAll().ToList();
 
+                        //var volSkillInfo = db.VolunteerSkill.Where(m => m.userId == UserId).Select(m => m.skillId).ToList();
+
+                        //var getOrgSkillReq = new List<OrgSkillRequirement>();
+                        //foreach (var skillId in volSkillInfo)
+                        //{
+                        //    getOrgSkillReq = db.OrgSkillRequirement.Where(m => m.skillId == skillId).ToList();
+                        //}
+
                         var orgEventsSelectId = _orgEvents.GetAll().Where(m => m.targetAmount != null).Select(m => m.eventId).ToList();
                         var orgEvents = _orgEvents.GetAll().Where(m => m.targetAmount != null).ToList();
 
@@ -57,6 +65,7 @@ namespace Tabang_Hub.Controllers
                             orgInfos = getOrgInfo,
                             listofUserDonated = getUserDonated,
                             detailsEventImage = getOrgImages,
+                            //detailsSkillRequirement = getOrgSkillReq,
                         };
                         return View(indexModel);
                     case 2:
