@@ -6,11 +6,14 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using Tabang_Hub.Repository;
 using Tabang_Hub.Utils;
+using System.Net.Http;
+using System.Collections.ObjectModel;
 
 namespace Tabang_Hub.Controllers
 {
@@ -18,7 +21,7 @@ namespace Tabang_Hub.Controllers
     public class PageController : BaseController
     {
         // GET: Page
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
             var user = _userManager.GetUserByEmail(User.Identity.Name);
             if (user != null)
@@ -37,14 +40,6 @@ namespace Tabang_Hub.Controllers
                         var getEvents = _listsOfEvent.GetAll().ToList();
                         var getOrgImages = _eventImages.GetAll().ToList();
 
-                        //var volSkillInfo = db.VolunteerSkill.Where(m => m.userId == UserId).Select(m => m.skillId).ToList();
-
-                        //var getOrgSkillReq = new List<OrgSkillRequirement>();
-                        //foreach (var skillId in volSkillInfo)
-                        //{
-                        //    getOrgSkillReq = db.OrgSkillRequirement.Where(m => m.skillId == skillId).ToList();
-                        //}
-
                         var orgEventsSelectId = _orgEvents.GetAll().Where(m => m.targetAmount != null).Select(m => m.eventId).ToList();
                         var orgEvents = _orgEvents.GetAll().Where(m => m.targetAmount != null).ToList();
 
@@ -54,18 +49,27 @@ namespace Tabang_Hub.Controllers
                             getUserDonated = _userDonated.GetAll().Where(m => m.eventId == eventId).ToList();
                         }
 
+                        var recommendedEvents = await RunRecommendation(UserId);
+
+                        var filteredEvent = new List<vw_ListOfEvent>();
+                        foreach (var recommendedEvent in recommendedEvents)
+                        {
+                            var matchedEvents = _listsOfEvent.GetAll().Where(m => m.Event_Id == recommendedEvent.EventID).ToList();
+                            filteredEvent.AddRange(matchedEvents);
+                        }
+
                         var indexModel = new Lists()
                         {
                             volunteersInfo = getInfo,
                             volunteersSkills = getVolunteerSkills,
                             skills = getSkills,
                             picture = getProfile,
-                            listOfEvents = getEvents,
+                            listOfEvents = filteredEvent,
                             volunteers = getVolunteers,
                             orgInfos = getOrgInfo,
                             listofUserDonated = getUserDonated,
                             detailsEventImage = getOrgImages,
-                            //detailsSkillRequirement = getOrgSkillReq,
+                            //filteredEvents = filteredEvent,
                         };
                         return View(indexModel);
                     case 2:
@@ -76,6 +80,32 @@ namespace Tabang_Hub.Controllers
             }
             return View();
         }
+        public async Task<List<FilteredEvent>> RunRecommendation(int userId)
+        {
+            string flaskApiUrl = "http://127.0.0.1:5000/predict";  // Flask API URL
+            List<FilteredEvent> recommendedEvents = new List<FilteredEvent>();
+
+            using (var client = new HttpClient())
+            {
+                var requestData = new { userId = userId }; // Create the request data
+                var response = await client.PostAsJsonAsync(flaskApiUrl, requestData); // Send POST request
+                var jsonResponse = await response.Content.ReadAsStringAsync(); // Get the response as JSON
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    ViewBag.PythonOutput = "Error calling the Python API: " + response.ReasonPhrase;
+                }
+                else
+                {
+                    // Parse the JSON response to a list of recommended events
+                    recommendedEvents = Newtonsoft.Json.JsonConvert.DeserializeObject<List<FilteredEvent>>(jsonResponse);
+                }
+            }
+
+            return recommendedEvents; // Return the list of recommended events
+        }
+
+
         [AllowAnonymous]
         public ActionResult ChooseRegister()
         {

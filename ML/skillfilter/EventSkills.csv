@@ -1,0 +1,141 @@
+eventID,skillID,skillName
+101,1,Cooking
+101,2,Painting
+101,3,Carpentry
+101,4,First Aid
+102,5,Wood Crafting
+102,6,Teaching
+102,7,Graphic Design
+102,8,Event Management
+103,9,Photography
+103,10,Fundraising
+103,11,Gardening
+103,12,Public Speaking
+104,13,Event Planning
+104,14,Leadership
+104,15,Team Building
+104,16,Mentoring
+105,1,Cooking
+105,2,Painting
+105,3,Carpentry
+105,17,Social Media Management
+106,18,Medical Assistance
+106,19,Crisis Response
+106,4,First Aid
+106,20,Community Outreach
+107,21,Childcare
+107,22,Animal Care
+107,23,Environmental Conservation
+107,8,Event Management
+108,24,Music Performance
+108,6,Teaching
+108,7,Graphic Design
+108,9,Photography
+109,25,Database Management
+109,3,Carpentry
+109,5,Wood Crafting
+109,26,Website Development
+110,2,Painting
+110,14,Leadership
+110,16,Mentoring
+110,27,Transportation Assistance
+111,4,First Aid
+111,19,Crisis Response
+111,9,Photography
+111,8,Event Management
+112,1,Cooking
+112,6,Teaching
+112,13,Event Planning
+112,7,Graphic Design
+113,5,Wood Crafting
+113,17,Social Media Management
+113,10,Fundraising
+113,11,Gardening
+114,18,Medical Assistance
+114,21,Childcare
+114,23,Environmental Conservation
+114,15,Team Building
+115,14,Leadership
+115,12,Public Speaking
+115,16,Mentoring
+115,2,Painting
+116,6,Teaching
+116,13,Event Planning
+116,7,Graphic Design
+116,17,Social Media Management
+117,3,Carpentry
+117,5,Wood Crafting
+117,24,Music Performance
+117,19,Crisis Response
+118,20,Community Outreach
+118,21,Childcare
+118,22,Animal Care
+118,4,First Aid
+119,1,Cooking
+119,2,Painting
+119,14,Leadership
+119,9,Photography
+120,7,Graphic Design
+120,10,Fundraising
+120,25,Database Management
+120,16,Mentoring
+121,5,Wood Crafting
+121,3,Carpentry
+121,12,Public Speaking
+121,27,Transportation Assistance
+122,2,Painting
+122,7,Graphic Design
+122,17,Social Media Management
+122,6,Teaching
+123,8,Event Management
+123,9,Photography
+123,18,Medical Assistance
+123,11,Gardening
+124,24,Music Performance
+124,19,Crisis Response
+124,5,Wood Crafting
+124,14,Leadership
+125,20,Community Outreach
+125,23,Environmental Conservation
+125,12,Public Speaking
+125,16,Mentoring
+126,2,Painting
+126,13,Event Planning
+126,15,Team Building
+126,6,Teaching
+127,9,Photography
+127,11,Gardening
+127,19,Crisis Response
+127,25,Database Management
+128,18,Medical Assistance
+128,1,Cooking
+128,17,Social Media Management
+128,27,Transportation Assistance
+129,5,Wood Crafting
+129,3,Carpentry
+129,22,Animal Care
+129,14,Leadership
+130,2,Painting
+130,9,Photography
+130,8,Event Management
+130,7,Graphic Design
+131,5,Wood Crafting
+131,26,Website Development
+132,3,Carpentry
+132,19,Crisis Response
+133,22,Animal Care
+133,1,Cooking
+134,9,Photography
+134,13,Event Planning
+135,8,Event Management
+135,17,Social Media Management
+136,20,Community Outreach
+136,18,Medical Assistance
+137,16,Mentoring
+137,4,First Aid
+138,21,Childcare
+138,12,Public Speaking
+139,7,Graphic Design
+139,9,Photography
+140,25,Database Management
+140,6,Teaching

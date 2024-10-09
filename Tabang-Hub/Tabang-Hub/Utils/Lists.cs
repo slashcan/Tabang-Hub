@@ -64,5 +64,7 @@ namespace Tabang_Hub.Utils
 
         public Dictionary<int, int> eventSummary { get; set; }
         public Dictionary<int, int> allEventSummary { get; set; }
+
+        public List<FilteredEvent> filteredEvents { get; set; }
     }
 }

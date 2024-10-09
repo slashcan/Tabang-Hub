@@ -1,0 +1,110 @@
+userID,skillID,skillName
+1,1,Cooking
+1,2,Painting
+1,5,Wood Crafting
+1,7,Graphic Design
+1,8,Event Management
+1,9,Photography
+2,3,Carpentry
+2,6,Teaching
+2,8,Event Management
+2,9,Photography
+2,12,Public Speaking
+2,19,Crisis Response
+3,4,First Aid
+3,10,Fundraising
+3,12,Public Speaking
+3,14,Leadership
+3,18,Medical Assistance
+3,16,Mentoring
+4,11,Gardening
+4,13,Event Planning
+4,15,Team Building
+4,16,Mentoring
+4,21,Childcare
+5,17,Social Media Management
+5,18,Medical Assistance
+5,19,Crisis Response
+5,21,Childcare
+5,24,Music Performance
+6,1,Cooking
+6,7,Graphic Design
+6,9,Photography
+6,11,Gardening
+6,26,Website Development
+6,5,Wood Crafting
+7,2,Painting
+7,3,Carpentry
+7,5,Wood Crafting
+7,13,Event Planning
+7,20,Community Outreach
+7,12,Public Speaking
+8,8,Event Management
+8,10,Fundraising
+8,12,Public Speaking
+8,14,Leadership
+8,18,Medical Assistance
+9,6,Teaching
+9,16,Mentoring
+9,19,Crisis Response
+9,20,Community Outreach
+9,23,Environmental Conservation
+9,22,Animal Care
+10,21,Childcare
+10,23,Environmental Conservation
+10,18,Medical Assistance
+10,4,First Aid
+10,7,Graphic Design
+10,14,Leadership
+11,22,Animal Care
+11,17,Social Media Management
+11,25,Database Management
+11,26,Website Development
+11,20,Community Outreach
+12,2,Painting
+12,13,Event Planning
+12,16,Mentoring
+12,9,Photography
+12,19,Crisis Response
+13,7,Graphic Design
+13,11,Gardening
+13,18,Medical Assistance
+13,19,Crisis Response
+13,24,Music Performance
+14,8,Event Management
+14,5,Wood Crafting
+14,3,Carpentry
+14,12,Public Speaking
+14,20,Community Outreach
+14,16,Mentoring
+15,1,Cooking
+15,10,Fundraising
+15,14,Leadership
+15,9,Photography
+15,17,Social Media Management
+16,22,Animal Care
+16,25,Database Management
+16,26,Website Development
+16,17,Social Media Management
+16,4,First Aid
+17,4,First Aid
+17,19,Crisis Response
+17,18,Medical Assistance
+17,8,Event Management
+17,21,Childcare
+18,23,Environmental Conservation
+18,21,Childcare
+18,20,Community Outreach
+18,12,Public Speaking
+18,14,Leadership
+18,16,Mentoring
+19,7,Graphic Design
+19,9,Photography
+19,14,Leadership
+19,10,Fundraising
+19,26,Website Development
+20,2,Painting
+20,3,Carpentry
+20,5,Wood Crafting
+20,11,Gardening
+20,9,Photography

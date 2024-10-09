@@ -216,6 +216,7 @@
           <Property Name="eventId" Type="int" />
           <Property Name="Status" Type="int" />
           <Property Name="skillId" Type="int" />
+          <Property Name="attended" Type="int" />
           <Property Name="appliedAt" Type="date" />
         </EntityType>
         <EntityType Name="VolunteerSkill">
@@ -892,7 +893,7 @@ FROM [dbo].[vw_VolunteerAccounts] AS [vw_VolunteerAccounts]</DefiningQuery>
             <End Role="Volunteers" EntitySet="Volunteers" />
           </AssociationSet>
           <FunctionImport Name="sp_matchSkill" ReturnType="Collection(TabangHubModel.sp_matchSkill_Result)">
-            <Parameter Name="userId" Mode="In" Type="Int32" />
+          <Parameter Name="userId" Mode="In" Type="Int32" />
           </FunctionImport>
           </EntityContainer>
         <ComplexType Name="sp_GetSkills_Result">
@@ -1187,6 +1188,7 @@ FROM [dbo].[vw_VolunteerAccounts] AS [vw_VolunteerAccounts]</DefiningQuery>
           <Property Name="Status" Type="Int32" />
           <Property Name="skillId" Type="Int32" />
           <Property Name="appliedAt" Type="DateTime" Precision="0" />
+          <Property Name="attended" Type="Int32" />
         </EntityType>
         <EntityType Name="VolunteerSkill">
           <Key>
@@ -1821,6 +1823,7 @@ FROM [dbo].[vw_VolunteerAccounts] AS [vw_VolunteerAccounts]</DefiningQuery>
           <EntitySetMapping Name="VolunteersHistory">
             <EntityTypeMapping TypeName="TabangHubModel.VolunteersHistory">
               <MappingFragment StoreEntitySet="VolunteersHistory">
+                <ScalarProperty Name="attended" ColumnName="attended" />
                 <ScalarProperty Name="appliedAt" ColumnName="appliedAt" />
                 <ScalarProperty Name="skillId" ColumnName="skillId" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
