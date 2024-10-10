@@ -132,6 +132,10 @@
     </AssociationSet>
     <FunctionImport Name="sp_matchSkill" ReturnType="Collection(TabangHubModel.sp_matchSkill_Result)">
       <Parameter Name="userId" Mode="In" Type="Int32" />
+      <Parameter Name="eventId" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_VolunteerHistory" ReturnType="Collection(TabangHubModel.sp_VolunteerHistory_Result)">
+      <Parameter Name="userId" Mode="In" Type="Int32" />
     </FunctionImport>
   </EntityContainer>
   <ComplexType Name="sp_GetSkills_Result">
@@ -766,5 +770,18 @@
     <Property Type="Int32" Name="skillId" Nullable="true" />
     <Property Type="Int32" Name="userId" Nullable="true" />
     <Property Type="String" Name="skillName" Nullable="true" MaxLength="255" />
+  </ComplexType>
+  <ComplexType Name="sp_VolunteerHistory_Result">
+    <Property Type="Int32" Name="VolHistoryId" Nullable="false" />
+    <Property Type="Int32" Name="userId" Nullable="true" />
+    <Property Type="Int32" Name="eventId" Nullable="true" />
+    <Property Type="Int32" Name="skillId" Nullable="true" />
+    <Property Type="String" Name="skillName" Nullable="true" MaxLength="255" />
+    <Property Type="String" Name="eventImage" Nullable="true" MaxLength="255" />
+    <Property Type="String" Name="eventTitle" Nullable="true" MaxLength="255" />
+    <Property Type="String" Name="location" Nullable="true" MaxLength="255" />
+    <Property Type="String" Name="eventDescription" Nullable="true" MaxLength="Max" />
+    <Property Type="DateTime" Name="dateStart" Nullable="true" Precision="23" />
+    <Property Type="DateTime" Name="dateEnd" Nullable="true" Precision="23" />
   </ComplexType>
 </Schema>

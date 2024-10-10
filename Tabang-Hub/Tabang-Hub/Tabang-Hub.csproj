@@ -2053,6 +2053,9 @@
     <Compile Include="sp_UserListEvent_Result.cs">
       <DependentUpon>ModelTabangHub.tt</DependentUpon>
     </Compile>
+    <Compile Include="sp_VolunteerHistory_Result.cs">
+      <DependentUpon>ModelTabangHub.tt</DependentUpon>
+    </Compile>
     <Compile Include="Startup.cs" />
     <Compile Include="UserAccount.cs">
       <DependentUpon>ModelTabangHub.tt</DependentUpon>

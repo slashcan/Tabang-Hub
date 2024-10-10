@@ -17,7 +17,7 @@ namespace Tabang_Hub.Controllers
                 var getProfile = db.ProfilePicture.Where(m => m.userId == UserId).ToList();
                 var getEventProfile = db.OrgEventImage.Select(m => m.eventId).FirstOrDefault();
 
-                var checkVolunteers = db.Volunteers.Where(m => m.userId == UserId).FirstOrDefault();
+                var checkVolunteers = db.Volunteers.Where(m => m.userId == UserId && m.Status != 0).FirstOrDefault();
 
                 var groupChatProfile = db.OrgEventImage.Where(m => m.eventId == checkVolunteers.eventId).ToList();
                 var getOrgEvent = _orgEvents.GetAll().Where(m => m.eventId == checkVolunteers.eventId).ToList();

@@ -74,6 +74,16 @@
         .img-title-container img {
             margin-right: 10px;
         }
+
+    .badge {
+        padding: 8px 12px;
+        font-size: 0.85rem;
+        margin-right: 5px;
+        background-color: mediumseagreen; /* Light gray background for badges */
+        border: 1px solid #ccc; /* Border to make badges more prominent */
+        cursor: default;
+        color: white;
+    }
 </style>
 
 <link href="~/Content/Css/Participate.css" rel="stylesheet" />
@@ -101,16 +111,29 @@
         foreach (var org in Model.orgEvents)
         {
             <div class="container mt-5">
-                <div class="card custom-card">
-                    <div class="card-body">
-                        <div class="img-title-container">
-                            <img src="https://via.placeholder.com/60" alt="Event Logo" class="img-fluid rounded-circle">
-                            <h5 class="card-title mb-0">@org.eventTitle</h5>
+                <div class="card custom-card shadow-lg">
+                    <div class="row g-0">
+                        <!-- Image Section -->
+                        <div class="col-12 col-md-4">
+                            <img src="https://via.placeholder.com/400x200" class="img-fluid rounded w-100 image-container" style="height: 100%;" alt="Event Image">
                         </div>
-                        <div class="mt-2">
-                            <p class="card-text">@org.eventDescription</p>
+                        <!-- Text Content Section -->
+                        <div class="col-12 col-md-8 d-flex align-items-center">
+                            <div class="card-body">
+                                <h5 class="card-title fw-bold">@org.eventTitle</h5>
+                                <p class="card-text">
+                                    <i class="bi bi-geo-alt-fill"></i> @org.eventTitle<br>
+                                    @org.eventDescription
+                                </p>
+                                <p class="card-text">
+                                    <i class="bi bi-calendar-event-fill"></i> Start Date: @org.dateStart<br>
+                                    <i class="bi bi-calendar-event-fill"></i> End Date: @org.dateEnd
+                                </p>
+                                <p class="card-text">
+                                    <button class="btn btn-outline-danger" onclick="CancelRequestBtn('@org.eventId')">Cancel Request</button>
+                                </p>
+                            </div>
                         </div>
-                        <button class="btn btn-outline-danger" onclick="LeaveBtn('@org.eventId')">Leave</button>
                     </div>
                 </div>
             </div>
@@ -137,17 +160,31 @@
     {
         foreach (var pendingOrg in Model.pendingOrgDetails)
         {
+
             <div class="container mt-5">
-                <div class="card custom-card">
-                    <div class="card-body">
-                        <div class="img-title-container">
-                            <img src="https://via.placeholder.com/60" alt="Event Logo" class="img-fluid rounded-circle">
-                            <h5 class="card-title mb-0">@pendingOrg.eventTitle</h5>
+                <div class="card custom-card shadow-lg">
+                    <div class="row g-0">
+                        <!-- Image Section -->
+                        <div class="col-12 col-md-4">
+                            <img src="https://via.placeholder.com/400x200" class="img-fluid rounded w-100 image-container" style="height: 100%;" alt="Event Image">
                         </div>
-                        <div class="mt-2">
-                            <p class="card-text">@pendingOrg.eventDescription</p>
+                        <!-- Text Content Section -->
+                        <div class="col-12 col-md-8 d-flex align-items-center">
+                            <div class="card-body">
+                                <h5 class="card-title fw-bold">@pendingOrg.eventTitle</h5>
+                                <p class="card-text">
+                                    <i class="bi bi-geo-alt-fill"></i> @pendingOrg.eventTitle<br>
+                                    @pendingOrg.eventDescription
+                                </p>
+                                <p class="card-text">
+                                    <i class="bi bi-calendar-event-fill"></i> Start Date: @pendingOrg.dateStart<br>
+                                    <i class="bi bi-calendar-event-fill"></i> End Date: @pendingOrg.dateEnd
+                                </p>
+                                <p class="card-text">
+                                    <button class="btn btn-outline-danger" onclick="CancelRequestBtn('@pendingOrg.eventId')">Cancel Request</button>
+                                </p>
+                            </div>
                         </div>
-                        <button class="btn btn-outline-danger" onclick="CancelRequestBtn('@pendingOrg.eventId')">Cancel Request</button>
                     </div>
                 </div>
             </div>
@@ -170,46 +207,56 @@
 </div>
 
 <div id="historySection" class="content-section">
-    <div class="container mt-5">
-        <div class="card custom-card">
-            <div class="card-body">
-                <div class="img-title-container">
-                    <img src="https://via.placeholder.com/60" alt="Event Logo" class="img-fluid rounded-circle">
-                    <h5 class="card-title mb-0">Event Title 1</h5>
-                </div>
-                <div class="mt-2">
-                    <p class="card-text">Description for Event Title 1.</p>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="container mt-5">
-        <div class="card custom-card">
-            <div class="card-body">
-                <div class="img-title-container">
-                    <img src="https://via.placeholder.com/60" alt="Event Logo" class="img-fluid rounded-circle">
-                    <h5 class="card-title mb-0">Event Title 2</h5>
-                </div>
-                <div class="mt-2">
-                    <p class="card-text">Description for Event Title 2.</p>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="container mt-5">
-        <div class="card custom-card">
-            <div class="card-body">
-                <div class="img-title-container">
-                    <img src="https://via.placeholder.com/60" alt="Event Logo" class="img-fluid rounded-circle">
-                    <h5 class="card-title mb-0">Event Title 3</h5>
-                </div>
-                <div class="mt-2">
-                    <p class="card-text">Description for Event Title 3.</p>
+    @if (Model.volunteersHistories != null && Model.volunteersHistories.Any())
+    {
+        foreach (var vh in Model.volunteersHistories)
+        {
+        <div class="container mt-5">
+            <div class="card custom-card shadow-lg">
+                <div class="row g-0">
+                    <!-- Image Section -->
+                    <div class="col-12 col-md-4">
+                        <img src="https://via.placeholder.com/400x200" class="img-fluid rounded w-100 image-container" style="height: 100%;" alt="Event Image">
+                    </div>
+                    <!-- Text Content Section -->
+                    <div class="col-12 col-md-8 d-flex align-items-center">
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">@vh.eventTitle</h5>
+                            <p class="card-text">
+                                <i class="bi bi-geo-alt-fill"></i> @vh.location<br>
+                                @vh.eventDescription
+                            </p>
+                            <p class="card-text">
+                                <i class="bi bi-calendar-event-fill"></i> Start Date: @vh.dateStart<br>
+                                <i class="bi bi-calendar-event-fill"></i> End Date: @vh.dateEnd
+                            </p>
+                            <p class="card-text">
+                                <strong>Skills Utilized:</strong>
+                                <span class="badge text-white border">@vh.skillName</span>
+                            </p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+         }
+     }
+     else
+     {
+        <div class="container mt-5">
+            <div class="card custom-card-no-content">
+                <div class="card-body">
+                    <div class="mt-2">
+                        <div class="center-message">
+                            You have no Event History.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
 </div>
+
 
 <br />
 
@@ -222,52 +269,52 @@
         $('.section-title').removeClass('active');
         $(element).addClass('active');
 
-        updateUnderline(element);
-    }
+            updateUnderline(element);
+        }
 
-    function updateUnderline(element) {
-        const underline = document.getElementById('underline');
-        const leftPosition = element.offsetLeft;
-        const width = element.offsetWidth;
+        function updateUnderline(element) {
+            const underline = document.getElementById('underline');
+            const leftPosition = element.offsetLeft;
+            const width = element.offsetWidth;
 
-        underline.style.left = leftPosition + 'px';
-        underline.style.width = width + 'px';
-    }
+            underline.style.left = leftPosition + 'px';
+            underline.style.width = width + 'px';
+        }
 
-    function LeaveBtn(eventId) {
-        Swal.fire({
+        function LeaveBtn(eventId) {
+            Swal.fire({
             title: 'Confirm Leave',
             text: 'Are you sure you want to leave this event?',
             icon: 'info',
             showCancelButton: true,
             confirmButtonText: 'Yes',
             cancelButtonText: 'No'
-        }).then((result) => {
-            if (result.isConfirmed) {
+            }).then((result) => {
+        if (result.isConfirmed) {
                 $.ajax({
-                    url: '@Url.Action("LeaveEvent", "Volunteer")',
+            url: '@Url.Action("LeaveEvent", "Volunteer")',
                     type: 'POST',
                     data: { eventId: eventId },
                     success: function (response) {
-                        if (response.success) {
-                            Swal.fire({
-                                title: response.message,
+                    if (response.success) {
+                        Swal.fire({
+                        title: response.message,
                                 text: '',
                                 icon: 'success',
                                 confirmButtonText: 'OK'
                             }).then(() => {
                                 location.reload();
                             });
-                        }
-                    },
+        }
+    },
                     error: function (xhr, status, error) {
-                        Swal.fire({
-                            title: 'Error',
+        Swal.fire({
+        title: 'Error',
                             text: 'An error occurred. Please try again.',
                             icon: 'error',
                             confirmButtonText: 'Ok'
                         });
-                    }
+    }
                 });
             }
         });
@@ -275,38 +322,38 @@
 
     function CancelRequestBtn(eventId) {
         Swal.fire({
-            title: 'Confirm Cancel',
+        title: 'Confirm Cancel',
             text: 'Are you sure you want to cancel this request?',
             icon: 'info',
             showCancelButton: true,
             confirmButtonText: 'Yes',
             cancelButtonText: 'No'
         }).then((result) => {
-            if (result.isConfirmed) {
+        if (result.isConfirmed) {
                 $.ajax({
-                    url: '@Url.Action("CancelRequest", "Volunteer")',
+            url: '@Url.Action("CancelRequest", "Volunteer")',
                     type: 'POST',
                     data: { eventId: eventId },
                     success: function (response) {
-                        if (response.success) {
-                            Swal.fire({
-                                title: response.message,
+                    if (response.success) {
+                        Swal.fire({
+                        title: response.message,
                                 text: '',
                                 icon: 'success',
                                 confirmButtonText: 'OK'
                             }).then(() => {
                                 location.reload();
                             });
-                        }
+    }
                     },
                     error: function (xhr, status, error) {
-                        Swal.fire({
-                            title: 'Error',
+        Swal.fire({
+        title: 'Error',
                             text: 'An error occurred. Please try again.',
                             icon: 'error',
                             confirmButtonText: 'Ok'
                         });
-                    }
+    }
                 });
             }
         });

@@ -238,6 +238,7 @@ namespace Tabang_Hub.Controllers
                     var getOrgInfo = db.OrgEvents.Where(m => m.eventId == eventId).FirstOrDefault();
                     var getInfo = _orgInfo.GetAll().Where(m => m.userId == getOrgInfo.userId).ToList();
                     var getSkillRequirmenet = _skillRequirement.GetAll().Where(m => m.eventId == getOrgInfo.eventId).ToList();
+                    var getVolSkill = _volunteerSkills.GetAll().Where(m => m.userId == UserId).FirstOrDefault();
                     var getOrgImages = _eventImages.GetAll().Where(m => m.eventId == getOrgInfo.eventId).ToList();
                     var getEvent = _orgEvents.GetAll().Where(m => m.eventId == getOrgInfo.eventId).ToList();
                     var getOrgOtherEvent = db.sp_OtherEvent(getOrgInfo.userId).ToList();
@@ -260,7 +261,7 @@ namespace Tabang_Hub.Controllers
                         volunteers = getVolunteers,
                         listofUserDonated = listofUserDonated,
                         volunteersStatusEvent = volunteerStatusEvent,
-                        matchSkill = db.sp_matchSkill(UserId).ToList(),
+                        matchSkill = db.sp_matchSkill(UserId, eventId).ToList(),
                     };
                     return View(indexModel);
                 }
@@ -427,8 +428,10 @@ namespace Tabang_Hub.Controllers
                     picture = userProfile,
                     volunteers = acceptedEvents,
                     orgEvents = acceptedEvents.Select(e => _orgEvents.GetAll().FirstOrDefault(o => o.eventId == e.eventId)).ToList(),
+                    orgEventHistory = db.OrgEventHistory.Where(m => m.userId == UserId).ToList(),
                     pendingOrgDetails = pendingEvents.Select(e => _pendingOrgDetails.GetAll().FirstOrDefault(p => p.eventId == e.eventId)).ToList(),
-                    volunteersInfo = getVolunteerInfo
+                    volunteersInfo = getVolunteerInfo,
+                    volunteersHistories = db.sp_VolunteerHistory(UserId).ToList()
                 };
 
                 return View(indexModel);
