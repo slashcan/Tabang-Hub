@@ -9,7 +9,7 @@ namespace Tabang_Hub.Utils
     {
         public int EventID { get; set; }
         public string EventDescription { get; set; }
-        public string RequiredSkills { get; set; }
-        public string MatchedSkills { get; set; }
+        public List<int> RequiredSkills { get; set; }
+        public List<int> MatchedSkills { get; set; }
     }
 }
