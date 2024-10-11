@@ -783,3 +783,18 @@ C:\Users\arvie\OneDrive\Desktop\Tabang-Hub\Tabang-Hub\Tabang-Hub\Tabang-Hub\bin\
 C:\Users\arvie\OneDrive\Desktop\Tabang-Hub\Tabang-Hub\Tabang-Hub\Tabang-Hub\bin\System.Numerics.Vectors.xml
 C:\Users\arvie\OneDrive\Desktop\Tabang-Hub\Tabang-Hub\Tabang-Hub\Tabang-Hub\bin\System.Runtime.CompilerServices.Unsafe.xml
 C:\Users\arvie\OneDrive\Desktop\Tabang-Hub\Tabang-Hub\Tabang-Hub\Tabang-Hub\bin\System.Threading.Tasks.Extensions.xml
+D:\School Shits\Tabang-Hub\Tabang-Hub\Tabang-Hub\bin\Newtonsoft.Json.Bson.dll
+D:\School Shits\Tabang-Hub\Tabang-Hub\Tabang-Hub\bin\System.Buffers.dll
+D:\School Shits\Tabang-Hub\Tabang-Hub\Tabang-Hub\bin\System.Memory.dll
+D:\School Shits\Tabang-Hub\Tabang-Hub\Tabang-Hub\bin\System.Net.Http.Formatting.dll
+D:\School Shits\Tabang-Hub\Tabang-Hub\Tabang-Hub\bin\System.Numerics.Vectors.dll
+D:\School Shits\Tabang-Hub\Tabang-Hub\Tabang-Hub\bin\System.Runtime.CompilerServices.Unsafe.dll
+D:\School Shits\Tabang-Hub\Tabang-Hub\Tabang-Hub\bin\System.Threading.Tasks.Extensions.dll
+D:\School Shits\Tabang-Hub\Tabang-Hub\Tabang-Hub\bin\Newtonsoft.Json.Bson.pdb
+D:\School Shits\Tabang-Hub\Tabang-Hub\Tabang-Hub\bin\Newtonsoft.Json.Bson.xml
+D:\School Shits\Tabang-Hub\Tabang-Hub\Tabang-Hub\bin\System.Buffers.xml
+D:\School Shits\Tabang-Hub\Tabang-Hub\Tabang-Hub\bin\System.Memory.xml
+D:\School Shits\Tabang-Hub\Tabang-Hub\Tabang-Hub\bin\System.Net.Http.Formatting.xml
+D:\School Shits\Tabang-Hub\Tabang-Hub\Tabang-Hub\bin\System.Numerics.Vectors.xml
+D:\School Shits\Tabang-Hub\Tabang-Hub\Tabang-Hub\bin\System.Runtime.CompilerServices.Unsafe.xml
+D:\School Shits\Tabang-Hub\Tabang-Hub\Tabang-Hub\bin\System.Threading.Tasks.Extensions.xml

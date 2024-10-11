@@ -29,6 +29,7 @@ namespace Tabang_Hub.Repository
         private BaseRepository<VolunteerSkillsHistory> _volunteerSkillHistory;
         private BaseRepository<GroupChat> _groupChat;
         private BaseRepository<GroupMessages> _groupMessages;
+        private BaseRepository<Rating> _ratings;
 
         public OrganizationManager()
         {
@@ -53,6 +54,7 @@ namespace Tabang_Hub.Repository
             _volunteerSkillHistory = new BaseRepository<VolunteerSkillsHistory>();
             _groupChat = new BaseRepository<GroupChat>();
             _groupMessages = new BaseRepository<GroupMessages>();
+            _ratings = new BaseRepository<Rating>();
         }
 
 
@@ -560,6 +562,10 @@ namespace Tabang_Hub.Repository
         {
             return _groupMessages._table.Where(m => m.groupChatId == groupChatId).ToList();
         }
+        public Volunteers GetSkillIdByEventIdAndUserId(int eventId, int userId)
+        {
+            return _eventVolunteers._table.Where(m => m.userId == userId && m.eventId == eventId).FirstOrDefault();
+        }
         public ErrorCode DeleteEvent(int eventId)
         {
             var skillsRequirement = listOfSkillRequirement(eventId);
@@ -567,7 +573,7 @@ namespace Tabang_Hub.Repository
             var eventVolunteers = ListOfEventVolunteers(eventId);
             var userDonated = ListOfUserDonated(eventId);
             var groupChat = GetGroupChatByEventId(eventId);
-
+             
 
             if (groupChat != null)
             {
@@ -782,6 +788,24 @@ namespace Tabang_Hub.Repository
                     }
                 }
             }
+            return ErrorCode.Success;
+        }
+        public ErrorCode SaveRating(int eventId, int userId, int rating, ref string errMsg)
+        {
+            var skillId = GetSkillIdByEventIdAndUserId(eventId, userId);
+            var ratings = new Rating()
+            {
+                userId = userId,
+                rate = rating,
+                skillId = skillId.skillId,
+                ratedAt = DateTime.Now,
+            };
+
+            if (_ratings.Create(ratings, out errMsg) != ErrorCode.Success)
+            {
+                return ErrorCode.Error;
+            }
+
             return ErrorCode.Success;
         }
     }

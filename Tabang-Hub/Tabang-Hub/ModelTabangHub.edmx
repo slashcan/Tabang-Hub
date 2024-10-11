@@ -124,6 +124,16 @@
           <Property Name="userId" Type="int" />
           <Property Name="profilePath" Type="nvarchar" MaxLength="255" />
         </EntityType>
+        <EntityType Name="Rating">
+          <Key>
+            <PropertyRef Name="ratingId" />
+          </Key>
+          <Property Name="ratingId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="userId" Type="int" />
+          <Property Name="skillId" Type="int" />
+          <Property Name="rate" Type="int" />
+          <Property Name="ratedAt" Type="datetime" />
+        </EntityType>
         <EntityType Name="Role">
           <Key>
             <PropertyRef Name="roleId" />
@@ -603,6 +613,7 @@ warning 6002: The table/view 'TabangHub.dbo.vw_VolunteerAccounts' does not have 
           <EntitySet Name="OrgSkillRequirementsHistory" EntityType="Self.OrgSkillRequirementsHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OrgValidation" EntityType="Self.OrgValidation" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ProfilePicture" EntityType="Self.ProfilePicture" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Rating" EntityType="Self.Rating" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Skills" EntityType="Self.Skills" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserAccount" EntityType="Self.UserAccount" Schema="dbo" store:Type="Tables" />
@@ -790,6 +801,13 @@ FROM [dbo].[vw_VolunteerAccounts] AS [vw_VolunteerAccounts]</DefiningQuery>
           <FunctionImport Name="sp_GetAllMessage" ReturnType="Collection(TabangHubModel.sp_GetAllMessage_Result)">
           <Parameter Name="groupChatId" Mode="In" Type="Int32" />
           </FunctionImport>
+          <FunctionImport Name="sp_matchSkill" ReturnType="Collection(TabangHubModel.sp_matchSkill_Result)">
+            <Parameter Name="userId" Mode="In" Type="Int32" />
+            <Parameter Name="eventId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_VolunteerHistory" ReturnType="Collection(TabangHubModel.sp_VolunteerHistory_Result)">
+          <Parameter Name="userId" Mode="In" Type="Int32" />
+          </FunctionImport>
           <EntitySet Name="GroupChat" EntityType="TabangHubModel.GroupChat" />
           <EntitySet Name="GroupMessages" EntityType="TabangHubModel.GroupMessages" />
           <EntitySet Name="OrgEventHistory" EntityType="TabangHubModel.OrgEventHistory" />
@@ -801,6 +819,7 @@ FROM [dbo].[vw_VolunteerAccounts] AS [vw_VolunteerAccounts]</DefiningQuery>
           <EntitySet Name="OrgSkillRequirementsHistory" EntityType="TabangHubModel.OrgSkillRequirementsHistory" />
           <EntitySet Name="OrgValidation" EntityType="TabangHubModel.OrgValidation" />
           <EntitySet Name="ProfilePicture" EntityType="TabangHubModel.ProfilePicture" />
+          <EntitySet Name="Rating" EntityType="TabangHubModel.Rating" />
           <EntitySet Name="Role" EntityType="TabangHubModel.Role" />
           <EntitySet Name="Skills" EntityType="TabangHubModel.Skills" />
           <EntitySet Name="UserAccount" EntityType="TabangHubModel.UserAccount" />
@@ -896,13 +915,6 @@ FROM [dbo].[vw_VolunteerAccounts] AS [vw_VolunteerAccounts]</DefiningQuery>
             <End Role="UserAccount" EntitySet="UserAccount" />
             <End Role="Volunteers" EntitySet="Volunteers" />
           </AssociationSet>
-          <FunctionImport Name="sp_matchSkill" ReturnType="Collection(TabangHubModel.sp_matchSkill_Result)">
-            <Parameter Name="userId" Mode="In" Type="Int32" />
-            <Parameter Name="eventId" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="sp_VolunteerHistory" ReturnType="Collection(TabangHubModel.sp_VolunteerHistory_Result)">
-            <Parameter Name="userId" Mode="In" Type="Int32" />
-          </FunctionImport>
           </EntityContainer>
         <ComplexType Name="sp_GetSkills_Result">
           <Property Type="Int32" Name="skillId" Nullable="false" />
@@ -945,6 +957,24 @@ FROM [dbo].[vw_VolunteerAccounts] AS [vw_VolunteerAccounts]</DefiningQuery>
           <Property Type="String" Name="userName" Nullable="false" MaxLength="513" />
           <Property Type="String" Name="message" Nullable="true" MaxLength="Max" />
           <Property Type="DateTime" Name="messageAt" Nullable="true" Precision="23" />
+        </ComplexType>
+        <ComplexType Name="sp_matchSkill_Result">
+          <Property Type="Int32" Name="skillId" Nullable="true" />
+          <Property Type="Int32" Name="userId" Nullable="true" />
+          <Property Type="String" Name="skillName" Nullable="true" MaxLength="255" />
+        </ComplexType>
+        <ComplexType Name="sp_VolunteerHistory_Result">
+          <Property Type="Int32" Name="VolHistoryId" Nullable="false" />
+          <Property Type="Int32" Name="userId" Nullable="true" />
+          <Property Type="Int32" Name="eventId" Nullable="true" />
+          <Property Type="Int32" Name="skillId" Nullable="true" />
+          <Property Type="String" Name="skillName" Nullable="true" MaxLength="255" />
+          <Property Type="String" Name="eventImage" Nullable="true" MaxLength="255" />
+          <Property Type="String" Name="eventTitle" Nullable="true" MaxLength="255" />
+          <Property Type="String" Name="location" Nullable="true" MaxLength="255" />
+          <Property Type="String" Name="eventDescription" Nullable="true" MaxLength="Max" />
+          <Property Type="DateTime" Name="dateStart" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="dateEnd" Nullable="true" Precision="23" />
         </ComplexType>
         <EntityType Name="GroupChat">
           <Key>
@@ -1083,6 +1113,16 @@ FROM [dbo].[vw_VolunteerAccounts] AS [vw_VolunteerAccounts]</DefiningQuery>
           <Property Name="profilePath" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="VolunteerInfo" Relationship="TabangHubModel.FK_VolunteerInfo_ProfilePicture" FromRole="ProfilePicture" ToRole="VolunteerInfo" />
         </EntityType>
+        <EntityType Name="Rating">
+          <Key>
+            <PropertyRef Name="ratingId" />
+          </Key>
+          <Property Name="ratingId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="userId" Type="Int32" />
+          <Property Name="skillId" Type="Int32" />
+          <Property Name="rate" Type="Int32" />
+          <Property Name="ratedAt" Type="DateTime" Precision="3" />
+        </EntityType>
         <EntityType Name="Role">
           <Key>
             <PropertyRef Name="roleId" />
@@ -1195,8 +1235,8 @@ FROM [dbo].[vw_VolunteerAccounts] AS [vw_VolunteerAccounts]</DefiningQuery>
           <Property Name="eventId" Type="Int32" />
           <Property Name="Status" Type="Int32" />
           <Property Name="skillId" Type="Int32" />
-          <Property Name="appliedAt" Type="DateTime" Precision="0" />
           <Property Name="attended" Type="Int32" />
+          <Property Name="appliedAt" Type="DateTime" Precision="0" />
         </EntityType>
         <EntityType Name="VolunteerSkill">
           <Key>
@@ -1532,24 +1572,6 @@ FROM [dbo].[vw_VolunteerAccounts] AS [vw_VolunteerAccounts]</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <ComplexType Name="sp_matchSkill_Result">
-          <Property Type="Int32" Name="skillId" Nullable="true" />
-          <Property Type="Int32" Name="userId" Nullable="true" />
-          <Property Type="String" Name="skillName" Nullable="true" MaxLength="255" />
-        </ComplexType>
-        <ComplexType Name="sp_VolunteerHistory_Result">
-          <Property Type="Int32" Name="VolHistoryId" Nullable="false" />
-          <Property Type="Int32" Name="userId" Nullable="true" />
-          <Property Type="Int32" Name="eventId" Nullable="true" />
-          <Property Type="Int32" Name="skillId" Nullable="true" />
-          <Property Type="String" Name="skillName" Nullable="true" MaxLength="255" />
-          <Property Type="String" Name="eventImage" Nullable="true" MaxLength="255" />
-          <Property Type="String" Name="eventTitle" Nullable="true" MaxLength="255" />
-          <Property Type="String" Name="location" Nullable="true" MaxLength="255" />
-          <Property Type="String" Name="eventDescription" Nullable="true" MaxLength="Max" />
-          <Property Type="DateTime" Name="dateStart" Nullable="true" Precision="23" />
-          <Property Type="DateTime" Name="dateEnd" Nullable="true" Precision="23" />
-        </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1617,6 +1639,32 @@ FROM [dbo].[vw_VolunteerAccounts] AS [vw_VolunteerAccounts]</DefiningQuery>
                 <ScalarProperty Name="userName" ColumnName="userName" />
                 <ScalarProperty Name="message" ColumnName="message" />
                 <ScalarProperty Name="messageAt" ColumnName="messageAt" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_matchSkill" FunctionName="TabangHubModel.Store.sp_matchSkill">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="TabangHubModel.sp_matchSkill_Result">
+                <ScalarProperty Name="skillId" ColumnName="skillId" />
+                <ScalarProperty Name="userId" ColumnName="userId" />
+                <ScalarProperty Name="skillName" ColumnName="skillName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_VolunteerHistory" FunctionName="TabangHubModel.Store.sp_VolunteerHistory">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="TabangHubModel.sp_VolunteerHistory_Result">
+                <ScalarProperty Name="VolHistoryId" ColumnName="VolHistoryId" />
+                <ScalarProperty Name="userId" ColumnName="userId" />
+                <ScalarProperty Name="eventId" ColumnName="eventId" />
+                <ScalarProperty Name="skillId" ColumnName="skillId" />
+                <ScalarProperty Name="skillName" ColumnName="skillName" />
+                <ScalarProperty Name="eventImage" ColumnName="eventImage" />
+                <ScalarProperty Name="eventTitle" ColumnName="eventTitle" />
+                <ScalarProperty Name="location" ColumnName="location" />
+                <ScalarProperty Name="eventDescription" ColumnName="eventDescription" />
+                <ScalarProperty Name="dateStart" ColumnName="dateStart" />
+                <ScalarProperty Name="dateEnd" ColumnName="dateEnd" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -1750,6 +1798,17 @@ FROM [dbo].[vw_VolunteerAccounts] AS [vw_VolunteerAccounts]</DefiningQuery>
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Rating">
+            <EntityTypeMapping TypeName="TabangHubModel.Rating">
+              <MappingFragment StoreEntitySet="Rating">
+                <ScalarProperty Name="ratedAt" ColumnName="ratedAt" />
+                <ScalarProperty Name="rate" ColumnName="rate" />
+                <ScalarProperty Name="skillId" ColumnName="skillId" />
+                <ScalarProperty Name="userId" ColumnName="userId" />
+                <ScalarProperty Name="ratingId" ColumnName="ratingId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Role">
             <EntityTypeMapping TypeName="TabangHubModel.Role">
               <MappingFragment StoreEntitySet="Role">
@@ -1844,8 +1903,8 @@ FROM [dbo].[vw_VolunteerAccounts] AS [vw_VolunteerAccounts]</DefiningQuery>
           <EntitySetMapping Name="VolunteersHistory">
             <EntityTypeMapping TypeName="TabangHubModel.VolunteersHistory">
               <MappingFragment StoreEntitySet="VolunteersHistory">
-                <ScalarProperty Name="attended" ColumnName="attended" />
                 <ScalarProperty Name="appliedAt" ColumnName="appliedAt" />
+                <ScalarProperty Name="attended" ColumnName="attended" />
                 <ScalarProperty Name="skillId" ColumnName="skillId" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="eventId" ColumnName="eventId" />
@@ -1941,32 +2000,6 @@ FROM [dbo].[vw_VolunteerAccounts] AS [vw_VolunteerAccounts]</DefiningQuery>
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="sp_matchSkill" FunctionName="TabangHubModel.Store.sp_matchSkill">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="TabangHubModel.sp_matchSkill_Result">
-                <ScalarProperty Name="skillId" ColumnName="skillId" />
-                <ScalarProperty Name="userId" ColumnName="userId" />
-                <ScalarProperty Name="skillName" ColumnName="skillName" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="sp_VolunteerHistory" FunctionName="TabangHubModel.Store.sp_VolunteerHistory">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="TabangHubModel.sp_VolunteerHistory_Result">
-                <ScalarProperty Name="VolHistoryId" ColumnName="VolHistoryId" />
-                <ScalarProperty Name="userId" ColumnName="userId" />
-                <ScalarProperty Name="eventId" ColumnName="eventId" />
-                <ScalarProperty Name="skillId" ColumnName="skillId" />
-                <ScalarProperty Name="skillName" ColumnName="skillName" />
-                <ScalarProperty Name="eventImage" ColumnName="eventImage" />
-                <ScalarProperty Name="eventTitle" ColumnName="eventTitle" />
-                <ScalarProperty Name="location" ColumnName="location" />
-                <ScalarProperty Name="eventDescription" ColumnName="eventDescription" />
-                <ScalarProperty Name="dateStart" ColumnName="dateStart" />
-                <ScalarProperty Name="dateEnd" ColumnName="dateEnd" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

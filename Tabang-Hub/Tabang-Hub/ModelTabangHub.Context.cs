@@ -39,6 +39,7 @@ namespace Tabang_Hub
         public DbSet<OrgSkillRequirementsHistory> OrgSkillRequirementsHistory { get; set; }
         public DbSet<OrgValidation> OrgValidation { get; set; }
         public DbSet<ProfilePicture> ProfilePicture { get; set; }
+        public DbSet<Rating> Rating { get; set; }
         public DbSet<Role> Role { get; set; }
         public DbSet<Skills> Skills { get; set; }
         public DbSet<UserAccount> UserAccount { get; set; }

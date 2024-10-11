@@ -119,6 +119,16 @@
     <Property Name="userId" Type="int" />
     <Property Name="profilePath" Type="nvarchar" MaxLength="255" />
   </EntityType>
+  <EntityType Name="Rating">
+    <Key>
+      <PropertyRef Name="ratingId" />
+    </Key>
+    <Property Name="ratingId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="userId" Type="int" />
+    <Property Name="skillId" Type="int" />
+    <Property Name="rate" Type="int" />
+    <Property Name="ratedAt" Type="datetime" />
+  </EntityType>
   <EntityType Name="Role">
     <Key>
       <PropertyRef Name="roleId" />
@@ -598,6 +608,7 @@ warning 6002: The table/view 'TabangHub.dbo.vw_VolunteerAccounts' does not have 
     <EntitySet Name="OrgSkillRequirementsHistory" EntityType="Self.OrgSkillRequirementsHistory" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="OrgValidation" EntityType="Self.OrgValidation" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ProfilePicture" EntityType="Self.ProfilePicture" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Rating" EntityType="Self.Rating" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Skills" EntityType="Self.Skills" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="UserAccount" EntityType="Self.UserAccount" Schema="dbo" store:Type="Tables" />

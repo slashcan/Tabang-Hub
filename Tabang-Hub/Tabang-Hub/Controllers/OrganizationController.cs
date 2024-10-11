@@ -447,6 +447,28 @@ namespace Tabang_Hub.Controllers
 
             return File(fileBytes, "text/csv", "OrganizationDataExport.csv");
         }
+        [HttpPost]
+        public JsonResult SubmitRatings(int eventId, int[] volunteerIds, int[] ratings)
+        {
+            string errMsg = string.Empty;
+            if (volunteerIds == null || ratings == null || volunteerIds.Length != ratings.Length)
+            {
+                return Json(new { success = false, message = "Invalid data received." });
+            }
 
+            // Process each rating along with the eventId
+            for (int i = 0; i < volunteerIds.Length; i++)
+            {
+                int volunteerId = volunteerIds[i];
+                int rating = ratings[i];
+
+                if (_organizationManager.SaveRating(eventId, volunteerId, rating, ref errMsg) != ErrorCode.Success)
+                {
+                    return Json(new { success = false, message = "Error saving rating" });
+                }
+            }
+
+            return Json(new { success = true, message = "All ratings submitted successfully" });
+        }
     }
-}
+} 
