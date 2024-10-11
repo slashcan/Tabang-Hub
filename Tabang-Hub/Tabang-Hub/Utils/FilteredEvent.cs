@@ -9,6 +9,7 @@ namespace Tabang_Hub.Utils
     {
         public int EventID { get; set; }
         public string EventDescription { get; set; }
+        public double similarityScore { get; set; }
         public List<int> RequiredSkills { get; set; }
         public List<int> MatchedSkills { get; set; }
     }
