@@ -74,8 +74,7 @@
               "RelativeToolTip": "Tabang-Hub\\Views\\Shared\\_Organization.cshtml",
               "ViewState": "AQIAAI4AAAAAAAAAAAAuwLQAAAASAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-10-11T16:07:10.535Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-10-11T16:07:10.535Z"
             },
             {
               "$type": "Document",
@@ -87,8 +86,7 @@
               "RelativeToolTip": "Tabang-Hub\\Controllers\\BaseController.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-11T16:03:51.672Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-10-11T16:03:51.672Z"
             },
             {
               "$type": "Document",
@@ -147,7 +145,7 @@
               "RelativeDocumentMoniker": "Tabang-Hub\\Views\\Organization\\Details.cshtml",
               "ToolTip": "D:\\School Shits\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Views\\Organization\\Details.cshtml",
               "RelativeToolTip": "Tabang-Hub\\Views\\Organization\\Details.cshtml",
-              "ViewState": "AQIAAIMDAAAAAAAAAAAkwLkDAAAJAAAA",
+              "ViewState": "AQIAAH0CAAAAAAAAAAAkwJQCAAAZAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2024-10-11T11:55:08.959Z",
               "EditorCaption": ""
@@ -160,7 +158,7 @@
               "RelativeDocumentMoniker": "Tabang-Hub\\Controllers\\OrganizationController.cs",
               "ToolTip": "D:\\School Shits\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Controllers\\OrganizationController.cs",
               "RelativeToolTip": "Tabang-Hub\\Controllers\\OrganizationController.cs",
-              "ViewState": "AQIAALgBAAAAAAAAAAAYwN0BAABlAAAA",
+              "ViewState": "AQIAALgBAAAAAAAAAAAYwM0BAAAyAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-10-11T11:30:45.004Z",
               "EditorCaption": ""
@@ -174,8 +172,7 @@
               "ToolTip": "D:\\School Shits\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\ModelTabangHub.edmx [Diagram1]",
               "RelativeToolTip": "Tabang-Hub\\ModelTabangHub.edmx [Diagram1]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001116|",
-              "WhenOpened": "2024-10-11T16:57:24.127Z",
-              "EditorCaption": " [Diagram1]"
+              "WhenOpened": "2024-10-11T16:57:24.127Z"
             },
             {
               "$type": "Document",
