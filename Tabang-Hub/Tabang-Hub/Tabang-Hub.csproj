@@ -2143,6 +2143,7 @@
     <Content Include="Views\Shared\_Verify.cshtml" />
     <Content Include="Views\Admin\ManageSkill.cshtml" />
     <Content Include="Views\Admin\Reports.cshtml" />
+    <Content Include="Views\Page\AdminApprove.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

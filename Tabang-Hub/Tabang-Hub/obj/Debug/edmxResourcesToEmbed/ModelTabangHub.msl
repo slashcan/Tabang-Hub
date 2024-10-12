@@ -335,6 +335,7 @@
       <EntityTypeMapping TypeName="TabangHubModel.Volunteers">
         <MappingFragment StoreEntitySet="Volunteers">
           <ScalarProperty Name="appliedAt" ColumnName="appliedAt" />
+          <ScalarProperty Name="attended" ColumnName="attended" />
           <ScalarProperty Name="skillId" ColumnName="skillId" />
           <ScalarProperty Name="Status" ColumnName="Status" />
           <ScalarProperty Name="eventId" ColumnName="eventId" />

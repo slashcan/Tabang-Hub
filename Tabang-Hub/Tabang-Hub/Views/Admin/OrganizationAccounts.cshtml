@@ -6,10 +6,14 @@
 }
 
 <div class="container mt-4">
-    <div class="mb-3 d-flex justify-content-between">
-        <button type="button" class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#createAccountModal">Create Account</button>
+    <div class="mb-3 d-flex justify-content-between align-items-center">
+        <div>
+            <button type="button" class="btn btn-success me-2" data-bs-toggle="modal" data-bs-target="#createAccountModal">Create Account</button>
+            <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#pendingApprovalModal">Pending Approval</button>
+        </div>
         <input type="text" class="form-control w-25" placeholder="Search" />
     </div>
+
     <div class="active-accounts">
         <h5 class="text-start">Active Accounts</h5>
         <div class="table-responsive border rounded p-2 mb-5">
@@ -78,6 +82,50 @@
         </div>
     </div>
 
+</div>
+
+<!-- Pending Approval Modal -->
+<div class="modal fade" id="pendingApprovalModal" tabindex="-1" aria-labelledby="pendingApprovalModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="pendingApprovalModalLabel">Pending Approval Accounts</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead class="table-dark">
+                            <tr class="text-center">
+                                <th>Org. Name</th>
+                                <th>Email</th>
+                                <th>Org. Type</th>
+                                <th>Contact No.</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var list in Model.organizationAccounts)
+                            {
+                                if (list.Status == 3) // Assuming Status 2 means Pending Approval
+                                {
+                                    <tr class="text-center">
+                                        <td>@list.Org_Name</td>
+                                        <td>@list.Email</td>
+                                        <td>@list.Org_Type</td>
+                                        <td>@list.Contact_No</td>
+                                        <td>
+                                            <button type="button" class="btn btn-sm btn-success approve-button" data-org-id="@list.User_Id">View</button>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="modal fade" id="createAccountModal" tabindex="-1" aria-labelledby="createAccountModalLabel" aria-hidden="true">
@@ -203,6 +251,47 @@
         $('.organization-row').click(function () {
             var orgId = $(this).data('org-id');
             window.location.href = '@Url.Action("OrgDetails", "Admin")' + '?orgId=' + orgId;
+        });
+
+        // Event listener for approve buttons
+        $('.approve-button').click(function (event) {
+            event.stopPropagation();
+            var userId = $(this).data('org-id');
+
+            // Confirmation dialog before approval
+            Swal.fire({
+                title: 'Approve this account?',
+                text: "The organization will now be able to use their account.",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#28a745',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, approve it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '@Url.Action("Approve")',
+                        type: 'POST',
+                        data: { userId: userId },
+                        success: function (response) {
+                            if (response.success) {
+                                Swal.fire(
+                                    'Approved!',
+                                    'The account has been approved.',
+                                    'success'
+                                ).then(() => {
+                                    location.reload();
+                                });
+                            } else {
+                                Swal.fire('Error!', 'Failed to approve the account: ' + response.message, 'error');
+                            }
+                        },
+                        error: function () {
+                            Swal.fire('Error!', 'An error occurred. Please try again.', 'error');
+                        }
+                    });
+                }
+            });
         });
     });
 </script>

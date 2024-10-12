@@ -855,6 +855,7 @@ namespace Tabang_Hub.Repository
                     userId = volunteer?.userId,
                     appliedAt = volunteer?.appliedAt,
                     skillId = volunteer.skillId,
+                    attended = volunteer.attended,
                     Status = volunteer?.Status,
                 };
 
@@ -954,7 +955,7 @@ namespace Tabang_Hub.Repository
             }
             return ErrorCode.Success;
         }
-        public ErrorCode SaveRating(int eventId, int userId, int rating, ref string errMsg)
+        public ErrorCode SaveRating(int eventId, int attended, int userId, int rating, ref string errMsg)
         {
             var skillId = GetSkillIdByEventIdAndUserId(eventId, userId);
             var ratings = new Rating()
@@ -964,6 +965,13 @@ namespace Tabang_Hub.Repository
                 skillId = skillId.skillId,
                 ratedAt = DateTime.Now,
             };
+
+            skillId.attended = attended;
+
+            if (_eventVolunteers.Update(skillId.applyVolunteerId, skillId, out errMsg) != ErrorCode.Success)
+            {
+                return ErrorCode.Error;
+            }
 
             if (_ratings.Create(ratings, out errMsg) != ErrorCode.Success)
             {

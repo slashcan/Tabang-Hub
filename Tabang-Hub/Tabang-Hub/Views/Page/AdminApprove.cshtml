@@ -1,0 +1,27 @@
+﻿@model Tabang_Hub.Utils.Lists
+
+@{
+    ViewBag.Title = "Admin Approval Pending";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card border-light shadow-sm rounded">
+                <div class="card-body text-center p-4">
+                    <h3 class="card-title text-success mb-3">Thank You for Joining!</h3>
+                    <p class="card-text">
+                        Your registration has been successfully submitted and is currently under review by our team. We're excited to have you on board!
+                    </p>
+                    <p class="card-text mt-3">
+                        You'll receive a notification once your registration has been reviewed and approved.
+                    </p>
+                    <a href="@Url.Action("Login", "Page")" class="btn btn-outline-success mt-4">
+                        Return to Login
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

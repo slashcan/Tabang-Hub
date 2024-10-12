@@ -464,7 +464,7 @@ namespace Tabang_Hub.Controllers
                 int attendanceStatus = attendance[i]; // Get the attendance value
 
                 // Save the rating and attendance
-                var result = _organizationManager.SaveRating(eventId, volunteerId, rating, ref errMsg); // Assume SaveRating can handle attendance too
+                var result = _organizationManager.SaveRating(eventId, attendanceStatus, volunteerId, rating, ref errMsg); // Assume SaveRating can handle attendance too
                 if (result != ErrorCode.Success)
                 {
                     // Log the error for debugging purposes (optional)

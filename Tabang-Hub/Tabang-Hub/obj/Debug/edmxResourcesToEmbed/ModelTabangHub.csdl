@@ -464,6 +464,7 @@
     <Property Name="eventId" Type="Int32" />
     <Property Name="Status" Type="Int32" />
     <Property Name="skillId" Type="Int32" />
+    <Property Name="attended" Type="Int32" />
     <Property Name="appliedAt" Type="DateTime" Precision="0" />
     <NavigationProperty Name="OrgEvents" Relationship="TabangHubModel.FK_Volunteers_OrgEvents" FromRole="Volunteers" ToRole="OrgEvents" />
     <NavigationProperty Name="Skills" Relationship="TabangHubModel.FK_Volunteers_Skills" FromRole="Volunteers" ToRole="Skills" />
