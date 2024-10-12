@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.Xml;
 using System.Web;
 using Tabang_Hub.Utils;
 
@@ -28,7 +29,9 @@ namespace Tabang_Hub.Repository
         private BaseRepository<OrgEventImageHistory> _orgEventImageHistory;
         private BaseRepository<VolunteerSkillsHistory> _volunteerSkillHistory;
         private BaseRepository<GroupChat> _groupChat;
+        private BaseRepository<GroupChatHistory> _groupChatHistory;
         private BaseRepository<GroupMessages> _groupMessages;
+        private BaseRepository<GroupMessagesHistory> _groupMessagesHistory;
         private BaseRepository<Rating> _ratings;
 
         public OrganizationManager()
@@ -53,6 +56,8 @@ namespace Tabang_Hub.Repository
             _orgEventImageHistory = new BaseRepository<OrgEventImageHistory>();
             _volunteerSkillHistory = new BaseRepository<VolunteerSkillsHistory>();
             _groupChat = new BaseRepository<GroupChat>();
+            _groupChatHistory = new BaseRepository<GroupChatHistory>();
+            _groupMessagesHistory = new BaseRepository<GroupMessagesHistory>();
             _groupMessages = new BaseRepository<GroupMessages>();
             _ratings = new BaseRepository<Rating>();
         }
@@ -517,6 +522,10 @@ namespace Tabang_Hub.Repository
         {
             return _listOfEvents._table.Where(m => m.Event_Id == id).FirstOrDefault();
         }
+        public OrgEvents GetEventByEventId(int eventId)
+        {
+            return _orgEvents._table.Where(m => m.eventId == eventId).FirstOrDefault(); 
+        }
         public OrgEvents GetEventsById(int id)
         {
             return _orgEvents._table.Where(m => m.eventId == id).FirstOrDefault();
@@ -787,6 +796,161 @@ namespace Tabang_Hub.Repository
                         return ErrorCode.Error;
                     }
                 }
+            }
+            return ErrorCode.Success;
+        }
+        public ErrorCode TrasferToHisotry1(int eventId, ref string errMsg)
+        {
+            var orgEvent = GetEventByEventId(eventId);
+            var userDonate = ListOfUserDonated(eventId);
+            var volunteers = ListOfEventVolunteers(eventId);
+            var skillRequirements = listOfSkillRequirement(eventId);
+            var orgImage = listOfEventImage(eventId);
+            var groupChat = GetGroupChatByEventId(eventId);
+            var groupMessages = GetGroupMessagesByGroupChatId(groupChat.groupChatId);
+
+            foreach (var donated in userDonate)
+            {
+                var donateHistory = new UserDonatedHistory()
+                {
+                    eventId = (int)donated.eventId,
+                    userId = (int)donated.userId,
+                    amount = donated.amount,
+                };
+                if (_userDonatedHistory.Create(donateHistory, out errMsg) != ErrorCode.Success)
+                {
+                    return ErrorCode.Error;
+                }
+
+                if (_userDonated.Delete(donated.orgUserDonatedId) != ErrorCode.Success)
+                {
+                    return ErrorCode.Error;
+                }
+            }
+            foreach (var volunteer in volunteers)
+            {
+                var volunteerSkills = GetListOfVolunteerSkillByUserId((int)volunteer.skillId);
+
+                foreach (var skills in volunteerSkills)
+                {
+                    var volunteerSkillHistory = new VolunteerSkillsHistory()
+                    {
+                        userId = skills.userId,
+                        skillId = skills.skillId,
+                    };
+
+                    if (_volunteerSkillHistory.Create(volunteerSkillHistory, out errMsg) != ErrorCode.Success)
+                    {
+                        return ErrorCode.Error;
+                    }
+                    if (_volunteerSkills.Delete(skills.volunteerSkillId) != ErrorCode.Success)
+                    {
+                        return ErrorCode.Error;
+                    }
+                }
+
+                var volunteersHistory = new VolunteersHistory()
+                {
+                    eventId = volunteer.eventId,
+                    userId = volunteer?.userId,
+                    appliedAt = volunteer?.appliedAt,
+                    skillId = volunteer.skillId,
+                    Status = volunteer?.Status,
+                };
+
+                if (_volunteersHistory.Create(volunteersHistory, out errMsg) != ErrorCode.Success)
+                {
+                    return ErrorCode.Error;
+                }
+                if (_eventVolunteers.Delete(volunteer.applyVolunteerId) != ErrorCode.Success)
+                {
+                    return ErrorCode.Error;
+                }
+            }
+            foreach (var skillRequire in skillRequirements)
+            {
+                var skillRequirementsHistory = new OrgSkillRequirementsHistory()
+                {
+                    eventId = (int)skillRequire.eventId,
+                    skillId = skillRequire.skillId,
+                    totalNeeded = skillRequire.totalNeeded,
+                };
+                if (_skillRequirementsHistory.Create(skillRequirementsHistory, out errMsg) != ErrorCode.Success)
+                {
+                    return ErrorCode.Error;
+                }
+                if (_orgSkillRequirements.Delete(skillRequire.skillRequirementId) != ErrorCode.Success)
+                {
+                    return ErrorCode.Error;
+                }
+            }
+            foreach (var image in orgImage)
+            {
+                var imageHistory = new OrgEventImageHistory()
+                {
+                    eventId = (int)image.eventId,
+                    eventImage = image.eventImage,
+                };
+                if (_orgEventImageHistory.Create(imageHistory, out errMsg) != ErrorCode.Success)
+                {
+                    return ErrorCode.Error;
+                }
+                if (_orgEventsImage.Delete(image.eventImageId) != ErrorCode.Success)
+                {
+                    return ErrorCode.Error;
+                }
+            }
+            foreach (var messages in groupMessages)
+            {
+                var messageHistory = new GroupMessagesHistory()
+                { 
+                    userId = messages.userId,
+                    message = messages.message,
+                    messageAt = messages.messageAt,
+                };
+                if (_groupMessagesHistory.Create(messageHistory, out errMsg) != ErrorCode.Success)
+                {
+                    return ErrorCode.Error;
+                }
+                if (_groupMessages.Delete(messages.messageId) != ErrorCode.Success)
+                {
+                    return ErrorCode.Error;
+                }
+            }
+
+            var groupAChatHistory = new GroupChatHistory()
+            {
+                eventId = groupChat.eventId,
+                orgInfoId = groupChat.orgInfoId,
+            };
+            if (_groupChatHistory.Create(groupAChatHistory, out errMsg) != ErrorCode.Success)
+            {
+                return ErrorCode.Error;
+            }
+            if (_groupChat.Delete(groupChat.groupChatId) != ErrorCode.Success)
+            {
+                return ErrorCode.Error;
+            }
+
+            var eventHistory = new OrgEventHistory()
+            {
+                eventId = orgEvent.eventId,
+                userId = (int)orgEvent.userId,
+                eventTitle = orgEvent.eventTitle,
+                eventDescription = orgEvent.eventDescription,
+                targetAmount = orgEvent.targetAmount,
+                maxVolunteer = orgEvent.maxVolunteer,
+                dateStart = orgEvent.dateStart,
+                dateEnd = orgEvent.dateEnd,
+                location = orgEvent.location,
+            };
+            if (_orgEventHistory.Create(eventHistory, out errMsg) != ErrorCode.Success)
+            {
+                return ErrorCode.Error;
+            }
+            if (_orgEvents.Delete(orgEvent.eventId) != ErrorCode.Success)
+            {
+                return ErrorCode.Error;
             }
             return ErrorCode.Success;
         }

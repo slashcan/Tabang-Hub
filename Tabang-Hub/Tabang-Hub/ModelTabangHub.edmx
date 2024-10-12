@@ -13,7 +13,25 @@
           <Property Name="eventId" Type="int" />
           <Property Name="orgInfoId" Type="int" />
         </EntityType>
+        <EntityType Name="GroupChatHistory">
+          <Key>
+            <PropertyRef Name="groupChatId" />
+          </Key>
+          <Property Name="groupChatId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="eventId" Type="int" />
+          <Property Name="orgInfoId" Type="int" />
+        </EntityType>
         <EntityType Name="GroupMessages">
+          <Key>
+            <PropertyRef Name="messageId" />
+          </Key>
+          <Property Name="messageId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="groupChatId" Type="int" />
+          <Property Name="userId" Type="int" />
+          <Property Name="message" Type="text" />
+          <Property Name="messageAt" Type="datetime" />
+        </EntityType>
+        <EntityType Name="GroupMessagesHistory">
           <Key>
             <PropertyRef Name="messageId" />
           </Key>
@@ -603,7 +621,9 @@ warning 6002: The table/view 'TabangHub.dbo.vw_VolunteerAccounts' does not have 
         </Function>
         <EntityContainer Name="TabangHubModelStoreContainer">
           <EntitySet Name="GroupChat" EntityType="Self.GroupChat" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="GroupChatHistory" EntityType="Self.GroupChatHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="GroupMessages" EntityType="Self.GroupMessages" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="GroupMessagesHistory" EntityType="Self.GroupMessagesHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OrgEventHistory" EntityType="Self.OrgEventHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OrgEventImage" EntityType="Self.OrgEventImage" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OrgEventImageHistory" EntityType="Self.OrgEventImageHistory" Schema="dbo" store:Type="Tables" />
@@ -809,7 +829,9 @@ FROM [dbo].[vw_VolunteerAccounts] AS [vw_VolunteerAccounts]</DefiningQuery>
           <Parameter Name="userId" Mode="In" Type="Int32" />
           </FunctionImport>
           <EntitySet Name="GroupChat" EntityType="TabangHubModel.GroupChat" />
+          <EntitySet Name="GroupChatHistory" EntityType="TabangHubModel.GroupChatHistory" />
           <EntitySet Name="GroupMessages" EntityType="TabangHubModel.GroupMessages" />
+          <EntitySet Name="GroupMessagesHistory" EntityType="TabangHubModel.GroupMessagesHistory" />
           <EntitySet Name="OrgEventHistory" EntityType="TabangHubModel.OrgEventHistory" />
           <EntitySet Name="OrgEventImage" EntityType="TabangHubModel.OrgEventImage" />
           <EntitySet Name="OrgEventImageHistory" EntityType="TabangHubModel.OrgEventImageHistory" />
@@ -987,6 +1009,14 @@ FROM [dbo].[vw_VolunteerAccounts] AS [vw_VolunteerAccounts]</DefiningQuery>
           <NavigationProperty Name="OrgInfo" Relationship="TabangHubModel.FK_GroupChat_OrgInfo" FromRole="GroupChat" ToRole="OrgInfo" />
           <NavigationProperty Name="GroupMessages" Relationship="TabangHubModel.FK_GroupMessages_GroupChat" FromRole="GroupChat" ToRole="GroupMessages" />
         </EntityType>
+        <EntityType Name="GroupChatHistory">
+          <Key>
+            <PropertyRef Name="groupChatId" />
+          </Key>
+          <Property Name="groupChatId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="eventId" Type="Int32" />
+          <Property Name="orgInfoId" Type="Int32" />
+        </EntityType>
         <EntityType Name="GroupMessages">
           <Key>
             <PropertyRef Name="messageId" />
@@ -998,6 +1028,16 @@ FROM [dbo].[vw_VolunteerAccounts] AS [vw_VolunteerAccounts]</DefiningQuery>
           <Property Name="messageAt" Type="DateTime" Precision="3" />
           <NavigationProperty Name="GroupChat" Relationship="TabangHubModel.FK_GroupMessages_GroupChat" FromRole="GroupMessages" ToRole="GroupChat" />
           <NavigationProperty Name="UserAccount" Relationship="TabangHubModel.FK_GroupMessages_UserAccount" FromRole="GroupMessages" ToRole="UserAccount" />
+        </EntityType>
+        <EntityType Name="GroupMessagesHistory">
+          <Key>
+            <PropertyRef Name="messageId" />
+          </Key>
+          <Property Name="messageId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="groupChatId" Type="Int32" />
+          <Property Name="userId" Type="Int32" />
+          <Property Name="message" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="messageAt" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityType Name="OrgEventHistory">
           <Key>
@@ -1677,9 +1717,29 @@ FROM [dbo].[vw_VolunteerAccounts] AS [vw_VolunteerAccounts]</DefiningQuery>
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="GroupChatHistory">
+            <EntityTypeMapping TypeName="TabangHubModel.GroupChatHistory">
+              <MappingFragment StoreEntitySet="GroupChatHistory">
+                <ScalarProperty Name="orgInfoId" ColumnName="orgInfoId" />
+                <ScalarProperty Name="eventId" ColumnName="eventId" />
+                <ScalarProperty Name="groupChatId" ColumnName="groupChatId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="GroupMessages">
             <EntityTypeMapping TypeName="TabangHubModel.GroupMessages">
               <MappingFragment StoreEntitySet="GroupMessages">
+                <ScalarProperty Name="messageAt" ColumnName="messageAt" />
+                <ScalarProperty Name="message" ColumnName="message" />
+                <ScalarProperty Name="userId" ColumnName="userId" />
+                <ScalarProperty Name="groupChatId" ColumnName="groupChatId" />
+                <ScalarProperty Name="messageId" ColumnName="messageId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="GroupMessagesHistory">
+            <EntityTypeMapping TypeName="TabangHubModel.GroupMessagesHistory">
+              <MappingFragment StoreEntitySet="GroupMessagesHistory">
                 <ScalarProperty Name="messageAt" ColumnName="messageAt" />
                 <ScalarProperty Name="message" ColumnName="message" />
                 <ScalarProperty Name="userId" ColumnName="userId" />

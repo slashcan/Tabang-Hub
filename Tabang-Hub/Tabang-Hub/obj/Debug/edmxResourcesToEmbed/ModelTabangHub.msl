@@ -100,9 +100,29 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="GroupChatHistory">
+      <EntityTypeMapping TypeName="TabangHubModel.GroupChatHistory">
+        <MappingFragment StoreEntitySet="GroupChatHistory">
+          <ScalarProperty Name="orgInfoId" ColumnName="orgInfoId" />
+          <ScalarProperty Name="eventId" ColumnName="eventId" />
+          <ScalarProperty Name="groupChatId" ColumnName="groupChatId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="GroupMessages">
       <EntityTypeMapping TypeName="TabangHubModel.GroupMessages">
         <MappingFragment StoreEntitySet="GroupMessages">
+          <ScalarProperty Name="messageAt" ColumnName="messageAt" />
+          <ScalarProperty Name="message" ColumnName="message" />
+          <ScalarProperty Name="userId" ColumnName="userId" />
+          <ScalarProperty Name="groupChatId" ColumnName="groupChatId" />
+          <ScalarProperty Name="messageId" ColumnName="messageId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="GroupMessagesHistory">
+      <EntityTypeMapping TypeName="TabangHubModel.GroupMessagesHistory">
+        <MappingFragment StoreEntitySet="GroupMessagesHistory">
           <ScalarProperty Name="messageAt" ColumnName="messageAt" />
           <ScalarProperty Name="message" ColumnName="message" />
           <ScalarProperty Name="userId" ColumnName="userId" />

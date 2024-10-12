@@ -410,11 +410,11 @@ namespace Tabang_Hub.Controllers
             csv.AppendLine("Skill Requirement ID,Event ID,Skill ID,Total Needed");
             foreach (var evt in events)
             {
-                var skillRequirements = _organizationManager.listOfSkillRequirement(evt.Event_Id);                
+                var skillRequirements = _organizationManager.listOfSkillRequirement(evt.Event_Id);
                 foreach (var skillReq in skillRequirements)
                 {
                     csv.AppendLine($"{skillReq.skillRequirementId},{skillReq.eventId},{skillReq.skillId},{skillReq.totalNeeded}");
-                }               
+                }
             }
 
             csv.AppendLine();
@@ -451,24 +451,35 @@ namespace Tabang_Hub.Controllers
         public JsonResult SubmitRatings(int eventId, int[] volunteerIds, int[] ratings)
         {
             string errMsg = string.Empty;
+
             if (volunteerIds == null || ratings == null || volunteerIds.Length != ratings.Length)
             {
                 return Json(new { success = false, message = "Invalid data received." });
             }
 
-            // Process each rating along with the eventId
             for (int i = 0; i < volunteerIds.Length; i++)
             {
                 int volunteerId = volunteerIds[i];
                 int rating = ratings[i];
 
-                if (_organizationManager.SaveRating(eventId, volunteerId, rating, ref errMsg) != ErrorCode.Success)
+                var result = _organizationManager.SaveRating(eventId, volunteerId, rating, ref errMsg);
+                if (result != ErrorCode.Success)
                 {
-                    return Json(new { success = false, message = "Error saving rating" });
+                    // Log the error for debugging purposes (optional)
+                    // LogError("SaveRating failed for volunteerId: " + volunteerId + ", eventId: " + eventId + ", Error: " + errMsg);
+
+                    return Json(new { success = false, message = "Error saving rating: " + errMsg });
                 }
             }
+            var historyResult = _organizationManager.TrasferToHisotry1(eventId, ref errMsg);
+            if (historyResult != ErrorCode.Success)
+            {
 
-            return Json(new { success = true, message = "All ratings submitted successfully" });
+                return Json(new { success = false, message = "Error saving to history: " + errMsg });
+            }
+
+            return Json(new { success = true, message = "All ratings submitted successfully." });
         }
+
     }
-} 
+}

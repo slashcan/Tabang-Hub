@@ -29,7 +29,9 @@ namespace Tabang_Hub
         }
     
         public DbSet<GroupChat> GroupChat { get; set; }
+        public DbSet<GroupChatHistory> GroupChatHistory { get; set; }
         public DbSet<GroupMessages> GroupMessages { get; set; }
+        public DbSet<GroupMessagesHistory> GroupMessagesHistory { get; set; }
         public DbSet<OrgEventHistory> OrgEventHistory { get; set; }
         public DbSet<OrgEventImage> OrgEventImage { get; set; }
         public DbSet<OrgEventImageHistory> OrgEventImageHistory { get; set; }
