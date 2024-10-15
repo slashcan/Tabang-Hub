@@ -24,6 +24,9 @@
     <FunctionImport Name="sp_GetAllMessage" ReturnType="Collection(TabangHubModel.sp_GetAllMessage_Result)">
       <Parameter Name="groupChatId" Mode="In" Type="Int32" />
     </FunctionImport>
+    <FunctionImport Name="sp_matchSkill" ReturnType="Collection(TabangHubModel.sp_matchSkill_Result)">
+      <Parameter Name="userId" Mode="In" Type="Int32" />
+    </FunctionImport>
     <EntitySet Name="GroupChat" EntityType="TabangHubModel.GroupChat" />
     <EntitySet Name="GroupMessages" EntityType="TabangHubModel.GroupMessages" />
     <EntitySet Name="OrgEventHistory" EntityType="TabangHubModel.OrgEventHistory" />
@@ -130,9 +133,6 @@
       <End Role="UserAccount" EntitySet="UserAccount" />
       <End Role="Volunteers" EntitySet="Volunteers" />
     </AssociationSet>
-    <FunctionImport Name="sp_matchSkill" ReturnType="Collection(TabangHubModel.sp_matchSkill_Result)">
-      <Parameter Name="userId" Mode="In" Type="Int32" />
-    </FunctionImport>
   </EntityContainer>
   <ComplexType Name="sp_GetSkills_Result">
     <Property Type="Int32" Name="skillId" Nullable="false" />
@@ -175,6 +175,11 @@
     <Property Type="String" Name="userName" Nullable="false" MaxLength="513" />
     <Property Type="String" Name="message" Nullable="true" MaxLength="Max" />
     <Property Type="DateTime" Name="messageAt" Nullable="true" Precision="23" />
+  </ComplexType>
+  <ComplexType Name="sp_matchSkill_Result">
+    <Property Type="Int32" Name="skillId" Nullable="true" />
+    <Property Type="Int32" Name="userId" Nullable="true" />
+    <Property Type="String" Name="skillName" Nullable="true" MaxLength="255" />
   </ComplexType>
   <EntityType Name="GroupChat">
     <Key>
@@ -358,6 +363,7 @@
     <Property Name="eventId" Type="Int32" />
     <Property Name="userId" Type="Int32" />
     <Property Name="amount" Type="Decimal" Precision="10" Scale="2" />
+    <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="donatedAt" Type="DateTime" Precision="3" />
     <NavigationProperty Name="OrgEvents" Relationship="TabangHubModel.FK_UserDonated_UserDonated" FromRole="UserDonated" ToRole="OrgEvents" />
     <NavigationProperty Name="UserAccount" Relationship="TabangHubModel.FK_UserDonated_UserAccount" FromRole="UserDonated" ToRole="UserAccount" />
@@ -761,9 +767,4 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <ComplexType Name="sp_matchSkill_Result">
-    <Property Type="Int32" Name="skillId" Nullable="true" />
-    <Property Type="Int32" Name="userId" Nullable="true" />
-    <Property Type="String" Name="skillName" Nullable="true" MaxLength="255" />
-  </ComplexType>
 </Schema>

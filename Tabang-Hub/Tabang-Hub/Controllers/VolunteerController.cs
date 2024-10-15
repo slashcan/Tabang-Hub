@@ -10,6 +10,12 @@ using Tabang_Hub.Repository;
 using System.Web.Security;
 using System.Web.Management;
 using System.IO;
+using Newtonsoft.Json;
+using System.Net;
+using System.Security.Cryptography;
+using System.Text;
+using System.Threading.Tasks;
+using RestSharp;
 
 namespace Tabang_Hub.Controllers
 {
@@ -336,7 +342,7 @@ namespace Tabang_Hub.Controllers
                     Status = 0,
                     skillId = db.Skills.Where(m => m.skillName == skill).Select(m => m.skillId).FirstOrDefault(),
                     appliedAt = DateTime.Now
-                };
+                }; 
 
                 //var updateVolunteerNeeded = db.OrgEvents.Where(m => m.eventId == eventId).FirstOrDefault();
 
@@ -384,7 +390,7 @@ namespace Tabang_Hub.Controllers
             return View(indexModel);
         }
         [HttpPost]
-        public JsonResult DonateNow(int eventId, decimal amount)
+        public async Task<JsonResult> DonateNow(int eventId, decimal amount)
         {
             try
             {
@@ -398,18 +404,229 @@ namespace Tabang_Hub.Controllers
                     userId = UserId,
                     eventId = eventId,
                     amount = amount,
-                    donatedAt = DateTime.Now
+                    donatedAt = DateTime.Now,
+                    Status = "Pending"
                 };
 
                 db.UserDonated.Add(donation);
-                db.SaveChanges();
+                db.SaveChanges(); // Save to get the donation ID
 
-                return Json(new { success = true, message = "Thank you for your donation!" });
+                var checkoutUrl = await CreatePayMongoCheckoutSession(amount, "Donation for event #" + eventId, donation.orgUserDonatedId);
+
+                if (checkoutUrl != null)
+                {
+                    return Json(new { success = true, checkoutUrl = checkoutUrl });
+                }
+                else
+                {
+                    return Json(new { success = false, message = "Failed to create checkout session. Please try again." });
+                }
             }
             catch (Exception ex)
             {
-                return Json(new { success = false, message = ex.Message });
+                // Log the exception
+                System.Diagnostics.Debug.WriteLine($"Error in DonateNow: {ex.Message}");
+                return Json(new { success = false, message = "An error occurred. Please try again later." });
             }
+        }
+        private async Task<string> CreatePayMongoCheckoutSession(decimal amount, string description, int donationId)
+        {
+            var client = new RestClient("https://api.paymongo.com/v1/checkout_sessions");
+            var request = new RestRequest();
+            request.Method = Method.Post;
+
+            // Use your actual secret key
+            var secretKey = "sk_test_gvQ3WTM1Acco8AGhp35zT1b1"; // Replace with your secret key
+            var encodedSecretKey = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{secretKey}:"));
+            request.AddHeader("Authorization", $"Basic {encodedSecretKey}");
+            request.AddHeader("Content-Type", "application/json");
+
+            var body = new
+            {
+                data = new
+                {
+                    attributes = new
+                    {
+                        line_items = new[]
+                        {
+                    new
+                    {
+                        amount = (int)(amount * 100), // Amount in centavos
+                        currency = "PHP",
+                        name = "Donation", // Add name
+                        description = description,
+                        quantity = 1
+                    }
+                },
+                        payment_method_types = new[] { "card", "gcash", "grab_pay" },
+                        send_email_receipt = false,
+                        show_description = true,
+                        description = description, // Add description at root level
+                        cancel_url = Url.Action("PaymentFailed", "Volunteer", null, Request.Url.Scheme),
+                        success_url = Url.Action("PaymentSuccess", "Volunteer", null, Request.Url.Scheme),
+                        reference_number = donationId.ToString()
+                    }
+                }
+            };
+
+            request.AddJsonBody(body);
+
+            var response = await client.ExecuteAsync(request);
+
+            if (response.IsSuccessful)
+            {
+                var responseData = JsonConvert.DeserializeObject<dynamic>(response.Content);
+                string checkoutUrl = responseData.data.attributes.checkout_url;
+                return checkoutUrl;
+            }
+            else
+            {
+                // Log the error for debugging
+                var errorContent = response.Content;
+                // Handle error accordingly
+                System.Diagnostics.Debug.WriteLine($"PayMongo Error Response: {errorContent}");
+                return null;
+            }
+        }
+        [HttpPost]
+        public async Task<ActionResult> PayMongoWebhook()
+        {
+            var signatureHeader = Request.Headers["Paymongo-Signature"];
+            var webhookSecretKey = "whsk_test_your_webhook_secret_key"; // Replace with your actual webhook secret key
+
+            // Read the request body
+            string json;
+            using (var reader = new StreamReader(Request.InputStream))
+            {
+                json = await reader.ReadToEndAsync();
+            }
+
+            // Verify the webhook signature
+            if (!VerifySignature(signatureHeader, json, webhookSecretKey))
+            {
+                // Invalid signature
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            // Deserialize the webhook event
+            var webhookEvent = JsonConvert.DeserializeObject<dynamic>(json);
+
+            // Extract the event type
+            string eventType = webhookEvent.data.attributes.type.ToString();
+
+            if (eventType == "checkout.session_paid")
+            {
+                // Payment was successful
+                string referenceNumber = webhookEvent.data.attributes.data.attributes.reference_number.ToString();
+                int donationId = int.Parse(referenceNumber);
+
+                var donation = db.UserDonated.Find(donationId);
+                if (donation != null)
+                {
+                    donation.Status = "Paid";
+                    db.SaveChanges();
+                }
+            }
+
+            // Return a 200 OK response to acknowledge receipt of the webhook
+            return new HttpStatusCodeResult(HttpStatusCode.OK);
+        }
+        private bool VerifySignature(string signatureHeader, string payload, string secret)
+        {
+            if (string.IsNullOrEmpty(signatureHeader))
+            {
+                return false;
+            }
+
+            var signatures = signatureHeader.Split(',');
+
+            foreach (var sig in signatures)
+            {
+                var parts = sig.Split('=');
+                if (parts.Length == 2 && parts[0].Trim() == "v1")
+                {
+                    var expectedSignature = parts[1].Trim();
+
+                    // Compute HMAC SHA256 hash of the payload using the webhook secret key
+                    var secretBytes = Encoding.UTF8.GetBytes(secret);
+                    var payloadBytes = Encoding.UTF8.GetBytes(payload);
+                    using (var hmac = new HMACSHA256(secretBytes))
+                    {
+                        var hash = hmac.ComputeHash(payloadBytes);
+                        var computedSignature = BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant().Trim();
+
+                        if (computedSignature == expectedSignature)
+                        {
+                            return true; // Signature is valid
+                        }
+                    }
+                }
+            }
+            return false; // Signature is invalid
+        }
+        public ActionResult PaymentSuccess()
+        {
+            var getUserAccount = db.UserAccount.Where(m => m.userId == UserId).ToList();
+            var getVolunteerInfo = db.VolunteerInfo.Where(m => m.userId == UserId).ToList();
+            var getVolunteerSkills = db.VolunteerSkill.Where(m => m.userId == UserId).ToList();
+            var getProfile = db.ProfilePicture.Where(m => m.userId == UserId).ToList();
+
+            var getUniqueSkill = db.sp_GetSkills(UserId).ToList();
+            if (getProfile.Count() <= 0)
+            {
+                var defaultPicture = new ProfilePicture
+                {
+                    userId = UserId,
+                    profilePath = "default.jpg"
+                };
+                _profilePic.Create(defaultPicture);
+
+                getProfile = db.ProfilePicture.Where(m => m.userId == UserId).ToList();
+            }
+            var listModel = new Lists()
+            {
+                userAccounts = getUserAccount,
+                volunteersInfo = getVolunteerInfo,
+                volunteersSkills = getVolunteerSkills,
+                uniqueSkill = getUniqueSkill,
+                picture = getProfile,
+                skills = _skills.GetAll().ToList(),
+            };
+
+            return View(listModel);
+        }
+
+        // Payment failed handler
+        public ActionResult PaymentFailed()
+        {
+            var getUserAccount = db.UserAccount.Where(m => m.userId == UserId).ToList();
+            var getVolunteerInfo = db.VolunteerInfo.Where(m => m.userId == UserId).ToList();
+            var getVolunteerSkills = db.VolunteerSkill.Where(m => m.userId == UserId).ToList();
+            var getProfile = db.ProfilePicture.Where(m => m.userId == UserId).ToList();
+
+            var getUniqueSkill = db.sp_GetSkills(UserId).ToList();
+            if (getProfile.Count() <= 0)
+            {
+                var defaultPicture = new ProfilePicture
+                {
+                    userId = UserId,
+                    profilePath = "default.jpg"
+                };
+                _profilePic.Create(defaultPicture);
+
+                getProfile = db.ProfilePicture.Where(m => m.userId == UserId).ToList();
+            }
+            var listModel = new Lists()
+            {
+                userAccounts = getUserAccount,
+                volunteersInfo = getVolunteerInfo,
+                volunteersSkills = getVolunteerSkills,
+                uniqueSkill = getUniqueSkill,
+                picture = getProfile,
+                skills = _skills.GetAll().ToList(),
+            };
+
+            return View(listModel);
         }
         public ActionResult Participate()
         {

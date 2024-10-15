@@ -49,6 +49,7 @@ namespace Tabang_Hub.Utils
         public List<OrgInfo> getAllOrgAccounts { get; set; }
         public List<VolunteerInfo> getAllVolunteerAccounts { get; set; }
         public List<OrgEvents> getAllOrgEvent { get; set; } 
+        public List<UserAccount> matchedSkills { get; set; }
 
         //Stored Procedure
         public List<sp_GetSkills_Result> uniqueSkill { get; set; }

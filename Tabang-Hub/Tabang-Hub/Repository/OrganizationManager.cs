@@ -255,7 +255,7 @@ namespace Tabang_Hub.Repository
             orgEvents.maxVolunteer = oldSkills.Sum(s => s.totalNeeded) + skills.Sum(skill => skill.Value);
 
             // Update the event details (title, description, etc.)
-            var oldObj = GetEventsById(eventId);
+            var oldObj = GetEventsByEventId(eventId);
             oldObj.eventTitle = orgEvents.eventTitle;
             oldObj.eventDescription = orgEvents.eventDescription;
             oldObj.targetAmount = orgEvents.targetAmount;
@@ -487,6 +487,10 @@ namespace Tabang_Hub.Repository
         {
             return _eventVolunteers._table.Where(m => m.eventId == eventId).ToList();
         }
+        public List<UserAccount> GetListOfVolunteer()
+        {
+            return _userAccount._table.Where(m => m.roleId == 1 && m.status == 1).ToList();
+        }
         public List<VolunteersHistory> GetTotalVolunteerHistoryByEventId(int eventId)
         { 
             return _volunteersHistory._table.Where(v => v.eventId == eventId).ToList();
@@ -515,7 +519,7 @@ namespace Tabang_Hub.Repository
         {
             return _listOfEvents._table.Where(m => m.Event_Id == id).FirstOrDefault();
         }
-        public OrgEvents GetEventsById(int id)
+        public OrgEvents GetEventsByEventId(int id)
         {
             return _orgEvents._table.Where(m => m.eventId == id).FirstOrDefault();
         }
@@ -782,6 +786,56 @@ namespace Tabang_Hub.Repository
                     }
                 }
             }
+            return ErrorCode.Success;
+        }
+        public List<UserAccount> GetMatchedVolunteers(int eventId)
+        {
+
+            var matchedVolunteers = new List<UserAccount>();
+
+            var userAcc = GetListOfVolunteer();
+
+            var orgEvent = GetEventsByEventId(eventId);
+
+            foreach (var users in userAcc)
+            {
+                var userSkills = GetVolunteerSkillsByUserId(users.userId);
+
+                foreach (var skills in userSkills)
+                {
+                    foreach (var skillRequ in orgEvent.OrgSkillRequirement)
+                    {
+                        if (skills.Skills.skillName == skillRequ.Skills.skillName)
+                        {
+                            matchedVolunteers.Add(users);
+
+                            break;
+                        }
+                    }
+
+                    if (matchedVolunteers.Contains(users))
+                    {
+                        break;
+                    }
+                }
+            }
+
+            return matchedVolunteers;
+        }
+        public ErrorCode InviteVolunteer(int userId, int eventId, ref string errMsg)
+        {
+            var volunteer = new Volunteers()
+            {
+                userId = userId,
+                eventId = eventId,
+                Status = 3,
+            };
+
+            if (_eventVolunteers.Create(volunteer, out errMsg) != ErrorCode.Success)
+            {
+                return ErrorCode.Error;
+            }
+
             return ErrorCode.Success;
         }
     }

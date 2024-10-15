@@ -192,6 +192,7 @@ namespace Tabang_Hub.Controllers
             var orgInfo = _organizationManager.GetOrgInfoByUserId(UserId);
             var listOfEventVolunteers = _organizationManager.ListOfEventVolunteers(id);
             var volunteerSkills = _organizationManager.ListOfEventVolunteerSkills();
+            var matchedSkill = _organizationManager.GetMatchedVolunteers(id);
             //var profile = _organizationManager.GetProfileByProfileId(orgInfo.profileId);
             var listOfSkill = _organizationManager.ListOfSkills();
 
@@ -205,6 +206,7 @@ namespace Tabang_Hub.Controllers
                 listOfEventVolunteers = listOfEventVolunteers,
                 volunteersSkills = volunteerSkills,
                 listofUserDonated = listofUserDonated,
+                matchedSkills = matchedSkill,
                 //profilePic = profile,
             };
 
@@ -214,6 +216,24 @@ namespace Tabang_Hub.Controllers
             }
             return RedirectToAction("EventsManagement");
         }
+        [HttpPost]
+        public JsonResult InviteVolunteer(List<int> selectedVolunteers, int eventId)
+       {
+            string errMsg = string.Empty;
+
+            // Process the selected volunteers by userId
+            foreach (var userId in selectedVolunteers)
+            {
+                if (_organizationManager.InviteVolunteer(userId, eventId, ref errMsg) != ErrorCode.Success)
+                {
+                    return Json(new { success = false, message = errMsg });
+                }
+            }
+
+            // Return JSON indicating success
+            return Json(new { success = true, redirectUrl = Url.Action("Details", "Organization", new { id = eventId }) });
+        }
+
         [HttpPost]
         public ActionResult EditEvent(Lists events, Dictionary<string, int> skills, string[] skillsToRemove, HttpPostedFileBase[] images, int eventId)
         {

@@ -264,6 +264,7 @@
                 <div class="card">
                     <div class="card-header">
                         <h5 class="card-title">Volunteer List</h5>
+                        <button class="btn btn-outline-success btn-sm" data-bs-toggle="modal" data-bs-target="#inviteVolunteerModal" onclick="openInviteModal()">Invite Volunteers</button>
                     </div>
                     <div class="card-body">
                         <div class="list-group">
@@ -343,7 +344,7 @@
                                         </div>
                                     </div>
                                 }
-                            }                           
+                            }
                         </div>
                     </div>
                 </div>
@@ -441,8 +442,70 @@
     </div>
 </div>
 
+<!-- Invite Volunteer Modal -->
+<div class="modal fade" id="inviteVolunteerModal" tabindex="-1" aria-labelledby="inviteVolunteerModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="inviteVolunteerModalLabel">Invite Volunteers</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="inviteForm" action="@Url.Action("InviteVolunteer", "Organization")" method="post">
+                    <!-- Hidden input to pass eventId -->
+                    <input type="hidden" name="eventId" value="@Model.eventDetails.Event_Id" />
+
+                    <!-- Matched Volunteers -->
+                    <div class="mb-3">
+                        <label class="form-label">Select Volunteers to Invite</label>
+                        <div class="form-check">
+                            @foreach (var volunteer in Model.matchedSkills)
+                            {
+                                <div class="form-check d-flex justify-content-between align-items-center">
+                                    <label class="form-check-label" for="volunteer_@volunteer.userId">
+                                        @volunteer.email
+                                    </label>
+                                    <input class="form-check-input ms-3" type="checkbox" name="selectedVolunteers" value="@volunteer.userId" id="volunteer_@volunteer.userId">
+                                </div>
+                            }
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn btn-primary">Send Invites</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
+
+    $("#inviteForm").submit(function (event) {
+        event.preventDefault(); // Prevent the default form submission
+
+        $.ajax({
+            type: "POST",
+            url: $(this).attr("action"), // Use the action URL defined in the form
+            data: $(this).serialize(), // Serialize the form data
+            success: function (response) {
+                if (response.success) {
+                    // Redirect to the provided URL in the response
+                    window.location.href = response.redirectUrl;
+                } else {
+                    // If an error occurred, display an alert or handle the error
+                    alert(response.message);
+                }
+            },
+            error: function (xhr, status, error) {
+                // Handle any errors that occur during the AJAX request
+                alert("An error occurred while sending the invitations.");
+            }
+        });
+    });
+
     function showSection(sectionId, event) {
         event.preventDefault();
         // Hide all sections

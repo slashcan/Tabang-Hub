@@ -18,6 +18,7 @@ namespace Tabang_Hub
         public Nullable<int> eventId { get; set; }
         public Nullable<int> userId { get; set; }
         public Nullable<decimal> amount { get; set; }
+        public string Status { get; set; }
         public Nullable<System.DateTime> donatedAt { get; set; }
     
         public virtual OrgEvents OrgEvents { get; set; }

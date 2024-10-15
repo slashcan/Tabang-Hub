@@ -145,7 +145,7 @@
                         @for (int i = 0; i < Model.detailsEventImage.Count; i++)
                         {
                             <div class="carousel-item @(i == 0 ? "active" : "")">
-                                <img src="@Url.Content("~/Content/IdPicture/" + Model.detailsEventImage[i].eventImage)" class="d-block w-100 img-fluid fixed-size-img" alt="Event Image" style="border-radius: 1rem; margin: 15px 0px 15px 0px;">
+                                <img src="@Url.Content("~/Content/Events/" + Model.detailsEventImage[i].eventImage)" class="d-block w-100 img-fluid fixed-size-img" alt="Event Image" style="border-radius: 1rem; margin: 15px 0px 15px 0px;">
                             </div>
                         }
                     </div>
@@ -404,10 +404,11 @@
 <br />
 
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-@*<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.6/js/bootstrap.bundle.min.js"></script>*@
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 <script>
-    function submitDonation(eventId) {
+    // Function to handle donation with PayMongo
+function submitDonation(eventId) {
     var donationAmount = document.getElementById('donationAmount').value;
 
     $.ajax({
@@ -419,14 +420,8 @@
         },
         success: function (response) {
             if (response.success) {
-                Swal.fire({
-                    title: '',
-                    text: response.message,
-                    icon: 'success',
-                    confirmButtonText: 'OK'
-                }).then(() => {
-                    location.reload();
-                });
+                // Redirect the user to the checkout URL
+                window.location.href = response.checkoutUrl;
             } else {
                 Swal.fire({
                     title: 'Error',
@@ -446,8 +441,6 @@
         }
     });
 }
-
-
     function applyEvent(eventId) {
         var selectedSkill = document.querySelector('input[name="skill"]:checked').value;
 

@@ -215,7 +215,7 @@
                                     @{ 
                                         var imgs = Model.detailsEventImage.Where(m => m.eventId == evt.Event_Id).Select(m => m.eventImage).FirstOrDefault();
                                     }
-                                    <img src="@Url.Content("~/Content/IdPicture/" + imgs)" class="custom-block-image img-fluid" alt="">
+                                    <img src="@Url.Content("~/Content/Events/" + imgs)" class="custom-block-image img-fluid" alt="">
                                     <div class="custom-block">
                                         <div class="custom-block-body">
                                             <h5 class="mb-3">@evt.Event_Name</h5>
