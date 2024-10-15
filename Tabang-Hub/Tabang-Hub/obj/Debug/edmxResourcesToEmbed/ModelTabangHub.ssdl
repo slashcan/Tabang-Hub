@@ -211,6 +211,7 @@
     <Property Name="userId" Type="int" />
     <Property Name="eventId" Type="int" />
     <Property Name="Status" Type="int" />
+    <Property Name="attended" Type="int" />
     <Property Name="skillId" Type="int" />
     <Property Name="appliedAt" Type="date" />
   </EntityType>

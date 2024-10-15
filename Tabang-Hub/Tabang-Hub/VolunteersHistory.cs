@@ -20,5 +20,6 @@ namespace Tabang_Hub
         public Nullable<int> Status { get; set; }
         public Nullable<int> skillId { get; set; }
         public Nullable<System.DateTime> appliedAt { get; set; }
+        public Nullable<int> attended { get; set; }
     }
 }

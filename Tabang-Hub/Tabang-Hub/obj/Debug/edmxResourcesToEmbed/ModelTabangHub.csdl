@@ -432,6 +432,7 @@
     <Property Name="Status" Type="Int32" />
     <Property Name="skillId" Type="Int32" />
     <Property Name="appliedAt" Type="DateTime" Precision="0" />
+    <Property Name="attended" Type="Int32" />
   </EntityType>
   <EntityType Name="VolunteerSkill">
     <Key>

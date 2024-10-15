@@ -1,16 +1,20 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using Tabang_Hub.Repository;
 using Tabang_Hub.Utils;
+using System.Collections.ObjectModel;
 
 namespace Tabang_Hub.Controllers
 {
@@ -18,7 +22,7 @@ namespace Tabang_Hub.Controllers
     public class PageController : BaseController
     {
         // GET: Page
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
             var user = _userManager.GetUserByEmail(User.Identity.Name);
             if (user != null)
@@ -37,21 +41,32 @@ namespace Tabang_Hub.Controllers
                         var getEvents = _listsOfEvent.GetAll().ToList();
                         var getOrgImages = _eventImages.GetAll().ToList();
 
-                        //var volSkillInfo = db.VolunteerSkill.Where(m => m.userId == UserId).Select(m => m.skillId).ToList();
-
-                        //var getOrgSkillReq = new List<OrgSkillRequirement>();
-                        //foreach (var skillId in volSkillInfo)
-                        //{
-                        //    getOrgSkillReq = db.OrgSkillRequirement.Where(m => m.skillId == skillId).ToList();
-                        //}
-
-                        var orgEventsSelectId = _orgEvents.GetAll().Where(m => m.targetAmount != null).Select(m => m.eventId).ToList();
-                        var orgEvents = _orgEvents.GetAll().Where(m => m.targetAmount != null).ToList();
+                        var orgEventsSelectId = _orgEvents.GetAll().Where(m => m.dateEnd >= DateTime.Now).Select(m => m.eventId).ToList();
+                        //var orgEvents = _orgEvents.GetAll().Where(m => m.targetAmount != null).ToList();
 
                         var getUserDonated = new List<UserDonated>();
                         foreach (var eventId in orgEventsSelectId)
                         {
                             getUserDonated = _userDonated.GetAll().Where(m => m.eventId == eventId).ToList();
+                        }
+
+
+                        // Prepare the data to pass to Flask
+                        var datas = new
+                        {
+                            user_skills = db.VolunteerSkill.Where(m => m.userId == UserId).Select(m => new { userId = m.userId, skillId = m.skillId }).ToList(),
+                            event_data = _orgEvents.GetAll().Where(m => m.dateEnd >= DateTime.Now).Select(m => new { eventId = m.eventId, eventDescription = m.eventDescription }).ToList(),
+                            event_skills = db.OrgSkillRequirement.Select(es => new { eventId = es.eventId, skillId = es.skillId }).ToList(),
+                            volunteer_history = db.VolunteersHistory.Where(vh => vh.userId == user.userId).Select(vh => new { eventId = vh.eventId, attended = vh.attended }).ToList()
+                        };
+
+                        var recommendedEvents = await RunRecommendation(datas);
+
+                        var filteredEvent = new List<vw_ListOfEvent>();
+                        foreach (var recommendedEvent in recommendedEvents)
+                        {
+                            var matchedEvents = _listsOfEvent.GetAll().Where(m => m.Event_Id == recommendedEvent.EventID).ToList();
+                            filteredEvent.AddRange(matchedEvents);
                         }
 
                         var indexModel = new Lists()
@@ -60,12 +75,11 @@ namespace Tabang_Hub.Controllers
                             volunteersSkills = getVolunteerSkills,
                             skills = getSkills,
                             picture = getProfile,
-                            listOfEvents = getEvents,
+                            listOfEvents = filteredEvent,
                             volunteers = getVolunteers,
                             orgInfos = getOrgInfo,
                             listofUserDonated = getUserDonated,
-                            detailsEventImage = getOrgImages,
-                            //detailsSkillRequirement = getOrgSkillReq,
+                            detailsEventImage = getOrgImages
                         };
                         return View(indexModel);
                     case 2:
@@ -76,6 +90,32 @@ namespace Tabang_Hub.Controllers
             }
             return View();
         }
+
+        public async Task<List<FilteredEvent>> RunRecommendation(object requestData)
+        {
+            string flaskApiUrl = "http://127.0.0.1:5000/predict"; // Flask API URL
+            List<FilteredEvent> recommendedEvents = new List<FilteredEvent>();
+
+            using (var client = new HttpClient())
+            {
+                // Step 1: Send POST request to Flask API with the requestData
+                var response = await client.PostAsJsonAsync(flaskApiUrl, requestData);
+                var jsonResponse = await response.Content.ReadAsStringAsync();
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    ViewBag.PythonOutput = "Error calling the Python API: " + response.ReasonPhrase;
+                }
+                else
+                {
+                    // Step 2: Deserialize Flask API response to a list of recommended events
+                    recommendedEvents = JsonConvert.DeserializeObject<List<FilteredEvent>>(jsonResponse);
+                }
+            }
+
+            return recommendedEvents; // Return the list of recommended events
+        }
+
         [AllowAnonymous]
         public ActionResult ChooseRegister()
         {

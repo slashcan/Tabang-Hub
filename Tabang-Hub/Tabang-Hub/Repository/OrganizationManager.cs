@@ -1,7 +1,11 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web;
+using System.Web.Mvc;
 using Tabang_Hub.Utils;
 
 namespace Tabang_Hub.Repository
@@ -73,7 +77,7 @@ namespace Tabang_Hub.Repository
                 eventId = eventId,
                 orgInfoId = orgInfoId
             };
-            if(_groupChat.Create(gc, out errMsg) != ErrorCode.Success)
+            if (_groupChat.Create(gc, out errMsg) != ErrorCode.Success)
             {
                 return ErrorCode.Error;
             }
@@ -88,7 +92,7 @@ namespace Tabang_Hub.Repository
                     skillId = skillId.skillId,
                     totalNeeded = skill.Value
                 };
-                
+
                 if (_orgSkillRequirements.Create(skillRequirement, out errMsg) != ErrorCode.Success)
                 {
                     return ErrorCode.Error;
@@ -183,7 +187,7 @@ namespace Tabang_Hub.Repository
                         return ErrorCode.Error;
                     }
                 }
-            }         
+            }
 
             // Step 2: Update existing skills where totalNeeded has changed
             foreach (var oldSkill in oldSkills)
@@ -277,8 +281,8 @@ namespace Tabang_Hub.Repository
         {
             return _listOfEvents.GetAll().Where(m => m.User_Id == userId).ToList();
         }
-       
-        public decimal GetTotalDonationByUserId(int userId) 
+
+        public decimal GetTotalDonationByUserId(int userId)
         {
             var events = ListOfEvents(userId);
 
@@ -313,11 +317,11 @@ namespace Tabang_Hub.Repository
             int totalVolunteer = 0;
 
             foreach (var totalEvent in events)
-            { 
+            {
                 var volunteers = GetTotalVolunteerByEventId(totalEvent.Event_Id);
 
                 totalVolunteer += volunteers.Count();
-         
+
             }
 
             var historyEvents = GetEventHistoryByUserId(userId);
@@ -460,7 +464,7 @@ namespace Tabang_Hub.Repository
         }
 
         public List<Volunteers> GetVolunteersByEventId(int eventId)
-        { 
+        {
             return _eventVolunteers._table.Where(m => m.eventId == eventId).ToList();
         }
         public List<VolunteerSkill> GetVolunteerSkillsByUserId(int? userId)
@@ -468,19 +472,19 @@ namespace Tabang_Hub.Repository
             return _volunteerSkills._table.Where(m => m.userId == userId).ToList();
         }
         public List<VolunteerSkillsHistory> GetVolunteerSkillHistoryByUserId(int userId)
-        { 
+        {
             return _volunteerSkillHistory._table.Where(m => m.userId == userId).ToList();
         }
         public List<UserDonated> GetTotalDonationByEventId(int eventId)
-        { 
+        {
             return _userDonated._table.Where(m => m.eventId == eventId).ToList();
         }
         public Skills GetSkillIdBySkillName(string skillName)
-        { 
+        {
             return _skills._table.Where(m => m.skillName == skillName).FirstOrDefault();
         }
         public List<UserDonatedHistory> GetTotalDonationHistoryByEventId(int eventId)
-        { 
+        {
             return _userDonatedHistory._table.Where(d => d.eventId == eventId).ToList();
         }
         public List<Volunteers> GetTotalVolunteerByEventId(int eventId)
@@ -492,15 +496,15 @@ namespace Tabang_Hub.Repository
             return _userAccount._table.Where(m => m.roleId == 1 && m.status == 1).ToList();
         }
         public List<VolunteersHistory> GetTotalVolunteerHistoryByEventId(int eventId)
-        { 
+        {
             return _volunteersHistory._table.Where(v => v.eventId == eventId).ToList();
         }
         public OrgInfo GetProfileByProfileId(int? id)
-        { 
+        {
             return _orgInfo._table.Where(m => m.userId == id).FirstOrDefault();
         }
         public List<Skills> ListOfSkills()
-        { 
+        {
             return _skills.GetAll().ToList();
         }
         public Volunteers GetVolunteerById(int id, int eventId)
@@ -545,7 +549,7 @@ namespace Tabang_Hub.Repository
             return _volunteerSkills.GetAll();
         }
         public List<VolunteerSkill> GetListOfVolunteerSkillByUserId(int userId)
-        { 
+        {
             return _volunteerSkills.GetAll().Where(m => m.userId == userId).ToList();
         }
         public UserAccount GetUserByUserId(int userId)
@@ -697,7 +701,7 @@ namespace Tabang_Hub.Repository
                         foreach (var skills in volunteerSkills)
                         {
                             var volunteerSkillHistory = new VolunteerSkillsHistory()
-                            { 
+                            {
                                 userId = skills.userId,
                                 skillId = skills.skillId,
                             };
@@ -719,7 +723,7 @@ namespace Tabang_Hub.Repository
                             appliedAt = volunteer?.appliedAt,
                             skillId = volunteer.skillId,
                             Status = volunteer?.Status,
-                        };                        
+                        };
 
                         if (_volunteersHistory.Create(volunteersHistory, out errMsg) != ErrorCode.Success)
                         {
@@ -788,6 +792,38 @@ namespace Tabang_Hub.Repository
             }
             return ErrorCode.Success;
         }
+        //public async Task<List<UserAccount>> GetMatchedVolunteers(int eventId)
+        //{
+            //string flaskApiUrl = "http://127.0.0.1:5000/recruit"; // Flask API URL
+            //List<FilteredVolunteer> recruit = new List<FilteredVolunteer>();
+
+            //var datas = new
+            //{
+            //    user_skills = _volunteerSkills.GetAll().Select(m => new { userId = m.userId, skillId = m.skillId }).ToList(),
+            //    event_data = _orgEvents.GetAll().Where(m => m.dateEnd >= DateTime.Now).Select(m => new { eventId = m.eventId, eventDescription = m.eventDescription }).ToList(),
+            //    event_skills = db.OrgSkillRequirement.Select(es => new { eventId = es.eventId, skillId = es.skillId }).ToList(),
+            //    volunteer_history = _volunteersHistory.GetAll().Select(vh => new { eventId = vh.eventId, attended = vh.attended }).ToList()
+            //};
+
+            //using (var client = new HttpClient())
+            //{
+            //    // Step 1: Send POST request to Flask API with the requestData
+            //    var response = await client.PostAsJsonAsync(flaskApiUrl, datas);
+            //    var jsonResponse = await response.Content.ReadAsStringAsync();
+
+            //    if (!response.IsSuccessStatusCode)
+            //    {
+            //        ViewBag.PythonOutput = "Error calling the Python API: " + response.ReasonPhrase;
+            //    }
+            //    else
+            //    {
+            //        // Step 2: Deserialize Flask API response to a list of recommended events
+            //        recruit = JsonConvert.DeserializeObject<List<FilteredVolunteer>>(jsonResponse);
+            //    }
+            //}
+
+            //return recruit; // Return the list of recommended events
+        //}
         public List<UserAccount> GetMatchedVolunteers(int eventId)
         {
 

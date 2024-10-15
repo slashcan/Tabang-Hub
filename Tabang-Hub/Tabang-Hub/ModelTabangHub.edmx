@@ -216,6 +216,7 @@
           <Property Name="userId" Type="int" />
           <Property Name="eventId" Type="int" />
           <Property Name="Status" Type="int" />
+          <Property Name="attended" Type="int" />
           <Property Name="skillId" Type="int" />
           <Property Name="appliedAt" Type="date" />
         </EntityType>
@@ -1194,6 +1195,7 @@ FROM [dbo].[vw_VolunteerAccounts] AS [vw_VolunteerAccounts]</DefiningQuery>
           <Property Name="Status" Type="Int32" />
           <Property Name="skillId" Type="Int32" />
           <Property Name="appliedAt" Type="DateTime" Precision="0" />
+          <Property Name="attended" Type="Int32" />
         </EntityType>
         <EntityType Name="VolunteerSkill">
           <Key>
@@ -1833,6 +1835,7 @@ FROM [dbo].[vw_VolunteerAccounts] AS [vw_VolunteerAccounts]</DefiningQuery>
           <EntitySetMapping Name="VolunteersHistory">
             <EntityTypeMapping TypeName="TabangHubModel.VolunteersHistory">
               <MappingFragment StoreEntitySet="VolunteersHistory">
+                <ScalarProperty Name="attended" ColumnName="attended" />
                 <ScalarProperty Name="appliedAt" ColumnName="appliedAt" />
                 <ScalarProperty Name="skillId" ColumnName="skillId" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
