@@ -26,9 +26,15 @@
     </FunctionImport>
     <FunctionImport Name="sp_matchSkill" ReturnType="Collection(TabangHubModel.sp_matchSkill_Result)">
       <Parameter Name="userId" Mode="In" Type="Int32" />
+      <Parameter Name="eventId" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_VolunteerHistory" ReturnType="Collection(TabangHubModel.sp_VolunteerHistory_Result)">
+      <Parameter Name="userId" Mode="In" Type="Int32" />
     </FunctionImport>
     <EntitySet Name="GroupChat" EntityType="TabangHubModel.GroupChat" />
+    <EntitySet Name="GroupChatHistory" EntityType="TabangHubModel.GroupChatHistory" />
     <EntitySet Name="GroupMessages" EntityType="TabangHubModel.GroupMessages" />
+    <EntitySet Name="GroupMessagesHistory" EntityType="TabangHubModel.GroupMessagesHistory" />
     <EntitySet Name="OrgEventHistory" EntityType="TabangHubModel.OrgEventHistory" />
     <EntitySet Name="OrgEventImage" EntityType="TabangHubModel.OrgEventImage" />
     <EntitySet Name="OrgEventImageHistory" EntityType="TabangHubModel.OrgEventImageHistory" />
@@ -38,6 +44,7 @@
     <EntitySet Name="OrgSkillRequirementsHistory" EntityType="TabangHubModel.OrgSkillRequirementsHistory" />
     <EntitySet Name="OrgValidation" EntityType="TabangHubModel.OrgValidation" />
     <EntitySet Name="ProfilePicture" EntityType="TabangHubModel.ProfilePicture" />
+    <EntitySet Name="Rating" EntityType="TabangHubModel.Rating" />
     <EntitySet Name="Role" EntityType="TabangHubModel.Role" />
     <EntitySet Name="Skills" EntityType="TabangHubModel.Skills" />
     <EntitySet Name="UserAccount" EntityType="TabangHubModel.UserAccount" />
@@ -181,6 +188,19 @@
     <Property Type="Int32" Name="userId" Nullable="true" />
     <Property Type="String" Name="skillName" Nullable="true" MaxLength="255" />
   </ComplexType>
+  <ComplexType Name="sp_VolunteerHistory_Result">
+    <Property Type="Int32" Name="VolHistoryId" Nullable="false" />
+    <Property Type="Int32" Name="userId" Nullable="true" />
+    <Property Type="Int32" Name="eventId" Nullable="true" />
+    <Property Type="Int32" Name="skillId" Nullable="true" />
+    <Property Type="String" Name="skillName" Nullable="true" MaxLength="255" />
+    <Property Type="String" Name="eventImage" Nullable="true" MaxLength="255" />
+    <Property Type="String" Name="eventTitle" Nullable="true" MaxLength="255" />
+    <Property Type="String" Name="location" Nullable="true" MaxLength="255" />
+    <Property Type="String" Name="eventDescription" Nullable="true" MaxLength="Max" />
+    <Property Type="DateTime" Name="dateStart" Nullable="true" Precision="23" />
+    <Property Type="DateTime" Name="dateEnd" Nullable="true" Precision="23" />
+  </ComplexType>
   <EntityType Name="GroupChat">
     <Key>
       <PropertyRef Name="groupChatId" />
@@ -191,6 +211,14 @@
     <NavigationProperty Name="OrgEvents" Relationship="TabangHubModel.FK_GroupChat_OrgEvents" FromRole="GroupChat" ToRole="OrgEvents" />
     <NavigationProperty Name="OrgInfo" Relationship="TabangHubModel.FK_GroupChat_OrgInfo" FromRole="GroupChat" ToRole="OrgInfo" />
     <NavigationProperty Name="GroupMessages" Relationship="TabangHubModel.FK_GroupMessages_GroupChat" FromRole="GroupChat" ToRole="GroupMessages" />
+  </EntityType>
+  <EntityType Name="GroupChatHistory">
+    <Key>
+      <PropertyRef Name="groupChatId" />
+    </Key>
+    <Property Name="groupChatId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="eventId" Type="Int32" />
+    <Property Name="orgInfoId" Type="Int32" />
   </EntityType>
   <EntityType Name="GroupMessages">
     <Key>
@@ -203,6 +231,16 @@
     <Property Name="messageAt" Type="DateTime" Precision="3" />
     <NavigationProperty Name="GroupChat" Relationship="TabangHubModel.FK_GroupMessages_GroupChat" FromRole="GroupMessages" ToRole="GroupChat" />
     <NavigationProperty Name="UserAccount" Relationship="TabangHubModel.FK_GroupMessages_UserAccount" FromRole="GroupMessages" ToRole="UserAccount" />
+  </EntityType>
+  <EntityType Name="GroupMessagesHistory">
+    <Key>
+      <PropertyRef Name="messageId" />
+    </Key>
+    <Property Name="messageId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="groupChatId" Type="Int32" />
+    <Property Name="userId" Type="Int32" />
+    <Property Name="message" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="messageAt" Type="DateTime" Precision="3" />
   </EntityType>
   <EntityType Name="OrgEventHistory">
     <Key>
@@ -318,6 +356,16 @@
     <Property Name="profilePath" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
     <NavigationProperty Name="VolunteerInfo" Relationship="TabangHubModel.FK_VolunteerInfo_ProfilePicture" FromRole="ProfilePicture" ToRole="VolunteerInfo" />
   </EntityType>
+  <EntityType Name="Rating">
+    <Key>
+      <PropertyRef Name="ratingId" />
+    </Key>
+    <Property Name="ratingId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="userId" Type="Int32" />
+    <Property Name="skillId" Type="Int32" />
+    <Property Name="rate" Type="Int32" />
+    <Property Name="ratedAt" Type="DateTime" Precision="3" />
+  </EntityType>
   <EntityType Name="Role">
     <Key>
       <PropertyRef Name="roleId" />
@@ -417,6 +465,7 @@
     <Property Name="eventId" Type="Int32" />
     <Property Name="Status" Type="Int32" />
     <Property Name="skillId" Type="Int32" />
+    <Property Name="attended" Type="Int32" />
     <Property Name="appliedAt" Type="DateTime" Precision="0" />
     <NavigationProperty Name="OrgEvents" Relationship="TabangHubModel.FK_Volunteers_OrgEvents" FromRole="Volunteers" ToRole="OrgEvents" />
     <NavigationProperty Name="Skills" Relationship="TabangHubModel.FK_Volunteers_Skills" FromRole="Volunteers" ToRole="Skills" />
@@ -431,8 +480,8 @@
     <Property Name="eventId" Type="Int32" />
     <Property Name="Status" Type="Int32" />
     <Property Name="skillId" Type="Int32" />
-    <Property Name="appliedAt" Type="DateTime" Precision="0" />
     <Property Name="attended" Type="Int32" />
+    <Property Name="appliedAt" Type="DateTime" Precision="0" />
   </EntityType>
   <EntityType Name="VolunteerSkill">
     <Key>

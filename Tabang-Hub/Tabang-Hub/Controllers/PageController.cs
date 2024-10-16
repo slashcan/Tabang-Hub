@@ -46,7 +46,7 @@ namespace Tabang_Hub.Controllers
 
                         var getUserDonated = new List<UserDonated>();
                         foreach (var eventId in orgEventsSelectId)
-                        {
+                        {           
                             getUserDonated = _userDonated.GetAll().Where(m => m.eventId == eventId).ToList();
                         }
 

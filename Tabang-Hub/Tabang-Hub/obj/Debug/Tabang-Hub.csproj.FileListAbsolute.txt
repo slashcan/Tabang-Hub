@@ -813,3 +813,8 @@ C:\Users\arvie\OneDrive\Desktop\Tabang-Hub\Tabang-Hub\Tabang-Hub\Tabang-Hub\bin\
 C:\Users\arvie\OneDrive\Desktop\Tabang-Hub\Tabang-Hub\Tabang-Hub\Tabang-Hub\bin\System.Text.Json.xml
 C:\Users\arvie\OneDrive\Desktop\Tabang-Hub\Tabang-Hub\Tabang-Hub\Tabang-Hub\bin\System.Threading.Tasks.Extensions.xml
 C:\Users\arvie\OneDrive\Desktop\Tabang-Hub\Tabang-Hub\Tabang-Hub\Tabang-Hub\bin\System.ValueTuple.xml
+D:\School Shits\Tabang-Hub\Tabang-Hub\Tabang-Hub\bin\Newtonsoft.Json.Bson.dll
+D:\School Shits\Tabang-Hub\Tabang-Hub\Tabang-Hub\bin\System.Net.Http.Formatting.dll
+D:\School Shits\Tabang-Hub\Tabang-Hub\Tabang-Hub\bin\Newtonsoft.Json.Bson.pdb
+D:\School Shits\Tabang-Hub\Tabang-Hub\Tabang-Hub\bin\Newtonsoft.Json.Bson.xml
+D:\School Shits\Tabang-Hub\Tabang-Hub\Tabang-Hub\bin\System.Net.Http.Formatting.xml

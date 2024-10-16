@@ -8,7 +8,25 @@
     <Property Name="eventId" Type="int" />
     <Property Name="orgInfoId" Type="int" />
   </EntityType>
+  <EntityType Name="GroupChatHistory">
+    <Key>
+      <PropertyRef Name="groupChatId" />
+    </Key>
+    <Property Name="groupChatId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="eventId" Type="int" />
+    <Property Name="orgInfoId" Type="int" />
+  </EntityType>
   <EntityType Name="GroupMessages">
+    <Key>
+      <PropertyRef Name="messageId" />
+    </Key>
+    <Property Name="messageId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="groupChatId" Type="int" />
+    <Property Name="userId" Type="int" />
+    <Property Name="message" Type="text" />
+    <Property Name="messageAt" Type="datetime" />
+  </EntityType>
+  <EntityType Name="GroupMessagesHistory">
     <Key>
       <PropertyRef Name="messageId" />
     </Key>
@@ -119,6 +137,16 @@
     <Property Name="userId" Type="int" />
     <Property Name="profilePath" Type="nvarchar" MaxLength="255" />
   </EntityType>
+  <EntityType Name="Rating">
+    <Key>
+      <PropertyRef Name="ratingId" />
+    </Key>
+    <Property Name="ratingId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="userId" Type="int" />
+    <Property Name="skillId" Type="int" />
+    <Property Name="rate" Type="int" />
+    <Property Name="ratedAt" Type="datetime" />
+  </EntityType>
   <EntityType Name="Role">
     <Key>
       <PropertyRef Name="roleId" />
@@ -201,6 +229,7 @@
     <Property Name="eventId" Type="int" />
     <Property Name="Status" Type="int" />
     <Property Name="skillId" Type="int" />
+    <Property Name="attended" Type="int" />
     <Property Name="appliedAt" Type="date" />
   </EntityType>
   <EntityType Name="VolunteersHistory">
@@ -211,8 +240,8 @@
     <Property Name="userId" Type="int" />
     <Property Name="eventId" Type="int" />
     <Property Name="Status" Type="int" />
-    <Property Name="attended" Type="int" />
     <Property Name="skillId" Type="int" />
+    <Property Name="attended" Type="int" />
     <Property Name="appliedAt" Type="date" />
   </EntityType>
   <EntityType Name="VolunteerSkill">
@@ -576,6 +605,7 @@ warning 6002: The table/view 'TabangHub.dbo.vw_VolunteerAccounts' does not have 
   </Function>
   <Function Name="sp_matchSkill" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="userId" Type="int" Mode="In" />
+    <Parameter Name="eventId" Type="int" Mode="In" />
   </Function>
   <Function Name="sp_OtherEvent" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="userId" Type="int" Mode="In" />
@@ -583,9 +613,14 @@ warning 6002: The table/view 'TabangHub.dbo.vw_VolunteerAccounts' does not have 
   <Function Name="sp_UserListEvent" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="userId" Type="int" Mode="In" />
   </Function>
+  <Function Name="sp_VolunteerHistory" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="userId" Type="int" Mode="In" />
+  </Function>
   <EntityContainer Name="TabangHubModelStoreContainer">
     <EntitySet Name="GroupChat" EntityType="Self.GroupChat" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="GroupChatHistory" EntityType="Self.GroupChatHistory" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="GroupMessages" EntityType="Self.GroupMessages" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="GroupMessagesHistory" EntityType="Self.GroupMessagesHistory" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="OrgEventHistory" EntityType="Self.OrgEventHistory" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="OrgEventImage" EntityType="Self.OrgEventImage" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="OrgEventImageHistory" EntityType="Self.OrgEventImageHistory" Schema="dbo" store:Type="Tables" />
@@ -595,6 +630,7 @@ warning 6002: The table/view 'TabangHub.dbo.vw_VolunteerAccounts' does not have 
     <EntitySet Name="OrgSkillRequirementsHistory" EntityType="Self.OrgSkillRequirementsHistory" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="OrgValidation" EntityType="Self.OrgValidation" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ProfilePicture" EntityType="Self.ProfilePicture" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Rating" EntityType="Self.Rating" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Skills" EntityType="Self.Skills" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="UserAccount" EntityType="Self.UserAccount" Schema="dbo" store:Type="Tables" />
