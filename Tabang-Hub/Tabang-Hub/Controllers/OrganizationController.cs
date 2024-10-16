@@ -11,6 +11,7 @@ using Tabang_Hub.Repository;
 using Tabang_Hub.Utils;
 using System.Text;
 using Microsoft.AspNet.SignalR.Hubs;
+using System.Threading.Tasks;
 
 namespace Tabang_Hub.Controllers
 {
@@ -183,7 +184,7 @@ namespace Tabang_Hub.Controllers
             TempData["Success"] = true;
             return RedirectToAction("EventsList");
         }
-        public ActionResult Details(int id)
+        public async Task<ActionResult> Details(int id)
         {
             var events = _organizationManager.GetEventById(id);
             var listofImage = _organizationManager.listOfEventImage(id);
@@ -192,9 +193,17 @@ namespace Tabang_Hub.Controllers
             var orgInfo = _organizationManager.GetOrgInfoByUserId(UserId);
             var listOfEventVolunteers = _organizationManager.ListOfEventVolunteers(id);
             var volunteerSkills = _organizationManager.ListOfEventVolunteerSkills();
-            var matchedSkill = _organizationManager.GetMatchedVolunteers(id);
+            //var matchedSkill = _organizationManager.GetMatchedVolunteers(id);
+            var matchedSkill = await _organizationManager.GetMatchedVolunteers(id);
             //var profile = _organizationManager.GetProfileByProfileId(orgInfo.profileId);
             var listOfSkill = _organizationManager.ListOfSkills();
+
+            var usrRank = new List<UserAccount>();
+            foreach (var data in matchedSkill)
+            {
+                var usrs = _userAcc.GetAll().Where(m => m.userId == data.userId).ToList();
+                usrRank.AddRange(usrs);
+            }
 
             var indexModel = new Lists()
             {
@@ -206,7 +215,9 @@ namespace Tabang_Hub.Controllers
                 listOfEventVolunteers = listOfEventVolunteers,
                 volunteersSkills = volunteerSkills,
                 listofUserDonated = listofUserDonated,
-                matchedSkills = matchedSkill,
+                matchedSkills = usrRank,
+                //filteredVolunteers = matchedSkill,
+                //matchedSkills = matchedSkill,
                 //profilePic = profile,
             };
 

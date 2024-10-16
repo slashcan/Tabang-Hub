@@ -445,5 +445,15 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="vw_VolunteerSkills">
+      <EntityTypeMapping TypeName="TabangHubModel.vw_VolunteerSkills">
+        <MappingFragment StoreEntitySet="vw_VolunteerSkills">
+          <ScalarProperty Name="rate" ColumnName="rate" />
+          <ScalarProperty Name="skillId" ColumnName="skillId" />
+          <ScalarProperty Name="userId" ColumnName="userId" />
+          <ScalarProperty Name="ratingId" ColumnName="ratingId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
   </EntityContainerMapping>
 </Mapping>

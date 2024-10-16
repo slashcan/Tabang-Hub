@@ -351,6 +351,17 @@ warning 6002: The table/view 'TabangHub.dbo.vw_VolunteerAccounts' does not have 
           <Property Name="Availability" Type="nvarchar" MaxLength="25" />
           <Property Name="About_Me" Type="text" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'TabangHub.dbo.vw_VolunteerSkills' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="vw_VolunteerSkills">
+          <Key>
+            <PropertyRef Name="ratingId" />
+          </Key>
+          <Property Name="ratingId" Type="int" Nullable="false" />
+          <Property Name="userId" Type="int" />
+          <Property Name="skillId" Type="int" />
+          <Property Name="rate" Type="int" />
+        </EntityType>
         <Association Name="FK_GroupChat_OrgEvents">
           <End Role="OrgEvents" Type="Self.OrgEvents" Multiplicity="0..1" />
           <End Role="GroupChat" Type="Self.GroupChat" Multiplicity="*" />
@@ -467,6 +478,30 @@ warning 6002: The table/view 'TabangHub.dbo.vw_VolunteerAccounts' does not have 
               <PropertyRef Name="userId" />
             </Principal>
             <Dependent Role="OrgValidation">
+              <PropertyRef Name="userId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Rating_Skills">
+          <End Role="Skills" Type="Self.Skills" Multiplicity="0..1" />
+          <End Role="Rating" Type="Self.Rating" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Skills">
+              <PropertyRef Name="skillId" />
+            </Principal>
+            <Dependent Role="Rating">
+              <PropertyRef Name="skillId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Rating_UserAccount">
+          <End Role="UserAccount" Type="Self.UserAccount" Multiplicity="0..1" />
+          <End Role="Rating" Type="Self.Rating" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserAccount">
+              <PropertyRef Name="userId" />
+            </Principal>
+            <Dependent Role="Rating">
               <PropertyRef Name="userId" />
             </Dependent>
           </ReferentialConstraint>
@@ -714,6 +749,14 @@ FROM [dbo].[vw_UserRoles] AS [vw_UserRoles]</DefiningQuery>
 [vw_VolunteerAccounts].[About_Me] AS [About_Me]
 FROM [dbo].[vw_VolunteerAccounts] AS [vw_VolunteerAccounts]</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="vw_VolunteerSkills" EntityType="Self.vw_VolunteerSkills" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+[vw_VolunteerSkills].[ratingId] AS [ratingId], 
+[vw_VolunteerSkills].[userId] AS [userId], 
+[vw_VolunteerSkills].[skillId] AS [skillId], 
+[vw_VolunteerSkills].[rate] AS [rate]
+FROM [dbo].[vw_VolunteerSkills] AS [vw_VolunteerSkills]</DefiningQuery>
+          </EntitySet>
           <AssociationSet Name="FK_GroupChat_OrgEvents" Association="Self.FK_GroupChat_OrgEvents">
             <End Role="OrgEvents" EntitySet="OrgEvents" />
             <End Role="GroupChat" EntitySet="GroupChat" />
@@ -753,6 +796,14 @@ FROM [dbo].[vw_VolunteerAccounts] AS [vw_VolunteerAccounts]</DefiningQuery>
           <AssociationSet Name="FK_OrgValidation_UserAccount" Association="Self.FK_OrgValidation_UserAccount">
             <End Role="UserAccount" EntitySet="UserAccount" />
             <End Role="OrgValidation" EntitySet="OrgValidation" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Rating_Skills" Association="Self.FK_Rating_Skills">
+            <End Role="Skills" EntitySet="Skills" />
+            <End Role="Rating" EntitySet="Rating" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Rating_UserAccount" Association="Self.FK_Rating_UserAccount">
+            <End Role="UserAccount" EntitySet="UserAccount" />
+            <End Role="Rating" EntitySet="Rating" />
           </AssociationSet>
           <AssociationSet Name="FK_Skills_UserAccount" Association="Self.FK_Skills_UserAccount">
             <End Role="Skills" EntitySet="Skills" />
@@ -939,6 +990,15 @@ FROM [dbo].[vw_VolunteerAccounts] AS [vw_VolunteerAccounts]</DefiningQuery>
             <End Role="UserAccount" EntitySet="UserAccount" />
             <End Role="Volunteers" EntitySet="Volunteers" />
           </AssociationSet>
+          <AssociationSet Name="FK_Rating_Skills" Association="TabangHubModel.FK_Rating_Skills">
+            <End Role="Skills" EntitySet="Skills" />
+            <End Role="Rating" EntitySet="Rating" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Rating_UserAccount" Association="TabangHubModel.FK_Rating_UserAccount">
+            <End Role="UserAccount" EntitySet="UserAccount" />
+            <End Role="Rating" EntitySet="Rating" />
+          </AssociationSet>
+          <EntitySet Name="vw_VolunteerSkills" EntityType="TabangHubModel.vw_VolunteerSkills" />
           </EntityContainer>
         <ComplexType Name="sp_GetSkills_Result">
           <Property Type="Int32" Name="skillId" Nullable="false" />
@@ -1164,6 +1224,8 @@ FROM [dbo].[vw_VolunteerAccounts] AS [vw_VolunteerAccounts]</DefiningQuery>
           <Property Name="skillId" Type="Int32" />
           <Property Name="rate" Type="Int32" />
           <Property Name="ratedAt" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Skills" Relationship="TabangHubModel.FK_Rating_Skills" FromRole="Rating" ToRole="Skills" />
+          <NavigationProperty Name="UserAccount" Relationship="TabangHubModel.FK_Rating_UserAccount" FromRole="Rating" ToRole="UserAccount" />
         </EntityType>
         <EntityType Name="Role">
           <Key>
@@ -1183,6 +1245,7 @@ FROM [dbo].[vw_VolunteerAccounts] AS [vw_VolunteerAccounts]</DefiningQuery>
           <NavigationProperty Name="VolunteerSkill" Relationship="TabangHubModel.FK_Skills_UserAccount" FromRole="Skills" ToRole="VolunteerSkill" />
           <NavigationProperty Name="Volunteers" Relationship="TabangHubModel.FK_Volunteers_Skills" FromRole="Skills" ToRole="Volunteers" />
           <NavigationProperty Name="VolunteerSkillsHistory" Relationship="TabangHubModel.FK_VolunteerSkillsHistory_Skills" FromRole="Skills" ToRole="VolunteerSkillsHistory" />
+          <NavigationProperty Name="Rating" Relationship="TabangHubModel.FK_Rating_Skills" FromRole="Skills" ToRole="Rating" />
         </EntityType>
         <EntityType Name="UserAccount">
           <Key>
@@ -1201,6 +1264,7 @@ FROM [dbo].[vw_VolunteerAccounts] AS [vw_VolunteerAccounts]</DefiningQuery>
           <NavigationProperty Name="UserRoles" Relationship="TabangHubModel.FK_UserRoles_UserAccount" FromRole="UserAccount" ToRole="UserRoles" />
           <NavigationProperty Name="VolunteerInfo" Relationship="TabangHubModel.FK_VolunteerInfo_UserAccount" FromRole="UserAccount" ToRole="VolunteerInfo" />
           <NavigationProperty Name="Volunteers" Relationship="TabangHubModel.FK_Volunteers_UserAccount" FromRole="UserAccount" ToRole="Volunteers" />
+          <NavigationProperty Name="Rating" Relationship="TabangHubModel.FK_Rating_UserAccount" FromRole="UserAccount" ToRole="Rating" />
         </EntityType>
         <EntityType Name="UserDonated">
           <Key>
@@ -1616,6 +1680,39 @@ FROM [dbo].[vw_VolunteerAccounts] AS [vw_VolunteerAccounts]</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Rating_Skills">
+          <End Type="TabangHubModel.Skills" Role="Skills" Multiplicity="0..1" />
+          <End Type="TabangHubModel.Rating" Role="Rating" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Skills">
+              <PropertyRef Name="skillId" />
+            </Principal>
+            <Dependent Role="Rating">
+              <PropertyRef Name="skillId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Rating_UserAccount">
+          <End Type="TabangHubModel.UserAccount" Role="UserAccount" Multiplicity="0..1" />
+          <End Type="TabangHubModel.Rating" Role="Rating" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserAccount">
+              <PropertyRef Name="userId" />
+            </Principal>
+            <Dependent Role="Rating">
+              <PropertyRef Name="userId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="vw_VolunteerSkills">
+          <Key>
+            <PropertyRef Name="ratingId" />
+          </Key>
+          <Property Name="ratingId" Type="Int32" Nullable="false" />
+          <Property Name="userId" Type="Int32" />
+          <Property Name="skillId" Type="Int32" />
+          <Property Name="rate" Type="Int32" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2063,6 +2160,16 @@ FROM [dbo].[vw_VolunteerAccounts] AS [vw_VolunteerAccounts]</DefiningQuery>
                 <ScalarProperty Name="Password" ColumnName="Password" />
                 <ScalarProperty Name="Email" ColumnName="Email" />
                 <ScalarProperty Name="User_Id" ColumnName="User_Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="vw_VolunteerSkills">
+            <EntityTypeMapping TypeName="TabangHubModel.vw_VolunteerSkills">
+              <MappingFragment StoreEntitySet="vw_VolunteerSkills">
+                <ScalarProperty Name="rate" ColumnName="rate" />
+                <ScalarProperty Name="skillId" ColumnName="skillId" />
+                <ScalarProperty Name="userId" ColumnName="userId" />
+                <ScalarProperty Name="ratingId" ColumnName="ratingId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -36,6 +36,7 @@ namespace Tabang_Hub.Repository
         private BaseRepository<GroupMessages> _groupMessages;
         private BaseRepository<GroupMessagesHistory> _groupMessagesHistory;
         private BaseRepository<Rating> _ratings;
+        private BaseRepository<vw_VolunteerSkills> _vwVollunterSkills;
 
         public OrganizationManager()
         {
@@ -63,6 +64,7 @@ namespace Tabang_Hub.Repository
             _groupMessages = new BaseRepository<GroupMessages>();
             _groupMessagesHistory = new BaseRepository<GroupMessagesHistory>();
             _ratings = new BaseRepository<Rating>();
+            _vwVollunterSkills = new BaseRepository<vw_VolunteerSkills>();
         }
 
 
@@ -806,72 +808,89 @@ namespace Tabang_Hub.Repository
             }
             return ErrorCode.Success;
         }
-        //public async Task<List<UserAccount>> GetMatchedVolunteers(int eventId)
-        //{
-            //string flaskApiUrl = "http://127.0.0.1:5000/recruit"; // Flask API URL
-            //List<FilteredVolunteer> recruit = new List<FilteredVolunteer>();
-
-            //var datas = new
-            //{
-            //    user_skills = _volunteerSkills.GetAll().Select(m => new { userId = m.userId, skillId = m.skillId }).ToList(),
-            //    event_data = _orgEvents.GetAll().Where(m => m.dateEnd >= DateTime.Now).Select(m => new { eventId = m.eventId, eventDescription = m.eventDescription }).ToList(),
-            //    event_skills = db.OrgSkillRequirement.Select(es => new { eventId = es.eventId, skillId = es.skillId }).ToList(),
-            //    volunteer_history = _volunteersHistory.GetAll().Select(vh => new { eventId = vh.eventId, attended = vh.attended }).ToList()
-            //};
-
-            //using (var client = new HttpClient())
-            //{
-            //    // Step 1: Send POST request to Flask API with the requestData
-            //    var response = await client.PostAsJsonAsync(flaskApiUrl, datas);
-            //    var jsonResponse = await response.Content.ReadAsStringAsync();
-
-            //    if (!response.IsSuccessStatusCode)
-            //    {
-            //        ViewBag.PythonOutput = "Error calling the Python API: " + response.ReasonPhrase;
-            //    }
-            //    else
-            //    {
-            //        // Step 2: Deserialize Flask API response to a list of recommended events
-            //        recruit = JsonConvert.DeserializeObject<List<FilteredVolunteer>>(jsonResponse);
-            //    }
-            //}
-
-            //return recruit; // Return the list of recommended events
-        //}
-        public List<UserAccount> GetMatchedVolunteers(int eventId)
+        public async Task<List<FilteredVolunteer>> GetMatchedVolunteers(int eventId)
         {
+            string flaskApiUrl = "http://127.0.0.1:5000/recruit"; // Flask API URL
+            List<FilteredVolunteer> recruit = new List<FilteredVolunteer>();
+            string errorMessage = null;
 
-            var matchedVolunteers = new List<UserAccount>();
-
-            var userAcc = GetListOfVolunteer();
-
-            var orgEvent = GetEventsByEventId(eventId);
-
-            foreach (var users in userAcc)
+            // Prepare the data to pass to Flask
+            var datas = new
             {
-                var userSkills = GetVolunteerSkillsByUserId(users.userId);
+                // Retrieve only relevant user skills for volunteers
+                user_skills = _vwVollunterSkills.GetAll().Select(m => new { userId = m.userId, skillId = m.skillId, rating = m.rate }).ToList(),
 
-                foreach (var skills in userSkills)
+                // Pass only the specific event's data
+                event_data = _orgEvents.GetAll().Where(m => m.eventId == eventId).Select(m => new { eventId = m.eventId, eventDescription = m.eventDescription }).ToList(),
+
+                // Only pass skills required for the specific event
+                event_skills = db.OrgSkillRequirement.Where(es => es.eventId == eventId).Select(es => new { eventId = es.eventId, skillId = es.skillId }).ToList(),
+
+                // Include volunteer history for future use in model training
+                volunteer_history = _volunteersHistory.GetAll().Select(vh => new { eventId = vh.eventId, attended = vh.attended }).ToList()
+            };
+
+            using (var client = new HttpClient())
+            {
+                try
                 {
-                    foreach (var skillRequ in orgEvent.OrgSkillRequirement)
-                    {
-                        if (skills.Skills.skillName == skillRequ.Skills.skillName)
-                        {
-                            matchedVolunteers.Add(users);
+                    // Step 1: Send POST request to Flask API with the requestData
+                    var response = await client.PostAsJsonAsync(flaskApiUrl, datas);
 
-                            break;
-                        }
-                    }
-
-                    if (matchedVolunteers.Contains(users))
+                    if (response.IsSuccessStatusCode)
                     {
-                        break;
+                        // Step 2: Deserialize Flask API response to a list of recommended events
+                        var jsonResponse = await response.Content.ReadAsStringAsync();
+                        recruit = JsonConvert.DeserializeObject<List<FilteredVolunteer>>(jsonResponse);
                     }
+                    else
+                    {
+                        errorMessage = "Error calling the Python API: " + response.ReasonPhrase;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    errorMessage = "An error occurred: " + ex.Message;
                 }
             }
 
-            return matchedVolunteers;
+            return recruit; // Return the list of recommended volunteers and any error message
         }
+
+        //public List<UserAccount> GetMatchedVolunteers(int eventId)
+        //{
+
+        //    var matchedVolunteers = new List<UserAccount>();
+
+        //    var userAcc = GetListOfVolunteer();
+
+        //    var orgEvent = GetEventsByEventId(eventId);
+
+        //    foreach (var users in userAcc)
+        //    {
+        //        var userSkills = GetVolunteerSkillsByUserId(users.userId);
+
+        //        foreach (var skills in userSkills)
+        //        {
+        //            foreach (var skillRequ in orgEvent.OrgSkillRequirement)
+        //            {
+        //                if (skills.Skills.skillName == skillRequ.Skills.skillName)
+        //                {
+        //                    matchedVolunteers.Add(users);
+
+        //                    break;
+        //                }
+        //            }
+
+        //            if (matchedVolunteers.Contains(users))
+        //            {
+        //                break;
+        //            }
+        //        }
+        //    }
+
+        //    return matchedVolunteers;
+        //}
         public ErrorCode TrasferToHisotry1(int eventId, ref string errMsg)
         {
             var orgEvent = GetEventByEventId(eventId);

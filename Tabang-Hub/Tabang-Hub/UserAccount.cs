@@ -24,6 +24,7 @@ namespace Tabang_Hub
             this.UserRoles = new HashSet<UserRoles>();
             this.VolunteerInfo = new HashSet<VolunteerInfo>();
             this.Volunteers = new HashSet<Volunteers>();
+            this.Rating = new HashSet<Rating>();
         }
     
         public int userId { get; set; }
@@ -40,5 +41,6 @@ namespace Tabang_Hub
         public virtual ICollection<UserRoles> UserRoles { get; set; }
         public virtual ICollection<VolunteerInfo> VolunteerInfo { get; set; }
         public virtual ICollection<Volunteers> Volunteers { get; set; }
+        public virtual ICollection<Rating> Rating { get; set; }
     }
 }

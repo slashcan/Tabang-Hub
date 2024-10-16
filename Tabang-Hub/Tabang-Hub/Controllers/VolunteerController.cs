@@ -266,7 +266,7 @@ namespace Tabang_Hub.Controllers
                         volunteers = getVolunteers,
                         listofUserDonated = listofUserDonated,
                         volunteersStatusEvent = volunteerStatusEvent,
-                        matchSkill = db.sp_matchSkill(UserId).ToList(),
+                        matchSkill = db.sp_matchSkill(UserId, eventId).ToList(),
                     };
                     return View(indexModel);
                 }
@@ -636,7 +636,7 @@ namespace Tabang_Hub.Controllers
                 var getVolunteerInfo = db.VolunteerInfo.Where(m => m.userId == UserId).ToList();
                 var acceptedEvents = _volunteers.GetAll().Where(m => m.userId == UserId && m.Status == 1).ToList();
                 var pendingEvents = _volunteers.GetAll().Where(m => m.userId == UserId && m.Status == 0).ToList();
-
+                var getOrgImages = _eventImages.GetAll().ToList();
                 var userProfile = db.ProfilePicture.Where(m => m.userId == UserId).ToList();
 
                 var indexModel = new Lists()
@@ -644,8 +644,11 @@ namespace Tabang_Hub.Controllers
                     picture = userProfile,
                     volunteers = acceptedEvents,
                     orgEvents = acceptedEvents.Select(e => _orgEvents.GetAll().FirstOrDefault(o => o.eventId == e.eventId)).ToList(),
+                    orgEventHistory = db.OrgEventHistory.Where(m => m.userId == UserId).ToList(),
                     pendingOrgDetails = pendingEvents.Select(e => _pendingOrgDetails.GetAll().FirstOrDefault(p => p.eventId == e.eventId)).ToList(),
-                    volunteersInfo = getVolunteerInfo
+                    volunteersInfo = getVolunteerInfo,
+                    volunteersHistories = db.sp_VolunteerHistory(UserId).ToList(),
+                    detailsEventImage = getOrgImages
                 };
 
                 return View(indexModel);

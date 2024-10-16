@@ -346,6 +346,17 @@ warning 6002: The table/view 'TabangHub.dbo.vw_VolunteerAccounts' does not have 
     <Property Name="Availability" Type="nvarchar" MaxLength="25" />
     <Property Name="About_Me" Type="text" />
   </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'TabangHub.dbo.vw_VolunteerSkills' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="vw_VolunteerSkills">
+    <Key>
+      <PropertyRef Name="ratingId" />
+    </Key>
+    <Property Name="ratingId" Type="int" Nullable="false" />
+    <Property Name="userId" Type="int" />
+    <Property Name="skillId" Type="int" />
+    <Property Name="rate" Type="int" />
+  </EntityType>
   <Association Name="FK_GroupChat_OrgEvents">
     <End Role="OrgEvents" Type="Self.OrgEvents" Multiplicity="0..1" />
     <End Role="GroupChat" Type="Self.GroupChat" Multiplicity="*" />
@@ -462,6 +473,30 @@ warning 6002: The table/view 'TabangHub.dbo.vw_VolunteerAccounts' does not have 
         <PropertyRef Name="userId" />
       </Principal>
       <Dependent Role="OrgValidation">
+        <PropertyRef Name="userId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Rating_Skills">
+    <End Role="Skills" Type="Self.Skills" Multiplicity="0..1" />
+    <End Role="Rating" Type="Self.Rating" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Skills">
+        <PropertyRef Name="skillId" />
+      </Principal>
+      <Dependent Role="Rating">
+        <PropertyRef Name="skillId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Rating_UserAccount">
+    <End Role="UserAccount" Type="Self.UserAccount" Multiplicity="0..1" />
+    <End Role="Rating" Type="Self.Rating" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserAccount">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="Rating">
         <PropertyRef Name="userId" />
       </Dependent>
     </ReferentialConstraint>
@@ -709,6 +744,14 @@ FROM [dbo].[vw_UserRoles] AS [vw_UserRoles]</DefiningQuery>
 [vw_VolunteerAccounts].[About_Me] AS [About_Me]
 FROM [dbo].[vw_VolunteerAccounts] AS [vw_VolunteerAccounts]</DefiningQuery>
     </EntitySet>
+    <EntitySet Name="vw_VolunteerSkills" EntityType="Self.vw_VolunteerSkills" store:Type="Views" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+[vw_VolunteerSkills].[ratingId] AS [ratingId], 
+[vw_VolunteerSkills].[userId] AS [userId], 
+[vw_VolunteerSkills].[skillId] AS [skillId], 
+[vw_VolunteerSkills].[rate] AS [rate]
+FROM [dbo].[vw_VolunteerSkills] AS [vw_VolunteerSkills]</DefiningQuery>
+    </EntitySet>
     <AssociationSet Name="FK_GroupChat_OrgEvents" Association="Self.FK_GroupChat_OrgEvents">
       <End Role="OrgEvents" EntitySet="OrgEvents" />
       <End Role="GroupChat" EntitySet="GroupChat" />
@@ -748,6 +791,14 @@ FROM [dbo].[vw_VolunteerAccounts] AS [vw_VolunteerAccounts]</DefiningQuery>
     <AssociationSet Name="FK_OrgValidation_UserAccount" Association="Self.FK_OrgValidation_UserAccount">
       <End Role="UserAccount" EntitySet="UserAccount" />
       <End Role="OrgValidation" EntitySet="OrgValidation" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Rating_Skills" Association="Self.FK_Rating_Skills">
+      <End Role="Skills" EntitySet="Skills" />
+      <End Role="Rating" EntitySet="Rating" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Rating_UserAccount" Association="Self.FK_Rating_UserAccount">
+      <End Role="UserAccount" EntitySet="UserAccount" />
+      <End Role="Rating" EntitySet="Rating" />
     </AssociationSet>
     <AssociationSet Name="FK_Skills_UserAccount" Association="Self.FK_Skills_UserAccount">
       <End Role="Skills" EntitySet="Skills" />

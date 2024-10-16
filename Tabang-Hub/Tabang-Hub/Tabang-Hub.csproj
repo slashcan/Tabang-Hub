@@ -2124,6 +2124,9 @@
     <Compile Include="vw_VolunteerAccounts.cs">
       <DependentUpon>ModelTabangHub.tt</DependentUpon>
     </Compile>
+    <Compile Include="vw_VolunteerSkills.cs">
+      <DependentUpon>ModelTabangHub.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\web.config" />

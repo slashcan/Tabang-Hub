@@ -57,6 +57,7 @@ namespace Tabang_Hub
         public DbSet<vw_OrganizationAccounts> vw_OrganizationAccounts { get; set; }
         public DbSet<vw_UserRoles> vw_UserRoles { get; set; }
         public DbSet<vw_VolunteerAccounts> vw_VolunteerAccounts { get; set; }
+        public DbSet<vw_VolunteerSkills> vw_VolunteerSkills { get; set; }
     
         public virtual int sp_CancelRequest(Nullable<int> eventId, Nullable<int> userId)
         {

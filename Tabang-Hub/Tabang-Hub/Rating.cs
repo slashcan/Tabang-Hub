@@ -19,5 +19,8 @@ namespace Tabang_Hub
         public Nullable<int> skillId { get; set; }
         public Nullable<int> rate { get; set; }
         public Nullable<System.DateTime> ratedAt { get; set; }
+    
+        public virtual Skills Skills { get; set; }
+        public virtual UserAccount UserAccount { get; set; }
     }
 }

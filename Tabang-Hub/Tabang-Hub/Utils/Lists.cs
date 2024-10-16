@@ -56,6 +56,7 @@ namespace Tabang_Hub.Utils
         public List<sp_OtherEvent_Result> orgOtherEvent { get; set; }
         public List<sp_ListOfGc_Result> listOfGc { get; set; }
         public List<sp_matchSkill_Result> matchSkill { get; set; }
+        public List<sp_VolunteerHistory_Result> volunteersHistories { get; set; }
 
         //View
         public List<vw_ListOfEvent> listOfEvents { get; set; }
@@ -65,5 +66,6 @@ namespace Tabang_Hub.Utils
 
         public Dictionary<int, int> eventSummary { get; set; }
         public Dictionary<int, int> allEventSummary { get; set; }
+        public List<FilteredVolunteer> filteredVolunteers { get; set; }
     }
 }
