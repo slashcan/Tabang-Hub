@@ -467,6 +467,39 @@ namespace Tabang_Hub.Controllers
 
             return File(fileBytes, "text/csv", "OrganizationDataExport.csv");
         }
+        [HttpPost]
+        public JsonResult SubmitRatings(int eventId, int[] volunteerIds, int[] ratings, int[] attendance) // Added attendance array
+        {
+            string errMsg = string.Empty;
 
+            if (volunteerIds == null || ratings == null || volunteerIds.Length != ratings.Length || attendance == null || volunteerIds.Length != attendance.Length)
+            {
+                return Json(new { success = false, message = "Invalid data received." });
+            }
+
+            for (int i = 0; i < volunteerIds.Length; i++)
+            {
+                int volunteerId = volunteerIds[i];
+                int rating = ratings[i];
+                int attendanceStatus = attendance[i]; // Get the attendance value
+
+                // Save the rating and attendance
+                var result = _organizationManager.SaveRating(eventId, attendanceStatus, volunteerId, rating, ref errMsg); // Assume SaveRating can handle attendance too
+                if (result != ErrorCode.Success)
+                {
+                    // Log the error for debugging purposes (optional)
+                    return Json(new { success = false, message = "Error saving rating: " + errMsg });
+                }
+            }
+
+            // After saving all the ratings, transfer the event to history
+            var historyResult = _organizationManager.TrasferToHisotry1(eventId, ref errMsg);
+            if (historyResult != ErrorCode.Success)
+            {
+                return Json(new { success = false, message = "Error saving to history: " + errMsg });
+            }
+
+            return Json(new { success = true, message = "All ratings and attendance submitted successfully." });
+        }
     }
 }

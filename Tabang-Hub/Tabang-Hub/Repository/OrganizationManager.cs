@@ -32,7 +32,10 @@ namespace Tabang_Hub.Repository
         private BaseRepository<OrgEventImageHistory> _orgEventImageHistory;
         private BaseRepository<VolunteerSkillsHistory> _volunteerSkillHistory;
         private BaseRepository<GroupChat> _groupChat;
+        private BaseRepository<GroupChatHistory> _groupChatHistory;
         private BaseRepository<GroupMessages> _groupMessages;
+        private BaseRepository<GroupMessagesHistory> _groupMessagesHistory;
+        private BaseRepository<Rating> _ratings;
 
         public OrganizationManager()
         {
@@ -56,7 +59,10 @@ namespace Tabang_Hub.Repository
             _orgEventImageHistory = new BaseRepository<OrgEventImageHistory>();
             _volunteerSkillHistory = new BaseRepository<VolunteerSkillsHistory>();
             _groupChat = new BaseRepository<GroupChat>();
+            _groupChatHistory = new BaseRepository<GroupChatHistory>();
             _groupMessages = new BaseRepository<GroupMessages>();
+            _groupMessagesHistory = new BaseRepository<GroupMessagesHistory>();
+            _ratings = new BaseRepository<Rating>();
         }
 
 
@@ -568,6 +574,14 @@ namespace Tabang_Hub.Repository
         {
             return _groupMessages._table.Where(m => m.groupChatId == groupChatId).ToList();
         }
+        public Volunteers GetSkillIdByEventIdAndUserId(int eventId, int userId)
+        {
+            return _eventVolunteers._table.Where(m => m.userId == userId && m.eventId == eventId).FirstOrDefault();
+        }
+        public OrgEvents GetEventByEventId(int eventId)
+        {
+            return _orgEvents._table.Where(m => m.eventId == eventId).FirstOrDefault();
+        }
         public ErrorCode DeleteEvent(int eventId)
         {
             var skillsRequirement = listOfSkillRequirement(eventId);
@@ -857,6 +871,187 @@ namespace Tabang_Hub.Repository
             }
 
             return matchedVolunteers;
+        }
+        public ErrorCode TrasferToHisotry1(int eventId, ref string errMsg)
+        {
+            var orgEvent = GetEventByEventId(eventId);
+            var userDonate = ListOfUserDonated(eventId);
+            var volunteers = ListOfEventVolunteers(eventId);
+            var skillRequirements = listOfSkillRequirement(eventId);
+            var orgImage = listOfEventImage(eventId);
+            var groupChat = GetGroupChatByEventId(eventId);
+            var groupMessages = GetGroupMessagesByGroupChatId(groupChat.groupChatId);
+
+            foreach (var donated in userDonate)
+            {
+                var donateHistory = new UserDonatedHistory()
+                {
+                    eventId = (int)donated.eventId,
+                    userId = (int)donated.userId,
+                    amount = donated.amount,
+                };
+                if (_userDonatedHistory.Create(donateHistory, out errMsg) != ErrorCode.Success)
+                {
+                    return ErrorCode.Error;
+                }
+
+                if (_userDonated.Delete(donated.orgUserDonatedId) != ErrorCode.Success)
+                {
+                    return ErrorCode.Error;
+                }
+            }
+            foreach (var volunteer in volunteers)
+            {
+                var volunteerSkills = GetListOfVolunteerSkillByUserId((int)volunteer.skillId);
+
+                foreach (var skills in volunteerSkills)
+                {
+                    var volunteerSkillHistory = new VolunteerSkillsHistory()
+                    {
+                        userId = skills.userId,
+                        skillId = skills.skillId,
+                    };
+
+                    if (_volunteerSkillHistory.Create(volunteerSkillHistory, out errMsg) != ErrorCode.Success)
+                    {
+                        return ErrorCode.Error;
+                    }
+                    if (_volunteerSkills.Delete(skills.volunteerSkillId) != ErrorCode.Success)
+                    {
+                        return ErrorCode.Error;
+                    }
+                }
+
+                var volunteersHistory = new VolunteersHistory()
+                {
+                    eventId = volunteer.eventId,
+                    userId = volunteer?.userId,
+                    appliedAt = volunteer?.appliedAt,
+                    skillId = volunteer.skillId,
+                    attended = volunteer.attended,
+                    Status = volunteer?.Status,
+                };
+
+                if (_volunteersHistory.Create(volunteersHistory, out errMsg) != ErrorCode.Success)
+                {
+                    return ErrorCode.Error;
+                }
+                if (_eventVolunteers.Delete(volunteer.applyVolunteerId) != ErrorCode.Success)
+                {
+                    return ErrorCode.Error;
+                }
+            }
+            foreach (var skillRequire in skillRequirements)
+            {
+                var skillRequirementsHistory = new OrgSkillRequirementsHistory()
+                {
+                    eventId = (int)skillRequire.eventId,
+                    skillId = skillRequire.skillId,
+                    totalNeeded = skillRequire.totalNeeded,
+                };
+                if (_skillRequirementsHistory.Create(skillRequirementsHistory, out errMsg) != ErrorCode.Success)
+                {
+                    return ErrorCode.Error;
+                }
+                if (_orgSkillRequirements.Delete(skillRequire.skillRequirementId) != ErrorCode.Success)
+                {
+                    return ErrorCode.Error;
+                }
+            }
+            foreach (var image in orgImage)
+            {
+                var imageHistory = new OrgEventImageHistory()
+                {
+                    eventId = (int)image.eventId,
+                    eventImage = image.eventImage,
+                };
+                if (_orgEventImageHistory.Create(imageHistory, out errMsg) != ErrorCode.Success)
+                {
+                    return ErrorCode.Error;
+                }
+                if (_orgEventsImage.Delete(image.eventImageId) != ErrorCode.Success)
+                {
+                    return ErrorCode.Error;
+                }
+            }
+            foreach (var messages in groupMessages)
+            {
+                var messageHistory = new GroupMessagesHistory()
+                {
+                    userId = messages.userId,
+                    message = messages.message,
+                    messageAt = messages.messageAt,
+                };
+                if (_groupMessagesHistory.Create(messageHistory, out errMsg) != ErrorCode.Success)
+                {
+                    return ErrorCode.Error;
+                }
+                if (_groupMessages.Delete(messages.messageId) != ErrorCode.Success)
+                {
+                    return ErrorCode.Error;
+                }
+            }
+
+            var groupAChatHistory = new GroupChatHistory()
+            {
+                eventId = groupChat.eventId,
+                orgInfoId = groupChat.orgInfoId,
+            };
+            if (_groupChatHistory.Create(groupAChatHistory, out errMsg) != ErrorCode.Success)
+            {
+                return ErrorCode.Error;
+            }
+            if (_groupChat.Delete(groupChat.groupChatId) != ErrorCode.Success)
+            {
+                return ErrorCode.Error;
+            }
+
+            var eventHistory = new OrgEventHistory()
+            {
+                eventId = orgEvent.eventId,
+                userId = (int)orgEvent.userId,
+                eventTitle = orgEvent.eventTitle,
+                eventDescription = orgEvent.eventDescription,
+                targetAmount = orgEvent.targetAmount,
+                maxVolunteer = orgEvent.maxVolunteer,
+                dateStart = orgEvent.dateStart,
+                dateEnd = orgEvent.dateEnd,
+                location = orgEvent.location,
+            };
+            if (_orgEventHistory.Create(eventHistory, out errMsg) != ErrorCode.Success)
+            {
+                return ErrorCode.Error;
+            }
+            if (_orgEvents.Delete(orgEvent.eventId) != ErrorCode.Success)
+            {
+                return ErrorCode.Error;
+            }
+            return ErrorCode.Success;
+        }
+        public ErrorCode SaveRating(int eventId, int attended, int userId, int rating, ref string errMsg)
+        {
+            var skillId = GetSkillIdByEventIdAndUserId(eventId, userId);
+            var ratings = new Rating()
+            {
+                userId = userId,
+                rate = rating,
+                skillId = skillId.skillId,
+                ratedAt = DateTime.Now,
+            };
+
+            skillId.attended = attended;
+
+            if (_eventVolunteers.Update(skillId.applyVolunteerId, skillId, out errMsg) != ErrorCode.Success)
+            {
+                return ErrorCode.Error;
+            }
+
+            if (_ratings.Create(ratings, out errMsg) != ErrorCode.Success)
+            {
+                return ErrorCode.Error;
+            }
+
+            return ErrorCode.Success;
         }
         public ErrorCode InviteVolunteer(int userId, int eventId, ref string errMsg)
         {

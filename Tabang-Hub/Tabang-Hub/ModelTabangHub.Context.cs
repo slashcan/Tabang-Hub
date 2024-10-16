@@ -29,7 +29,9 @@ namespace Tabang_Hub
         }
     
         public DbSet<GroupChat> GroupChat { get; set; }
+        public DbSet<GroupChatHistory> GroupChatHistory { get; set; }
         public DbSet<GroupMessages> GroupMessages { get; set; }
+        public DbSet<GroupMessagesHistory> GroupMessagesHistory { get; set; }
         public DbSet<OrgEventHistory> OrgEventHistory { get; set; }
         public DbSet<OrgEventImage> OrgEventImage { get; set; }
         public DbSet<OrgEventImageHistory> OrgEventImageHistory { get; set; }
@@ -39,6 +41,7 @@ namespace Tabang_Hub
         public DbSet<OrgSkillRequirementsHistory> OrgSkillRequirementsHistory { get; set; }
         public DbSet<OrgValidation> OrgValidation { get; set; }
         public DbSet<ProfilePicture> ProfilePicture { get; set; }
+        public DbSet<Rating> Rating { get; set; }
         public DbSet<Role> Role { get; set; }
         public DbSet<Skills> Skills { get; set; }
         public DbSet<UserAccount> UserAccount { get; set; }
@@ -126,13 +129,26 @@ namespace Tabang_Hub
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_GetAllMessage_Result>("sp_GetAllMessage", groupChatIdParameter);
         }
     
-        public virtual ObjectResult<sp_matchSkill_Result> sp_matchSkill(Nullable<int> userId)
+        public virtual ObjectResult<sp_matchSkill_Result> sp_matchSkill(Nullable<int> userId, Nullable<int> eventId)
         {
             var userIdParameter = userId.HasValue ?
                 new ObjectParameter("userId", userId) :
                 new ObjectParameter("userId", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_matchSkill_Result>("sp_matchSkill", userIdParameter);
+            var eventIdParameter = eventId.HasValue ?
+                new ObjectParameter("eventId", eventId) :
+                new ObjectParameter("eventId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_matchSkill_Result>("sp_matchSkill", userIdParameter, eventIdParameter);
+        }
+    
+        public virtual ObjectResult<sp_VolunteerHistory_Result> sp_VolunteerHistory(Nullable<int> userId)
+        {
+            var userIdParameter = userId.HasValue ?
+                new ObjectParameter("userId", userId) :
+                new ObjectParameter("userId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_VolunteerHistory_Result>("sp_VolunteerHistory", userIdParameter);
         }
     }
 }
