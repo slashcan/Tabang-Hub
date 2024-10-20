@@ -20,11 +20,11 @@ namespace Tabang_Hub
             this.OrgEvents = new HashSet<OrgEvents>();
             this.OrgInfo = new HashSet<OrgInfo>();
             this.OrgValidation = new HashSet<OrgValidation>();
+            this.Rating = new HashSet<Rating>();
             this.UserDonated = new HashSet<UserDonated>();
             this.UserRoles = new HashSet<UserRoles>();
             this.VolunteerInfo = new HashSet<VolunteerInfo>();
             this.Volunteers = new HashSet<Volunteers>();
-            this.Rating = new HashSet<Rating>();
         }
     
         public int userId { get; set; }
@@ -37,10 +37,10 @@ namespace Tabang_Hub
         public virtual ICollection<OrgEvents> OrgEvents { get; set; }
         public virtual ICollection<OrgInfo> OrgInfo { get; set; }
         public virtual ICollection<OrgValidation> OrgValidation { get; set; }
+        public virtual ICollection<Rating> Rating { get; set; }
         public virtual ICollection<UserDonated> UserDonated { get; set; }
         public virtual ICollection<UserRoles> UserRoles { get; set; }
         public virtual ICollection<VolunteerInfo> VolunteerInfo { get; set; }
         public virtual ICollection<Volunteers> Volunteers { get; set; }
-        public virtual ICollection<Rating> Rating { get; set; }
     }
 }

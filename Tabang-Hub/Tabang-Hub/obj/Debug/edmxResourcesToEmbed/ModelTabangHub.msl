@@ -131,6 +131,21 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="Notification">
+      <EntityTypeMapping TypeName="TabangHubModel.Notification">
+        <MappingFragment StoreEntitySet="Notification">
+          <ScalarProperty Name="readAt" ColumnName="readAt" />
+          <ScalarProperty Name="createdAt" ColumnName="createdAt" />
+          <ScalarProperty Name="status" ColumnName="status" />
+          <ScalarProperty Name="broadcast" ColumnName="broadcast" />
+          <ScalarProperty Name="content" ColumnName="content" />
+          <ScalarProperty Name="type" ColumnName="type" />
+          <ScalarProperty Name="senderUserId" ColumnName="senderUserId" />
+          <ScalarProperty Name="userId" ColumnName="userId" />
+          <ScalarProperty Name="notificationId" ColumnName="notificationId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="OrgEventHistory">
       <EntityTypeMapping TypeName="TabangHubModel.OrgEventHistory">
         <MappingFragment StoreEntitySet="OrgEventHistory">

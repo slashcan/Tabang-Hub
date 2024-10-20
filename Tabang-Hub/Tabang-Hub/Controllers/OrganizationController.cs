@@ -12,6 +12,7 @@ using Tabang_Hub.Utils;
 using System.Text;
 using Microsoft.AspNet.SignalR.Hubs;
 using System.Threading.Tasks;
+using Tabang_Hub.Hubs;
 
 namespace Tabang_Hub.Controllers
 {
@@ -244,18 +245,11 @@ namespace Tabang_Hub.Controllers
             // Return JSON indicating success
             return Json(new { success = true, redirectUrl = Url.Action("Details", "Organization", new { id = eventId }) });
         }
-
         [HttpPost]
         public ActionResult EditEvent(Lists events, Dictionary<string, int> skills, string[] skillsToRemove, HttpPostedFileBase[] images, int eventId)
         {
             string errMsg = string.Empty;
             var allowedExtensions = new List<string> { ".jpg", ".jpeg", ".png", ".gif" };
-
-            // Remove the "edit_" prefix from skill names, if present
-            var cleanedSkills = skills.ToDictionary(
-                entry => entry.Key.Replace("edit_", ""),  // This removes "edit_" from the skill name
-                entry => entry.Value
-            );
 
             List<string> uploadedFiles = new List<string>();
 
@@ -270,7 +264,7 @@ namespace Tabang_Hub.Controllers
 
                         if (!allowedExtensions.Contains(extension))
                         {
-                            ModelState.AddModelError(String.Empty, "Invalid file type. Only JPG, JPEG, PNG, and GIF files are allowed.");
+                            ModelState.AddModelError(string.Empty, "Invalid file type. Only JPG, JPEG, PNG, and GIF files are allowed.");
                             return RedirectToAction("Details", new { id = eventId });
                         }
 
@@ -282,48 +276,89 @@ namespace Tabang_Hub.Controllers
 
                         try
                         {
-                            using (var srcImage = Image.FromStream(image.InputStream))
-                            {
-                                var newWidth = 400;
-                                var newHeight = 300;
-                                var resizedImage = new Bitmap(newWidth, newHeight);
-
-                                using (var graphics = Graphics.FromImage(resizedImage))
-                                {
-                                    graphics.CompositingQuality = CompositingQuality.HighQuality;
-                                    graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                                    graphics.SmoothingMode = SmoothingMode.HighQuality;
-                                    graphics.DrawImage(srcImage, 0, 0, newWidth, newHeight);
-                                }
-
-                                resizedImage.Save(serverSavePath, ImageFormat.Jpeg);
-                            }
-
+                            // Save the image (you can include resizing logic here)
+                            image.SaveAs(serverSavePath);
                             uploadedFiles.Add(inputFileName);
                         }
                         catch (Exception ex)
                         {
-                            ModelState.AddModelError(String.Empty, $"Error processing file {inputFileName}: {ex.Message}");
+                            ModelState.AddModelError(string.Empty, $"Error processing file {inputFileName}: {ex.Message}");
                             return RedirectToAction("Details", new { id = eventId });
                         }
                     }
                 }
             }
 
-            // Call the organization manager to edit the event, passing the cleaned skills and removed skills
-            if (_organizationManager.EditEvent(events.CreateEvents, cleanedSkills, skillsToRemove, uploadedFiles, eventId, ref errMsg) != ErrorCode.Success)
+            // Calculate total volunteers
+            int totalVolunteers = 0;
+            if (skills != null && skills.Count > 0)
             {
-                ModelState.AddModelError(String.Empty, errMsg);
+                totalVolunteers = skills.Values.Sum();
+            }
+            events.CreateEvents.maxVolunteer = totalVolunteers;
+
+
+            if (Request.Form["events.CreateEvents.targetAmount"] != null)
+            {
+                var targetAmountString = Request.Form["events.CreateEvents.targetAmount"];
+                if (string.IsNullOrWhiteSpace(targetAmountString))
+                {
+                    events.CreateEvents.targetAmount = null; // Set to null if empty
+                }
+                else
+                {
+                    // Validate and parse the target amount
+                    if (decimal.TryParse(targetAmountString, out decimal targetAmountValue) && targetAmountValue > 0)
+                    {
+                        events.CreateEvents.targetAmount = targetAmountValue;
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, "Please enter a valid target amount.");
+                        return RedirectToAction("Details", new { id = eventId });
+                    }
+                }
+            }
+            else
+            {
+                // If the field is not present, set targetAmount to null
+                events.CreateEvents.targetAmount = null;
+            }
+            // Proceed to update the event details in the database
+            if (_organizationManager.EditEvent(events.CreateEvents, skills, skillsToRemove, uploadedFiles, eventId, ref errMsg) != ErrorCode.Success)
+            {
+                ModelState.AddModelError(string.Empty, errMsg);
                 return RedirectToAction("Details", new { id = eventId });
             }
 
+            var volunteers = _organizationManager.GetVolunteersByEventId(eventId);           
+
+            foreach (var vol in volunteers)
+            {
+                var notification = new Notification
+                {
+                    userId = vol.userId,
+                    senderUserId = UserId,
+                    type = "Donation",
+                    content = $"{events.CreateEvents.eventTitle} Event has been Edited.",
+                    broadcast = 0,
+                    status = 0,
+                    createdAt = DateTime.Now,
+                    readAt = null                    
+                };
+
+                db.Notification.Add(notification);
+                db.SaveChanges(); // Save the notification
+            }          
+
             return RedirectToAction("Details", new { id = eventId });
         }
-
         [HttpPost]
         public ActionResult Delete(int eventId)
         {
             var deleteEvent = _organizationManager.DeleteEvent(eventId);
+            var volunteer = _organizationManager.GetVolunteersByEventId(eventId);
+            var events = _organizationManager.GetEventByEventId(eventId);
 
             if (deleteEvent != ErrorCode.Success)
             {
@@ -332,21 +367,55 @@ namespace Tabang_Hub.Controllers
                 return RedirectToAction("EventsList");
             }
 
+            foreach (var vol in volunteer)
+            {
+                var notification = new Notification
+                {
+                    userId = vol.userId,
+                    senderUserId = UserId,
+                    type = "Donation",
+                    content = $"{events.eventTitle} Event has been deleted.",
+                    broadcast = 0,
+                    status = 0,
+                    createdAt = DateTime.Now,
+                    readAt = null
+                };
+
+
+                db.Notification.Add(notification);
+                db.SaveChanges(); // Save the notification
+            }
+           
+
+
             // You may want to set a TempData or ViewBag message to inform the user of the success
             TempData["SuccessMessage"] = "Event deleted successfully.";
             return RedirectToAction("EventsList");
         }
         [HttpPost]
-        public ActionResult ConfirmApplicants(int id, int eventId)
+        public JsonResult ConfirmApplicants(int id, int eventId)
         {
             string errMsg = string.Empty;
 
-            if (_organizationManager.ConfirmApplicants(id, eventId, ref errMsg) != ErrorCode.Success)
+            if (_organizationManager.ConfirmApplicants(id, eventId, ref errMsg) == ErrorCode.Success)
             {
-                ModelState.AddModelError(String.Empty, errMsg);
-                return RedirectToAction("EventsList");
+                // Create an instance of your NotificationHub and call SendNotification
+                var notificationHub = new NotificationHub();
+                notificationHub.SendNotification(
+                    userId: id, // The volunteer's user ID
+                    senderUserId: UserId, // The organization ID or admin ID who is sending the notification
+                    type: "Acceptance",
+                    content: "You have been accepted to participate in the event!"
+                );
+
+                // Return JSON response indicating success
+                return Json(new { success = true, message = "Volunteer confirmed successfully." });
             }
-            return RedirectToAction("EventsList");
+            else
+            {
+                // Return JSON response indicating failure with an error message
+                return Json(new { success = false, message = errMsg });
+            }
         }
         public ActionResult VolunteerDetails(int userId)
         {
@@ -478,6 +547,16 @@ namespace Tabang_Hub.Controllers
 
             return File(fileBytes, "text/csv", "OrganizationDataExport.csv");
         }
+        public JsonResult GetUnreadNotifications()
+        {
+            int organizationId = UserId;
+            var unreadNotifications = db.Notification
+                .Where(n => n.userId == organizationId && n.status == 0)
+                .OrderByDescending(n => n.createdAt)
+                .ToList();
+
+            return Json(unreadNotifications, JsonRequestBehavior.AllowGet);
+        }
         [HttpPost]
         public JsonResult SubmitRatings(int eventId, int[] volunteerIds, int[] ratings, int[] attendance) // Added attendance array
         {
@@ -501,6 +580,22 @@ namespace Tabang_Hub.Controllers
                     // Log the error for debugging purposes (optional)
                     return Json(new { success = false, message = "Error saving rating: " + errMsg });
                 }
+                var events = _organizationManager.GetEventByEventId(eventId);
+
+                var notification = new Notification
+                {
+                    userId = volunteerId,
+                    senderUserId = UserId,
+                    type = "Event",
+                    content = $"{events.eventTitle} Has ended",
+                    broadcast = 0,
+                    status = 0,
+                    createdAt = DateTime.Now,
+                    readAt = null
+                };
+
+                db.Notification.Add(notification);
+                db.SaveChanges();
             }
 
             // After saving all the ratings, transfer the event to history

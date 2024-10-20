@@ -6,6 +6,32 @@
 }
 
 <style>
+    .added-skills {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 10px;
+    }
+
+    .skill-item {
+        display: flex;
+        align-items: center;
+        border: 1px solid #ced4da;
+        border-radius: 5px;
+        padding: 5px 10px;
+        background-color: #f8f9fa;
+    }
+
+        .skill-item .remove-skill {
+            margin-left: 5px;
+            color: red;
+            cursor: pointer;
+        }
+
+    .skill-count {
+        width: 60px;
+        margin-left: 10px;
+    }
     .navbar-nav .nav-link {
         padding-left: 10px;
         padding-right: 10px;
@@ -364,65 +390,70 @@
                     </div>
                     <div class="modal-body">
                         <form method="post" enctype="multipart/form-data" action="@Url.Action("EditEvent", "Organization")">
+                            <!-- Event ID -->
                             <input type="hidden" name="eventId" value="@Model.eventDetails.Event_Id" />
+
+                            <!-- Event Title -->
                             <div class="mb-3">
                                 <label for="EditEvent_eventTitle" class="form-label">Event Title</label>
-                                <input type="text" class="form-control" id="EditEvent_eventTitle" name="CreateEvents.eventTitle" value="@Model.eventDetails.Event_Name" placeholder="Enter event title">
+                                <input type="text" class="form-control" id="EditEvent_eventTitle" name="events.CreateEvents.eventTitle" value="@Model.eventDetails.Event_Name" placeholder="Enter event title">
                                 <span class="error" id="EditEvent_eventTitle_error"></span>
                             </div>
+
+                            <!-- Event Description -->
                             <div class="mb-3">
                                 <label for="EditEvent_eventDescription" class="form-label">Event Description</label>
-                                <textarea class="form-control" id="EditEvent_eventDescription" name="CreateEvents.eventDescription" rows="4" placeholder="Enter event description">@Model.eventDetails.Description</textarea>
+                                <textarea class="form-control" id="EditEvent_eventDescription" name="events.CreateEvents.eventDescription" rows="4" placeholder="Enter event description">@Model.eventDetails.Description</textarea>
                                 <span class="error" id="EditEvent_eventDescription_error"></span>
                             </div>
+
+                            <!-- Target Amount -->
                             <div class="mb-3">
                                 <div class="form-check form-switch">
                                     <input class="form-check-input" type="checkbox" id="editSwitchCheckDefault" onchange="toggleTargetAmount(this)" @(Model.eventDetails.Target_Amount != null ? "checked" : "")>
                                     <label class="form-check-label" for="editSwitchCheckDefault">Enable Target Amount</label>
                                 </div>
-                                <input type="text" class="form-control mt-2" id="EditEvent_targetAmount" name="CreateEvents.targetAmount" value="@Model.eventDetails.Target_Amount" placeholder="Enter target amount in Peso" @(Model.eventDetails.Target_Amount == null ? "disabled" : "")>
+                                <input type="text" class="form-control mt-2" id="EditEvent_targetAmount" name="events.CreateEvents.targetAmount" value="@(Model.eventDetails.Target_Amount?.ToString() ?? "")" placeholder="Enter target amount in Peso" @(Model.eventDetails.Target_Amount == null ? "disabled" : "")>
                                 <span class="error" id="EditEvent_targetAmount_error"></span>
                             </div>
-                            <div class="mb-3">
-                                <label for="EditEvent_maxVolunteer" class="form-label">Maximum Volunteers</label>
-                                <input type="text" class="form-control" id="EditEvent_maxVolunteer" name="CreateEvents.maxVolunteer" value="@Model.eventDetails.Maximum_Volunteer" placeholder="Enter maximum volunteers">
-                                <span class="error" id="EditEvent_maxVolunteer_error"></span>
-                            </div>
+
+                            <!-- Dates -->
                             <div class="mb-3 row">
                                 <div class="col">
-                                    @{
-                                        var strtdate = Model.eventDetails.Start_Date.ToString();
-
-                                        <label for="EditEvent_dateStart" class="form-label">Start Date and Time</label>
-                                        <input type="datetime-local" class="form-control" id="EditEvent_dateStart" name="CreateEvents.dateStart">
-                                    }
+                                    <label for="EditEvent_dateStart" class="form-label">Start Date and Time</label>
+                                    <input type="datetime-local" class="form-control" id="EditEvent_dateStart" name="events.CreateEvents.dateStart" value="@(Model.eventDetails.Start_Date.HasValue ? Model.eventDetails.Start_Date.Value.ToString("yyyy-MM-ddTHH:mm") : "")">
                                     <span class="error" id="EditEvent_dateStart_error"></span>
                                 </div>
                                 <div class="col">
                                     <label for="EditEvent_dateEnd" class="form-label">End Date and Time</label>
-                                    <input type="datetime-local" class="form-control" id="EditEvent_dateEnd" name="CreateEvents.dateEnd">
+                                    <input type="datetime-local" class="form-control" id="EditEvent_dateEnd" name="events.CreateEvents.dateEnd" value="@(Model.eventDetails.End_Date.HasValue ? Model.eventDetails.End_Date.Value.ToString("yyyy-MM-ddTHH:mm") : "")">
                                     <span class="error" id="EditEvent_dateEnd_error"></span>
                                 </div>
                             </div>
+
+                            <!-- Location -->
                             <div class="mb-3">
                                 <label for="EditEvent_location" class="form-label">Location</label>
-                                <input type="text" class="form-control" id="EditEvent_location" name="CreateEvents.location" value="@Model.eventDetails.Location" placeholder="Enter location">
+                                <input type="text" class="form-control" id="EditEvent_location" name="events.CreateEvents.location" value="@Model.eventDetails.Location" placeholder="Enter location">
                                 <span class="error" id="EditEvent_location_error"></span>
                             </div>
+
+                            <!-- Volunteer Skills Requirements -->
                             <div class="mb-3">
                                 <label>Volunteer Skills Requirements</label>
                                 <div class="added-skills" id="edit-added-skills">
                                     @foreach (var skill in Model.detailsSkillRequirement)
                                     {
                                         <div class="skill-item" id="skill-item-@skill.Skills.skillName">
-                                            <button type="button" class="skill-button selected" onclick="removeEditSkill('@skill.Skills.skillName', this, document.getElementById('edit-skill-@skill.Skills.skillName'))">@skill.Skills.skillName <span class="remove-skill">x</span></button>
-                                            <input type="number" class="form-control skill-count" name="skills[@skill.Skills.skillName]" value="@skill.totalNeeded" min="1" style="width: 60px; display: inline-block; margin-left: 10px;" />
+                                            <span>@skill.Skills.skillName</span>
+                                            <input type="number" class="form-control skill-count" name="skills[@skill.Skills.skillName]" value="@skill.totalNeeded" min="1" onchange="updateTotalVolunteers()" />
+                                            <span class="remove-skill" onclick="removeEditSkill('@skill.Skills.skillName', this.parentNode, document.getElementById('edit-skill-@skill.Skills.skillName'))">&times;</span>
                                         </div>
                                     }
                                 </div>
-
-                                <!-- Hidden input for removed skills -->
-                                <input type="hidden" id="skillsToRemove" name="skillsToRemove" value="" />
+                                <!-- Hidden inputs for skills to remove -->
+                                <div id="skillsToRemoveContainer"></div>
+                                <!-- Skill buttons -->
                                 <div class="skills-container mb-3">
                                     @foreach (var skills in Model.listOfSkills)
                                     {
@@ -430,12 +461,21 @@
                                     }
                                 </div>
                             </div>
+
+                            <!-- Display Total Volunteers -->
+                            <div class="mb-3">
+                                <label for="totalVolunteers" class="form-label">Total Volunteers Needed</label>
+                                <input type="text" class="form-control" id="totalVolunteers" name="events.CreateEvents.maxVolunteer" readonly>
+                            </div>
+
+                            <!-- Upload Images -->
                             <div class="mb-3">
                                 <label for="EditEvent_uploadImage" class="form-label">Upload Images</label>
                                 <input type="file" class="form-control" id="EditEvent_uploadImage" name="images" multiple onchange="previewEditImages()">
                                 <span class="error" id="EditEvent_uploadImage_error"></span>
                                 <div class="preview-container" id="edit-image-preview"></div>
                             </div>
+
                             <button class="btn btn-primary" type="submit">Save Changes</button>
                         </form>
                     </div>
@@ -870,7 +910,12 @@ else
 
     function toggleTargetAmount(checkbox) {
         const targetAmountInput = document.getElementById('EditEvent_targetAmount');
-        targetAmountInput.disabled = !checkbox.checked;
+        if (checkbox.checked) {
+            targetAmountInput.disabled = false;
+        } else {
+            targetAmountInput.disabled = true;
+            targetAmountInput.value = ''; // Clear the value when disabled
+        }
     }
 
     function addEditSkill(skillName) {
@@ -878,41 +923,73 @@ else
         const skillButton = document.getElementById(`edit-skill-${skillName}`);
         skillButton.disabled = true;
 
-        const skillBadge = document.createElement('button');
-        skillBadge.type = 'button';
-        skillBadge.className = 'skill-button selected';
-        skillBadge.innerHTML = `${skillName} <span class="remove-skill">x</span>`;
-        skillBadge.onclick = function () {
-            removeEditSkill(skillName, skillBadge, skillButton);
-        };
+        const skillItem = document.createElement('div');
+        skillItem.className = 'skill-item';
+        skillItem.id = `skill-item-${skillName}`;
 
-        addedSkillsContainer.appendChild(skillBadge);
+        const skillSpan = document.createElement('span');
+        skillSpan.textContent = skillName;
+        skillItem.appendChild(skillSpan);
 
-        // Create a hidden input to hold the skill value
         const skillInput = document.createElement('input');
-        skillInput.type = 'hidden';
-        skillInput.name = 'skills';
-        skillInput.value = skillName;
-        addedSkillsContainer.appendChild(skillInput);
-    }
+        skillInput.type = 'number';
+        skillInput.className = 'form-control skill-count';
+        skillInput.name = `skills[${skillName}]`;
+        skillInput.min = '1';
+        skillInput.value = '1';
+        skillInput.onchange = updateTotalVolunteers;
+        skillItem.appendChild(skillInput);
 
-    function removeEditSkill(skillName, skillBadge, skillButton) {
-        const skillsContainer = document.getElementById('edit-added-skills');
+        const removeSpan = document.createElement('span');
+        removeSpan.className = 'remove-skill';
+        removeSpan.innerHTML = '&times;';
+        removeSpan.onclick = function () {
+            removeEditSkill(skillName, skillItem, skillButton);
+        };
+        skillItem.appendChild(removeSpan);
 
-        if (skillsContainer.contains(skillBadge)) {
-            skillsContainer.removeChild(skillBadge);
+        addedSkillsContainer.appendChild(skillItem);
+
+        // Remove the hidden input for the skill if it exists
+        const existingInput = document.querySelector(`input[name="skillsToRemove"][value="${skillName}"]`);
+        if (existingInput) {
+            existingInput.remove();
         }
 
-        // Remove the hidden input when the skill is removed
-        const skillInput = document.querySelector(`input[name="skills"][value="${skillName}"]`);
-        if (skillInput && skillsContainer.contains(skillInput)) {
-            skillsContainer.removeChild(skillInput);
+        updateTotalVolunteers();
+    }
+
+    function removeEditSkill(skillName, skillItem, skillButton) {
+        const skillsContainer = document.getElementById('edit-added-skills');
+        if (skillsContainer.contains(skillItem)) {
+            skillsContainer.removeChild(skillItem);
         }
 
         // Enable the skill button when the skill is removed
         if (skillButton) {
             skillButton.disabled = false;
         }
+
+        // Check if the hidden input already exists
+        const existingInput = document.querySelector(`input[name="skillsToRemove"][value="${skillName}"]`);
+        if (!existingInput) {
+            // Add a hidden input for the removed skill
+            const skillsToRemoveContainer = document.getElementById('skillsToRemoveContainer');
+            const removedSkillInput = document.createElement('input');
+            removedSkillInput.type = 'hidden';
+            removedSkillInput.name = 'skillsToRemove';
+            removedSkillInput.value = skillName;
+            skillsToRemoveContainer.appendChild(removedSkillInput);
+        }
+
+        updateTotalVolunteers();
+    }
+    function updateTotalVolunteers() {
+        let totalVolunteers = 0;
+        document.querySelectorAll('.skill-count').forEach(function (input) {
+            totalVolunteers += parseInt(input.value) || 0;
+        });
+        document.getElementById('totalVolunteers').value = totalVolunteers;
     }
 
     function previewImages() {

@@ -2000,6 +2000,7 @@
       <DependentUpon>ModelTabangHub.tt</DependentUpon>
     </Compile>
     <Compile Include="Hubs\ChatHub.cs" />
+    <Compile Include="Hubs\NotificaitonHub.cs" />
     <Compile Include="ModelTabangHub.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -2016,6 +2017,9 @@
       <DependentUpon>ModelTabangHub.edmx</DependentUpon>
     </Compile>
     <Compile Include="MyRole.cs" />
+    <Compile Include="Notification.cs">
+      <DependentUpon>ModelTabangHub.tt</DependentUpon>
+    </Compile>
     <Compile Include="OrgEventHistory.cs">
       <DependentUpon>ModelTabangHub.tt</DependentUpon>
     </Compile>

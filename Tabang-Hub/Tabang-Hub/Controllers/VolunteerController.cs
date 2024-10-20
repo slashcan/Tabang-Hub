@@ -16,6 +16,8 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using RestSharp;
+using Tabang_Hub.Hubs;
+using Microsoft.AspNet.SignalR;
 
 namespace Tabang_Hub.Controllers
 {
@@ -96,7 +98,18 @@ namespace Tabang_Hub.Controllers
                 return Json(new { success = false, message = "Failed !" });
             }
         }
+        [HttpGet]
+        public JsonResult GetUnreadNotifications()
+        {
+            int userId = UserId;
 
+            var notifications = db.Notification
+                .Where(n => n.userId == userId && n.status == 0)
+                .Select(n => new { n.type, n.content })
+                .ToList();
+
+            return Json(notifications, JsonRequestBehavior.AllowGet);
+        }
         [HttpPost]
         public JsonResult EditAboutMe(string aboutMe, List<int?> skills)
         {
@@ -350,6 +363,20 @@ namespace Tabang_Hub.Controllers
                 {
                     //updateVolunteerNeeded.maxVolunteer = updateVolunteerNeeded.maxVolunteer - 1;
                     //db.SaveChanges();
+
+                    var organizationId = checkDateOrgEvents.userId;
+
+                    // Save the notification to the database
+                    var notificationMessage = $"A new volunteer has applied for your event (Event ID: {eventId}).";
+                    var notificationType = "New Application";
+
+                    // Instantiate NotificationHub and save the notification
+                    var notificationHub = new NotificationHub();
+                    notificationHub.SendNotification((int)organizationId, UserId, notificationType, notificationMessage);
+
+                    // Send real-time notification if the organization is online
+                    var context = GlobalHost.ConnectionManager.GetHubContext<NotificationHub>();
+                    context.Clients.User(organizationId.ToString()).receiveNotification(notificationType, notificationMessage);
                     _volunteers.Create(apply);
 
                     return Json(new { success = true, message = "Application sent" });
@@ -399,19 +426,7 @@ namespace Tabang_Hub.Controllers
                     return Json(new { success = false, message = "Donation amount must be greater than zero." });
                 }
 
-                var donation = new UserDonated
-                {
-                    userId = UserId,
-                    eventId = eventId,
-                    amount = amount,
-                    donatedAt = DateTime.Now,
-                    Status = "Pending"
-                };
-
-                db.UserDonated.Add(donation);
-                db.SaveChanges(); // Save to get the donation ID
-
-                var checkoutUrl = await CreatePayMongoCheckoutSession(amount, "Donation for event #" + eventId, donation.orgUserDonatedId);
+                var checkoutUrl = await CreatePayMongoCheckoutSession(amount, "Donation for event #" + eventId, eventId);
 
                 if (checkoutUrl != null)
                 {
@@ -429,14 +444,13 @@ namespace Tabang_Hub.Controllers
                 return Json(new { success = false, message = "An error occurred. Please try again later." });
             }
         }
-        private async Task<string> CreatePayMongoCheckoutSession(decimal amount, string description, int donationId)
+        private async Task<string> CreatePayMongoCheckoutSession(decimal amount, string description, int eventId)
         {
             var client = new RestClient("https://api.paymongo.com/v1/checkout_sessions");
             var request = new RestRequest();
             request.Method = Method.Post;
 
-            // Use your actual secret key
-            var secretKey = "sk_test_gvQ3WTM1Acco8AGhp35zT1b1"; // Replace with your secret key
+            var secretKey = "sk_test_gvQ3WTM1Acco8AGhp35zT1b1"; // Replace with your actual secret key
             var encodedSecretKey = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{secretKey}:"));
             request.AddHeader("Authorization", $"Basic {encodedSecretKey}");
             request.AddHeader("Content-Type", "application/json");
@@ -453,7 +467,7 @@ namespace Tabang_Hub.Controllers
                     {
                         amount = (int)(amount * 100), // Amount in centavos
                         currency = "PHP",
-                        name = "Donation", // Add name
+                        name = "Donation",
                         description = description,
                         quantity = 1
                     }
@@ -461,10 +475,9 @@ namespace Tabang_Hub.Controllers
                         payment_method_types = new[] { "card", "gcash", "grab_pay" },
                         send_email_receipt = false,
                         show_description = true,
-                        description = description, // Add description at root level
+                        description = description,
                         cancel_url = Url.Action("PaymentFailed", "Volunteer", null, Request.Url.Scheme),
-                        success_url = Url.Action("PaymentSuccess", "Volunteer", null, Request.Url.Scheme),
-                        reference_number = donationId.ToString()
+                        success_url = Url.Action("PaymentSuccess", "Volunteer", new { eventId = eventId, amount = amount }, Request.Url.Scheme) // Passing eventId and amount
                     }
                 }
             };
@@ -483,7 +496,6 @@ namespace Tabang_Hub.Controllers
             {
                 // Log the error for debugging
                 var errorContent = response.Content;
-                // Handle error accordingly
                 System.Diagnostics.Debug.WriteLine($"PayMongo Error Response: {errorContent}");
                 return null;
             }
@@ -564,8 +576,46 @@ namespace Tabang_Hub.Controllers
             }
             return false; // Signature is invalid
         }
-        public ActionResult PaymentSuccess()
+        public ActionResult PaymentSuccess(int eventId, decimal amount)
         {
+            // Save the donation to the database
+            var donation = new UserDonated
+            {
+                userId = UserId, // User who made the donation
+                eventId = eventId,
+                amount = amount,
+                donatedAt = DateTime.Now,
+                Status = "Paid"
+            };
+
+            db.UserDonated.Add(donation);
+            db.SaveChanges(); // Save the donation to the database
+
+            // Find the organization associated with the event
+            var organization = db.OrgEvents
+                                 .Where(o => o.eventId == eventId)
+                                 .FirstOrDefault();
+
+            if (organization != null)
+            {
+                // Save the notification for the organization
+                var notification = new Notification
+                {
+                    userId = organization.userId, // Notify the organization
+                    senderUserId = UserId, // The user who donated
+                    type = "Donation",
+                    content = $"You have received a donation of {donation.amount} for event #{eventId}.",
+                    broadcast = 0, // Not a broadcast
+                    status = 0, // Assuming 1 is the status for a new notification
+                    createdAt = DateTime.Now,
+                    readAt = null // Initially unread
+                };
+
+                db.Notification.Add(notification);
+                db.SaveChanges(); // Save the notification
+            }
+
+            // Now proceed with loading the user's profile information
             var getUserAccount = db.UserAccount.Where(m => m.userId == UserId).ToList();
             var getVolunteerInfo = db.VolunteerInfo.Where(m => m.userId == UserId).ToList();
             var getVolunteerSkills = db.VolunteerSkill.Where(m => m.userId == UserId).ToList();
@@ -665,10 +715,27 @@ namespace Tabang_Hub.Controllers
             try
             {
                 var updateVol = _volunteers.GetAll().Where(m => m.userId == UserId && m.eventId == eventId).FirstOrDefault();
+                var events = _organizationManager.GetEventByEventId(eventId);
 
                 if (updateVol != null)
                 {
                     db.sp_LeaveEvent(updateVol.eventId, updateVol.userId);
+
+                    // Save the notification for the organization
+                    var notification = new Notification
+                    {
+                        userId = events.userId, // Notify the organization
+                        senderUserId = UserId, // The user who donated
+                        type = "Leave",
+                        content = $"{updateVol.UserAccount.email} Left {events.eventTitle} Event.",
+                        broadcast = 0, // Not a broadcast
+                        status = 0, // Assuming 1 is the status for a new notification
+                        createdAt = DateTime.Now,
+                        readAt = null // Initially unread
+                    };
+
+                    db.Notification.Add(notification);
+                    db.SaveChanges(); // Save the notification
 
                     return Json(new { success = true, message = "Leave successfully" });
                 }
@@ -711,6 +778,6 @@ namespace Tabang_Hub.Controllers
             };
 
             return View(indexModel);
-        }
+        }      
     }
 }
