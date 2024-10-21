@@ -5,6 +5,21 @@
 }
 @*<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">*@
 
+<style>
+    #profilePicPreview {
+        width: 150px;
+        height: 150px;
+        object-fit: cover;
+    }
+    #profilePicPreview {
+        border-radius: 50%;
+        width: 150px;
+        height: 150px;
+        object-fit: cover;
+    }
+
+</style>
+
 <div class="container mt-5">
     <div class="card">
         <div class="card-body">
@@ -113,10 +128,21 @@
                 <h5>Volunteer Summary</h5>
                 <ul>
                     <li>
-                        Total hours volunteered
+                        @{ 
+                            int? getRate = 0;
+                            foreach (var rt in Model.rating.Select(m => m.rate))
+                            {
+                                getRate += rt;
+                            }
+                            var calculateRate = getRate / Model.rating.Count();
+                        }
+                        Rate: <strong>@calculateRate</strong>
                     </li>
                     <li>
-                        Number of events participated
+                        Total hours volunteered: <strong></strong>
+                    </li>
+                    <li>
+                        Number of events participated: <strong>@Model.volunteersHistories.Count()</strong>
                     </li>
                 </ul>
             </div>

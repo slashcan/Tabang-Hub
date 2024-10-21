@@ -55,6 +55,8 @@ namespace Tabang_Hub.Controllers
                 uniqueSkill = getUniqueSkill,
                 picture = getProfile,
                 skills = _skills.GetAll().ToList(),
+                volunteersHistories = db.sp_VolunteerHistory(UserId).ToList(),
+                rating = db.Rating.Where(m => m.userId == UserId).ToList()
             };
 
             return View(listModel);
@@ -698,7 +700,8 @@ namespace Tabang_Hub.Controllers
                     pendingOrgDetails = pendingEvents.Select(e => _pendingOrgDetails.GetAll().FirstOrDefault(p => p.eventId == e.eventId)).ToList(),
                     volunteersInfo = getVolunteerInfo,
                     volunteersHistories = db.sp_VolunteerHistory(UserId).ToList(),
-                    detailsEventImage = getOrgImages
+                    detailsEventImage = getOrgImages,
+                    orgEventImageHistories = db.OrgEventImageHistory.ToList()
                 };
 
                 return View(indexModel);

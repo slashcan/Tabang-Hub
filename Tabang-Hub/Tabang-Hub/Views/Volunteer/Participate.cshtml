@@ -222,7 +222,7 @@
                     <div class="row g-0">
                         <!-- Image Section -->
                         @{
-                            var imgs = Model.detailsEventImage.Where(m => m.eventId == vh.eventId).Select(m => m.eventImage).FirstOrDefault();
+                            var imgs = Model.orgEventImageHistories.Where(m => m.eventId == vh.eventId).Select(m => m.eventImage).FirstOrDefault();
                         }
                         <div class="col-12 col-md-4">
                             <img src="@Url.Content("~/Content/Events/" + imgs)" class="img-fluid rounded w-100 image-container" style="height: 100%;" alt="Event Image">

@@ -375,32 +375,6 @@
     </div>
 </div>
 
-<div class="similar-opportunities-container" style="background-color: #F0F8FF;">
-    <div class="header">
-        <h2>Be Involved</h2>
-        @*<a href="#" class="see-all">See all</a>*@
-    </div>
-    <div class="similar-opportunities-carousel">
-        <div class="carousel-buttons-opportunities">
-            <button class="carousel-button-opportunities prev-button-opportunities">&lt;</button>
-            <button class="carousel-button-opportunities next-button-opportunities">&gt;</button>
-        </div>
-        <div class="carousel-track-opportunities">
-            @foreach (var lstEvent in Model.orgOtherEvent)
-            {
-                <div class="opportunity-card">
-                    <img src="~/Content/images/tabanghub3.png" alt="">
-                    <div class="card-content">
-                        @*<p>PROJECT | 6-7 WEEKS</p>*@
-                        <h3 class="card-title">@lstEvent.Event_Title</h3>
-                        <p class="card-text">@lstEvent.Event_Description</p>
-                    </div>
-                </div>
-            }
-        </div>
-    </div>
-</div>
-
 <br />
 
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
