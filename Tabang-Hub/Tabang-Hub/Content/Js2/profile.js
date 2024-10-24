@@ -218,7 +218,7 @@ function cancelEditAboutMe() {
 
     originalSkills.forEach(function (skill) {
         var skillBadge = document.createElement('span');
-        skillBadge.className = 'badge badge-secondary skill-badge';
+        skillBadge.className = 'skill-badge';
         skillBadge.setAttribute('data-skill-id', skill.id);
         skillBadge.style.backgroundColor = 'mediumseagreen';
         skillBadge.innerHTML = `${skill.name} <span class="remove-skill d-none" onclick="removeSkill(this)">x</span>`;
@@ -260,8 +260,15 @@ function SaveAboutMe(aboutMe, getDisplaySkill) {
             if (response.success) {
                 $('#aboutMe').text(aboutMe);
                 toggleAboutMeInputs(false);
+                location.reload();
             } else {
-                console.log("Error: " + response.message);
+                console.log("Error:!! " + response.message);
+                Swal.fire({
+                    icon: 'error',
+                    text: "This skill is in use for an ongoing or applied event. You can't remove it until the event is completed or your application is withdrawn.",
+                }).then(() => {
+                    location.reload();
+                });
             }
         },
         error: function (xhr, status, error) {
@@ -277,7 +284,7 @@ function addSkill() {
     if (selectedSkill) {
         var skillsDisplay = document.getElementById('skillsDisplay');
         var newSkill = document.createElement('span');
-        newSkill.className = 'badge badge-secondary skill-badge';
+        newSkill.className = 'skill-badge';
         newSkill.setAttribute('data-skill-id', selectedSkill);
         newSkill.style.backgroundColor = 'mediumseagreen';
         newSkill.innerHTML = `${selectedSkillName} <span class="remove-skill" onclick="removeSkill(this)">x</span>`;

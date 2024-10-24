@@ -1,0 +1,17 @@
+﻿.view-more i {
+    font-size: 1.2em;
+    color: #137af0;
+    transition: color 0.2s ease;
+}
+
+    /* Change color on hover */
+    .view-more i:hover {
+        cursor: pointer;
+        color: #2bb1ff;
+    }
+
+@media (max-width: 768px) {
+    .view-more i {
+        font-size: 1.1em;
+    }
+}

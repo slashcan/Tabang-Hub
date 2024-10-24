@@ -211,6 +211,7 @@
     <Content Include="Content\css2\Template-css\bootstrap.min.css" />
     <Content Include="Content\css2\Template-css\templatemo-kind-heart-charity.css" />
     <Content Include="Content\Css\CustomeStyle.css" />
+    <Content Include="Content\Css\donationStyle.css" />
     <Content Include="Content\Css\generalskill.css" />
     <Content Include="Content\Css\generalStyle.css" />
     <Content Include="Content\Css\message.css" />
@@ -309,6 +310,7 @@
     <Content Include="Content\Js2\popup.js" />
     <Content Include="Content\Js2\profile.js" />
     <Content Include="Content\Js2\progress.js" />
+    <Content Include="Content\Js2\rankskill.js" />
     <Content Include="Content\Js2\SaveDataInfo.js" />
     <Content Include="Content\Js2\selectImage.js" />
     <Content Include="Content\Js2\Template-js\bootstrap.min.js" />
@@ -2166,6 +2168,7 @@
     <Content Include="Views\Shared\_Verify.cshtml" />
     <Content Include="Views\Admin\ManageSkill.cshtml" />
     <Content Include="Views\Admin\Reports.cshtml" />
+    <Content Include="Views\Volunteer\DonationHistory.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

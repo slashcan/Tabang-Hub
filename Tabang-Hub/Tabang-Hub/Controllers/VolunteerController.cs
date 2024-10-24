@@ -56,7 +56,8 @@ namespace Tabang_Hub.Controllers
                 picture = getProfile,
                 skills = _skills.GetAll().ToList(),
                 volunteersHistories = db.sp_VolunteerHistory(UserId).ToList(),
-                rating = db.Rating.Where(m => m.userId == UserId).ToList()
+                rating = db.Rating.Where(m => m.userId == UserId).ToList(),
+                orgEventHistory = db.OrgEventHistory.Where(m => m.userId == UserId).ToList(),
             };
 
             return View(listModel);
@@ -137,8 +138,17 @@ namespace Tabang_Hub.Controllers
                         //Ang user ganahan tang tangon ang skill sa database
                         var skillToRemove = db.VolunteerSkill.Where(m => !skills.Contains(m.skillId) && m.userId == UserId).ToList();
 
+                        var skillsInVolunteersTable = db.Volunteers
+                        .Where(m => !skills.Contains(m.skillId) && m.userId == UserId)
+                        .Select(m => m.skillId)
+                        .ToList();
+
                         foreach (var removeSkill in skillToRemove)
                         {
+                            if(skillsInVolunteersTable.Contains(removeSkill.skillId))
+                            {
+                                return Json(new { success = false, message = "Error: " });
+                            }
                             db.VolunteerSkill.Remove(removeSkill);
                         }
                     }
@@ -224,29 +234,6 @@ namespace Tabang_Hub.Controllers
                 return Json(new { success = false, message = "Error" });
             }
         }
-        //public ActionResult GeneralSkill()
-        //{
-        //    var getEventImages = _eventImages.GetAll().ToList();
-        //    var getSkills = _skills.GetAll().ToList();
-        //    var getProfile = db.ProfilePicture.Where(m => m.userId == UserId).ToList();
-        //    var getEvents = _listsOfEvent.GetAll().ToList();
-
-        //    var getOrgEvents = _orgEvents.GetAll().FirstOrDefault();
-        //    var getOrgInfo = db.OrgInfo.Where(m => m.userId == getOrgEvents.userId).ToList();
-
-        //    var getSkillRequirements = _skillRequirement.GetAll().ToList();
-
-        //    var indexModel = new Lists()
-        //    {
-        //        skills = getSkills,
-        //        picture = getProfile,
-        //        listOfEvents = getEvents,
-        //        orgInfos = getOrgInfo,
-        //        detailsSkillRequirement = getSkillRequirements,
-        //        detailsEventImage = getEventImages
-        //    };
-        //    return View(indexModel);
-        //}
         public ActionResult EventDetails(int? eventId)
         {
             try
@@ -680,7 +667,16 @@ namespace Tabang_Hub.Controllers
 
             return View(listModel);
         }
-        public ActionResult Participate()
+        public ActionResult DonationHistory()
+        {
+            var listModel = new Lists()
+            {
+                picture = db.ProfilePicture.Where(m => m.userId == UserId).ToList(),
+                volunteersInfo = db.VolunteerInfo.Where(m => m.userId == UserId).ToList()
+            };
+            return View(listModel);
+        }
+        public ActionResult Participate(string section = null)
         {
             try
             {
@@ -700,9 +696,12 @@ namespace Tabang_Hub.Controllers
                     pendingOrgDetails = pendingEvents.Select(e => _pendingOrgDetails.GetAll().FirstOrDefault(p => p.eventId == e.eventId)).ToList(),
                     volunteersInfo = getVolunteerInfo,
                     volunteersHistories = db.sp_VolunteerHistory(UserId).ToList(),
+                    rating = db.Rating.Where(m => m.userId == UserId).ToList(),
                     detailsEventImage = getOrgImages,
                     orgEventImageHistories = db.OrgEventImageHistory.ToList()
                 };
+
+                ViewBag.SectionToShow = section;
 
                 return View(indexModel);
             }

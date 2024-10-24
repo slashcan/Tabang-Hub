@@ -1,0 +1,72 @@
+﻿@{
+    ViewBag.Title = "PaymentHistory";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<!-- Center the card on the page -->
+<div class="d-flex justify-content-center align-items-center mt-5">
+    <!-- Bootstrap Card for a cleaner look -->
+    <div class="card shadow-sm" style="width: 85%; border-radius: 10px;">
+        <div class="card-body">
+            <!-- Table Title -->
+            <h5 class="card-title">Donation History</h5>
+
+            <!-- Payment History Table -->
+            <div class="table-responsive">
+                <table class="table table-borderless align-middle">
+                    <thead>
+                        <tr style="background-color: #5BC1AC; color: black">
+                            <th scope="col">Date Donated</th>
+                            <th scope="col">Event Title</th>
+                            <th scope="col">Event Description</th>
+                            <th scope="col">Amount</th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-bordered">
+                        <tr>
+                            <td>April 15, 2021</td>
+                            <td>Charity Walk 2021</td>
+                            <td>A fundraising walk to support local charities</td>
+                            <td>₱315.00</td>
+                            <td>
+                                <!-- Clickable arrow icon with hover effect -->
+                                <a href="#" class="view-more">
+                                    <i class="fa fa-chevron-right"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>January 20, 2021</td>
+                            <td>Food Drive 2021</td>
+                            <td>Providing food donations to underprivileged families</td>
+                            <td>₱500.00</td>
+                            <td>
+                                <a href="#" class="view-more">
+                                    <i class="fa fa-chevron-right"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>September 5, 2020</td>
+                            <td>Disaster Relief Fund</td>
+                            <td>Fundraising for disaster victims</td>
+                            <td>₱750.00</td>
+                            <td>
+                                <a href="#" class="view-more">
+                                    <i class="fa fa-chevron-right"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<link href="~/Content/Css/donationStyle.css" rel="stylesheet" />
+<!-- FontAwesome for icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">

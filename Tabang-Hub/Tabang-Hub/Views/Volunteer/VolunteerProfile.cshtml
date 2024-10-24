@@ -18,6 +18,83 @@
         object-fit: cover;
     }
 
+
+
+    .event-card {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #ddd;
+        padding: 15px;
+        margin-bottom: 15px;
+        background-color: #fff;
+        /*font-size: 0.9em;*/
+    }
+
+        .event-card:last-child {
+            border-bottom: none;
+        }
+
+    .event-title {
+        font-weight: bold;
+        color: #28a745;
+        margin-bottom: 5px;
+        font-size: 1.1em;
+    }
+
+    .event-description {
+        font-size: 0.9em;
+        color: #666;
+        margin-bottom: 5px;
+    }
+
+    .event-details {
+        flex-grow: 1;
+    }
+
+    .event-dates {
+        font-size: 0.8em;
+        color: #666;
+        margin-bottom: 5px;
+    }
+
+    .event-pricing {
+        text-align: right;
+        font-size: 0.9em;
+    }
+
+    .event-rating {
+        display: flex;
+        align-items: center;
+        font-size: 1.1em;
+        color: #ffa500;
+    }
+
+        .event-rating span {
+            margin-right: 5px;
+        }
+        .event-rating .rate-number {
+            font-size: 1em; /* Adjust the size of the number separately */
+            margin-right: 8px; /* Space between the number and the stars */
+        }
+
+    .skill-badge {
+        background-color: #28a745;
+        color: white;
+        padding: 3px 7px;
+        border-radius: 12px;
+        font-size: 0.8em;
+        margin-top: 5px;
+        display: inline-block;
+    }
+    .view-more {
+        color: #137af0;
+        margin-left: 10px;
+    }
+        .view-more:hover {
+            color: #2bb1ff;
+        }
+
 </style>
 
 <div class="container mt-5">
@@ -102,7 +179,7 @@
                         {
                             var skillName = Model.skills.Where(m => m.skillId == UserSkill.skillId).Select(m => m.skillName).FirstOrDefault();
 
-                            <span style="background-color: mediumseagreen; cursor: pointer" class="badge badge-secondary skill-badge" data-skill-id="@UserSkill.skillId">
+                            <span style="background-color: mediumseagreen; cursor: pointer" class="skill-badge" data-skill-id="@UserSkill.skillId">
                                 @Html.Raw(skillName)
                                 <span class="remove-skill d-none" onclick="removeSkill(this)">x</span>
                             </span>
@@ -123,12 +200,16 @@
             </div>
         </div>
     </div>
+
     <div class="card mt-3">
-            <div class="card-body">
-                <h5>Volunteer Summary</h5>
-                <ul>
-                    <li>
-                        @{ 
+        <div class="card-body">
+            <div class="row">
+                <!-- Volunteer Summary Section -->
+                <div class="col-md-5">
+                    <h5>Volunteer Summary</h5>
+                    <div class="mt-4">
+                        @* Calculating the rate as before *@
+                        @{
                             int? getRate = 0;
                             foreach (var rt in Model.rating.Select(m => m.rate))
                             {
@@ -136,25 +217,133 @@
                             }
                             var calculateRate = getRate / Model.rating.Count();
                         }
-                        Rate: <strong>@calculateRate</strong>
-                    </li>
-                    <li>
-                        Total hours volunteered: <strong></strong>
-                    </li>
-                    <li>
-                        Number of events participated: <strong>@Model.volunteersHistories.Count()</strong>
-                    </li>
-                </ul>
+                        <div>
+                            <span class="rate-number"><span>My Rate: &nbsp;</span><span style="color: #FFA500"><strong>@calculateRate.Value &nbsp;</strong></span></span>
+                            @for (int i = 0; i < calculateRate.Value; i++)
+                            {
+                                <span style="color: #FFA500">★</span>
+                            }
+                            @for (int i = calculateRate.Value; i < 5; i++)
+                            {
+                                <span style="color: #FFA500">☆</span>
+                            }
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        Number of event(s) participated: &nbsp;<strong style="color: #FFA500">@Model.volunteersHistories.Count()</strong>
+                    </div>
+                    <div class="mt-3">
+                        Number of skill(s): &nbsp;<strong style="color: #FFA500">@Model.volunteersSkills.Count()</strong>
+                    </div>
+                </div>
+
+                <!-- Rank Skill Section with Dropdown next to the heading -->
+                <div class="col-md-7">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Rank Skill</h5>
+                        <!-- Dynamic Dropdown Section for sorting -->
+                        <div class="form-group mb-0">
+                            <select class="form-control" id="skillRankFilter" style="width: 200px;" onchange="filterSkills()">
+                                <option value="Highest">Highest</option>
+                                <option value="Lowest">Lowest</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <ul id="rankedSkillsList" class="list-group mt-3" style="max-height: 190px; overflow-y: auto;">
+                        @foreach (var UserSkill in Model.volunteersSkills)
+                        {
+                            var skillName = Model.skills.Where(m => m.skillId == UserSkill.skillId).Select(m => m.skillName).FirstOrDefault();
+                            var rating = Model.rating.Where(m => m.userId == UserSkill.userId && m.skillId == UserSkill.skillId).Select(m => m.rate).FirstOrDefault();
+
+                            <li class="list-group-item skill-item" data-rating="@rating">
+                                <strong>@Html.Raw(skillName)</strong> - @(rating > 0 ? $"{rating} stars" : "No rating available")
+                                <div class="event-rating" style="color: #ffa500;">
+                                    @if (rating.HasValue)
+                                    {
+                                        for (int i = 0; i < rating.Value; i++)
+                                        {
+                                            <span>★</span>
+                                        }
+                                        for (int i = rating.Value; i < 5; i++)
+                                        {
+                                            <span>☆</span>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <span>No Rating</span>
+                                    }
+                                </div>
+                            </li>
+                        }
+                        @* Each list item has a data attribute for the rating so we can sort dynamically *@
+                    </ul>
+                </div>
             </div>
+        </div>
+    </div>
+    
+    <div class="card mt-3">
+        <div class="card-body">
+            <h5>Event History</h5>
+            <!-- Static Example of a Compact Event History Entry -->
+            @foreach (var vh in Model.volunteersHistories)
+            {
+                <div class="event-card">
+                    <!-- Event Details Section -->
+                    <div class="event-details">
+                        <h3 class="event-title">@vh.eventTitle</h3>
+                        <p class="event-description">@vh.eventDescription</p>
+                        <div class="event-dates">
+                            Start Date: @vh.dateStart - End Date: @vh.dateEnd
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <!-- Skills Section -->
+                            <div>
+                                Skill Utilized:
+                                <span class="skill-badge">@vh.skillName</span>
+                            </div>
+                            <!-- Rating Section, right aligned to the skill -->
+                            <div class="ml-auto event-rating mt-1" style="margin-left: 15px; color: #ffa500;">
+                                @{
+                                    var rating = Model.rating
+                                        .Where(m => m.userId == vh.userId && m.skillId == vh.skillId)
+                                        .Select(m => m.rate)
+                                        .FirstOrDefault();
+                                }
+                                @if (rating.HasValue)
+                                {
+                                    <span class="rate-number">@rating.Value &nbsp;</span>
+                                    for (int i = 0; i < rating.Value; i++)
+                                    {
+                                        <span>★</span>
+                                    }
+                                    for (int i = rating.Value; i < 5; i++)
+                                    {
+                                        <span>☆</span>
+                                    }
+                                }
+                                else
+                                {
+                                    <span>No Rating</span>
+                                }
+                            </div>
+                            <hr />
+                        </div>
+                    </div>
+                </div>
+            }
+            <div class="mt-3">
+                <a href="@Url.Action("Participate", "Volunteer", new { section = "historySection" })" class="view-more">View More</a>
+            </div>
+        </div>
     </div>
 
-        @*<div class="card mt-3">
-        <div class="card-body">
-            <h5>Feedback and Ratings</h5>
-            <p>Feedback from the past events</p>
-        </div>*@
+
 </div>
 <br />
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script src="~/Content/Js2/profile.js"></script>
+<script src="~/Content/Js2/rankskill.js"></script>
