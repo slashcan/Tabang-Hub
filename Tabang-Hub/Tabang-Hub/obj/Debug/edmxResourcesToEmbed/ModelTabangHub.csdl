@@ -607,12 +607,13 @@
   </EntityType>
   <EntityType Name="vw_VolunteerSkills">
     <Key>
-      <PropertyRef Name="ratingId" />
+      <PropertyRef Name="volunteerSkillId" />
+      <PropertyRef Name="rate" />
     </Key>
-    <Property Name="ratingId" Type="Int32" Nullable="false" />
+    <Property Name="volunteerSkillId" Type="Int32" Nullable="false" />
     <Property Name="userId" Type="Int32" />
     <Property Name="skillId" Type="Int32" />
-    <Property Name="rate" Type="Int32" />
+    <Property Name="rate" Type="Int32" Nullable="false" />
   </EntityType>
   <Association Name="FK_GroupChat_OrgEvents">
     <End Type="TabangHubModel.OrgEvents" Role="OrgEvents" Multiplicity="0..1" />

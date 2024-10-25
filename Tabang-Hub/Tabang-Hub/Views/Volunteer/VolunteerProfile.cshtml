@@ -211,24 +211,34 @@
                         @* Calculating the rate as before *@
                         @{
                             int? getRate = 0;
-                            foreach (var rt in Model.rating.Select(m => m.rate))
+                            int count = Model.rating.Count();
+                            int calculateRate = 0; // Declare calculateRate here so it's accessible
+
+                            if (count > 0)
                             {
-                                getRate += rt;
+                                foreach (var rt in Model.rating.Select(m => m.rate))
+                                {
+                                    getRate += rt;
+                                }
+                                calculateRate = getRate.Value / count; // Update calculateRate here
                             }
-                            var calculateRate = getRate / Model.rating.Count();
                         }
                         <div>
-                            <span class="rate-number"><span>My Rate: &nbsp;</span><span style="color: #FFA500"><strong>@calculateRate.Value &nbsp;</strong></span></span>
-                            @for (int i = 0; i < calculateRate.Value; i++)
+                            <span class="rate-number">
+                                <span>My Rate: &nbsp;</span>
+                                <span style="color: #FFA500"><strong>@calculateRate &nbsp;</strong></span>
+                            </span>
+                            @for (int i = 0; i < calculateRate; i++)
                             {
                                 <span style="color: #FFA500">★</span>
                             }
-                            @for (int i = calculateRate.Value; i < 5; i++)
+                            @for (int i = calculateRate; i < 5; i++)
                             {
                                 <span style="color: #FFA500">☆</span>
                             }
                         </div>
                     </div>
+
                     <div class="mt-3">
                         Number of event(s) participated: &nbsp;<strong style="color: #FFA500">@Model.volunteersHistories.Count()</strong>
                     </div>

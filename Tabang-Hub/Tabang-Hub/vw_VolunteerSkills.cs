@@ -14,9 +14,9 @@ namespace Tabang_Hub
     
     public partial class vw_VolunteerSkills
     {
-        public int ratingId { get; set; }
+        public int volunteerSkillId { get; set; }
         public Nullable<int> userId { get; set; }
         public Nullable<int> skillId { get; set; }
-        public Nullable<int> rate { get; set; }
+        public int rate { get; set; }
     }
 }

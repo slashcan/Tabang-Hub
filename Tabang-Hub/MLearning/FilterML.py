@@ -21,7 +21,15 @@ except:
 def calculate_similarity(user_skills, event_skills):
     user_vector = np.array([1 if skill in user_skills else 0 for skill in event_skills])
     event_vector = np.ones(len(event_skills))
-    return np.dot(user_vector, event_vector) / (np.linalg.norm(user_vector) * np.linalg.norm(event_vector))
+
+    # Prevent division by zero
+    user_norm = np.linalg.norm(user_vector)
+    event_norm = np.linalg.norm(event_vector)
+
+    if user_norm == 0 or event_norm == 0:
+        return 0.0  # Return 0 if the vectors are zero
+
+    return np.dot(user_vector, event_vector) / (user_norm * event_norm)
 
 # Route 1: Skill Filtering and Attendance Prediction
 @app.route('/predict', methods=['POST'])

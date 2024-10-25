@@ -466,7 +466,7 @@
           <ScalarProperty Name="rate" ColumnName="rate" />
           <ScalarProperty Name="skillId" ColumnName="skillId" />
           <ScalarProperty Name="userId" ColumnName="userId" />
-          <ScalarProperty Name="ratingId" ColumnName="ratingId" />
+          <ScalarProperty Name="volunteerSkillId" ColumnName="volunteerSkillId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

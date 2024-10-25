@@ -369,12 +369,13 @@ warning 6002: The table/view 'TabangHub.dbo.vw_VolunteerAccounts' does not have 
 warning 6002: The table/view 'TabangHub.dbo.vw_VolunteerSkills' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="vw_VolunteerSkills">
           <Key>
-            <PropertyRef Name="ratingId" />
+            <PropertyRef Name="volunteerSkillId" />
+            <PropertyRef Name="rate" />
           </Key>
-          <Property Name="ratingId" Type="int" Nullable="false" />
+          <Property Name="volunteerSkillId" Type="int" Nullable="false" />
           <Property Name="userId" Type="int" />
           <Property Name="skillId" Type="int" />
-          <Property Name="rate" Type="int" />
+          <Property Name="rate" Type="int" Nullable="false" />
         </EntityType>
         <Association Name="FK_GroupChat_OrgEvents">
           <End Role="OrgEvents" Type="Self.OrgEvents" Multiplicity="0..1" />
@@ -766,7 +767,7 @@ FROM [dbo].[vw_VolunteerAccounts] AS [vw_VolunteerAccounts]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="vw_VolunteerSkills" EntityType="Self.vw_VolunteerSkills" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
-[vw_VolunteerSkills].[ratingId] AS [ratingId], 
+[vw_VolunteerSkills].[volunteerSkillId] AS [volunteerSkillId], 
 [vw_VolunteerSkills].[userId] AS [userId], 
 [vw_VolunteerSkills].[skillId] AS [skillId], 
 [vw_VolunteerSkills].[rate] AS [rate]
@@ -1472,12 +1473,13 @@ FROM [dbo].[vw_VolunteerSkills] AS [vw_VolunteerSkills]</DefiningQuery>
         </EntityType>
         <EntityType Name="vw_VolunteerSkills">
           <Key>
-            <PropertyRef Name="ratingId" />
+            <PropertyRef Name="volunteerSkillId" />
+            <PropertyRef Name="rate" />
           </Key>
-          <Property Name="ratingId" Type="Int32" Nullable="false" />
+          <Property Name="volunteerSkillId" Type="Int32" Nullable="false" />
           <Property Name="userId" Type="Int32" />
           <Property Name="skillId" Type="Int32" />
-          <Property Name="rate" Type="Int32" />
+          <Property Name="rate" Type="Int32" Nullable="false" />
         </EntityType>
         <Association Name="FK_GroupChat_OrgEvents">
           <End Type="TabangHubModel.OrgEvents" Role="OrgEvents" Multiplicity="0..1" />
@@ -2214,7 +2216,7 @@ FROM [dbo].[vw_VolunteerSkills] AS [vw_VolunteerSkills]</DefiningQuery>
                 <ScalarProperty Name="rate" ColumnName="rate" />
                 <ScalarProperty Name="skillId" ColumnName="skillId" />
                 <ScalarProperty Name="userId" ColumnName="userId" />
-                <ScalarProperty Name="ratingId" ColumnName="ratingId" />
+                <ScalarProperty Name="volunteerSkillId" ColumnName="volunteerSkillId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
