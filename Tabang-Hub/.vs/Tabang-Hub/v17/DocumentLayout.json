@@ -3,16 +3,28 @@
   "WorkspaceRootPath": "C:\\Users\\arvie\\OneDrive\\Desktop\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|c:\\users\\arvie\\onedrive\\desktop\\tabang-hub\\tabang-hub\\tabang-hub\\tabang-hub\\repository\\organizationmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|solutionrelative:tabang-hub\\repository\\organizationmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|c:\\users\\arvie\\onedrive\\desktop\\tabang-hub\\tabang-hub\\tabang-hub\\tabang-hub\\views\\message\\message.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|solutionrelative:tabang-hub\\views\\message\\message.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|C:\\Users\\arvie\\OneDrive\\Desktop\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\tabang-hub\\controllers\\pagecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|solutionrelative:tabang-hub\\controllers\\pagecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|c:\\users\\arvie\\onedrive\\desktop\\tabang-hub\\tabang-hub\\tabang-hub\\tabang-hub\\controllers\\organizationcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|c:\\users\\arvie\\onedrive\\desktop\\tabang-hub\\tabang-hub\\tabang-hub\\tabang-hub\\content\\css\\message.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|solutionrelative:tabang-hub\\content\\css\\message.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|c:\\users\\arvie\\onedrive\\desktop\\tabang-hub\\tabang-hub\\tabang-hub\\tabang-hub\\controllers\\messagecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|solutionrelative:tabang-hub\\controllers\\messagecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|C:\\Users\\arvie\\OneDrive\\Desktop\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\tabang-hub\\controllers\\organizationcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|solutionrelative:tabang-hub\\controllers\\organizationcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|c:\\users\\arvie\\onedrive\\desktop\\tabang-hub\\tabang-hub\\tabang-hub\\tabang-hub\\repository\\organizationmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C91BF11D-2370-46E0-8461-E1D6FBCBCA76}|Tabang-Hub\\Tabang-Hub.csproj|solutionrelative:tabang-hub\\repository\\organizationmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -27,19 +39,58 @@
             {
               "$type": "Document",
               "DocumentIndex": 2,
+              "Title": "message.css",
+              "DocumentMoniker": "C:\\Users\\arvie\\OneDrive\\Desktop\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Content\\Css\\message.css",
+              "RelativeDocumentMoniker": "Tabang-Hub\\Content\\Css\\message.css",
+              "ToolTip": "C:\\Users\\arvie\\OneDrive\\Desktop\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Content\\Css\\message.css",
+              "RelativeToolTip": "Tabang-Hub\\Content\\Css\\message.css",
+              "ViewState": "AQIAABgAAAAAAAAAAAAAADIAAAAFAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2024-10-26T08:55:06.009Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Message.cshtml",
+              "DocumentMoniker": "C:\\Users\\arvie\\OneDrive\\Desktop\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Views\\Message\\Message.cshtml",
+              "RelativeDocumentMoniker": "Tabang-Hub\\Views\\Message\\Message.cshtml",
+              "ToolTip": "C:\\Users\\arvie\\OneDrive\\Desktop\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Views\\Message\\Message.cshtml",
+              "RelativeToolTip": "Tabang-Hub\\Views\\Message\\Message.cshtml",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAQAAAABAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-10-26T08:15:38.231Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "MessageController.cs",
+              "DocumentMoniker": "C:\\Users\\arvie\\OneDrive\\Desktop\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Controllers\\MessageController.cs",
+              "RelativeDocumentMoniker": "Tabang-Hub\\Controllers\\MessageController.cs",
+              "ToolTip": "C:\\Users\\arvie\\OneDrive\\Desktop\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Controllers\\MessageController.cs",
+              "RelativeToolTip": "Tabang-Hub\\Controllers\\MessageController.cs",
+              "ViewState": "AQIAAAwAAAAAAAAAAAAlwA0AAAAIAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-26T08:15:29.175Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
               "Title": "OrganizationController.cs",
               "DocumentMoniker": "C:\\Users\\arvie\\OneDrive\\Desktop\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Controllers\\OrganizationController.cs",
               "RelativeDocumentMoniker": "Tabang-Hub\\Controllers\\OrganizationController.cs",
               "ToolTip": "C:\\Users\\arvie\\OneDrive\\Desktop\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Controllers\\OrganizationController.cs",
               "RelativeToolTip": "Tabang-Hub\\Controllers\\OrganizationController.cs",
-              "ViewState": "AQIAALgAAAAAAAAAAAAAAMUAAABOAAAA",
+              "ViewState": "AQIAALgAAAAAAAAAAAAAALwAAAAJAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-10-25T06:55:28.494Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 5,
               "Title": "OrganizationManager.cs",
               "DocumentMoniker": "C:\\Users\\arvie\\OneDrive\\Desktop\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Repository\\OrganizationManager.cs",
               "RelativeDocumentMoniker": "Tabang-Hub\\Repository\\OrganizationManager.cs",
@@ -58,7 +109,7 @@
               "RelativeDocumentMoniker": "Tabang-Hub\\Controllers\\PageController.cs",
               "ToolTip": "C:\\Users\\arvie\\OneDrive\\Desktop\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Tabang-Hub\\Controllers\\PageController.cs",
               "RelativeToolTip": "Tabang-Hub\\Controllers\\PageController.cs",
-              "ViewState": "AQIAABAAAAAAAAAAAAAwwBoAAABHAAAA",
+              "ViewState": "AQIAABAAAAAAAAAAAAAwwB0AAAAjAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-10-21T01:24:45.902Z",
               "EditorCaption": ""

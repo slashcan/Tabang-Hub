@@ -3,6 +3,7 @@
     ViewBag.Title = "Message";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
 <link href="~/Content/Css/message.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -11,7 +12,7 @@
         <div class="chat-item-head">
             <h2>Group Chats</h2>
         </div>
-        @if (Model.listOfGc == null)
+        @if (Model.listOfGc == null || Model.listOfGc.Count().Equals(0))
         {
             <script type="text/javascript">
                 Swal.fire({
@@ -31,12 +32,16 @@
         {
             foreach (var gc in Model.listOfGc)
             {
-                <div class="chat-item" onclick="selectGroup('@gc.groupChatId')">
-                    <img src="https://via.placeholder.com/40" alt="Profile">
+                <div class="chat-item" onclick="selectGroup('@gc.groupChatId', event)">
+                    @{ 
+                        var gcImage = Model.detailsEventImage.Where(m => m.eventId == gc.eventId).Select(m => m.eventImage).FirstOrDefault();
+                    }
+                    <img src="@Url.Content("~/Content/Events/" + gcImage)" alt="Profile">
                     <span>@gc.eventTitle</span>
                     <input type="hidden" value="@gc.groupChatId" id="groupId" />
                     <input type="hidden" value="@gc.userId" id="userId" />
                 </div>
+
             }
         }
     </div>
@@ -57,8 +62,14 @@
     console.log("currentUserId: ", currentUserId);
 
     var selectedGcID = null;
-    function selectGroup(groupId) {
+    function selectGroup(groupId, event) {
         console.log("Group ID: ", groupId);
+
+        // Remove 'selected' class from any previously selected item
+        $('.chat-item').removeClass('selected');
+
+        // Add 'selected' class to the clicked item
+        $(event.currentTarget).addClass('selected');
 
         selectedGcID = groupId;
 
@@ -82,6 +93,7 @@
             });
         });
     }
+
 
     $(function () {
         // Declare a proxy to reference the hub

@@ -884,9 +884,6 @@ FROM [dbo].[vw_VolunteerSkills] AS [vw_VolunteerSkills]</DefiningQuery>
           <FunctionImport Name="sp_UserListEvent" ReturnType="Collection(TabangHubModel.sp_UserListEvent_Result)">
           <Parameter Name="userId" Mode="In" Type="Int32" />
           </FunctionImport>
-          <FunctionImport Name="sp_ListOfGc" ReturnType="Collection(TabangHubModel.sp_ListOfGc_Result)">
-          <Parameter Name="userId" Mode="In" Type="Int32" />
-          </FunctionImport>
           <FunctionImport Name="sp_GetAllMessage" ReturnType="Collection(TabangHubModel.sp_GetAllMessage_Result)">
           <Parameter Name="groupChatId" Mode="In" Type="Int32" />
           </FunctionImport>
@@ -1016,6 +1013,9 @@ FROM [dbo].[vw_VolunteerSkills] AS [vw_VolunteerSkills]</DefiningQuery>
             <End Role="UserAccount" EntitySet="UserAccount" />
             <End Role="Volunteers" EntitySet="Volunteers" />
           </AssociationSet>
+          <FunctionImport Name="sp_ListOfGc" ReturnType="Collection(TabangHubModel.sp_ListOfGc_Result)">
+            <Parameter Name="userId" Mode="In" Type="Int32" />
+          </FunctionImport>
           </EntityContainer>
         <ComplexType Name="sp_GetSkills_Result">
           <Property Type="Int32" Name="skillId" Nullable="false" />
@@ -1042,14 +1042,6 @@ FROM [dbo].[vw_VolunteerSkills] AS [vw_VolunteerSkills]</DefiningQuery>
           <Property Type="DateTime" Name="appliedAt" Nullable="true" />
           <Property Type="DateTime" Name="dateStart" Nullable="true" Precision="23" />
           <Property Type="DateTime" Name="dateEnd" Nullable="true" Precision="23" />
-        </ComplexType>
-        <ComplexType Name="sp_ListOfGc_Result">
-          <Property Type="Int32" Name="groupChatId" Nullable="false" />
-          <Property Type="Int32" Name="userId" Nullable="true" />
-          <Property Type="Int32" Name="eventImageId" Nullable="false" />
-          <Property Type="String" Name="eventImage" Nullable="true" MaxLength="255" />
-          <Property Type="Int32" Name="eventId" Nullable="true" />
-          <Property Type="String" Name="eventTitle" Nullable="true" MaxLength="255" />
         </ComplexType>
         <ComplexType Name="sp_GetAllMessage_Result">
           <Property Type="Int32" Name="groupChatId" Nullable="false" />
@@ -1745,6 +1737,12 @@ FROM [dbo].[vw_VolunteerSkills] AS [vw_VolunteerSkills]</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <ComplexType Name="sp_ListOfGc_Result">
+          <Property Type="Int32" Name="groupChatId" Nullable="false" />
+          <Property Type="Int32" Name="userId" Nullable="true" />
+          <Property Type="Int32" Name="eventId" Nullable="true" />
+          <Property Type="String" Name="eventTitle" Nullable="true" MaxLength="255" />
+        </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1788,18 +1786,6 @@ FROM [dbo].[vw_VolunteerSkills] AS [vw_VolunteerSkills]</DefiningQuery>
                 <ScalarProperty Name="appliedAt" ColumnName="appliedAt" />
                 <ScalarProperty Name="dateStart" ColumnName="dateStart" />
                 <ScalarProperty Name="dateEnd" ColumnName="dateEnd" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="sp_ListOfGc" FunctionName="TabangHubModel.Store.sp_ListOfGc">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="TabangHubModel.sp_ListOfGc_Result">
-                <ScalarProperty Name="groupChatId" ColumnName="groupChatId" />
-                <ScalarProperty Name="userId" ColumnName="userId" />
-                <ScalarProperty Name="eventImageId" ColumnName="eventImageId" />
-                <ScalarProperty Name="eventImage" ColumnName="eventImage" />
-                <ScalarProperty Name="eventId" ColumnName="eventId" />
-                <ScalarProperty Name="eventTitle" ColumnName="eventTitle" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -2220,6 +2206,16 @@ FROM [dbo].[vw_VolunteerSkills] AS [vw_VolunteerSkills]</DefiningQuery>
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="sp_ListOfGc" FunctionName="TabangHubModel.Store.sp_ListOfGc">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="TabangHubModel.sp_ListOfGc_Result">
+                <ScalarProperty Name="groupChatId" ColumnName="groupChatId" />
+                <ScalarProperty Name="userId" ColumnName="userId" />
+                <ScalarProperty Name="eventId" ColumnName="eventId" />
+                <ScalarProperty Name="eventTitle" ColumnName="eventTitle" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

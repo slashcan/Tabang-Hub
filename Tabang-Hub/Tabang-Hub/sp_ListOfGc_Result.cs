@@ -15,8 +15,6 @@ namespace Tabang_Hub
     {
         public int groupChatId { get; set; }
         public Nullable<int> userId { get; set; }
-        public int eventImageId { get; set; }
-        public string eventImage { get; set; }
         public Nullable<int> eventId { get; set; }
         public string eventTitle { get; set; }
     }

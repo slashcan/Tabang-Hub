@@ -113,15 +113,6 @@ namespace Tabang_Hub
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_UserListEvent_Result>("sp_UserListEvent", userIdParameter);
         }
     
-        public virtual ObjectResult<sp_ListOfGc_Result> sp_ListOfGc(Nullable<int> userId)
-        {
-            var userIdParameter = userId.HasValue ?
-                new ObjectParameter("userId", userId) :
-                new ObjectParameter("userId", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_ListOfGc_Result>("sp_ListOfGc", userIdParameter);
-        }
-    
         public virtual ObjectResult<sp_GetAllMessage_Result> sp_GetAllMessage(Nullable<int> groupChatId)
         {
             var groupChatIdParameter = groupChatId.HasValue ?
@@ -151,6 +142,15 @@ namespace Tabang_Hub
                 new ObjectParameter("userId", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_VolunteerHistory_Result>("sp_VolunteerHistory", userIdParameter);
+        }
+    
+        public virtual ObjectResult<sp_ListOfGc_Result> sp_ListOfGc(Nullable<int> userId)
+        {
+            var userIdParameter = userId.HasValue ?
+                new ObjectParameter("userId", userId) :
+                new ObjectParameter("userId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_ListOfGc_Result>("sp_ListOfGc", userIdParameter);
         }
     }
 }

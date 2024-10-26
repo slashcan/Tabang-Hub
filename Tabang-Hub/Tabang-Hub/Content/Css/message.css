@@ -45,6 +45,11 @@
         text-overflow: ellipsis;
     }
 
+    .chat-item.selected {
+        background-color: #d3e0f5; /* Light blue background for the selected chat */
+        border-left: 4px solid #3b82f6; /* Blue border to indicate selection */
+    }
+
 .chat-area {
     flex-grow: 1;
     display: flex;
