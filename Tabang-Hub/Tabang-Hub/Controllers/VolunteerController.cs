@@ -108,6 +108,7 @@ namespace Tabang_Hub.Controllers
 
             var notifications = db.Notification
                 .Where(n => n.userId == userId && n.status == 0)
+                .OrderByDescending(n => n.createdAt) // Assuming 'CreatedAt' is the date field
                 .Select(n => new { n.type, n.content })
                 .ToList();
 
@@ -145,7 +146,7 @@ namespace Tabang_Hub.Controllers
 
                         foreach (var removeSkill in skillToRemove)
                         {
-                            if(skillsInVolunteersTable.Contains(removeSkill.skillId))
+                            if (skillsInVolunteersTable.Contains(removeSkill.skillId))
                             {
                                 return Json(new { success = false, message = "Error: " });
                             }
@@ -253,6 +254,7 @@ namespace Tabang_Hub.Controllers
                     var getVolunteers = _volunteers.GetAll().Where(m => m.eventId == eventId).ToList();
                     var listofUserDonated = db.UserDonated.Where(m => m.eventId == eventId).ToList();
                     var volunteerStatusEvent = _volunteersStatusEvent.GetAll().Where(m => m.userId == UserId && m.eventId == eventId).ToList();
+                    var volunteer = _volunteerManager.GetVolunteerByUserId(UserId, (int)eventId);
 
                     var indexModel = new Lists()
                     {
@@ -269,6 +271,7 @@ namespace Tabang_Hub.Controllers
                         listofUserDonated = listofUserDonated,
                         volunteersStatusEvent = volunteerStatusEvent,
                         matchSkill = db.sp_matchSkill(UserId, eventId).ToList(),
+                        volunteer = volunteer,
                     };
                     return View(indexModel);
                 }
@@ -344,7 +347,7 @@ namespace Tabang_Hub.Controllers
                     Status = 0,
                     skillId = db.Skills.Where(m => m.skillName == skill).Select(m => m.skillId).FirstOrDefault(),
                     appliedAt = DateTime.Now
-                }; 
+                };
 
                 //var updateVolunteerNeeded = db.OrgEvents.Where(m => m.eventId == eventId).FirstOrDefault();
 
@@ -361,7 +364,7 @@ namespace Tabang_Hub.Controllers
 
                     // Instantiate NotificationHub and save the notification
                     var notificationHub = new NotificationHub();
-                    notificationHub.SendNotification((int)organizationId, UserId, notificationType, notificationMessage);
+                    notificationHub.SendNotification((int)organizationId, UserId, eventId, notificationType, notificationMessage);
 
                     // Send real-time notification if the organization is online
                     var context = GlobalHost.ConnectionManager.GetHubContext<NotificationHub>();
@@ -592,6 +595,7 @@ namespace Tabang_Hub.Controllers
                 {
                     userId = organization.userId, // Notify the organization
                     senderUserId = UserId, // The user who donated
+                    relatedId = eventId,
                     type = "Donation",
                     content = $"You have received a donation of {donation.amount} for event #{eventId}.",
                     broadcast = 0, // Not a broadcast
@@ -728,6 +732,7 @@ namespace Tabang_Hub.Controllers
                     {
                         userId = events.userId, // Notify the organization
                         senderUserId = UserId, // The user who donated
+                        relatedId = eventId,
                         type = "Leave",
                         content = $"{updateVol.UserAccount.email} Left {events.eventTitle} Event.",
                         broadcast = 0, // Not a broadcast
@@ -780,6 +785,52 @@ namespace Tabang_Hub.Controllers
             };
 
             return View(indexModel);
-        }      
+        }
+        [HttpPost]
+        public JsonResult OpenNotification(int notificationId)
+        {
+            try
+            {
+                // Fetch the notification from the database
+                var notification = db.Notification.FirstOrDefault(n => n.notificationId == notificationId);
+
+                if (notification != null)
+                {
+                    // Mark the notification as read
+                    notification.status = 1;
+                    db.SaveChanges();
+
+                    // Optionally, get the URL to redirect the user
+                    string redirectUrl = GetRedirectUrlForNotification(notification);
+
+                    return Json(new { success = true, redirectUrl = redirectUrl });
+                }
+                else
+                {
+                    return Json(new { success = false, message = "Notification not found." });
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                // Return an error response
+                return Json(new { success = false, message = ex.Message });
+            }
+        }
+        private string GetRedirectUrlForNotification(Notification notification)
+        {
+            // Logic to determine redirect URL based on notification type or content
+            // For example:
+            if (notification.type == "Invitation")
+            {
+                return Url.Action("EventDetails", "Volunteer", new { eventId = notification.relatedId });
+            }
+            else if (notification.type == "Donation")
+            {
+                return Url.Action("Details", "Organization", new { eventId = notification.relatedId });
+            }
+            // Default to null if no redirection is needed
+            return null;
+        }
     }
 }

@@ -13,6 +13,8 @@ namespace Tabang_Hub.Utils
         public UserAccount userAccount { get; set; }
         public OrgInfo OrgInfo { get; set; }
         public ProfilePicture profilePic { get; set; }
+        public OrgValidation orgValidation { get; set; }
+        public Volunteers volunteer { get; set; } 
 
         //Tables List
         //public List<UserAccount> userAccounts { get; set; }

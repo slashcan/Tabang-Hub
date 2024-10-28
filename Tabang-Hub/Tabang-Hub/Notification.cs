@@ -17,6 +17,7 @@ namespace Tabang_Hub
         public int notificationId { get; set; }
         public Nullable<int> userId { get; set; }
         public Nullable<int> senderUserId { get; set; }
+        public Nullable<int> relatedId { get; set; }
         public string type { get; set; }
         public string content { get; set; }
         public Nullable<int> broadcast { get; set; }

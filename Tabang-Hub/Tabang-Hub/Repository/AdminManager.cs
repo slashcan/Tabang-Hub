@@ -104,9 +104,13 @@ namespace Tabang_Hub.Repository
             return _volunteers.GetAll().Where(m => m.eventId == eventId).ToList();
         }
 
-        public List<OrgValidation> GetOrgValidationsByUserId(int userId)
+        public List<OrgValidation> GetListOrgValidationsByUserId(int userId)
         {
             return _orgValidation.GetAll().Where(m => m.userId == userId).ToList();
+        }
+        public OrgValidation GetOrgValidationsByUserId(int userId)
+        {
+            return _orgValidation._table.Where(m => m.userId == userId).FirstOrDefault();
         }
         public OrgInfo GetOrgInfoByUserId(int userId)
         {
@@ -344,7 +348,7 @@ namespace Tabang_Hub.Repository
             }
 
             var events = GetEventsByUserId(user.userId);
-            var validation = GetOrgValidationsByUserId(user.userId);
+            var validation = GetListOrgValidationsByUserId(user.userId);
             var profile = GetProfileByUserId(user.userId);
             var orgInfo = GetOrgInfoByUserId(user.userId);
             var userRoles = GetRolesByUserId(user.userId);

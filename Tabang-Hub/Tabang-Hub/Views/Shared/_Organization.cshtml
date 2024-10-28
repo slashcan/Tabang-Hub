@@ -182,7 +182,7 @@
         $(document).ready(function () {
             // Establish SignalR connection
             const connection = new signalR.HubConnectionBuilder()
-                .withUrl("/notificationHub") // Ensure your SignalR Hub endpoint is correct
+                .withUrl("/notificationHub")
                 .build();
 
             // Start the connection
@@ -205,16 +205,21 @@
 
             function fetchUnreadNotifications() {
                 $.ajax({
-                    url: '/Organization/GetUnreadNotifications',
+                    url: '@Url.Action("GetUnreadNotifications", "Organization")',
                     type: 'GET',
                     success: function (data) {
                         let unreadCount = data.length;
                         updateNotificationCount(unreadCount);
 
                         if (unreadCount > 0) {
-                            let notificationsHtml = '';
+                            let notificationsHtml = '<li><h6 class="dropdown-header">Notifications</h6></li>';
                             data.forEach(notification => {
-                                notificationsHtml += `<li><a class="dropdown-item">${notification.content}</a></li>`;
+                                notificationsHtml += `
+                                    <li>
+                                        <a href="#" class="dropdown-item notification-item" data-notification-id="${notification.notificationId}">
+                                            ${notification.content}
+                                        </a>
+                                    </li>`;
                             });
                             $('#notificationDropdown').html(notificationsHtml);
                         } else {
@@ -227,6 +232,46 @@
                 });
             }
 
+            // Event handler for notification item click
+            $(document).on('click', '.notification-item', function (e) {
+                e.preventDefault();
+
+                var notificationId = $(this).data('notification-id');
+                console.log('Notification item clicked. ID:', notificationId);
+
+                // Get Anti-Forgery token
+                var token = $('input[name="__RequestVerificationToken"]').val();
+
+                var $notificationItem = $(this);
+
+                // Send AJAX POST request to the OpenNotification action
+                $.ajax({
+                    url: '@Url.Action("OpenNotification", "Organization")',
+                    type: 'POST',
+                    data: {
+                        __RequestVerificationToken: token,
+                        notificationId: notificationId
+                    },
+                    success: function (response) {
+                        if (response.success) {
+                            if (response.redirectUrl) {
+                                window.location.href = response.redirectUrl;
+                            } else {
+                                // Remove the notification from the dropdown
+                                $notificationItem.closest('li').remove();
+                                // Update the notification count
+                                fetchUnreadNotifications();
+                            }
+                        } else {
+                            console.error('Failed to open notification:', response.message);
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error opening notification:', error);
+                    }
+                });
+            });
+
             function updateNotificationCount(count) {
                 const notificationCountElement = $('#notificationCount');
                 if (count > 0) {
@@ -237,9 +282,9 @@
             }
 
             function showNotification(type, message) {
-                const notificationHtml = `<li><a class="dropdown-item">${message}</a></li>`;
+                const notificationHtml = `<li><a href="#" class="dropdown-item notification-item" data-notification-id="0">${message}</a></li>`;
                 $('#notificationDropdown').prepend(notificationHtml);
-                fetchUnreadNotifications(); // Update the count when a new notification is received
+                fetchUnreadNotifications();
             }
         });
     </script>

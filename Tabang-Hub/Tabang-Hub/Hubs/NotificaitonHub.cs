@@ -18,7 +18,7 @@ namespace Tabang_Hub.Hubs
             _db = new TabangHubEntities();
         }
 
-        public void SendNotification(int userId, int senderUserId, string type, string content, bool isBroadcast = false)
+        public void SendNotification(int userId, int senderUserId, int relatedId, string type, string content, bool isBroadcast = false)
         {
             // Validate inputs
             if (userId == 0 || string.IsNullOrEmpty(content))
@@ -31,6 +31,7 @@ namespace Tabang_Hub.Hubs
             {
                 userId = isBroadcast ? (int?)null : userId, // If it's a broadcast, set userId to null
                 senderUserId = senderUserId,
+                relatedId = relatedId,
                 type = type,
                 content = content,
                 broadcast = isBroadcast ? 1 : 0,
@@ -78,9 +79,9 @@ namespace Tabang_Hub.Hubs
         }
 
         // Method to broadcast a notification to all users
-        public void BroadcastNotification(int senderUserId, string type, string content)
-        {
-            SendNotification(0, senderUserId, type, content, true);
-        }
+        //public void BroadcastNotification(int senderUserId, string type, string content)
+        //{
+        //    SendNotification(0, senderUserId, type, content, true);
+        //}
     }
 }

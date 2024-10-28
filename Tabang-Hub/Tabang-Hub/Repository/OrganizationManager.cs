@@ -915,133 +915,132 @@ namespace Tabang_Hub.Repository
             var groupChat = GetGroupChatByEventId(eventId);
             var groupMessages = GetGroupMessagesByGroupChatId(groupChat.groupChatId);
 
-            foreach (var donated in userDonate)
-            {
-                var donateHistory = new UserDonatedHistory()
-                {
-                    eventId = (int)donated.eventId,
-                    userId = (int)donated.userId,
-                    amount = donated.amount,
-                };
-                if (_userDonatedHistory.Create(donateHistory, out errMsg) != ErrorCode.Success)
-                {
-                    return ErrorCode.Error;
-                }
+            //foreach (var donated in userDonate)
+            //{
+            //    var donateHistory = new UserDonatedHistory()
+            //    {
+            //        eventId = (int)donated.eventId,
+            //        userId = (int)donated.userId,
+            //        amount = donated.amount,
+            //    };
+            //    if (_userDonatedHistory.Create(donateHistory, out errMsg) != ErrorCode.Success)
+            //    {
+            //        return ErrorCode.Error;
+            //    }
 
-                if (_userDonated.Delete(donated.orgUserDonatedId) != ErrorCode.Success)
-                {
-                    return ErrorCode.Error;
-                }
-            }
-            foreach (var volunteer in volunteers)
-            {
-                var volunteerSkills = GetListOfVolunteerSkillByUserId((int)volunteer.skillId);
+            //    if (_userDonated.Delete(donated.orgUserDonatedId) != ErrorCode.Success)
+            //    {
+            //        return ErrorCode.Error;
+            //    }
+            //}
+            //foreach (var volunteer in volunteers)
+            //{
+            //    var volunteerSkills = GetListOfVolunteerSkillByUserId((int)volunteer.skillId);
 
-                foreach (var skills in volunteerSkills)
-                {
-                    var volunteerSkillHistory = new VolunteerSkillsHistory()
-                    {
-                        userId = skills.userId,
-                        skillId = skills.skillId,
-                    };
+            //    foreach (var skills in volunteerSkills)
+            //    {
+            //        var volunteerSkillHistory = new VolunteerSkillsHistory()
+            //        {
+            //            userId = skills.userId,
+            //            skillId = skills.skillId,
+            //        };
 
-                    if (_volunteerSkillHistory.Create(volunteerSkillHistory, out errMsg) != ErrorCode.Success)
-                    {
-                        return ErrorCode.Error;
-                    }
-                    if (_volunteerSkills.Delete(skills.volunteerSkillId) != ErrorCode.Success)
-                    {
-                        return ErrorCode.Error;
-                    }
-                }
+            //        if (_volunteerSkillHistory.Create(volunteerSkillHistory, out errMsg) != ErrorCode.Success)
+            //        {
+            //            return ErrorCode.Error;
+            //        }
+            //        if (_volunteerSkills.Delete(skills.volunteerSkillId) != ErrorCode.Success)
+            //        {
+            //            return ErrorCode.Error;
+            //        }
+            //    }
 
-                var volunteersHistory = new VolunteersHistory()
-                {
-                    eventId = volunteer.eventId,
-                    userId = volunteer?.userId,
-                    appliedAt = volunteer?.appliedAt,
-                    skillId = volunteer.skillId,
-                    attended = volunteer.attended,
-                    Status = volunteer?.Status,
-                };
+            //    var volunteersHistory = new VolunteersHistory()
+            //    {
+            //        eventId = volunteer.eventId,
+            //        userId = volunteer?.userId,
+            //        appliedAt = volunteer?.appliedAt,
+            //        skillId = volunteer.skillId,
+            //        attended = volunteer.attended,
+            //        Status = volunteer?.Status,
+            //    };
 
-                if (_volunteersHistory.Create(volunteersHistory, out errMsg) != ErrorCode.Success)
-                {
-                    return ErrorCode.Error;
-                }
-                if (_eventVolunteers.Delete(volunteer.applyVolunteerId) != ErrorCode.Success)
-                {
-                    return ErrorCode.Error;
-                }
-            }
-            foreach (var skillRequire in skillRequirements)
-            {
-                var skillRequirementsHistory = new OrgSkillRequirementsHistory()
-                {
-                    eventId = (int)skillRequire.eventId,
-                    skillId = skillRequire.skillId,
-                    totalNeeded = skillRequire.totalNeeded,
-                };
-                if (_skillRequirementsHistory.Create(skillRequirementsHistory, out errMsg) != ErrorCode.Success)
-                {
-                    return ErrorCode.Error;
-                }
-                if (_orgSkillRequirements.Delete(skillRequire.skillRequirementId) != ErrorCode.Success)
-                {
-                    return ErrorCode.Error;
-                }
-            }
-            foreach (var image in orgImage)
-            {
-                var imageHistory = new OrgEventImageHistory()
-                {
-                    eventId = (int)image.eventId,
-                    eventImage = image.eventImage,
-                };
-                if (_orgEventImageHistory.Create(imageHistory, out errMsg) != ErrorCode.Success)
-                {
-                    return ErrorCode.Error;
-                }
-                if (_orgEventsImage.Delete(image.eventImageId) != ErrorCode.Success)
-                {
-                    return ErrorCode.Error;
-                }
-            }
-            foreach (var messages in groupMessages)
-            {
-                var messageHistory = new GroupMessagesHistory()
-                {
-                    userId = messages.userId,
-                    message = messages.message,
-                    messageAt = messages.messageAt,
-                };
-                if (_groupMessagesHistory.Create(messageHistory, out errMsg) != ErrorCode.Success)
-                {
-                    return ErrorCode.Error;
-                }
-                if (_groupMessages.Delete(messages.messageId) != ErrorCode.Success)
-                {
-                    return ErrorCode.Error;
-                }
-            }
+            //    if (_volunteersHistory.Create(volunteersHistory, out errMsg) != ErrorCode.Success)
+            //    {
+            //        return ErrorCode.Error;
+            //    }
+            //    if (_eventVolunteers.Delete(volunteer.applyVolunteerId) != ErrorCode.Success)
+            //    {
+            //        return ErrorCode.Error;
+            //    }
+            //}
+            //foreach (var skillRequire in skillRequirements)
+            //{
+            //    var skillRequirementsHistory = new OrgSkillRequirementsHistory()
+            //    {
+            //        eventId = (int)skillRequire.eventId,
+            //        skillId = skillRequire.skillId,
+            //        totalNeeded = skillRequire.totalNeeded,
+            //    };
+            //    if (_skillRequirementsHistory.Create(skillRequirementsHistory, out errMsg) != ErrorCode.Success)
+            //    {
+            //        return ErrorCode.Error;
+            //    }
+            //    if (_orgSkillRequirements.Delete(skillRequire.skillRequirementId) != ErrorCode.Success)
+            //    {
+            //        return ErrorCode.Error;
+            //    }
+            //}
+            //foreach (var image in orgImage)
+            //{
+            //    var imageHistory = new OrgEventImageHistory()
+            //    {
+            //        eventId = (int)image.eventId,
+            //        eventImage = image.eventImage,
+            //    };
+            //    if (_orgEventImageHistory.Create(imageHistory, out errMsg) != ErrorCode.Success)
+            //    {
+            //        return ErrorCode.Error;
+            //    }
+            //    if (_orgEventsImage.Delete(image.eventImageId) != ErrorCode.Success)
+            //    {
+            //        return ErrorCode.Error;
+            //    }
+            //}
+            //foreach (var messages in groupMessages)
+            //{
+            //    var messageHistory = new GroupMessagesHistory()
+            //    {
+            //        userId = messages.userId,
+            //        message = messages.message,
+            //        messageAt = messages.messageAt,
+            //    };
+            //    if (_groupMessagesHistory.Create(messageHistory, out errMsg) != ErrorCode.Success)
+            //    {
+            //        return ErrorCode.Error;
+            //    }
+            //    if (_groupMessages.Delete(messages.messageId) != ErrorCode.Success)
+            //    {
+            //        return ErrorCode.Error;
+            //    }
+            //}
 
-            var groupAChatHistory = new GroupChatHistory()
-            {
-                eventId = groupChat.eventId,
-                orgInfoId = groupChat.orgInfoId,
-            };
-            if (_groupChatHistory.Create(groupAChatHistory, out errMsg) != ErrorCode.Success)
-            {
-                return ErrorCode.Error;
-            }
-            if (_groupChat.Delete(groupChat.groupChatId) != ErrorCode.Success)
-            {
-                return ErrorCode.Error;
-            }
+            //var groupAChatHistory = new GroupChatHistory()
+            //{
+            //    eventId = groupChat.eventId,
+            //    orgInfoId = groupChat.orgInfoId,
+            //};
+            //if (_groupChatHistory.Create(groupAChatHistory, out errMsg) != ErrorCode.Success)
+            //{
+            //    return ErrorCode.Error;
+            //}
+            //if (_groupChat.Delete(groupChat.groupChatId) != ErrorCode.Success)
+            //{
+            //    return ErrorCode.Error;
+            //}
 
-            var eventHistory = new OrgEventHistory()
+            var events = new OrgEvents()
             {
-                eventId = orgEvent.eventId,
                 userId = (int)orgEvent.userId,
                 eventTitle = orgEvent.eventTitle,
                 eventDescription = orgEvent.eventDescription,
@@ -1050,12 +1049,9 @@ namespace Tabang_Hub.Repository
                 dateStart = orgEvent.dateStart,
                 dateEnd = orgEvent.dateEnd,
                 location = orgEvent.location,
+                status = 2
             };
-            if (_orgEventHistory.Create(eventHistory, out errMsg) != ErrorCode.Success)
-            {
-                return ErrorCode.Error;
-            }
-            if (_orgEvents.Delete(orgEvent.eventId) != ErrorCode.Success)
+            if (_orgEvents.Update(orgEvent.eventId, events, out errMsg) != ErrorCode.Success)
             {
                 return ErrorCode.Error;
             }

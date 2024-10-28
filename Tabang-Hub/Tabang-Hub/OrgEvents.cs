@@ -33,6 +33,7 @@ namespace Tabang_Hub
         public Nullable<System.DateTime> dateEnd { get; set; }
         public string location { get; set; }
         public string eventImage { get; set; }
+        public Nullable<int> status { get; set; }
     
         public virtual ICollection<GroupChat> GroupChat { get; set; }
         public virtual ICollection<OrgEventImage> OrgEventImage { get; set; }

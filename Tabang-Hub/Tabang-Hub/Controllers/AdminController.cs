@@ -288,6 +288,51 @@ namespace Tabang_Hub.Controllers
             };
             return View(indexModdel);
         }
+        public ActionResult ToConfirm(int userId)
+        {
+            var userAcc = _adminManager.GetUserById(userId);
+            var orgInfo = _adminManager.GetOrgInfoByUserId(userAcc.userId);
+            var validation = _adminManager.GetOrgValidationsByUserId(userAcc.userId);
 
+            var indexModel = new Lists()
+            {
+                userAccount = userAcc,
+                OrgInfo = orgInfo,
+                orgValidation = validation
+            };
+            return View(indexModel);
+        }
+        [HttpPost]
+        public ActionResult Approve(int userId)
+        {
+            var organization = db.UserAccount.FirstOrDefault(o => o.userId == userId);
+
+            if (organization == null)
+            {
+                return HttpNotFound();
+            }
+
+            organization.status = 1; // Set status to approved
+            db.SaveChanges();
+
+            TempData["SuccessMessage"] = "The account has been approved.";
+            return RedirectToAction("OrganizationAccounts");
+        }
+        [HttpPost]
+        public ActionResult Reject(int userId)
+        {
+            var organization = db.UserAccount.FirstOrDefault(o => o.userId == userId);
+
+            if (organization == null)
+            {
+                return HttpNotFound();
+            }
+
+            organization.status = 0; // Set status to not active or rejected
+            db.SaveChanges();
+
+            TempData["SuccessMessage"] = "The account has been rejected.";
+            return RedirectToAction("OrganizationAccounts");
+        }
     }
 }

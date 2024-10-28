@@ -232,6 +232,7 @@ namespace Tabang_Hub.Controllers
         public JsonResult InviteVolunteer(List<int> selectedVolunteers, int eventId)
        {
             string errMsg = string.Empty;
+            var events = _organizationManager.GetEventByEventId(eventId);
 
             // Process the selected volunteers by userId
             foreach (var userId in selectedVolunteers)
@@ -240,6 +241,22 @@ namespace Tabang_Hub.Controllers
                 {
                     return Json(new { success = false, message = errMsg });
                 }
+
+                var notification = new Notification
+                {
+                    userId = userId,
+                    senderUserId = UserId,
+                    relatedId = events.eventId,
+                    type = "Invitation",
+                    content = $"You have been invited to join in {events.eventTitle} event.",
+                    broadcast = 0,
+                    status = 0,
+                    createdAt = DateTime.Now,
+                    readAt = null
+                };
+
+                db.Notification.Add(notification);
+                db.SaveChanges(); // Save the notification
             }
 
             // Return JSON indicating success
@@ -339,6 +356,7 @@ namespace Tabang_Hub.Controllers
                 {
                     userId = vol.userId,
                     senderUserId = UserId,
+                    relatedId = events.eventDetails.Event_Id,
                     type = "Donation",
                     content = $"{events.CreateEvents.eventTitle} Event has been Edited.",
                     broadcast = 0,
@@ -373,6 +391,7 @@ namespace Tabang_Hub.Controllers
                 {
                     userId = vol.userId,
                     senderUserId = UserId,
+                    relatedId = eventId,
                     type = "Donation",
                     content = $"{events.eventTitle} Event has been deleted.",
                     broadcast = 0,
@@ -401,9 +420,11 @@ namespace Tabang_Hub.Controllers
             {
                 // Create an instance of your NotificationHub and call SendNotification
                 var notificationHub = new NotificationHub();
+
                 notificationHub.SendNotification(
                     userId: id, // The volunteer's user ID
                     senderUserId: UserId, // The organization ID or admin ID who is sending the notification
+                    relatedId: eventId,
                     type: "Acceptance",
                     content: "You have been accepted to participate in the event!"
                 );
@@ -585,7 +606,8 @@ namespace Tabang_Hub.Controllers
                 var notification = new Notification
                 {
                     userId = volunteerId,
-                    senderUserId = UserId,
+                    senderUserId = UserId, 
+                    relatedId = eventId,
                     type = "Event",
                     content = $"{events.eventTitle} Has ended",
                     broadcast = 0,
@@ -606,6 +628,53 @@ namespace Tabang_Hub.Controllers
             }
 
             return Json(new { success = true, message = "All ratings and attendance submitted successfully." });
+        }
+
+        [HttpPost]
+        public JsonResult OpenNotification(int notificationId)
+        {
+            try
+            {
+                // Fetch the notification from the database
+                var notification = db.Notification.FirstOrDefault(n => n.notificationId == notificationId);
+
+                if (notification != null)
+                {
+                    // Mark the notification as read
+                    notification.status = 1;
+                    db.SaveChanges();
+
+                    // Optionally, get the URL to redirect the user
+                    string redirectUrl = GetRedirectUrlForNotification(notification);
+
+                    return Json(new { success = true, redirectUrl = redirectUrl });
+                }
+                else
+                {
+                    return Json(new { success = false, message = "Notification not found." });
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                // Return an error response
+                return Json(new { success = false, message = ex.Message });
+            }
+        }
+        private string GetRedirectUrlForNotification(Notification notification)
+        {
+            // Logic to determine redirect URL based on notification type or content
+            // For example:
+            if (notification.type == "New Application")
+            {
+                return Url.Action("Details", "Organization", new { id = notification.relatedId });
+            }
+            else if (notification.type == "Donation")
+            {
+                return Url.Action("Details", "Organization", new { id = notification.relatedId });
+            }
+            // Default to null if no redirection is needed
+            return null;
         }
     }
 }

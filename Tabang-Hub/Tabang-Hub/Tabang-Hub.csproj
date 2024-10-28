@@ -2169,6 +2169,8 @@
     <Content Include="Views\Admin\ManageSkill.cshtml" />
     <Content Include="Views\Admin\Reports.cshtml" />
     <Content Include="Views\Volunteer\DonationHistory.cshtml" />
+    <Content Include="Views\Admin\ToConfirm.cshtml" />
+    <Content Include="Views\Page\AdminApprove.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

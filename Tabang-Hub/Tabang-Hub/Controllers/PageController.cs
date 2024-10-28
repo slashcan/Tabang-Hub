@@ -132,6 +132,8 @@ namespace Tabang_Hub.Controllers
         {
             // Backend validation checks
             List<string> validationErrors = new List<string>();
+            o.profilePath = "~/Content/IdPicture/download (4).jpg";
+            o.orgEmail = u.email;
 
             // Check if email is provided
             if (string.IsNullOrWhiteSpace(u.email))
@@ -676,58 +678,68 @@ namespace Tabang_Hub.Controllers
             string email = Session["email"] as string;
             string expectedOTP = Session["randomOTP"]?.ToString();
 
-            // Check if email and expectedOTP are present in the session
-            if (string.IsNullOrEmpty(email) || expectedOTP == null)
+            // Validate session data
+            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(expectedOTP))
             {
-                // Redirect to the login page if session data is missing
                 return Json(new { success = false, message = "Session has expired. Please log in again." });
             }
 
             // Retrieve the user based on the email
             var user = _userManager.GetUserByEmail(email);
+            if (user == null)
+            {
+                return Json(new { success = false, message = "User not found." });
+            }
+
+            // Combine entered OTP
             string enteredOTP = $"{otp1}{otp2}{otp3}{otp4}";
 
-            // Check if the entered OTP matches the expected OTP
+            // Verify the entered OTP
             if (enteredOTP == expectedOTP)
             {
-                // Update user status to Active if OTP is correct            
-                _userManager.UpdateUserStatus(user.userId, (int)Status.Active, ref ErrorMessage);
-                if (TempData["login"] == null || TempData["login"] != null)
-                {
-                    FormsAuthentication.SetAuthCookie(user.email, false);
+                string redirectUrl;
 
-                    string redirectUrl = string.Empty;
-                    if (user.roleId == 1)
-                    {
-                        redirectUrl = Url.Action("Index", "User");
-                    }
-                    else if (user.roleId == 2)
-                    {
-                        redirectUrl = Url.Action("Index", "Organization");
-                    }
-                    else if (user.roleId == 3)
-                    {
-                        redirectUrl = Url.Action("Index", "Admin");
-                    }
-                    return Json(new { success = true, message = "Email has been verified!", redirectUrl });
+                // If the user is an organization admin, redirect to the Admin Approval page
+                if (user.roleId == 2)
+                {
+                    _userManager.UpdateUserStatus(user.userId, 3, ref ErrorMessage); // 3 is assumed to be 'Pending Approval'
+                    redirectUrl = Url.Action("AdminApprove", "Page");
                 }
                 else
                 {
-                    string redirectUrl = Url.Action("Login");
-                    return Json(new { success = true, message = "Email has been verified!", redirectUrl });
+                    // Update user status to Active
+                    _userManager.UpdateUserStatus(user.userId, (int)Status.Active, ref ErrorMessage);
+
+                    // Set authentication cookie
+                    FormsAuthentication.SetAuthCookie(user.email, false);
+
+                    // Determine redirect based on user role
+                    switch (user.roleId)
+                    {
+                        case 1: // User role
+                            redirectUrl = Url.Action("Index", "User");
+                            break;
+                        case 3: // Admin role
+                            redirectUrl = Url.Action("Index", "Admin");
+                            break;
+                        default: // Other roles (if applicable)
+                            redirectUrl = Url.Action("Login");
+                            break;
+                    }
                 }
+
+                return Json(new { success = true, message = "Email has been verified!", redirectUrl });
             }
             else
             {
                 // Return error message if OTP is incorrect
                 return Json(new { success = false, message = "Incorrect OTP. Please try again!" });
             }
-
-            // This return statement is needed to ensure that all code paths return a value
-            //return Json(new { success = false, message = "Unexpected error occurred. Please try again later." });
         }
-
-
+        public ActionResult AdminApprove()
+        {
+            return View();
+        }
         [AllowAnonymous]
         public ActionResult Logout()
         {

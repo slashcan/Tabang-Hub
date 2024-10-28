@@ -28,6 +28,9 @@
     <FunctionImport Name="sp_VolunteerHistory" ReturnType="Collection(TabangHubModel.sp_VolunteerHistory_Result)">
       <Parameter Name="userId" Mode="In" Type="Int32" />
     </FunctionImport>
+    <FunctionImport Name="sp_ListOfGc" ReturnType="Collection(TabangHubModel.sp_ListOfGc_Result)">
+      <Parameter Name="userId" Mode="In" Type="Int32" />
+    </FunctionImport>
     <EntitySet Name="GroupChat" EntityType="TabangHubModel.GroupChat" />
     <EntitySet Name="GroupChatHistory" EntityType="TabangHubModel.GroupChatHistory" />
     <EntitySet Name="GroupMessages" EntityType="TabangHubModel.GroupMessages" />
@@ -147,9 +150,6 @@
       <End Role="UserAccount" EntitySet="UserAccount" />
       <End Role="Volunteers" EntitySet="Volunteers" />
     </AssociationSet>
-    <FunctionImport Name="sp_ListOfGc" ReturnType="Collection(TabangHubModel.sp_ListOfGc_Result)">
-      <Parameter Name="userId" Mode="In" Type="Int32" />
-    </FunctionImport>
   </EntityContainer>
   <ComplexType Name="sp_GetSkills_Result">
     <Property Type="Int32" Name="skillId" Nullable="false" />
@@ -203,6 +203,12 @@
     <Property Type="DateTime" Name="dateStart" Nullable="true" Precision="23" />
     <Property Type="DateTime" Name="dateEnd" Nullable="true" Precision="23" />
   </ComplexType>
+  <ComplexType Name="sp_ListOfGc_Result">
+    <Property Type="Int32" Name="groupChatId" Nullable="false" />
+    <Property Type="Int32" Name="userId" Nullable="true" />
+    <Property Type="Int32" Name="eventId" Nullable="true" />
+    <Property Type="String" Name="eventTitle" Nullable="true" MaxLength="255" />
+  </ComplexType>
   <EntityType Name="GroupChat">
     <Key>
       <PropertyRef Name="groupChatId" />
@@ -251,6 +257,7 @@
     <Property Name="notificationId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="userId" Type="Int32" />
     <Property Name="senderUserId" Type="Int32" />
+    <Property Name="relatedId" Type="Int32" />
     <Property Name="type" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="content" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
     <Property Name="broadcast" Type="Int32" />
@@ -305,6 +312,7 @@
     <Property Name="dateEnd" Type="DateTime" Precision="3" />
     <Property Name="location" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
     <Property Name="eventImage" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="status" Type="Int32" />
     <NavigationProperty Name="GroupChat" Relationship="TabangHubModel.FK_GroupChat_OrgEvents" FromRole="OrgEvents" ToRole="GroupChat" />
     <NavigationProperty Name="OrgEventImage" Relationship="TabangHubModel.FK_OrgEventImage_OrgEvents" FromRole="OrgEvents" ToRole="OrgEventImage" />
     <NavigationProperty Name="UserAccount" Relationship="TabangHubModel.FK_OrgEvents_UserAccount" FromRole="OrgEvents" ToRole="UserAccount" />
@@ -871,10 +879,4 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <ComplexType Name="sp_ListOfGc_Result">
-    <Property Type="Int32" Name="groupChatId" Nullable="false" />
-    <Property Type="Int32" Name="userId" Nullable="true" />
-    <Property Type="Int32" Name="eventId" Nullable="true" />
-    <Property Type="String" Name="eventTitle" Nullable="true" MaxLength="255" />
-  </ComplexType>
 </Schema>

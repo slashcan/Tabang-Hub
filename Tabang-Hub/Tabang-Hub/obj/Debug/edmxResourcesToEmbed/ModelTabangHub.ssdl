@@ -43,6 +43,7 @@
     <Property Name="notificationId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="userId" Type="int" />
     <Property Name="senderUserId" Type="int" />
+    <Property Name="relatedId" Type="int" />
     <Property Name="type" Type="nvarchar" MaxLength="50" />
     <Property Name="content" Type="text" />
     <Property Name="broadcast" Type="int" />
@@ -96,6 +97,7 @@
     <Property Name="dateEnd" Type="datetime" />
     <Property Name="location" Type="nvarchar" MaxLength="255" />
     <Property Name="eventImage" Type="nvarchar" MaxLength="255" />
+    <Property Name="status" Type="int" />
   </EntityType>
   <EntityType Name="OrgInfo">
     <Key>

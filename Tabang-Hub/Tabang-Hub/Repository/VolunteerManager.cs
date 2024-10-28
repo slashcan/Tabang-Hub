@@ -14,10 +14,12 @@ namespace Tabang_Hub.Repository
     {
         public BaseRepository<Skills> _skills;
         public BaseRepository<UserDonated> _userDonated;
+        public BaseRepository<Volunteers> _volunteers;
         public VolunteerManager() 
         {
             _skills = new BaseRepository<Skills>();
             _userDonated = new BaseRepository<UserDonated>();
+            _volunteers = new BaseRepository<Volunteers>();
         }
 
         public ErrorCode CreateDonation(UserDonated userDonated, ref String errMsg)
@@ -27,6 +29,10 @@ namespace Tabang_Hub.Repository
                 return ErrorCode.Error;
             }
             return ErrorCode.Success;
+        }
+        public Volunteers GetVolunteerByUserId(int userId, int eventId)
+        {
+            return _volunteers._table.Where(m => m.userId == userId && m.eventId == eventId).FirstOrDefault();
         }
     }
 }
