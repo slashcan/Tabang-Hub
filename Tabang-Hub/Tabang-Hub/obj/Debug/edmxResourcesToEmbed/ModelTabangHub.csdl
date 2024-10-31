@@ -31,10 +31,14 @@
     <FunctionImport Name="sp_ListOfGc" ReturnType="Collection(TabangHubModel.sp_ListOfGc_Result)">
       <Parameter Name="userId" Mode="In" Type="Int32" />
     </FunctionImport>
+    <FunctionImport Name="sp_GetAllMessage1" ReturnType="Collection(TabangHubModel.sp_GetAllMessage1_Result)">
+      <Parameter Name="groupChatId" Mode="In" Type="Int32" />
+    </FunctionImport>
     <EntitySet Name="GroupChat" EntityType="TabangHubModel.GroupChat" />
     <EntitySet Name="GroupChatHistory" EntityType="TabangHubModel.GroupChatHistory" />
     <EntitySet Name="GroupMessages" EntityType="TabangHubModel.GroupMessages" />
     <EntitySet Name="GroupMessagesHistory" EntityType="TabangHubModel.GroupMessagesHistory" />
+    <EntitySet Name="LastRead" EntityType="TabangHubModel.LastRead" />
     <EntitySet Name="Notification" EntityType="TabangHubModel.Notification" />
     <EntitySet Name="OrgEventHistory" EntityType="TabangHubModel.OrgEventHistory" />
     <EntitySet Name="OrgEventImage" EntityType="TabangHubModel.OrgEventImage" />
@@ -209,6 +213,14 @@
     <Property Type="Int32" Name="eventId" Nullable="true" />
     <Property Type="String" Name="eventTitle" Nullable="true" MaxLength="255" />
   </ComplexType>
+  <ComplexType Name="sp_GetAllMessage1_Result">
+    <Property Type="Int32" Name="groupChatId" Nullable="false" />
+    <Property Type="Int32" Name="messageId" Nullable="false" />
+    <Property Type="Int32" Name="userId" Nullable="true" />
+    <Property Type="String" Name="userName" Nullable="false" MaxLength="513" />
+    <Property Type="String" Name="message" Nullable="true" MaxLength="Max" />
+    <Property Type="DateTime" Name="messageAt" Nullable="true" Precision="23" />
+  </ComplexType>
   <EntityType Name="GroupChat">
     <Key>
       <PropertyRef Name="groupChatId" />
@@ -249,6 +261,16 @@
     <Property Name="userId" Type="Int32" />
     <Property Name="message" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
     <Property Name="messageAt" Type="DateTime" Precision="3" />
+  </EntityType>
+  <EntityType Name="LastRead">
+    <Key>
+      <PropertyRef Name="LastReadId" />
+    </Key>
+    <Property Name="LastReadId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserId" Type="Int32" />
+    <Property Name="GroupChatId" Type="Int32" />
+    <Property Name="MessageId" Type="Int32" />
+    <Property Name="ReadAt" Type="DateTime" Precision="3" />
   </EntityType>
   <EntityType Name="Notification">
     <Key>

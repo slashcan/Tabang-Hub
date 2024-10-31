@@ -549,6 +549,14 @@ namespace Tabang_Hub.Repository
         {
             return _orgEvents._table.Where(m => m.eventId == id).FirstOrDefault();
         }
+        public OrgEventImage GetEventImageByEventId(int eventId)
+        {
+            return _orgEventsImage._table.Where(m => m.eventId == eventId).FirstOrDefault();
+        }
+        public List<OrgEvents> GetOrgEventsByUserId(int userId)
+        { 
+            return _orgEvents._table.Where(m => m.userId == userId).ToList();
+        }
         public List<OrgEventImage> listOfEventImage(int id)
         {
             return _orgEventsImage.GetAll().Where(m => m.eventId == id).ToList();

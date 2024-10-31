@@ -34,11 +34,22 @@ namespace Tabang_Hub.Controllers
         public ActionResult OrgProfile()
         {
             var orgInfo = _organizationManager.GetOrgInfoByUserId(UserId);
+            var orgEvents = _organizationManager.GetOrgEventsByUserId(UserId);
+            var orgImage = new List<OrgEventImage>();
+            foreach (var image in orgEvents)
+            {
+                var orgEvenImage = _organizationManager.GetEventImageByEventId(image.eventId);
+
+                orgImage.Add(orgEvenImage);
+            }
+            
             //var profile = _organizationManager.GetProfileByProfileId(orgInfo.profileId);
 
             var indexModdel = new Lists()
             {
                 OrgInfo = orgInfo,
+                getAllOrgEvent = orgEvents,
+                detailsEventImage = orgImage,
                 //profilePic = profile,
             };
             return View(indexModdel);

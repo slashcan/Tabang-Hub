@@ -27,9 +27,18 @@ namespace Tabang_Hub.Hubs
             {
                 return;
             }
+            var user = _db.OrgInfo.Where(m => m.userId == userId).FirstOrDefault();
+            var userName = "";
 
-            var userInfo = _db.VolunteerInfo.Where(m => m.userId == userId).FirstOrDefault();
-            var userName = userInfo != null ? char.ToUpper(userInfo.fName[0]) + userInfo.fName.Substring(1) + ' ' + char.ToUpper(userInfo.lName[0]) + userInfo.lName.Substring(1) : "Unknown User";
+            if (user != null && user.UserAccount.roleId == 2)
+            {
+                userName = user != null ? char.ToUpper(user.orgName[0]) + user.orgName.Substring(1) : "Unknown User";
+            }
+            else
+            {
+                var userInfo = _db.VolunteerInfo.Where(m => m.userId == userId).FirstOrDefault();
+                userName = userInfo != null ? char.ToUpper(userInfo.fName[0]) + userInfo.fName.Substring(1) + ' ' + char.ToUpper(userInfo.lName[0]) + userInfo.lName.Substring(1) : "Unknown User";
+            }
 
             var groupChatExists = _db.GroupChat.Any(m => m.groupChatId == groupId);
             if (!groupChatExists)
@@ -63,7 +72,7 @@ namespace Tabang_Hub.Hubs
                 return;
             }
 
-            var messages = _db.sp_GetAllMessage(groupId);
+            var messages = _db.sp_GetAllMessage1(groupId);
             Clients.Caller.loadMessages(messages);
         }
     }

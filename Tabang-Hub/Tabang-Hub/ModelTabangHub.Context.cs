@@ -32,6 +32,7 @@ namespace Tabang_Hub
         public DbSet<GroupChatHistory> GroupChatHistory { get; set; }
         public DbSet<GroupMessages> GroupMessages { get; set; }
         public DbSet<GroupMessagesHistory> GroupMessagesHistory { get; set; }
+        public DbSet<LastRead> LastRead { get; set; }
         public DbSet<Notification> Notification { get; set; }
         public DbSet<OrgEventHistory> OrgEventHistory { get; set; }
         public DbSet<OrgEventImage> OrgEventImage { get; set; }
@@ -151,6 +152,15 @@ namespace Tabang_Hub
                 new ObjectParameter("userId", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_ListOfGc_Result>("sp_ListOfGc", userIdParameter);
+        }
+    
+        public virtual ObjectResult<sp_GetAllMessage1_Result> sp_GetAllMessage1(Nullable<int> groupChatId)
+        {
+            var groupChatIdParameter = groupChatId.HasValue ?
+                new ObjectParameter("groupChatId", groupChatId) :
+                new ObjectParameter("groupChatId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_GetAllMessage1_Result>("sp_GetAllMessage1", groupChatIdParameter);
         }
     }
 }

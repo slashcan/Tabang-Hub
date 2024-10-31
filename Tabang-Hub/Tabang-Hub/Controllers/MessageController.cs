@@ -14,28 +14,65 @@ namespace Tabang_Hub.Controllers
         {
             try
             {
-                var getProfile = db.ProfilePicture.Where(m => m.userId == UserId).ToList();
-                var getEventProfile = db.OrgEventImage.Select(m => m.eventId).FirstOrDefault();
 
-                var checkVolunteers = db.Volunteers.Where(m => m.userId == UserId).FirstOrDefault();
-
-                var groupChatProfile = db.OrgEventImage.Where(m => m.eventId == checkVolunteers.eventId).ToList();
-                var getOrgEvent = _orgEvents.GetAll().Where(m => m.eventId == checkVolunteers.eventId).ToList();
-
-                var listOfGC = db.sp_ListOfGc(UserId).ToList();
-
+                var user = _organizationManager.GetUserByUserId(UserId);
                 ViewBag.UserId = UserId;
-
-                var indexModel = new Lists()
+                if (user != null && user.roleId == 2)
                 {
-                    picture = getProfile,
-                    volunteersInfo = db.VolunteerInfo.Where(m => m.userId == UserId).ToList(),
-                    detailsEventImage = groupChatProfile,
-                    orgEvents = getOrgEvent,
-                    listOfGc = listOfGC
-                };
+                    var orgInfo = _organizationManager.GetOrgInfoByUserId(user.userId);
+                    var listOfGc = new List<sp_ListOfGc_Result>();
+                    var eventImage = new List<OrgEventImage>();
 
-                return View(indexModel);
+                    var gc = _messageManager.GetGroupChatByUserId(user.userId);
+
+                    foreach (var g in gc)
+                    {
+                        var gcItem = new sp_ListOfGc_Result
+                        {
+                            groupChatId = g.groupChatId,
+                            userId = user.userId,
+                            eventId = g.eventId,
+                            eventTitle = g.OrgEvents.eventTitle,
+                        };
+
+                        var image = _messageManager.GetEventImageByEventId((int)g.eventId);
+
+                        listOfGc.Add(gcItem);
+                        eventImage.Add(image);
+                    }
+                    var indexModel = new Lists()
+                    {
+                        userAccount = user,
+                        OrgInfo = orgInfo,   
+                        detailsEventImage = eventImage,
+                        listOfGc = listOfGc,
+                    };
+
+                    return View(indexModel);
+                }
+                else
+                {
+                    var getProfile = db.ProfilePicture.Where(m => m.userId == UserId).ToList();
+                    var getEventProfile = db.OrgEventImage.Select(m => m.eventId).FirstOrDefault();
+
+                    var checkVolunteers = db.Volunteers.Where(m => m.userId == UserId).FirstOrDefault();
+
+                    var groupChatProfile = db.OrgEventImage.Where(m => m.eventId == checkVolunteers.eventId).ToList();
+                    var getOrgEvent = _orgEvents.GetAll().Where(m => m.eventId == checkVolunteers.eventId).ToList();
+
+                    var listOfGC = db.sp_ListOfGc(UserId).ToList();
+
+                    var indexModel = new Lists()
+                    {
+                        picture = getProfile,
+                        volunteersInfo = db.VolunteerInfo.Where(m => m.userId == UserId).ToList(),
+                        detailsEventImage = groupChatProfile,
+                        orgEvents = getOrgEvent,
+                        listOfGc = listOfGC
+                    };
+
+                    return View(indexModel);
+                }         
             }
             catch (Exception)
             {

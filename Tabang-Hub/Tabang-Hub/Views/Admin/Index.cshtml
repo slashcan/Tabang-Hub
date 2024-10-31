@@ -1,9 +1,94 @@
 ﻿@model Tabang_Hub.Utils.Lists
 
 @{
-    ViewBag.Title = "Index";
-    Layout = "~/Views/Shared/_Admin.cshtml";
+    ViewBag.Title = "Admin Dashboard";
+    Layout = "~/Views/Shared/_Admin.cshtml"; <!-- Replace with actual layout path for admin if different -->
 }
 
-<h2>Admin Page</h2>
+<div class="container mt-4">
+    <h2 class="mb-4">Admin Dashboard</h2>
+
+    <!-- Overview Cards -->
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card text-center shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Total Organizations</h5>
+                    <p class="card-text fs-4">24</p> <!-- Replace with dynamic count -->
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Total Volunteers</h5>
+                    <p class="card-text fs-4">102</p> <!-- Replace with dynamic count -->
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Total Donations</h5>
+                    <p class="card-text fs-4">$5,600</p> <!-- Replace with dynamic total -->
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Pending Approvals</h5>
+                    <p class="card-text fs-4">8</p> <!-- Replace with dynamic count -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Sections -->
+    <div class="row mt-4">
+    <!-- Donation Tracking Section -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-header bg-warning text-white">
+            <h5>Donation Tracking</h5>
+        </div>
+        <div class="card-body">
+            <p class="mb-2">Recent Donations</p>
+            <ul class="list-group">
+                <li class="list-group-item">John Smith - $500</li>
+                <li class="list-group-item">Alice Johnson - $200</li>
+                <li class="list-group-item">Corporate Partner - $1,500</li>
+                <!-- Repeat for each donation dynamically -->
+            </ul>
+            <button class="btn btn-warning mt-3">View All Donations</button>
+        </div>
+    </div>
+
+    <!-- Pending Approvals Section -->
+    <div class="card shadow-sm">
+        <div class="card-header bg-danger text-white">
+            <h5>Pending Organization Approvals</h5>
+        </div>
+        <div class="card-body">
+            <p class="mb-2">Organizations Awaiting Approval</p>
+            <ul class="list-group">
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    Sarah Connor Foundation
+                    <div>
+                        <button class="btn btn-sm btn-primary">Approve</button>
+                        <button class="btn btn-sm btn-danger">Reject</button>
+                    </div>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    Mike Ross Initiative
+                    <div>
+                        <button class="btn btn-sm btn-primary">Approve</button>
+                        <button class="btn btn-sm btn-danger">Reject</button>
+                    </div>
+                </li>
+                <!-- Repeat for each pending approval dynamically -->
+            </ul>
+        </div>
+    </div>
+</div>
+
 

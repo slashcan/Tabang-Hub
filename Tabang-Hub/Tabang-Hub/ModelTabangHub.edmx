@@ -41,6 +41,16 @@
           <Property Name="message" Type="text" />
           <Property Name="messageAt" Type="datetime" />
         </EntityType>
+        <EntityType Name="LastRead">
+          <Key>
+            <PropertyRef Name="LastReadId" />
+          </Key>
+          <Property Name="LastReadId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="int" />
+          <Property Name="GroupChatId" Type="int" />
+          <Property Name="MessageId" Type="int" />
+          <Property Name="ReadAt" Type="datetime" />
+        </EntityType>
         <EntityType Name="Notification">
           <Key>
             <PropertyRef Name="notificationId" />
@@ -650,6 +660,9 @@ warning 6002: The table/view 'TabangHub.dbo.vw_VolunteerSkills' does not have a 
         <Function Name="sp_GetAllMessage" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="groupChatId" Type="int" Mode="In" />
         </Function>
+        <Function Name="sp_GetAllMessage1" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="groupChatId" Type="int" Mode="In" />
+        </Function>
         <Function Name="sp_GetSkills" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="userId" Type="int" Mode="In" />
         </Function>
@@ -678,6 +691,7 @@ warning 6002: The table/view 'TabangHub.dbo.vw_VolunteerSkills' does not have a 
           <EntitySet Name="GroupChatHistory" EntityType="Self.GroupChatHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="GroupMessages" EntityType="Self.GroupMessages" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="GroupMessagesHistory" EntityType="Self.GroupMessagesHistory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LastRead" EntityType="Self.LastRead" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Notification" EntityType="Self.Notification" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OrgEventHistory" EntityType="Self.OrgEventHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OrgEventImage" EntityType="Self.OrgEventImage" Schema="dbo" store:Type="Tables" />
@@ -899,10 +913,14 @@ FROM [dbo].[vw_VolunteerSkills] AS [vw_VolunteerSkills]</DefiningQuery>
           <FunctionImport Name="sp_ListOfGc" ReturnType="Collection(TabangHubModel.sp_ListOfGc_Result)">
           <Parameter Name="userId" Mode="In" Type="Int32" />
           </FunctionImport>
+          <FunctionImport Name="sp_GetAllMessage1" ReturnType="Collection(TabangHubModel.sp_GetAllMessage1_Result)">
+          <Parameter Name="groupChatId" Mode="In" Type="Int32" />
+          </FunctionImport>
           <EntitySet Name="GroupChat" EntityType="TabangHubModel.GroupChat" />
           <EntitySet Name="GroupChatHistory" EntityType="TabangHubModel.GroupChatHistory" />
           <EntitySet Name="GroupMessages" EntityType="TabangHubModel.GroupMessages" />
           <EntitySet Name="GroupMessagesHistory" EntityType="TabangHubModel.GroupMessagesHistory" />
+          <EntitySet Name="LastRead" EntityType="TabangHubModel.LastRead" />
           <EntitySet Name="Notification" EntityType="TabangHubModel.Notification" />
           <EntitySet Name="OrgEventHistory" EntityType="TabangHubModel.OrgEventHistory" />
           <EntitySet Name="OrgEventImage" EntityType="TabangHubModel.OrgEventImage" />
@@ -1077,6 +1095,14 @@ FROM [dbo].[vw_VolunteerSkills] AS [vw_VolunteerSkills]</DefiningQuery>
           <Property Type="Int32" Name="eventId" Nullable="true" />
           <Property Type="String" Name="eventTitle" Nullable="true" MaxLength="255" />
         </ComplexType>
+        <ComplexType Name="sp_GetAllMessage1_Result">
+          <Property Type="Int32" Name="groupChatId" Nullable="false" />
+          <Property Type="Int32" Name="messageId" Nullable="false" />
+          <Property Type="Int32" Name="userId" Nullable="true" />
+          <Property Type="String" Name="userName" Nullable="false" MaxLength="513" />
+          <Property Type="String" Name="message" Nullable="true" MaxLength="Max" />
+          <Property Type="DateTime" Name="messageAt" Nullable="true" Precision="23" />
+        </ComplexType>
         <EntityType Name="GroupChat">
           <Key>
             <PropertyRef Name="groupChatId" />
@@ -1117,6 +1143,16 @@ FROM [dbo].[vw_VolunteerSkills] AS [vw_VolunteerSkills]</DefiningQuery>
           <Property Name="userId" Type="Int32" />
           <Property Name="message" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="messageAt" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="LastRead">
+          <Key>
+            <PropertyRef Name="LastReadId" />
+          </Key>
+          <Property Name="LastReadId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="Int32" />
+          <Property Name="GroupChatId" Type="Int32" />
+          <Property Name="MessageId" Type="Int32" />
+          <Property Name="ReadAt" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityType Name="Notification">
           <Key>
@@ -1841,6 +1877,18 @@ FROM [dbo].[vw_VolunteerSkills] AS [vw_VolunteerSkills]</DefiningQuery>
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_GetAllMessage1" FunctionName="TabangHubModel.Store.sp_GetAllMessage1">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="TabangHubModel.sp_GetAllMessage1_Result">
+                <ScalarProperty Name="groupChatId" ColumnName="groupChatId" />
+                <ScalarProperty Name="messageId" ColumnName="messageId" />
+                <ScalarProperty Name="userId" ColumnName="userId" />
+                <ScalarProperty Name="userName" ColumnName="userName" />
+                <ScalarProperty Name="message" ColumnName="message" />
+                <ScalarProperty Name="messageAt" ColumnName="messageAt" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           <EntitySetMapping Name="GroupChat">
             <EntityTypeMapping TypeName="TabangHubModel.GroupChat">
               <MappingFragment StoreEntitySet="GroupChat">
@@ -1878,6 +1926,17 @@ FROM [dbo].[vw_VolunteerSkills] AS [vw_VolunteerSkills]</DefiningQuery>
                 <ScalarProperty Name="userId" ColumnName="userId" />
                 <ScalarProperty Name="groupChatId" ColumnName="groupChatId" />
                 <ScalarProperty Name="messageId" ColumnName="messageId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LastRead">
+            <EntityTypeMapping TypeName="TabangHubModel.LastRead">
+              <MappingFragment StoreEntitySet="LastRead">
+                <ScalarProperty Name="ReadAt" ColumnName="ReadAt" />
+                <ScalarProperty Name="MessageId" ColumnName="MessageId" />
+                <ScalarProperty Name="GroupChatId" ColumnName="GroupChatId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="LastReadId" ColumnName="LastReadId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

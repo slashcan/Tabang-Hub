@@ -2003,6 +2003,9 @@
     </Compile>
     <Compile Include="Hubs\ChatHub.cs" />
     <Compile Include="Hubs\NotificaitonHub.cs" />
+    <Compile Include="LastRead.cs">
+      <DependentUpon>ModelTabangHub.tt</DependentUpon>
+    </Compile>
     <Compile Include="ModelTabangHub.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -2056,6 +2059,7 @@
     <Compile Include="Repository\AdminManager.cs" />
     <Compile Include="Repository\BaseRepository.cs" />
     <Compile Include="Repository\MailManager.cs" />
+    <Compile Include="Repository\MessageManager.cs" />
     <Compile Include="Repository\OrganizationManager.cs" />
     <Compile Include="Repository\UserManager.cs" />
     <Compile Include="Repository\VolunteerManager.cs" />
@@ -2063,6 +2067,9 @@
       <DependentUpon>ModelTabangHub.tt</DependentUpon>
     </Compile>
     <Compile Include="Skills.cs">
+      <DependentUpon>ModelTabangHub.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sp_GetAllMessage1_Result.cs">
       <DependentUpon>ModelTabangHub.tt</DependentUpon>
     </Compile>
     <Compile Include="sp_GetAllMessage_Result.cs">

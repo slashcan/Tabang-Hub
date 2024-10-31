@@ -89,6 +89,18 @@
         </ComplexTypeMapping>
       </ResultMapping>
     </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="sp_GetAllMessage1" FunctionName="TabangHubModel.Store.sp_GetAllMessage1">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="TabangHubModel.sp_GetAllMessage1_Result">
+          <ScalarProperty Name="groupChatId" ColumnName="groupChatId" />
+          <ScalarProperty Name="messageId" ColumnName="messageId" />
+          <ScalarProperty Name="userId" ColumnName="userId" />
+          <ScalarProperty Name="userName" ColumnName="userName" />
+          <ScalarProperty Name="message" ColumnName="message" />
+          <ScalarProperty Name="messageAt" ColumnName="messageAt" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
     <EntitySetMapping Name="GroupChat">
       <EntityTypeMapping TypeName="TabangHubModel.GroupChat">
         <MappingFragment StoreEntitySet="GroupChat">
@@ -126,6 +138,17 @@
           <ScalarProperty Name="userId" ColumnName="userId" />
           <ScalarProperty Name="groupChatId" ColumnName="groupChatId" />
           <ScalarProperty Name="messageId" ColumnName="messageId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="LastRead">
+      <EntityTypeMapping TypeName="TabangHubModel.LastRead">
+        <MappingFragment StoreEntitySet="LastRead">
+          <ScalarProperty Name="ReadAt" ColumnName="ReadAt" />
+          <ScalarProperty Name="MessageId" ColumnName="MessageId" />
+          <ScalarProperty Name="GroupChatId" ColumnName="GroupChatId" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="LastReadId" ColumnName="LastReadId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
