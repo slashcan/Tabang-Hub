@@ -55,12 +55,9 @@ namespace Tabang_Hub.Controllers
             return View(indexModdel);
         }
         [HttpPost]
-        public ActionResult EditOrgProfile(Lists orgProfile, ProfilePicture profilePicture, HttpPostedFileBase profilePic)
+        public JsonResult EditOrgProfile(Lists orgProfile, HttpPostedFileBase profilePic, HttpPostedFileBase coverPic)
         {
             string errMsg = string.Empty;
-            profilePicture.userId = UserId;
-
-            // Assuming you have a method to get the current user ID
 
             if (profilePic != null && profilePic.ContentLength > 0)
             {
@@ -71,17 +68,31 @@ namespace Tabang_Hub.Controllers
                     Directory.CreateDirectory(Server.MapPath("~/Content/IdPicture/"));
 
                 profilePic.SaveAs(serverSavePath);
-
-                profilePicture.profilePath = "~/Content/IdPicture/" + inputFileName;
+                orgProfile.OrgInfo.profilePath = "~/Content/IdPicture/" + inputFileName;
             }
 
-            if (_organizationManager.EditOrgInfo(orgProfile.OrgInfo, profilePicture, UserId, ref errMsg) != ErrorCode.Success)
+            if (coverPic != null && coverPic.ContentLength > 0)
             {
-                ModelState.AddModelError(string.Empty, errMsg);
-                return View("OrgProfile", orgProfile); // Returning the view with the model to display validation errors
+                var coverFileName = Path.GetFileName(coverPic.FileName);
+                var coverSavePath = Path.Combine(Server.MapPath("~/Content/CoverPhotos/"), coverFileName);
+
+                if (!Directory.Exists(Server.MapPath("~/Content/CoverPhotos/")))
+                    Directory.CreateDirectory(Server.MapPath("~/Content/CoverPhotos/"));
+
+                coverPic.SaveAs(coverSavePath);
+                orgProfile.OrgInfo.coverPhoto = "~/Content/CoverPhotos/" + coverFileName;
             }
 
-            return RedirectToAction("OrgProfile");
+            var result = _organizationManager.EditOrgInfo(orgProfile.OrgInfo, UserId, ref errMsg);
+
+            if (result == ErrorCode.Success)
+            {
+                return Json(new { success = true, message = "Profile updated successfully." });
+            }
+            else
+            {
+                return Json(new { success = false, message = errMsg });
+            }
         }
         public ActionResult EventsList()
         {

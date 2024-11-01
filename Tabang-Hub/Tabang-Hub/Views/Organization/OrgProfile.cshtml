@@ -6,7 +6,7 @@
 }
 
 <div class="container">
-    <form action="@Url.Action("EditOrgProfile", "Organization")" method="post" enctype="multipart/form-data" id="editOrgProfileForm">
+    <form id="editOrgProfileForm" enctype="multipart/form-data">
         <div class="card mb-4">
             <!-- Cover Photo -->
             <div id="coverPhotoContainer">
@@ -310,6 +310,35 @@
     }
 
     function submitForm() {
-        document.getElementById("editOrgProfileForm").submit();
+    const form = document.getElementById("editOrgProfileForm");
+    const formData = new FormData(form);
+
+    // Append the profilePic and coverPic files manually if present
+    const profilePicInput = document.getElementById("profilePicInput");
+    const coverPhotoInput = document.getElementById("coverPhotoInput");
+
+    if (profilePicInput.files.length > 0) {
+        formData.append("profilePic", profilePicInput.files[0]);
     }
+    if (coverPhotoInput.files.length > 0) {
+        formData.append("coverPic", coverPhotoInput.files[0]);
+    }
+
+    // Make the AJAX request
+    fetch("@Url.Action("EditOrgProfile", "Organization")", {
+        method: "POST",
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert(data.message); // Show success message
+            toggleEditMode(); // Hide edit mode
+            location.reload(); // Optionally reload to reflect changes
+        } else {
+            alert("Error: " + data.message); // Show error message
+        }
+    })
+    .catch(error => console.error("Error:", error));
+}
 </script>

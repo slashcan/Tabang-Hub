@@ -124,41 +124,30 @@ namespace Tabang_Hub.Repository
             return ErrorCode.Success;
         }
 
-        public ErrorCode EditOrgInfo(OrgInfo orgInformation, ProfilePicture profilePic, int id, ref string errMsg)
+        public ErrorCode EditOrgInfo(OrgInfo orgInformation, int id, ref string errMsg)
         {
             if (orgInformation == null)
             {
                 errMsg = "Organization information is required.";
                 return ErrorCode.Error;
             }
+            var currentOrgInfo = GetOrgInfoByUserId(id);
 
-            if (profilePic == null)
-            {
-                errMsg = "Profile picture is required.";
-                return ErrorCode.Error;
-            }
+            // Check if there are changes, otherwise keep the existing values
+            currentOrgInfo.userId = id;
+            currentOrgInfo.orgName = orgInformation.orgName ?? currentOrgInfo.orgName;
+            currentOrgInfo.orgEmail = orgInformation.orgEmail ?? currentOrgInfo.orgEmail;
+            currentOrgInfo.orgType = orgInformation.orgType ?? currentOrgInfo.orgType;
+            currentOrgInfo.orgDescription = orgInformation.orgDescription ?? currentOrgInfo.orgDescription;
+            currentOrgInfo.phoneNum = orgInformation.phoneNum ?? currentOrgInfo.phoneNum;
+            currentOrgInfo.street = orgInformation.street ?? currentOrgInfo.street;
+            currentOrgInfo.city = orgInformation.city ?? currentOrgInfo.city;
+            currentOrgInfo.province = orgInformation.province ?? currentOrgInfo.province;
+            currentOrgInfo.profilePath = orgInformation.profilePath ?? currentOrgInfo.profilePath;
+            currentOrgInfo.coverPhoto = orgInformation.coverPhoto ?? currentOrgInfo.coverPhoto;
 
-            profilePic.userId = orgInformation.userId;
-            if (_profilePic.Create(profilePic, out errMsg) != ErrorCode.Success)
-            {
-                return ErrorCode.Error;
-            }
-
-            orgInformation.profilePath = profilePic.profilePath;
-            var orgId = GetOrgInfoByUserId(id);
-
-            orgId.userId = id;
-            orgId.orgName = orgInformation.orgName;
-            orgId.orgEmail = orgInformation.orgEmail;
-            orgId.orgType = orgInformation.orgType;
-            orgId.orgDescription = orgInformation.orgDescription;
-            orgId.phoneNum = orgInformation.phoneNum;
-            orgId.street = orgInformation.street;
-            orgId.city = orgInformation.city;
-            orgId.province = orgInformation.province;
-            orgId.profilePath = profilePic.profilePath;
-
-            if (_orgInfo.Update(orgId.orgInfoId, orgId, out errMsg) != ErrorCode.Success)
+            // Proceed to update if there are changes
+            if (_orgInfo.Update(currentOrgInfo.orgInfoId, currentOrgInfo, out errMsg) != ErrorCode.Success)
             {
                 return ErrorCode.Error;
             }
