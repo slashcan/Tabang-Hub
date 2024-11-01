@@ -358,6 +358,7 @@
     <Property Name="province" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
     <Property Name="zipCode" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
     <Property Name="profilePath" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="coverPhoto" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
     <NavigationProperty Name="GroupChat" Relationship="TabangHubModel.FK_GroupChat_OrgInfo" FromRole="OrgInfo" ToRole="GroupChat" />
     <NavigationProperty Name="UserAccount" Relationship="TabangHubModel.FK_OrgInfo_UserAccount" FromRole="OrgInfo" ToRole="UserAccount" />
   </EntityType>

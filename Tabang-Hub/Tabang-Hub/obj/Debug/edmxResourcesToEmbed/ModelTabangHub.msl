@@ -223,6 +223,7 @@
     <EntitySetMapping Name="OrgInfo">
       <EntityTypeMapping TypeName="TabangHubModel.OrgInfo">
         <MappingFragment StoreEntitySet="OrgInfo">
+          <ScalarProperty Name="coverPhoto" ColumnName="coverPhoto" />
           <ScalarProperty Name="profilePath" ColumnName="profilePath" />
           <ScalarProperty Name="zipCode" ColumnName="zipCode" />
           <ScalarProperty Name="province" ColumnName="province" />

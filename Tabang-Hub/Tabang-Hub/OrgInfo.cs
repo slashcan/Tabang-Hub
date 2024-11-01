@@ -31,6 +31,7 @@ namespace Tabang_Hub
         public string province { get; set; }
         public string zipCode { get; set; }
         public string profilePath { get; set; }
+        public string coverPhoto { get; set; }
     
         public virtual ICollection<GroupChat> GroupChat { get; set; }
         public virtual UserAccount UserAccount { get; set; }

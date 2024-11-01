@@ -125,6 +125,7 @@
     <Property Name="province" Type="nvarchar" MaxLength="255" />
     <Property Name="zipCode" Type="nvarchar" MaxLength="255" />
     <Property Name="profilePath" Type="nvarchar" MaxLength="255" />
+    <Property Name="coverPhoto" Type="nvarchar" MaxLength="255" />
   </EntityType>
   <EntityType Name="OrgSkillRequirement">
     <Key>

@@ -102,6 +102,7 @@ namespace Tabang_Hub.Repository
         {
             u.roleId = 2;
             u.status = 0;
+            o.orgEmail = u.email;
             var profilePic = new ProfilePicture();
             if (GetUserByEmail(u.email) != null)
             {

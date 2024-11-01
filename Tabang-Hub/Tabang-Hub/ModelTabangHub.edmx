@@ -130,6 +130,7 @@
           <Property Name="province" Type="nvarchar" MaxLength="255" />
           <Property Name="zipCode" Type="nvarchar" MaxLength="255" />
           <Property Name="profilePath" Type="nvarchar" MaxLength="255" />
+          <Property Name="coverPhoto" Type="nvarchar" MaxLength="255" />
         </EntityType>
         <EntityType Name="OrgSkillRequirement">
           <Key>
@@ -1240,6 +1241,7 @@ FROM [dbo].[vw_VolunteerSkills] AS [vw_VolunteerSkills]</DefiningQuery>
           <Property Name="province" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="zipCode" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="profilePath" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="coverPhoto" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="GroupChat" Relationship="TabangHubModel.FK_GroupChat_OrgInfo" FromRole="OrgInfo" ToRole="GroupChat" />
           <NavigationProperty Name="UserAccount" Relationship="TabangHubModel.FK_OrgInfo_UserAccount" FromRole="OrgInfo" ToRole="UserAccount" />
         </EntityType>
@@ -2011,6 +2013,7 @@ FROM [dbo].[vw_VolunteerSkills] AS [vw_VolunteerSkills]</DefiningQuery>
           <EntitySetMapping Name="OrgInfo">
             <EntityTypeMapping TypeName="TabangHubModel.OrgInfo">
               <MappingFragment StoreEntitySet="OrgInfo">
+                <ScalarProperty Name="coverPhoto" ColumnName="coverPhoto" />
                 <ScalarProperty Name="profilePath" ColumnName="profilePath" />
                 <ScalarProperty Name="zipCode" ColumnName="zipCode" />
                 <ScalarProperty Name="province" ColumnName="province" />
