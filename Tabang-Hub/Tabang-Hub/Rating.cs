@@ -15,6 +15,7 @@ namespace Tabang_Hub
     public partial class Rating
     {
         public int ratingId { get; set; }
+        public Nullable<int> eventId { get; set; }
         public Nullable<int> userId { get; set; }
         public Nullable<int> skillId { get; set; }
         public Nullable<int> rate { get; set; }

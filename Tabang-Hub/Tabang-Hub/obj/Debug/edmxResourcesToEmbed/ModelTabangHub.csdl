@@ -28,6 +28,23 @@
     <FunctionImport Name="sp_GetAllMessage1" ReturnType="Collection(TabangHubModel.sp_GetAllMessage1_Result)">
       <Parameter Name="groupChatId" Mode="In" Type="Int32" />
     </FunctionImport>
+    <FunctionImport Name="sp_RemoveEvent">
+      <Parameter Name="eventId" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_GetUserDonatedInformations" ReturnType="Collection(TabangHubModel.sp_GetUserDonatedInformations_Result)">
+      <Parameter Name="userId" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_VolunteerHistory" ReturnType="Collection(TabangHubModel.sp_VolunteerHistory_Result)">
+      <Parameter Name="userId" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_UserListEvent" ReturnType="Collection(TabangHubModel.sp_UserListEvent_Result)">
+      <Parameter Name="userId" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_AcceptAndUpdateVolunteerStatus">
+      <Parameter Name="userId" Mode="In" Type="Int32" />
+      <Parameter Name="eventId" Mode="In" Type="Int32" />
+      <Parameter Name="skillId" Mode="In" Type="Int32" />
+    </FunctionImport>
     <EntitySet Name="GroupChat" EntityType="TabangHubModel.GroupChat" />
     <EntitySet Name="GroupChatHistory" EntityType="TabangHubModel.GroupChatHistory" />
     <EntitySet Name="GroupMessages" EntityType="TabangHubModel.GroupMessages" />
@@ -148,23 +165,6 @@
       <End Role="UserAccount" EntitySet="UserAccount" />
       <End Role="Volunteers" EntitySet="Volunteers" />
     </AssociationSet>
-    <FunctionImport Name="sp_RemoveEvent">
-      <Parameter Name="eventId" Mode="In" Type="Int32" />
-    </FunctionImport>
-    <FunctionImport Name="sp_GetUserDonatedInformations" ReturnType="Collection(TabangHubModel.sp_GetUserDonatedInformations_Result)">
-      <Parameter Name="userId" Mode="In" Type="Int32" />
-    </FunctionImport>
-    <FunctionImport Name="sp_VolunteerHistory" ReturnType="Collection(TabangHubModel.sp_VolunteerHistory_Result)">
-      <Parameter Name="userId" Mode="In" Type="Int32" />
-    </FunctionImport>
-    <FunctionImport Name="sp_UserListEvent" ReturnType="Collection(TabangHubModel.sp_UserListEvent_Result)">
-      <Parameter Name="userId" Mode="In" Type="Int32" />
-    </FunctionImport>
-    <FunctionImport Name="sp_AcceptAndUpdateVolunteerStatus">
-      <Parameter Name="userId" Mode="In" Type="Int32" />
-      <Parameter Name="eventId" Mode="In" Type="Int32" />
-      <Parameter Name="skillId" Mode="In" Type="Int32" />
-    </FunctionImport>
   </EntityContainer>
   <ComplexType Name="sp_GetSkills_Result">
     <Property Type="Int32" Name="skillId" Nullable="false" />
@@ -209,6 +209,43 @@
     <Property Type="String" Name="userName" Nullable="false" MaxLength="513" />
     <Property Type="String" Name="message" Nullable="true" MaxLength="Max" />
     <Property Type="DateTime" Name="messageAt" Nullable="true" Precision="23" />
+  </ComplexType>
+  <ComplexType Name="sp_GetUserDonatedInformations_Result">
+    <Property Type="Int32" Name="orgUserDonatedId" Nullable="false" />
+    <Property Type="Int32" Name="eventId" Nullable="true" />
+    <Property Type="String" Name="eventTitle" Nullable="true" MaxLength="255" />
+    <Property Type="String" Name="eventDescription" Nullable="true" MaxLength="Max" />
+    <Property Type="Decimal" Name="targetAmount" Nullable="true" Precision="10" Scale="2" />
+    <Property Type="Int32" Name="maxVolunteer" Nullable="true" />
+    <Property Type="DateTime" Name="dateStart" Nullable="true" Precision="23" />
+    <Property Type="DateTime" Name="dateEnd" Nullable="true" Precision="23" />
+    <Property Type="String" Name="location" Nullable="true" MaxLength="255" />
+    <Property Type="String" Name="eventImage" Nullable="true" MaxLength="255" />
+    <Property Type="Decimal" Name="amount" Nullable="true" Precision="10" Scale="2" />
+    <Property Type="DateTime" Name="donatedAt" Nullable="true" Precision="23" />
+    <Property Type="String" Name="Status" Nullable="true" MaxLength="50" />
+  </ComplexType>
+  <ComplexType Name="sp_VolunteerHistory_Result">
+    <Property Type="Int32" Name="VolHistoryId" Nullable="false" />
+    <Property Type="Int32" Name="userId" Nullable="true" />
+    <Property Type="Int32" Name="eventId" Nullable="true" />
+    <Property Type="Int32" Name="skillId" Nullable="true" />
+    <Property Type="String" Name="skillName" Nullable="true" MaxLength="255" />
+    <Property Type="String" Name="eventImage" Nullable="true" MaxLength="255" />
+    <Property Type="String" Name="eventTitle" Nullable="true" MaxLength="255" />
+    <Property Type="String" Name="location" Nullable="true" MaxLength="255" />
+    <Property Type="String" Name="eventDescription" Nullable="true" MaxLength="Max" />
+    <Property Type="DateTime" Name="dateStart" Nullable="true" Precision="23" />
+    <Property Type="DateTime" Name="dateEnd" Nullable="true" Precision="23" />
+  </ComplexType>
+  <ComplexType Name="sp_UserListEvent_Result">
+    <Property Type="Int32" Name="applyVolunteerId" Nullable="false" />
+    <Property Type="Int32" Name="userId" Nullable="true" />
+    <Property Type="Int32" Name="eventId" Nullable="true" />
+    <Property Type="Int32" Name="Status" Nullable="true" />
+    <Property Type="DateTime" Name="appliedAt" Nullable="true" />
+    <Property Type="DateTime" Name="dateStart" Nullable="true" Precision="23" />
+    <Property Type="DateTime" Name="dateEnd" Nullable="true" Precision="23" />
   </ComplexType>
   <EntityType Name="GroupChat">
     <Key>
@@ -397,6 +434,7 @@
       <PropertyRef Name="ratingId" />
     </Key>
     <Property Name="ratingId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="eventId" Type="Int32" />
     <Property Name="userId" Type="Int32" />
     <Property Name="skillId" Type="Int32" />
     <Property Name="rate" Type="Int32" />
@@ -891,41 +929,4 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <ComplexType Name="sp_GetUserDonatedInformations_Result">
-    <Property Type="Int32" Name="orgUserDonatedId" Nullable="false" />
-    <Property Type="Int32" Name="eventId" Nullable="true" />
-    <Property Type="String" Name="eventTitle" Nullable="true" MaxLength="255" />
-    <Property Type="String" Name="eventDescription" Nullable="true" MaxLength="Max" />
-    <Property Type="Decimal" Name="targetAmount" Nullable="true" Precision="10" Scale="2" />
-    <Property Type="Int32" Name="maxVolunteer" Nullable="true" />
-    <Property Type="DateTime" Name="dateStart" Nullable="true" Precision="23" />
-    <Property Type="DateTime" Name="dateEnd" Nullable="true" Precision="23" />
-    <Property Type="String" Name="location" Nullable="true" MaxLength="255" />
-    <Property Type="String" Name="eventImage" Nullable="true" MaxLength="255" />
-    <Property Type="Decimal" Name="amount" Nullable="true" Precision="10" Scale="2" />
-    <Property Type="DateTime" Name="donatedAt" Nullable="true" Precision="23" />
-    <Property Type="String" Name="Status" Nullable="true" MaxLength="50" />
-  </ComplexType>
-  <ComplexType Name="sp_VolunteerHistory_Result">
-    <Property Type="Int32" Name="VolHistoryId" Nullable="false" />
-    <Property Type="Int32" Name="userId" Nullable="true" />
-    <Property Type="Int32" Name="eventId" Nullable="true" />
-    <Property Type="Int32" Name="skillId" Nullable="true" />
-    <Property Type="String" Name="skillName" Nullable="true" MaxLength="255" />
-    <Property Type="String" Name="eventImage" Nullable="true" MaxLength="255" />
-    <Property Type="String" Name="eventTitle" Nullable="true" MaxLength="255" />
-    <Property Type="String" Name="location" Nullable="true" MaxLength="255" />
-    <Property Type="String" Name="eventDescription" Nullable="true" MaxLength="Max" />
-    <Property Type="DateTime" Name="dateStart" Nullable="true" Precision="23" />
-    <Property Type="DateTime" Name="dateEnd" Nullable="true" Precision="23" />
-  </ComplexType>
-  <ComplexType Name="sp_UserListEvent_Result">
-    <Property Type="Int32" Name="applyVolunteerId" Nullable="false" />
-    <Property Type="Int32" Name="userId" Nullable="true" />
-    <Property Type="Int32" Name="eventId" Nullable="true" />
-    <Property Type="Int32" Name="Status" Nullable="true" />
-    <Property Type="DateTime" Name="appliedAt" Nullable="true" />
-    <Property Type="DateTime" Name="dateStart" Nullable="true" Precision="23" />
-    <Property Type="DateTime" Name="dateEnd" Nullable="true" Precision="23" />
-  </ComplexType>
 </Schema>

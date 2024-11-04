@@ -690,6 +690,18 @@ namespace Tabang_Hub.Repository
 
             return ErrorCode.Success;
         }
+        public ErrorCode DeclineApplicant(int id, int eventId)
+        {
+            var user = GetVolunteerById(id, eventId);
+
+
+            if (_eventVolunteers.Delete(user.applyVolunteerId) != ErrorCode.Success)
+            {
+                return ErrorCode.Error;
+            }
+
+            return ErrorCode.Success;
+        }
         public ErrorCode TransferToHistory(int userId, ref string errMsg)
         {
             var toTransfer = ListOfEvents(userId);
@@ -1081,6 +1093,7 @@ namespace Tabang_Hub.Repository
             var skillId = GetSkillIdByEventIdAndUserId(eventId, userId);
             var ratings = new Rating()
             {
+                eventId = eventId,
                 userId = userId,
                 rate = rating,
                 skillId = skillId.skillId,
@@ -1107,7 +1120,7 @@ namespace Tabang_Hub.Repository
             {
                 userId = userId,
                 eventId = eventId,
-                Status = 3,
+                Status = 2,
             };
 
             if (_eventVolunteers.Create(volunteer, out errMsg) != ErrorCode.Success)

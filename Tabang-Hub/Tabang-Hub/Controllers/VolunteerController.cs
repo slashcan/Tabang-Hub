@@ -532,7 +532,7 @@ namespace Tabang_Hub.Controllers
                         send_email_receipt = false,
                         show_description = true,
                         description = description,
-                        cancel_url = Url.Action("PaymentFailed", "Volunteer", null, Request.Url.Scheme),
+                        cancel_url = Url.Action("PaymentFailed", "Volunteer", new { eventId = eventId, amount = amount }, Request.Url.Scheme),
                         success_url = Url.Action("PaymentSuccess", "Volunteer", new { eventId = eventId, amount = amount }, Request.Url.Scheme) // Passing eventId and amount
                     }
                 }
@@ -677,6 +677,7 @@ namespace Tabang_Hub.Controllers
             var getVolunteerInfo = db.VolunteerInfo.Where(m => m.userId == UserId).ToList();
             var getVolunteerSkills = db.VolunteerSkill.Where(m => m.userId == UserId).ToList();
             var getProfile = db.ProfilePicture.Where(m => m.userId == UserId).ToList();
+            var events = _organizationManager.GetEventByEventId(eventId);
 
             var getUniqueSkill = db.sp_GetSkills(UserId).ToList();
             if (getProfile.Count() <= 0)
@@ -697,6 +698,7 @@ namespace Tabang_Hub.Controllers
                 volunteersSkills = getVolunteerSkills,
                 uniqueSkill = getUniqueSkill,
                 picture = getProfile,
+                CreateEvents = events,
                 skills = _skills.GetAll().ToList(),
             };
 
@@ -704,12 +706,27 @@ namespace Tabang_Hub.Controllers
         }
 
         // Payment failed handler
-        public ActionResult PaymentFailed()
+        public ActionResult PaymentFailed(int eventId, decimal amount)
         {
+
+            // Save the donation to the database
+            var donation = new UserDonated
+            {
+                userId = UserId, // User who made the donation
+                eventId = eventId,
+                amount = amount,
+                donatedAt = DateTime.Now,
+                Status = "Failed"
+            };
+
+            db.UserDonated.Add(donation);
+            db.SaveChanges(); // Save the donation to the database
+
             var getUserAccount = db.UserAccount.Where(m => m.userId == UserId).ToList();
             var getVolunteerInfo = db.VolunteerInfo.Where(m => m.userId == UserId).ToList();
             var getVolunteerSkills = db.VolunteerSkill.Where(m => m.userId == UserId).ToList();
             var getProfile = db.ProfilePicture.Where(m => m.userId == UserId).ToList();
+            var events = _organizationManager.GetEventByEventId(eventId);
 
             var getUniqueSkill = db.sp_GetSkills(UserId).ToList();
             if (getProfile.Count() <= 0)
@@ -729,6 +746,7 @@ namespace Tabang_Hub.Controllers
                 volunteersInfo = getVolunteerInfo,
                 volunteersSkills = getVolunteerSkills,
                 uniqueSkill = getUniqueSkill,
+                CreateEvents = events,
                 picture = getProfile,
                 skills = _skills.GetAll().ToList(),
             };

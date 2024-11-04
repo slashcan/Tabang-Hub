@@ -451,8 +451,35 @@ namespace Tabang_Hub.Controllers
                     content: "You have been accepted to participate in the event!"
                 );
 
-                // Return JSON response indicating success
-                return Json(new { success = true, message = "Volunteer confirmed successfully." });
+                // Return JSON response indicating success with redirect URL to event details page
+                return Json(new { success = true, message = "Volunteer confirmed successfully.", redirectUrl = Url.Action("Details", "Organization", new { eventId }) });
+            }
+            else
+            {
+                // Return JSON response indicating failure with an error message
+                return Json(new { success = false, message = errMsg });
+            }
+        }
+        [HttpPost]
+        public JsonResult DeclineApplicants(int id, int eventId)
+        {
+            string errMsg = string.Empty;
+
+            if (_organizationManager.DeclineApplicant(id, eventId) == ErrorCode.Success)
+            {
+                // Create an instance of your NotificationHub and call SendNotification
+                var notificationHub = new NotificationHub();
+
+                notificationHub.SendNotification(
+                    userId: id, // The volunteer's user ID
+                    senderUserId: UserId, // The organization ID or admin ID who is sending the notification
+                    relatedId: eventId,
+                    type: "Declined",
+                    content: "You have been declined to participate in the event!"
+                );
+
+                // Return JSON response indicating success with redirect URL to event details page
+                return Json(new { success = true, message = "Volunteer declined successfully.", redirectUrl = Url.Action("Details", "Organization", new { eventId }) });
             }
             else
             {

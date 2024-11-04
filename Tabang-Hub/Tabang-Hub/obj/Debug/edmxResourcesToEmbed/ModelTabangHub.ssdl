@@ -169,6 +169,7 @@
       <PropertyRef Name="ratingId" />
     </Key>
     <Property Name="ratingId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="eventId" Type="int" />
     <Property Name="userId" Type="int" />
     <Property Name="skillId" Type="int" />
     <Property Name="rate" Type="int" />
@@ -649,11 +650,6 @@ warning 6002: The table/view 'TabangHub.dbo.vw_VolunteerSkills' does not have a 
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Function Name="sp_AcceptAndUpdateVolunteerStatus" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-    <Parameter Name="userId" Type="int" Mode="In" />
-    <Parameter Name="eventId" Type="int" Mode="In" />
-    <Parameter Name="skillId" Type="int" Mode="In" />
-  </Function>
   <Function Name="sp_CancelRequest" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="eventId" Type="int" Mode="In" />
     <Parameter Name="userId" Type="int" Mode="In" />
@@ -665,9 +661,6 @@ warning 6002: The table/view 'TabangHub.dbo.vw_VolunteerSkills' does not have a 
     <Parameter Name="groupChatId" Type="int" Mode="In" />
   </Function>
   <Function Name="sp_GetSkills" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-    <Parameter Name="userId" Type="int" Mode="In" />
-  </Function>
-  <Function Name="sp_GetUserDonatedInformations" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="userId" Type="int" Mode="In" />
   </Function>
   <Function Name="sp_LeaveEvent" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
@@ -683,9 +676,6 @@ warning 6002: The table/view 'TabangHub.dbo.vw_VolunteerSkills' does not have a 
   </Function>
   <Function Name="sp_OtherEvent" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="userId" Type="int" Mode="In" />
-  </Function>
-  <Function Name="sp_RemoveEvent" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-    <Parameter Name="eventId" Type="int" Mode="In" />
   </Function>
   <Function Name="sp_UserListEvent" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="userId" Type="int" Mode="In" />

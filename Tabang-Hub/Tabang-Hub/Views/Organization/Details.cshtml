@@ -256,7 +256,10 @@
 
                                     foreach (var donated in Model.listofUserDonated)
                                     {
-                                        raisedAmount += donated.amount;
+                                        if(donated.Status != "Failed")
+                                        {
+                                            raisedAmount += donated.amount;
+                                        }
                                     }
 
                                     var percentage = (raisedAmount / Model.eventDetails.Target_Amount) * 100;
@@ -357,17 +360,21 @@
                                                     }
                                                 </p>
                                             </div>
-                                            <div class="ms-auto">
+                                            <div class="ms-auto d-flex gap-2">
                                                 <a href="@Url.Action("VolunteerDetails", "Organization", new { userId = volunteer.userId })" class="btn btn-outline-primary btn-sm">View</a>
-                                                <form action="@Url.Action("ConfirmApplicants", "Organization")" method="post" class="confirm-form" data-volunteer-id="@volunteer.userId" data-event-id="@volunteer.eventId" style="display: inline;">
+
+                                                <!-- Accept Button -->
+                                                <form action="@Url.Action("ConfirmApplicants", "Organization")" method="post" class="d-inline">
                                                     <input type="hidden" name="id" value="@volunteer.userId" />
                                                     <input type="hidden" name="eventId" value="@volunteer.eventId" />
-                                                    <button type="button" class="btn btn-outline-success btn-sm confirm-button">Confirm</button>
+                                                    <button type="submit" class="btn btn-outline-success btn-sm">Accept</button>
                                                 </form>
-                                                <form action="@Url.Action("DeclineApplicants", "Organization")" method="post" class="decline-form" data-volunteer-id="@volunteer.userId" data-event-id="@volunteer.eventId" style="display: inline;">
+
+                                                <!-- Decline Button -->
+                                                <form action="@Url.Action("DeclineApplicants", "Organization")" method="post" class="d-inline">
                                                     <input type="hidden" name="id" value="@volunteer.userId" />
                                                     <input type="hidden" name="eventId" value="@volunteer.eventId" />
-                                                    <button type="button" class="btn btn-outline-danger btn-sm decline-button">Decline</button>
+                                                    <button type="submit" class="btn btn-outline-danger btn-sm">Decline</button>
                                                 </form>
                                             </div>
                                         </div>
@@ -800,52 +807,61 @@ else
         event.target.classList.add('active');
     }
 
-    document.addEventListener('DOMContentLoaded', function () {
-        document.querySelectorAll('.confirm-button').forEach(button => {
-            button.addEventListener('click', function () {
-                const form = this.closest('.confirm-form');
-                const volunteerId = form.getAttribute('data-volunteer-id');
-                const eventId = form.getAttribute('data-event-id');
+    // Add an event listener for the Accept button click
+    document.querySelectorAll('.confirm-form').forEach(form => {
+        form.addEventListener('submit', function (event) {
+            event.preventDefault(); // Prevent the default form submission
 
-                Swal.fire({
-                    title: 'Confirm Volunteer?',
-                    text: "Are you sure you want to confirm this volunteer?",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, confirm it!'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        // Submit the form to confirm the volunteer
-                        form.submit();
+            $.ajax({
+                url: $(this).attr('action'), // Use the action URL defined in the form
+                type: 'POST',
+                data: $(this).serialize(), // Serialize the form data
+                success: function (response) {
+                    if (response.success) {
+                        // Redirect to the provided URL in the response if successful
+                        if (response.redirectUrl) {
+                            window.location.href = response.redirectUrl;
+                        } else {
+                            alert('Confirmation successful, but no redirect URL was provided.');
+                        }
+                    } else {
+                        alert('Error: ' + response.message);
                     }
-                });
+                },
+                error: function () {
+                    alert('Error confirming the volunteer.');
+                }
             });
         });
+    });
 
-        document.querySelectorAll('.decline-button').forEach(button => {
-            button.addEventListener('click', function () {
-                const form = this.closest('.decline-form');
-                const volunteerId = form.getAttribute('data-volunteer-id');
-                const eventId = form.getAttribute('data-event-id');
+    // Add an event listener for the Decline button click
+    document.querySelectorAll('.decline-form').forEach(form => {
+        form.addEventListener('submit', function (event) {
+            event.preventDefault(); // Prevent the default form submission
 
-                Swal.fire({
-                    title: 'Decline Volunteer?',
-                    text: "Are you sure you want to decline this volunteer?",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, decline it!'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        // Submit the form to decline the volunteer
-                        form.submit();
+            $.ajax({
+                url: $(this).attr('action'), // Use the action URL defined in the form
+                type: 'POST',
+                data: $(this).serialize(), // Serialize the form data
+                success: function (response) {
+                    if (response.success) {
+                        // Redirect to the provided URL in the response if successful
+                        if (response.redirectUrl) {
+                            window.location.href = response.redirectUrl;
+                        } else {
+                            alert('Decline successful, but no redirect URL was provided.');
+                        }
+                    } else {
+                        alert('Error: ' + response.message);
                     }
-                });
+                },
+                error: function () {
+                    alert('Error declining the volunteer.');
+                }
             });
         });
+    });
 
         // Real-time validation for date and time inputs
         document.getElementById('EditEvent_dateStart').addEventListener('input', function () {
