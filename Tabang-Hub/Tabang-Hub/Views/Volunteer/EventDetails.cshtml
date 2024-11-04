@@ -199,97 +199,138 @@
                         </div>
                     }
 
-                    <div class="apply-button mt-2">
-                        @foreach (var orgDetails in Model.orgEvents)
+                <div class="apply-button mt-2">
+                    @foreach (var orgDetails in Model.orgEvents)
+                    {
+                        if (!Model.volunteersStatusEvent.Count().Equals(0))
                         {
-                            if (!Model.volunteersStatusEvent.Count().Equals(0))
+                            foreach (var status in Model.volunteersStatusEvent)
                             {
-                                foreach (var status in Model.volunteersStatusEvent)
+                                if (status.Status.Equals(1) && Model.volunteersStatusEvent.Count() != 0)
                                 {
-                                    if (status.Status.Equals(1) && Model.volunteersStatusEvent.Count() != 0)
-                                    {
-                                        <button style="width: 100%" onclick="leaveEvent('@orgDetails.eventId')" class="btn btnRequest">
-                                            Leave event
-                                        </button>
-                                    }
-                                    else if (status.Status.Equals(0) && Model.volunteersStatusEvent.Count() != 0)
-                                    {
-                                        <button style="width: 100%" onclick="cancelEvent('@orgDetails.eventId')" class="btn btnRequest">
-                                            Cancel application
-                                        </button>
-                                    }
+                                    <button style="width: 100%" onclick="leaveEvent('@orgDetails.eventId')" class="btn btnRequest">
+                                        Leave event
+                                    </button>
                                 }
-                            }
-                            <div class="action-buttons mt-2">
-                                <div class="d-flex justify-content-between">
-                                    <!-- Accept Button -->
-                                    <button type="button" class="btn btn-success flex-fill me-1" data-toggle="modal" data-target="#acceptModal">
-                                        Accept Invitation
-                                    </button>
-                                    <!-- Decline Button -->
-                                    <button type="button" class="btn btn-danger flex-fill ms-1" onclick="declineInvitation('@orgDetails.eventId')">
-                                        Decline Invitation
-                                    </button>
-                                </div>
-                            </div>
-
-                            if (orgDetails.targetAmount != null)
-                            {
-                                foreach (var evnt in Model.listOfEvents)
+                                else if (status.Status.Equals(0) && Model.volunteersStatusEvent.Count() != 0)
                                 {
-                                    <div class="donation-progress">
-                                        <label>Fund Raised</label>
-                                        <div class="progress">
-                                            @{
-                                                decimal? raisedAmount = 0;
-
-                                                foreach (var donated in Model.listofUserDonated)
-                                                {
-                                                    raisedAmount += donated.amount;
-                                                }
-
-                                                var percentage = (raisedAmount / evnt.Target_Amount) * 100;
-                                            }
-                                            <div class="progress-bar" role="progressbar" style="width: @percentage%; background-color: mediumseagreen;" aria-valuenow="@raisedAmount" aria-valuemin="0" aria-valuemax="@evnt.Target_Amount"></div>
-                                            <div class="progress-label">@($"{raisedAmount:₱#,##0.00}") / @($"{evnt.Target_Amount:₱#,##0.00}")</div>
-                                        </div>
-                                    </div>
-                                    <div class="donate-button mt-2">
-                                        <!-- Button to open the donation modal -->
-                                        <button style="width: 100%" type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#donationModal">
-                                            Donate
-                                        </button>
-                                    </div>
-
-                                    <!-- Donation Modal -->
-                                    <div class="modal fade" id="donationModal" tabindex="-1" role="dialog" aria-labelledby="donationModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog" role="document">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="donationModalLabel">Make a Donation</h5>
-                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                        <span aria-hidden="true">&times;</span>
-                                                    </button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <form id="donationForm">
-                                                        <div class="form-group">
-                                                            <label for="donationAmount">Donation Amount</label>
-                                                            <input type="number" class="form-control" id="donationAmount" min="1" required>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                    <button type="button" class="btn btn-primary" onclick="submitDonation('@orgDetails.eventId')">Donate</button>
-                                                </div>
-                                            </div>
+                                    <button style="width: 100%" onclick="cancelEvent('@orgDetails.eventId')" class="btn btnRequest">
+                                        Cancel application
+                                    </button>
+                                }
+                                else
+                                {
+                                    <div class="action-buttons mt-2">
+                                        <div class="d-flex justify-content-between">
+                                            <!-- Accept Button -->
+                                            <button type="button" class="btn btn-success flex-fill me-1" data-toggle="modal" data-target="#acceptEventModal" data-event-id="@orgDetails.eventId" id="acceptButton">
+                                                Accept Invitation
+                                            </button>
+                                            <!-- Decline Button -->
+                                            <button type="button" class="btn btn-danger flex-fill ms-1" data-event-id="@orgDetails.eventId" id="declineButton">
+                                                Decline Invitation
+                                            </button>
                                         </div>
                                     </div>
                                 }
                             }
                         }
-                    </div>
+                        <!-- Accept Invitation Modal -->
+                        <div class="modal fade" id="acceptEventModal" tabindex="-1" role="dialog" aria-labelledby="acceptEventModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="acceptEventModalLabel">Accept Invitation</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form id="acceptEventForm">
+                                            <div class="form-group" id="skillSelectSection">
+                                                <label for="skillSelect">Select Required Skill</label>
+                                                <div id="skillSelect">
+                                                    @foreach (var mskill in Model.matchSkill)
+                                                    {
+                                                        var skillName = Model.skills.Where(m => m.skillId == mskill.skillId).Select(m => m.skillName).FirstOrDefault();
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="radio" name="skill" id="skill1" value="@Html.Raw(skillName)" required>
+                                                            <label class="form-check-label" for="@Html.Raw(skillName)">
+                                                                @Html.Raw(skillName)
+                                                            </label>
+                                                        </div>
+                                                    }
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-primary" onclick="acceptEvent('@orgDetails.eventId')">Accept Invitation</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                        if (orgDetails.targetAmount != null)
+                        {
+                            foreach (var evnt in Model.listOfEvents)
+                            {
+                                <div class="donation-progress">
+                                    <label>Fund Raised</label>
+                                    <div class="progress">
+                                        @{
+                                            decimal? raisedAmount = 0;
+
+                                            foreach (var donated in Model.listofUserDonated)
+                                            {
+                                                raisedAmount += donated.amount;
+                                            }
+
+                                            var percentage = (raisedAmount / evnt.Target_Amount) * 100;
+                                        }
+                                        <div class="progress-bar" role="progressbar" style="width: @percentage%; background-color: mediumseagreen;" aria-valuenow="@raisedAmount" aria-valuemin="0" aria-valuemax="@evnt.Target_Amount"></div>
+                                        <div class="progress-label">@($"{raisedAmount:₱#,##0.00}") / @($"{evnt.Target_Amount:₱#,##0.00}")</div>
+                                    </div>
+                                </div>
+                                <div class="donate-button mt-2">
+                                    <!-- Button to open the donation modal -->
+                                    <button style="width: 100%" type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#donationModal">
+                                        Donate
+                                    </button>
+                                </div>
+
+                                <!-- Donation Modal -->
+                                <div class="modal fade" id="donationModal" tabindex="-1" role="dialog" aria-labelledby="donationModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="donationModalLabel">Make a Donation</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form id="donationForm">
+                                                    <div class="form-group">
+                                                        <label for="donationAmount">Donation Amount</label>
+                                                        <input type="number" class="form-control" id="donationAmount" min="1" required>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                <button type="button" class="btn btn-primary" onclick="submitDonation('@orgDetails.eventId')">Donate</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                    }
+                </div>
                     <br />
                 </div>
             </div>
@@ -717,6 +758,54 @@ function submitDonation(eventId) {
             }
         });
     }
+    //ACCEPT THE INVITATION
+    function acceptEvent(eventId) {
+        var selectedSkill = document.querySelector('input[name="skill"]:checked').value;
+
+        $.ajax({
+        url: '@Url.Action("AcceptInvite", "Volunteer")',
+        type: 'POST',
+        data: {
+            eventId: eventId,
+            skill: selectedSkill
+        },
+        success: function (response) {
+            if (response.success) {
+                Swal.fire({
+                    title: response.message,
+                    text: '',
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                }).then(() => {
+                    location.reload();
+                });
+            } else {
+                Swal.fire({
+                    title: response.message,
+                    text: '',
+                    icon: 'warning',
+                    confirmButtonText: 'OK'
+                });
+            }
+        },
+        error: function (xhr, status, error) {
+            Swal.fire({
+                title: 'Error!',
+                text: 'There was an issue with your application. Please try again later.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+        }
+    })
+    }
+
+    //DECLINE THE INVITATION
+    const decline = document.getElementById('declineButton');
+
+    decline.addEventListener('click', function () {
+        const eventId = this.dataset.eventId;
+        console.log(eventId);
+    });
 
     const track = document.querySelector('.carousel-track-opportunities');
     const prevButton = document.querySelector('.prev-button-opportunities');

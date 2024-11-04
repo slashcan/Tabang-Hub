@@ -258,7 +258,7 @@
                     <div class="card custom-card shadow-lg">
                         <div class="row g-0">
                             @{
-                                var imgs = Model.orgEventImageHistories.Where(m => m.eventId == vh.eventId).Select(m => m.eventImage).FirstOrDefault();
+                                var imgs = Model.detailsEventImage.Where(m => m.eventId == vh.eventId).Select(m => m.eventImage).FirstOrDefault();
                             }
                             <div class="col-12 col-md-4">
                                 <div class="image-container">

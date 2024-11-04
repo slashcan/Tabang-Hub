@@ -286,6 +286,70 @@ namespace Tabang_Hub.Controllers
             }
         }
         [HttpPost]
+        public JsonResult AcceptInvite(int eventId, string skill)
+        {
+            try
+            {
+                var checkVolunteer = _volunteers.GetAll().Where(m => m.userId == UserId && m.eventId == eventId && m.Status == 3).FirstOrDefault();
+                var checkDateOrgEvents = _orgEvents.GetAll().Where(m => m.eventId == eventId).FirstOrDefault();
+
+                // Check if the user has already accepted an invitation for this event
+                if (!checkVolunteer.Status.Equals(3))
+                {
+                    return Json(new { success = false, message = "Already accepted invitation" });
+                }
+
+                // Get list of events the user has already applied for
+                var listUserEvents = db.sp_UserListEvent(UserId).ToList();
+
+                // Convert to DateTime with only the date part
+                var checkEventStartDate = checkDateOrgEvents.dateStart?.Date;
+                var checkEventEndDate = checkDateOrgEvents.dateEnd?.Date;
+
+                // Check for conflicting event dates
+                foreach (var userEvent in listUserEvents)
+                {
+                    var userEventStartDate = userEvent.dateStart?.Date;
+                    var userEventEndDate = userEvent.dateEnd?.Date;
+
+                    if (userEventStartDate == null || userEventEndDate == null)
+                    {
+                        continue; // Skip if the event dates are null
+                    }
+
+                    if (!(checkEventEndDate < userEventStartDate || checkEventStartDate > userEventEndDate))
+                    {
+                        if (userEvent.Status == 0)
+                        {
+                            return Json(new { success = false, message = "Conflict with another applied event" });
+                        }
+                        else
+                        {
+                            return Json(new { success = false, message = "Conflict with another registered event" });
+                        }
+                    }
+                }
+
+                var getEventRequiredSkills = _skillRequirement.GetAll().Where(m => m.eventId == eventId).Select(m => m.skillId).ToList();
+                var volSkill = _volunteerSkills.GetAll().Where(m => m.userId == UserId).Select(m => m.skillId).ToList();
+
+                bool skillMatch = getEventRequiredSkills.Any(skll => volSkill.Contains(skll));
+
+                if (!skillMatch)
+                {
+                    return Json(new { success = false, message = "Your skills do not match the requirements" });
+                }
+                var selectedSkillID = db.Skills.Where(m => m.skillName == skill).Select(m => m.skillId).FirstOrDefault();
+                db.sp_AcceptAndUpdateVolunteerStatus(UserId, eventId, selectedSkillID);
+
+                return Json(new { success = true, message = "Invitation accepted" });
+            }
+            catch (Exception)
+            {
+                return Json(new { success = false, message = "Error accepting invitation!" });
+            }
+        }
+        [HttpPost]
         public JsonResult ApplyVolunteer(int eventId, string skill)
         {
             try
@@ -673,10 +737,22 @@ namespace Tabang_Hub.Controllers
         }
         public ActionResult DonationHistory()
         {
+
+            var orgEvents = new List<OrgEvents>();
+            foreach (var ev in _userDonated.GetAll())
+            {
+                var evnt = db.OrgEvents.Where(m => m.eventId == ev.eventId);
+
+                orgEvents.AddRange(evnt);
+            }
+
             var listModel = new Lists()
             {
                 picture = db.ProfilePicture.Where(m => m.userId == UserId).ToList(),
-                volunteersInfo = db.VolunteerInfo.Where(m => m.userId == UserId).ToList()
+                volunteersInfo = db.VolunteerInfo.Where(m => m.userId == UserId).ToList(),
+                listofUserDonated = db.UserDonated.Where(m => m.userId == UserId).ToList(),
+                orgEvents = orgEvents,
+                userDonatedInformations = db.sp_GetUserDonatedInformations(UserId).ToList()
             };
             return View(listModel);
         }
@@ -775,13 +851,24 @@ namespace Tabang_Hub.Controllers
             var getVolunteerInfo = db.VolunteerInfo.Where(m => m.userId == UserId).ToList();
 
             var getOrgUserId = db.OrgEvents.Where(m => m.eventId == userId).Select(m => m.userId).FirstOrDefault();
-            var getOrgInfo = db.OrgInfo.Where(m => m.userId == userId).ToList();
+            var getOrgInfo = _organizationManager.GetOrgInfoByUserId(userId);
+
+            var orgEvents = _organizationManager.GetOrgEventsByUserId(userId);
+            var orgImage = new List<OrgEventImage>();
+            foreach (var image in orgEvents)
+            {
+                var orgEvenImage = _organizationManager.GetEventImageByEventId(image.eventId);
+
+                orgImage.Add(orgEvenImage);
+            }
 
             var indexModel = new Lists()
             {
                 picture = userProfile,
                 volunteersInfo = getVolunteerInfo,
-                orgInfos = getOrgInfo
+                OrgInfo = getOrgInfo,
+                detailsEventImage = orgImage,
+                getAllOrgEvent = orgEvents,
             };
 
             return View(indexModel);

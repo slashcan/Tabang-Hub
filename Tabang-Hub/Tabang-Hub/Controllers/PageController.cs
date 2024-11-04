@@ -37,12 +37,39 @@ namespace Tabang_Hub.Controllers
                         var getProfile = db.ProfilePicture.Where(m => m.userId == UserId).ToList();
 
                         var getOrgInfo = _orgInfo.GetAll().ToList();
-                        var getVolunteers = _volunteers.GetAll().ToList();
                         var getEvents = _listsOfEvent.GetAll().ToList();
                         var getOrgImages = _eventImages.GetAll().ToList();
 
+                        var endedEvent = getEvents.Where(m => m.End_Date < DateTime.Now).ToList();
+
+                        var evnt = new List<Volunteers>();
+                        foreach (var evt in endedEvent)
+                        {
+                            var getVolEvent = _volunteers.GetAll().Where(m => m.eventId == evt.Event_Id).ToList();
+                            // Move each volunteer record to VolunteersHistory
+                            foreach (var volunteer in getVolEvent)
+                            {
+                                // Assuming you have a VolunteersHistory entity and a way to add it to the history table
+                                var volunteerHistory = new VolunteersHistory
+                                {
+                                    eventId = volunteer.eventId,
+                                    userId = volunteer.userId,
+                                    skillId = volunteer.skillId,
+                                    appliedAt = volunteer.appliedAt,
+                                    attended = volunteer.attended ?? 0
+                                };
+
+                                db.VolunteersHistory.Add(volunteerHistory);
+                                db.SaveChanges();
+                            }
+                            foreach (var volunteer in getVolEvent)
+                            {
+                                db.sp_RemoveEvent(volunteer.eventId);
+                            }
+                        }
+                        var getVolunteers = _volunteers.GetAll().ToList();
+
                         var orgEventsSelectId = _orgEvents.GetAll().Where(m => m.dateEnd >= DateTime.Now).Select(m => m.eventId).ToList();
-                        //var orgEvents = _orgEvents.GetAll().Where(m => m.targetAmount != null).ToList();
 
                         var getUserDonated = new List<UserDonated>();
                         foreach (var eventId in orgEventsSelectId)

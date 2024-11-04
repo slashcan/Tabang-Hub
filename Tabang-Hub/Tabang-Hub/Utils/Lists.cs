@@ -61,6 +61,7 @@ namespace Tabang_Hub.Utils
         public List<sp_ListOfGc_Result> listOfGc { get; set; }
         public List<sp_matchSkill_Result> matchSkill { get; set; }
         public List<sp_VolunteerHistory_Result> volunteersHistories { get; set; }
+        public List<sp_GetUserDonatedInformations_Result> userDonatedInformations { get; set; }
 
         //View
         public List<vw_ListOfEvent> listOfEvents { get; set; }

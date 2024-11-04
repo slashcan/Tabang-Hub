@@ -1,9 +1,20 @@
-﻿@{
+﻿@model Tabang_Hub.Utils.Lists
+
+@{
     ViewBag.Title = "PaymentHistory";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+    tr:hover {
+        cursor: default;
+        background-color: #C1C8C8;
+    }
+    strong{
+        cursor: default;
+    }
+</style>
 
 <!-- Center the card on the page -->
 <div class="d-flex justify-content-center align-items-center mt-5">
@@ -25,41 +36,31 @@
                             <th scope="col"></th>
                         </tr>
                     </thead>
-                    <tbody class="table-bordered">
-                        <tr>
-                            <td>April 15, 2021</td>
-                            <td>Charity Walk 2021</td>
-                            <td>A fundraising walk to support local charities</td>
-                            <td>₱315.00</td>
-                            <td>
-                                <!-- Clickable arrow icon with hover effect -->
-                                <a href="#" class="view-more">
-                                    <i class="fa fa-chevron-right"></i>
-                                </a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>January 20, 2021</td>
-                            <td>Food Drive 2021</td>
-                            <td>Providing food donations to underprivileged families</td>
-                            <td>₱500.00</td>
-                            <td>
-                                <a href="#" class="view-more">
-                                    <i class="fa fa-chevron-right"></i>
-                                </a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>September 5, 2020</td>
-                            <td>Disaster Relief Fund</td>
-                            <td>Fundraising for disaster victims</td>
-                            <td>₱750.00</td>
-                            <td>
-                                <a href="#" class="view-more">
-                                    <i class="fa fa-chevron-right"></i>
-                                </a>
-                            </td>
-                        </tr>
+                    <tbody>
+                        @foreach (var donation in Model.userDonatedInformations)
+                        {
+                            DateTime? originalDate = donation.donatedAt;
+                            string formattedDate = originalDate.HasValue ? originalDate.Value.ToString("MMMM dd, yyyy") : "N/A";
+
+                            var eventInfo = Model.orgEvents.FirstOrDefault(e => e.eventId == donation.eventId);
+                            int maxDescriptionLength = 85;
+                            string shortDescription = eventInfo?.eventDescription.Length > maxDescriptionLength
+                                ? eventInfo.eventDescription.Substring(0, maxDescriptionLength) + "..."
+                                : eventInfo?.eventDescription;
+
+                            <tr>
+                                <td style="width: 180px;">@formattedDate</td>
+                                <td style="width: 300px;">@eventInfo.eventTitle</td>
+                                <td style="width: 650px;">@shortDescription</td>
+                                <td style="width: 5%;">₱@donation.amount</td>
+                                <td>
+                                    <!-- Clickable arrow icon with hover effect -->
+                                    <a href="#" class="view-more" data-bs-toggle="modal" data-bs-target="#eventModal-@donation.orgUserDonatedId">
+                                        <i class="fa fa-chevron-right"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
                     </tbody>
                 </table>
             </div>
@@ -67,6 +68,49 @@
     </div>
 </div>
 
+<!-- Event Modals (placed outside of the table) -->
+@foreach (var evnt_info in Model.userDonatedInformations)
+{
+    var eventInfo = Model.orgEvents.FirstOrDefault(e => e.eventId == evnt_info.eventId);
+    DateTime? originalDate = evnt_info.donatedAt;
+    string formattedDate = originalDate.HasValue ? originalDate.Value.ToString("MMMM dd, yyyy") : "N/A";
+
+    <div class="modal fade" id="eventModal-@evnt_info.orgUserDonatedId" tabindex="-1" aria-labelledby="eventModalLabel-@evnt_info.orgUserDonatedId" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="eventModalLabel-@evnt_info.eventId">@evnt_info.eventTitle</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Event Image -->
+                    <div class="text-center">
+                        <img src="@Url.Content("~/Content/Events/" + evnt_info.eventImage)" alt="Event Image" class="img-fluid rounded mb-3" style="max-height: 400px;">
+                    </div>
+
+                    <!-- Event Information with Icons -->
+                    <p><i class="fa fa-info-circle" aria-hidden="true"></i> <strong>Description:</strong> @evnt_info.eventDescription</p>
+                    <p><i class="fa fa-money" aria-hidden="true"></i> <strong>Amount:</strong> ₱@evnt_info.amount</p>
+                    <p>
+                        <i class="fa fa-calendar" aria-hidden="true"></i> <strong>Date Start and End:</strong>
+                        @(eventInfo.dateStart.HasValue ? eventInfo.dateStart.Value.ToString("MMMM dd, yyyy") : "N/A") -
+                        @(eventInfo.dateEnd.HasValue ? eventInfo.dateEnd.Value.ToString("MMMM dd, yyyy") : "N/A")
+                    </p>
+                    <p>
+                        <i class="fa fa-calendar" aria-hidden="true"></i> <strong>Date:</strong>
+                        @formattedDate
+                    </p>
+                    <p><i class="fa fa-map-marker" aria-hidden="true"></i> <strong>Location:</strong> @evnt_info.location</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
 <link href="~/Content/Css/donationStyle.css" rel="stylesheet" />
-<!-- FontAwesome for icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<!-- Add necessary Bootstrap JS if not already included in _Layout.cshtml -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>

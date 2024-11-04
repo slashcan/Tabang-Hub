@@ -105,15 +105,6 @@ namespace Tabang_Hub
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_OtherEvent_Result>("sp_OtherEvent", userIdParameter);
         }
     
-        public virtual ObjectResult<sp_UserListEvent_Result> sp_UserListEvent(Nullable<int> userId)
-        {
-            var userIdParameter = userId.HasValue ?
-                new ObjectParameter("userId", userId) :
-                new ObjectParameter("userId", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_UserListEvent_Result>("sp_UserListEvent", userIdParameter);
-        }
-    
         public virtual ObjectResult<sp_GetAllMessage_Result> sp_GetAllMessage(Nullable<int> groupChatId)
         {
             var groupChatIdParameter = groupChatId.HasValue ?
@@ -136,15 +127,6 @@ namespace Tabang_Hub
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_matchSkill_Result>("sp_matchSkill", userIdParameter, eventIdParameter);
         }
     
-        public virtual ObjectResult<sp_VolunteerHistory_Result> sp_VolunteerHistory(Nullable<int> userId)
-        {
-            var userIdParameter = userId.HasValue ?
-                new ObjectParameter("userId", userId) :
-                new ObjectParameter("userId", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_VolunteerHistory_Result>("sp_VolunteerHistory", userIdParameter);
-        }
-    
         public virtual ObjectResult<sp_ListOfGc_Result> sp_ListOfGc(Nullable<int> userId)
         {
             var userIdParameter = userId.HasValue ?
@@ -161,6 +143,59 @@ namespace Tabang_Hub
                 new ObjectParameter("groupChatId", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_GetAllMessage1_Result>("sp_GetAllMessage1", groupChatIdParameter);
+        }
+    
+        public virtual int sp_RemoveEvent(Nullable<int> eventId)
+        {
+            var eventIdParameter = eventId.HasValue ?
+                new ObjectParameter("eventId", eventId) :
+                new ObjectParameter("eventId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_RemoveEvent", eventIdParameter);
+        }
+    
+        public virtual ObjectResult<sp_GetUserDonatedInformations_Result> sp_GetUserDonatedInformations(Nullable<int> userId)
+        {
+            var userIdParameter = userId.HasValue ?
+                new ObjectParameter("userId", userId) :
+                new ObjectParameter("userId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_GetUserDonatedInformations_Result>("sp_GetUserDonatedInformations", userIdParameter);
+        }
+    
+        public virtual ObjectResult<sp_VolunteerHistory_Result> sp_VolunteerHistory(Nullable<int> userId)
+        {
+            var userIdParameter = userId.HasValue ?
+                new ObjectParameter("userId", userId) :
+                new ObjectParameter("userId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_VolunteerHistory_Result>("sp_VolunteerHistory", userIdParameter);
+        }
+    
+        public virtual ObjectResult<sp_UserListEvent_Result> sp_UserListEvent(Nullable<int> userId)
+        {
+            var userIdParameter = userId.HasValue ?
+                new ObjectParameter("userId", userId) :
+                new ObjectParameter("userId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_UserListEvent_Result>("sp_UserListEvent", userIdParameter);
+        }
+    
+        public virtual int sp_AcceptAndUpdateVolunteerStatus(Nullable<int> userId, Nullable<int> eventId, Nullable<int> skillId)
+        {
+            var userIdParameter = userId.HasValue ?
+                new ObjectParameter("userId", userId) :
+                new ObjectParameter("userId", typeof(int));
+    
+            var eventIdParameter = eventId.HasValue ?
+                new ObjectParameter("eventId", eventId) :
+                new ObjectParameter("eventId", typeof(int));
+    
+            var skillIdParameter = skillId.HasValue ?
+                new ObjectParameter("skillId", skillId) :
+                new ObjectParameter("skillId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_AcceptAndUpdateVolunteerStatus", userIdParameter, eventIdParameter, skillIdParameter);
         }
     }
 }

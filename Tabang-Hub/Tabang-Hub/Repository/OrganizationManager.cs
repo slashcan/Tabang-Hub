@@ -825,11 +825,33 @@ namespace Tabang_Hub.Repository
             List<FilteredVolunteer> recruit = new List<FilteredVolunteer>();
             string errorMessage = null;
 
+
+            // Get the target event's date range
+            var targetEvent = _orgEvents.GetAll().FirstOrDefault(m => m.eventId == eventId);
+            if (targetEvent == null)
+            {
+                throw new Exception("Event not found");
+            }
+            DateTime targetStartDate = targetEvent.dateStart ?? DateTime.MinValue;
+            DateTime targetEndDate = targetEvent.dateEnd ?? DateTime.MaxValue;
+
+            // Get volunteers who do not have conflicting events
+            var availableVolunteers = _vwVollunterSkills.GetAll()
+                .Where(vol => !db.Volunteers.ToList().Any(e =>
+                    e.userId == vol.userId &&
+                    (e.Status == 0 || e.Status == 1) && // Check for pending or ongoing events
+                    _orgEvents.GetAll().Any(ev =>
+                        ev.eventId == e.eventId &&
+                        (ev.dateStart <= targetEndDate && ev.dateEnd >= targetStartDate) // Exclude if date overlap
+                    )
+                ))
+                .ToList();
+
             // Prepare the data to pass to Flask
             var datas = new
             {
                 // Retrieve only relevant user skills for volunteers
-                user_skills = _vwVollunterSkills.GetAll().Select(m => new { userId = m.userId, skillId = m.skillId, rating = m.rate }).ToList(),
+                user_skills = availableVolunteers.Select(m => new { userId = m.userId, skillId = m.skillId, rating = m.rate }).ToList(),
 
                 // Pass only the specific event's data
                 event_data = _orgEvents.GetAll().Where(m => m.eventId == eventId).Select(m => new { eventId = m.eventId, eventDescription = m.eventDescription }).ToList(),

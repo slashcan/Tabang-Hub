@@ -53,20 +53,28 @@ namespace Tabang_Hub.Controllers
                 else
                 {
                     var getProfile = db.ProfilePicture.Where(m => m.userId == UserId).ToList();
-                    var getEventProfile = db.OrgEventImage.Select(m => m.eventId).FirstOrDefault();
 
                     var checkVolunteers = db.Volunteers.Where(m => m.userId == UserId).FirstOrDefault();
 
-                    var groupChatProfile = db.OrgEventImage.Where(m => m.eventId == checkVolunteers.eventId).ToList();
                     var getOrgEvent = _orgEvents.GetAll().Where(m => m.eventId == checkVolunteers.eventId).ToList();
 
+                    var eventImage = new List<OrgEventImage>();
+
                     var listOfGC = db.sp_ListOfGc(UserId).ToList();
+
+                    foreach (var gc in listOfGC)
+                    {
+                        var image = _messageManager.GetEventImageByEventId((int)gc.eventId);
+
+                        eventImage.Add(image);
+                    }
+
 
                     var indexModel = new Lists()
                     {
                         picture = getProfile,
                         volunteersInfo = db.VolunteerInfo.Where(m => m.userId == UserId).ToList(),
-                        detailsEventImage = groupChatProfile,
+                        detailsEventImage = eventImage,
                         orgEvents = getOrgEvent,
                         listOfGc = listOfGC
                     };
