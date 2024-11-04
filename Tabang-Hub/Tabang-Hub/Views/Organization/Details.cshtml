@@ -32,6 +32,7 @@
         width: 60px;
         margin-left: 10px;
     }
+
     .navbar-nav .nav-link {
         padding-left: 10px;
         padding-right: 10px;
@@ -177,9 +178,9 @@
                 </button>
                 <div class="collapse navbar-collapse navbar-center" id="navbarNav">
                     <ul class="navbar-nav">
-                        <li class="nav-item"><a class="nav-link active" href="#organization-details" onclick="showSection('organization-details', event)">Details</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#volunteer-list" onclick="showSection('volunteer-list', event)">Volunteer List</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#applied-volunteer-list" onclick="showSection('applied-volunteer-list', event)">Applied Volunteer List</a></li>
+                        <li class="nav-item"><a class="nav-link active" href="#organization-details" data-section="organization-details">Details</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#volunteer-list" data-section="volunteer-list">Volunteer List</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#applied-volunteer-list" data-section="applied-volunteer-list">Applied Volunteer List</a></li>
                     </ul>
                 </div>
             </div>
@@ -256,7 +257,7 @@
 
                                     foreach (var donated in Model.listofUserDonated)
                                     {
-                                        if(donated.Status != 1)
+                                        if (donated.Status != 1)
                                         {
                                             raisedAmount += donated.amount;
                                         }
@@ -539,8 +540,8 @@ else
                 </button>
                 <div class="collapse navbar-collapse navbar-center" id="navbarNav">
                     <ul class="navbar-nav">
-                        <li class="nav-item"><a class="nav-link active" href="#organization-details" onclick="showSection('organization-details', event)">Details</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#volunteer-list" onclick="showSection('volunteer-list', event)">Volunteer List</a></li>
+                        <li class="nav-item"><a class="nav-link active" href="#organization-details" data-section="organization-details">Details</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#volunteer-list" data-section="volunteer-list">Volunteer List</a></li>
                     </ul>
                 </div>
             </div>
@@ -720,165 +721,193 @@ else
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
+    // Wrap your code in DOMContentLoaded to ensure the DOM is fully loaded before executing scripts
+    document.addEventListener('DOMContentLoaded', function () {
+        // Event listener for Invite Form submission
+        $("#inviteForm").submit(function (event) {
+            event.preventDefault(); // Prevent the default form submission
 
-    $("#inviteForm").submit(function (event) {
-        event.preventDefault(); // Prevent the default form submission
-
-        $.ajax({
-            type: "POST",
-            url: $(this).attr("action"), // Use the action URL defined in the form
-            data: $(this).serialize(), // Serialize the form data
-            success: function (response) {
-                if (response.success) {
-                    // Redirect to the provided URL in the response
-                    window.location.href = response.redirectUrl;
-                } else {
-                    // If an error occurred, display an alert or handle the error
-                    alert(response.message);
+            $.ajax({
+                type: "POST",
+                url: $(this).attr("action"), // Use the action URL defined in the form
+                data: $(this).serialize(), // Serialize the form data
+                success: function (response) {
+                    if (response.success) {
+                        // Redirect to the provided URL in the response
+                        window.location.href = response.redirectUrl;
+                    } else {
+                        // If an error occurred, display an alert or handle the error
+                        alert(response.message);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    // Handle any errors that occur during the AJAX request
+                    alert("An error occurred while sending the invitations.");
                 }
-            },
-            error: function (xhr, status, error) {
-                // Handle any errors that occur during the AJAX request
-                alert("An error occurred while sending the invitations.");
-            }
+            });
         });
-    });
 
- document.getElementById('submitAllRatings').addEventListener('click', function () {
-    var ratingsData = [];
-    var attendanceData = [];
-    var volunteerIds = [];
+        // Event listener for Submit All Ratings button
+        var submitAllRatingsButton = document.getElementById('submitAllRatings');
+        if (submitAllRatingsButton) {
+            submitAllRatingsButton.addEventListener('click', function () {
+                var ratingsData = [];
+                var attendanceData = [];
+                var volunteerIds = [];
 
-    // Loop through each volunteer and gather ratings and attendance data
-    document.querySelectorAll('.list-group-item').forEach(function (item) {
-        var volunteerId = item.getAttribute('data-volunteer-id');
-        var rating = document.querySelector(`input[name="rating_${volunteerId}"]:checked`);
-        var attendance = document.querySelector(`input[name="attendance_${volunteerId}"]:checked`);
+                // Loop through each volunteer and gather ratings and attendance data
+                document.querySelectorAll('.list-group-item').forEach(function (item) {
+                    var volunteerId = item.getAttribute('data-volunteer-id');
+                    var rating = document.querySelector(`input[name="rating_${volunteerId}"]:checked`);
+                    var attendance = document.querySelector(`input[name="attendance_${volunteerId}"]:checked`);
 
-        if (rating && attendance) {
-            volunteerIds.push(volunteerId);
-            ratingsData.push(rating.value);
-            attendanceData.push(attendance.value);
+                    if (rating && attendance) {
+                        volunteerIds.push(volunteerId);
+                        ratingsData.push(rating.value);
+                        attendanceData.push(attendance.value);
+                    }
+                });
+
+                // Check if data is complete
+                if (volunteerIds.length > 0) {
+                    // Send the data via AJAX
+                    $.ajax({
+                        url: '@Url.Action("SubmitRatings", "Organization")',
+                        type: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify({
+                            eventId: @Model.eventDetails.Event_Id,
+                            volunteerIds: volunteerIds,
+                            ratings: ratingsData,
+                            attendance: attendanceData // Added attendance data
+                        }),
+                        success: function (response) {
+                            if (response.success) {
+                                // Redirect to the Organization's EventsList after successful submission
+                                window.location.href = '@Url.Action("EventsList", "Organization")';
+                            } else {
+                                alert('Error: ' + response.message);
+                            }
+                        },
+                        error: function () {
+                            alert('Error submitting ratings.');
+                        }
+                    });
+                } else {
+                    alert('Please rate and select attendance for all volunteers.');
+                }
+            });
         }
-    });
 
-    // Check if data is complete
-    if (volunteerIds.length > 0) {
-        // Send the data via AJAX
-        $.ajax({
-            url: '@Url.Action("SubmitRatings", "Organization")',
-            type: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify({
-                eventId: @Model.eventDetails.Event_Id,
-                volunteerIds: volunteerIds,
-                ratings: ratingsData,
-                attendance: attendanceData // Added attendance data
-            }),
-            success: function (response) {
-                if (response.success) {
-                    // Redirect to the Organization's EventsList after successful submission
-                    window.location.href = '@Url.Action("EventsList", "Organization")';
-                } else {
-                    alert('Error: ' + response.message);
-                }
-            },
-            error: function () {
-                alert('Error submitting ratings.');
-            }
-        });
-    } else {
-        alert('Please rate and select attendance for all volunteers.');
-    }
-});
-
-    function showSection(sectionId, event) {
-        event.preventDefault();
-        // Hide all sections
-        document.querySelectorAll('.content-section').forEach(section => {
-            section.classList.remove('active');
-        });
-
-        // Show the selected section
-        document.getElementById(sectionId).classList.add('active');
+        // Event listeners for navigation links
         document.querySelectorAll('.nav-link').forEach(link => {
-            link.classList.remove('active');
-        });
-        event.target.classList.add('active');
-    }
-
-    // Add an event listener for the Accept button click
-    document.querySelectorAll('.confirm-form').forEach(form => {
-        form.addEventListener('submit', function (event) {
-            event.preventDefault(); // Prevent the default form submission
-
-            $.ajax({
-                url: $(this).attr('action'), // Use the action URL defined in the form
-                type: 'POST',
-                data: $(this).serialize(), // Serialize the form data
-                success: function (response) {
-                    if (response.success) {
-                        // Redirect to the provided URL in the response if successful
-                        if (response.redirectUrl) {
-                            window.location.href = response.redirectUrl;
-                        } else {
-                            alert('Confirmation successful, but no redirect URL was provided.');
-                        }
-                    } else {
-                        alert('Error: ' + response.message);
-                    }
-                },
-                error: function () {
-                    alert('Error confirming the volunteer.');
-                }
+            link.addEventListener('click', function (event) {
+                event.preventDefault();
+                const sectionId = this.getAttribute('data-section');
+                showSection(sectionId, this);
             });
         });
-    });
 
-    // Add an event listener for the Decline button click
-    document.querySelectorAll('.decline-form').forEach(form => {
-        form.addEventListener('submit', function (event) {
-            event.preventDefault(); // Prevent the default form submission
+        function showSection(sectionId, element) {
+            // Hide all sections
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
 
-            $.ajax({
-                url: $(this).attr('action'), // Use the action URL defined in the form
-                type: 'POST',
-                data: $(this).serialize(), // Serialize the form data
-                success: function (response) {
-                    if (response.success) {
-                        // Redirect to the provided URL in the response if successful
-                        if (response.redirectUrl) {
-                            window.location.href = response.redirectUrl;
+            // Show the selected section
+            var targetSection = document.getElementById(sectionId);
+            if (targetSection) {
+                targetSection.classList.add('active');
+            }
+
+            // Remove 'active' class from all nav links
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+
+            // Add 'active' class to the clicked nav link
+            element.classList.add('active');
+        }
+
+        // Add an event listener for the Accept button click
+        document.querySelectorAll('.confirm-form').forEach(form => {
+            form.addEventListener('submit', function (event) {
+                event.preventDefault(); // Prevent the default form submission
+
+                $.ajax({
+                    url: $(this).attr('action'), // Use the action URL defined in the form
+                    type: 'POST',
+                    data: $(this).serialize(), // Serialize the form data
+                    success: function (response) {
+                        if (response.success) {
+                            // Redirect to the provided URL in the response if successful
+                            if (response.redirectUrl) {
+                                window.location.href = response.redirectUrl;
+                            } else {
+                                alert('Confirmation successful, but no redirect URL was provided.');
+                            }
                         } else {
-                            alert('Decline successful, but no redirect URL was provided.');
+                            alert('Error: ' + response.message);
                         }
-                    } else {
-                        alert('Error: ' + response.message);
+                    },
+                    error: function () {
+                        alert('Error confirming the volunteer.');
                     }
-                },
-                error: function () {
-                    alert('Error declining the volunteer.');
-                }
+                });
             });
         });
-    });
+
+        // Add an event listener for the Decline button click
+        document.querySelectorAll('.decline-form').forEach(form => {
+            form.addEventListener('submit', function (event) {
+                event.preventDefault(); // Prevent the default form submission
+
+                $.ajax({
+                    url: $(this).attr('action'), // Use the action URL defined in the form
+                    type: 'POST',
+                    data: $(this).serialize(), // Serialize the form data
+                    success: function (response) {
+                        if (response.success) {
+                            // Redirect to the provided URL in the response if successful
+                            if (response.redirectUrl) {
+                                window.location.href = response.redirectUrl;
+                            } else {
+                                alert('Decline successful, but no redirect URL was provided.');
+                            }
+                        } else {
+                            alert('Error: ' + response.message);
+                        }
+                    },
+                    error: function () {
+                        alert('Error declining the volunteer.');
+                    }
+                });
+            });
+        });
 
         // Real-time validation for date and time inputs
-        document.getElementById('EditEvent_dateStart').addEventListener('input', function () {
-            const dateStart = new Date(this.value);
-            const now = new Date();
-            if (dateStart < now) {
-                document.getElementById('EditEvent_dateStart_error').innerText = 'Start date and time must be in the future.';
-                this.value = '';
-            } else {
-                document.getElementById('EditEvent_dateStart_error').innerText = '';
-            }
-            validateEditEventDuration();
-        });
+        var editEventDateStart = document.getElementById('EditEvent_dateStart');
+        var editEventDateEnd = document.getElementById('EditEvent_dateEnd');
 
-        document.getElementById('EditEvent_dateEnd').addEventListener('input', function () {
-            validateEditEventDuration();
-        });
+        if (editEventDateStart) {
+            editEventDateStart.addEventListener('input', function () {
+                const dateStart = new Date(this.value);
+                const now = new Date();
+                if (dateStart < now) {
+                    document.getElementById('EditEvent_dateStart_error').innerText = 'Start date and time must be in the future.';
+                    this.value = '';
+                } else {
+                    document.getElementById('EditEvent_dateStart_error').innerText = '';
+                }
+                validateEditEventDuration();
+            });
+        }
+
+        if (editEventDateEnd) {
+            editEventDateEnd.addEventListener('input', function () {
+                validateEditEventDuration();
+            });
+        }
 
         function validateEditEventDuration() {
             const dateStart = new Date(document.getElementById('EditEvent_dateStart').value);
@@ -920,10 +949,22 @@ else
             });
         }
 
-        onlyNumbers(document.getElementById('EditEvent_targetAmount'), 'EditEvent_targetAmount_error');
-        onlyNumbers(document.getElementById('EditEvent_maxVolunteer'), 'EditEvent_maxVolunteer_error');
+        var editEventTargetAmount = document.getElementById('EditEvent_targetAmount');
+        var editEventMaxVolunteer = document.getElementById('EditEvent_maxVolunteer');
+
+        if (editEventTargetAmount) {
+            onlyNumbers(editEventTargetAmount, 'EditEvent_targetAmount_error');
+        }
+
+        if (editEventMaxVolunteer) {
+            onlyNumbers(editEventMaxVolunteer, 'EditEvent_maxVolunteer_error');
+        }
+
+        // Update total volunteers on page load
+        updateTotalVolunteers();
     });
 
+    // Functions that don't depend on the DOM being fully loaded can be outside
     function toggleTargetAmount(checkbox) {
         const targetAmountInput = document.getElementById('EditEvent_targetAmount');
         if (checkbox.checked) {
@@ -1000,12 +1041,16 @@ else
 
         updateTotalVolunteers();
     }
+
     function updateTotalVolunteers() {
         let totalVolunteers = 0;
         document.querySelectorAll('.skill-count').forEach(function (input) {
             totalVolunteers += parseInt(input.value) || 0;
         });
-        document.getElementById('totalVolunteers').value = totalVolunteers;
+        const totalVolunteersInput = document.getElementById('totalVolunteers');
+        if (totalVolunteersInput) {
+            totalVolunteersInput.value = totalVolunteers;
+        }
     }
 
     function previewImages() {

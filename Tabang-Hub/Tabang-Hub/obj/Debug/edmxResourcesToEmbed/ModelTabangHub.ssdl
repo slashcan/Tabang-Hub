@@ -205,6 +205,7 @@
       <PropertyRef Name="orgUserDonatedId" />
     </Key>
     <Property Name="orgUserDonatedId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="referenceNum" Type="nvarchar" MaxLength="255" />
     <Property Name="eventId" Type="int" />
     <Property Name="userId" Type="int" />
     <Property Name="amount" Type="decimal" Precision="10" Scale="2" />

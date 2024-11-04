@@ -482,7 +482,8 @@ namespace Tabang_Hub.Controllers
                     return Json(new { success = false, message = "Donation amount must be greater than zero." });
                 }
 
-                var checkoutUrl = await CreatePayMongoCheckoutSession(amount, "Donation for event #" + eventId, eventId);
+                var referenceNumber = Guid.NewGuid().ToString();
+                var checkoutUrl = await CreatePayMongoCheckoutSession(amount, "Donation for event #" + eventId + " - Reference No. " + referenceNumber, eventId, referenceNumber);
 
                 if (checkoutUrl != null)
                 {
@@ -500,8 +501,8 @@ namespace Tabang_Hub.Controllers
                 return Json(new { success = false, message = "An error occurred. Please try again later." });
             }
         }
-        private async Task<string> CreatePayMongoCheckoutSession(decimal amount, string description, int eventId)
-        {
+        private async Task<string> CreatePayMongoCheckoutSession(decimal amount, string description, int eventId, string referencereferenceNumber)
+        {          
             var client = new RestClient("https://api.paymongo.com/v1/checkout_sessions");
             var request = new RestRequest();
             request.Method = Method.Post;
@@ -520,7 +521,7 @@ namespace Tabang_Hub.Controllers
                         line_items = new[]
                         {
                     new
-                    {
+                    {                       
                         amount = (int)(amount * 100), // Amount in centavos
                         currency = "PHP",
                         name = "Donation",
@@ -533,7 +534,7 @@ namespace Tabang_Hub.Controllers
                         show_description = true,
                         description = description,
                         cancel_url = Url.Action("PaymentFailed", "Volunteer", new { eventId = eventId, amount = amount }, Request.Url.Scheme),
-                        success_url = Url.Action("PaymentSuccess", "Volunteer", new { eventId = eventId, amount = amount }, Request.Url.Scheme) // Passing eventId and amount
+                        success_url = Url.Action("PaymentSuccess", "Volunteer", new { eventId = eventId, amount = amount, referenceNumber = referencereferenceNumber }, Request.Url.Scheme) // Passing eventId and amount                       
                     }
                 }
             };
@@ -632,11 +633,12 @@ namespace Tabang_Hub.Controllers
             }
             return false; // Signature is invalid
         }
-        public ActionResult PaymentSuccess(int eventId, decimal amount)
+        public ActionResult PaymentSuccess(int eventId, decimal amount, string referenceNumber)
         {
             // Save the donation to the database
             var donation = new UserDonated
             {
+                referenceNum = referenceNumber,
                 userId = UserId, // User who made the donation
                 eventId = eventId,
                 amount = amount,

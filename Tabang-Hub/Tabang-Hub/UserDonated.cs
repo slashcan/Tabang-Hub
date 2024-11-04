@@ -15,6 +15,7 @@ namespace Tabang_Hub
     public partial class UserDonated
     {
         public int orgUserDonatedId { get; set; }
+        public string referenceNum { get; set; }
         public Nullable<int> eventId { get; set; }
         public Nullable<int> userId { get; set; }
         public Nullable<decimal> amount { get; set; }

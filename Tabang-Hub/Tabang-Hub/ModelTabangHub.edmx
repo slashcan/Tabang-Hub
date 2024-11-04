@@ -210,6 +210,7 @@
             <PropertyRef Name="orgUserDonatedId" />
           </Key>
           <Property Name="orgUserDonatedId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="referenceNum" Type="nvarchar" MaxLength="255" />
           <Property Name="eventId" Type="int" />
           <Property Name="userId" Type="int" />
           <Property Name="amount" Type="decimal" Precision="10" Scale="2" />
@@ -937,6 +938,9 @@ FROM [dbo].[vw_VolunteerSkills] AS [vw_VolunteerSkills]</DefiningQuery>
             <Parameter Name="eventId" Mode="In" Type="Int32" />
             <Parameter Name="skillId" Mode="In" Type="Int32" />
           </FunctionImport>
+          <FunctionImport Name="sp_GetUserDonatedInformations" ReturnType="Collection(TabangHubModel.sp_GetUserDonatedInformations_Result)">
+          <Parameter Name="userId" Mode="In" Type="Int32" />
+          </FunctionImport>
           <EntitySet Name="GroupChat" EntityType="TabangHubModel.GroupChat" />
           <EntitySet Name="GroupChatHistory" EntityType="TabangHubModel.GroupChatHistory" />
           <EntitySet Name="GroupMessages" EntityType="TabangHubModel.GroupMessages" />
@@ -1057,9 +1061,6 @@ FROM [dbo].[vw_VolunteerSkills] AS [vw_VolunteerSkills]</DefiningQuery>
             <End Role="UserAccount" EntitySet="UserAccount" />
             <End Role="Volunteers" EntitySet="Volunteers" />
           </AssociationSet>
-          <FunctionImport Name="sp_GetUserDonatedInformations" ReturnType="Collection(TabangHubModel.sp_GetUserDonatedInformations_Result)">
-            <Parameter Name="userId" Mode="In" Type="Int32" />
-          </FunctionImport>
           </EntityContainer>
         <ComplexType Name="sp_GetSkills_Result">
           <Property Type="Int32" Name="skillId" Nullable="false" />
@@ -1126,6 +1127,21 @@ FROM [dbo].[vw_VolunteerSkills] AS [vw_VolunteerSkills]</DefiningQuery>
           <Property Type="DateTime" Name="appliedAt" Nullable="true" />
           <Property Type="DateTime" Name="dateStart" Nullable="true" Precision="23" />
           <Property Type="DateTime" Name="dateEnd" Nullable="true" Precision="23" />
+        </ComplexType>
+        <ComplexType Name="sp_GetUserDonatedInformations_Result">
+          <Property Type="Int32" Name="orgUserDonatedId" Nullable="false" />
+          <Property Type="Int32" Name="eventId" Nullable="false" />
+          <Property Type="String" Name="eventTitle" Nullable="true" MaxLength="255" />
+          <Property Type="String" Name="eventDescription" Nullable="true" MaxLength="Max" />
+          <Property Type="Decimal" Name="targetAmount" Nullable="true" Precision="10" Scale="2" />
+          <Property Type="Int32" Name="maxVolunteer" Nullable="true" />
+          <Property Type="DateTime" Name="dateStart" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="dateEnd" Nullable="true" Precision="23" />
+          <Property Type="String" Name="location" Nullable="true" MaxLength="255" />
+          <Property Type="String" Name="eventImage" Nullable="true" MaxLength="255" />
+          <Property Type="Decimal" Name="amount" Nullable="true" Precision="10" Scale="2" />
+          <Property Type="DateTime" Name="donatedAt" Nullable="true" Precision="23" />
+          <Property Type="Int32" Name="Status" Nullable="true" />
         </ComplexType>
         <EntityType Name="GroupChat">
           <Key>
@@ -1366,6 +1382,7 @@ FROM [dbo].[vw_VolunteerSkills] AS [vw_VolunteerSkills]</DefiningQuery>
             <PropertyRef Name="orgUserDonatedId" />
           </Key>
           <Property Name="orgUserDonatedId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="referenceNum" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="eventId" Type="Int32" />
           <Property Name="userId" Type="Int32" />
           <Property Name="amount" Type="Decimal" Precision="10" Scale="2" />
@@ -1809,21 +1826,6 @@ FROM [dbo].[vw_VolunteerSkills] AS [vw_VolunteerSkills]</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <ComplexType Name="sp_GetUserDonatedInformations_Result">
-          <Property Type="Int32" Name="orgUserDonatedId" Nullable="false" />
-          <Property Type="Int32" Name="eventId" Nullable="false" />
-          <Property Type="String" Name="eventTitle" Nullable="true" MaxLength="255" />
-          <Property Type="String" Name="eventDescription" Nullable="true" MaxLength="Max" />
-          <Property Type="Decimal" Name="targetAmount" Nullable="true" Precision="10" Scale="2" />
-          <Property Type="Int32" Name="maxVolunteer" Nullable="true" />
-          <Property Type="DateTime" Name="dateStart" Nullable="true" Precision="23" />
-          <Property Type="DateTime" Name="dateEnd" Nullable="true" Precision="23" />
-          <Property Type="String" Name="location" Nullable="true" MaxLength="255" />
-          <Property Type="String" Name="eventImage" Nullable="true" MaxLength="255" />
-          <Property Type="Decimal" Name="amount" Nullable="true" Precision="10" Scale="2" />
-          <Property Type="DateTime" Name="donatedAt" Nullable="true" Precision="23" />
-          <Property Type="Int32" Name="Status" Nullable="true" />
-        </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1927,6 +1929,25 @@ FROM [dbo].[vw_VolunteerSkills] AS [vw_VolunteerSkills]</DefiningQuery>
                 <ScalarProperty Name="appliedAt" ColumnName="appliedAt" />
                 <ScalarProperty Name="dateStart" ColumnName="dateStart" />
                 <ScalarProperty Name="dateEnd" ColumnName="dateEnd" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="sp_GetUserDonatedInformations" FunctionName="TabangHubModel.Store.sp_GetUserDonatedInformations">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="TabangHubModel.sp_GetUserDonatedInformations_Result">
+                <ScalarProperty Name="orgUserDonatedId" ColumnName="orgUserDonatedId" />
+                <ScalarProperty Name="eventId" ColumnName="eventId" />
+                <ScalarProperty Name="eventTitle" ColumnName="eventTitle" />
+                <ScalarProperty Name="eventDescription" ColumnName="eventDescription" />
+                <ScalarProperty Name="targetAmount" ColumnName="targetAmount" />
+                <ScalarProperty Name="maxVolunteer" ColumnName="maxVolunteer" />
+                <ScalarProperty Name="dateStart" ColumnName="dateStart" />
+                <ScalarProperty Name="dateEnd" ColumnName="dateEnd" />
+                <ScalarProperty Name="location" ColumnName="location" />
+                <ScalarProperty Name="eventImage" ColumnName="eventImage" />
+                <ScalarProperty Name="amount" ColumnName="amount" />
+                <ScalarProperty Name="donatedAt" ColumnName="donatedAt" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
@@ -2157,6 +2178,7 @@ FROM [dbo].[vw_VolunteerSkills] AS [vw_VolunteerSkills]</DefiningQuery>
                 <ScalarProperty Name="amount" ColumnName="amount" />
                 <ScalarProperty Name="userId" ColumnName="userId" />
                 <ScalarProperty Name="eventId" ColumnName="eventId" />
+                <ScalarProperty Name="referenceNum" ColumnName="referenceNum" />
                 <ScalarProperty Name="orgUserDonatedId" ColumnName="orgUserDonatedId" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -2324,25 +2346,6 @@ FROM [dbo].[vw_VolunteerSkills] AS [vw_VolunteerSkills]</DefiningQuery>
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="sp_GetUserDonatedInformations" FunctionName="TabangHubModel.Store.sp_GetUserDonatedInformations">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="TabangHubModel.sp_GetUserDonatedInformations_Result">
-                <ScalarProperty Name="orgUserDonatedId" ColumnName="orgUserDonatedId" />
-                <ScalarProperty Name="eventId" ColumnName="eventId" />
-                <ScalarProperty Name="eventTitle" ColumnName="eventTitle" />
-                <ScalarProperty Name="eventDescription" ColumnName="eventDescription" />
-                <ScalarProperty Name="targetAmount" ColumnName="targetAmount" />
-                <ScalarProperty Name="maxVolunteer" ColumnName="maxVolunteer" />
-                <ScalarProperty Name="dateStart" ColumnName="dateStart" />
-                <ScalarProperty Name="dateEnd" ColumnName="dateEnd" />
-                <ScalarProperty Name="location" ColumnName="location" />
-                <ScalarProperty Name="eventImage" ColumnName="eventImage" />
-                <ScalarProperty Name="amount" ColumnName="amount" />
-                <ScalarProperty Name="donatedAt" ColumnName="donatedAt" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
