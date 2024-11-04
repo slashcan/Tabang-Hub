@@ -591,7 +591,7 @@ namespace Tabang_Hub.Controllers
                 var donation = db.UserDonated.Find(donationId);
                 if (donation != null)
                 {
-                    donation.Status = "Paid";
+                    donation.Status = 1;
                     db.SaveChanges();
                 }
             }

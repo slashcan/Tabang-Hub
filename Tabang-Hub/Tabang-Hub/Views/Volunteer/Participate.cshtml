@@ -121,11 +121,26 @@
 </nav>
 
 <div id="participatingSection" class="content-section @(activeSection == "participatingSection" ? "active" : "")">
-    @if (Model.orgEvents != null && Model.orgEvents.Any())
-    {
-        foreach (var org in Model.orgEvents)
+    <div id="ongoingEventsContainer">
+        @if (Model.orgEvents != null && Model.orgEvents.Any())
         {
-            <div class="container mt-5">
+            <!-- Dropdown for Ongoing Events -->
+            <div class="mb-3">
+                <div class="col-11 d-flex justify-content-end">
+                    <div class="form-group mb-0">
+                        <select class="form-control" id="ongoingEventFilter" style="width: auto;" onchange="filterOngoingEvents()">
+                            <option value="startSoonest">Earliest Start Date</option>
+                            <option value="longestDuration">Longest Duration</option>
+                            <option value="shortestDuration">Shortest Duration</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            foreach (var org in Model.orgEvents)
+            {
+            <div class="container mt-5 event-card"
+                 data-start-date="@org.dateStart"
+                 data-end-date="@org.dateEnd">
                 <div class="card custom-card shadow-lg">
                     <div class="row g-0">
                         @{
@@ -157,30 +172,46 @@
                     </div>
                 </div>
             </div>
+            }
         }
-    }
-    else
-    {
-        <div class="container mt-5">
-            <div class="card custom-card-no-content">
-                <div class="card-body">
-                    <div class="mt-2">
-                        <div class="center-message">
-                            You have not joined any events yet.
+        else
+        {
+            <div class="container mt-5">
+                <div class="card custom-card-no-content">
+                    <div class="card-body">
+                        <div class="mt-2">
+                            <div class="center-message">
+                                You have not joined any events yet.
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    }
+        }
+    </div>
 </div>
 
 <div id="pendingSection" class="content-section @(activeSection == "pendingSection" ? "active" : "")">
-    @if (Model.pendingOrgDetails != null && Model.pendingOrgDetails.Any())
-    {
-        foreach (var pendingOrg in Model.pendingOrgDetails)
+    <div id="pendingEventsContainer">
+        @if (Model.pendingOrgDetails != null && Model.pendingOrgDetails.Any())
         {
-            <div class="container mt-5">
+            <!-- Dropdown for Pending Requests -->
+            <div class="mb-3">
+                <div class="col-11 d-flex justify-content-end">
+                    <div class="form-group mb-0">
+                        <select class="form-control" id="pendingEventFilter" style="width: auto;" onchange="filterPendingEvents()">
+                            <option value="startSoonest">Earliest Start Date</option>
+                            <option value="longestDuration">Longest Duration</option>
+                            <option value="shortestDuration">Shortest Duration</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            foreach (var pendingOrg in Model.pendingOrgDetails)
+            {
+            <div class="container mt-5 event-card"
+                 data-start-date="@pendingOrg.dateStart"
+                 data-end-date="@pendingOrg.dateEnd">
                 <div class="card custom-card shadow-lg">
                     <div class="row g-0">
                         @{
@@ -212,126 +243,203 @@
                     </div>
                 </div>
             </div>
+            }
         }
-    }
-    else
-    {
-        <div class="container mt-5">
-            <div class="card custom-card-no-content">
-                <div class="card-body">
-                    <div class="mt-2">
-                        <div class="center-message">
-                            You have no pending requests.
+        else
+        {
+            <div class="container mt-5">
+                <div class="card custom-card-no-content">
+                    <div class="card-body">
+                        <div class="mt-2">
+                            <div class="center-message">
+                                You have no pending requests.
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    }
+        }
+    </div>
 </div>
 
 <div id="historySection" class="content-section @(activeSection == "historySection" ? "active" : "")">
-    @if (Model.volunteersHistories != null && Model.volunteersHistories.Any())
-    {
-        <div class="mb-3">
-            <div class="col-11 d-flex justify-content-end">
-                <div class="form-group mb-0">
-                    <select class="form-control" id="eventFilter" style="width: auto;" onchange="filterEvents()">
-                        <option value="recent">Sort To Newest</option>
-                        <option value="past">Sort To Oldest</option>
-                        <option value="highestRating">Highest Rating</option>
-                        <option value="lowestRating">Lowest Rating</option>
-                        <option value="longestDuration">Longest Duration</option>
-                        <option value="shortestDuration">Shortest Duration</option>
-                    </select>
+    <div id="historyEventsContainer">
+        @if (Model.volunteersHistories != null && Model.volunteersHistories.Any())
+        {
+            <div class="mb-3">
+                <div class="col-11 d-flex justify-content-end">
+                    <div class="form-group mb-0">
+                        <select class="form-control" id="eventFilter" style="width: auto;" onchange="filterEvents()">
+                            <option value="recent">Sort To Newest</option>
+                            <option value="past">Sort To Oldest</option>
+                            <option value="highestRating">Highest Rating</option>
+                            <option value="lowestRating">Lowest Rating</option>
+                            <option value="longestDuration">Longest Duration</option>
+                            <option value="shortestDuration">Shortest Duration</option>
+                        </select>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div id="eventContainer">
-            @foreach (var vh in Model.volunteersHistories)
-            {
-                <div class="container mt-5 event-card"
-                     data-rating="@Model.rating.Where(m => m.userId == vh.userId && m.skillId == vh.skillId).Select(m => m.rate).FirstOrDefault()"
-                     data-start-date="@vh.dateStart"
-                     data-end-date="@vh.dateEnd">
-                    <div class="card custom-card shadow-lg">
-                        <div class="row g-0">
-                            @{
-                                var imgs = Model.detailsEventImage.Where(m => m.eventId == vh.eventId).Select(m => m.eventImage).FirstOrDefault();
-                            }
-                            <div class="col-12 col-md-4">
-                                <div class="image-container">
-                                    <img src="@Url.Content("~/Content/Events/" + imgs)" class="img-fluid rounded" alt="Event Image">
+            <div id="eventContainer">
+                @foreach (var vh in Model.volunteersHistories)
+                {
+                    <div class="container mt-5 event-card"
+                         data-rating="@Model.rating.Where(m => m.userId == vh.userId && m.skillId == vh.skillId && m.eventId == vh.eventId).Select(m => m.rate).FirstOrDefault()"
+                         data-start-date="@vh.dateStart"
+                         data-end-date="@vh.dateEnd">
+                        <div class="card custom-card shadow-lg">
+                            <div class="row g-0">
+                                @{
+                                    var imgs = Model.detailsEventImage.Where(m => m.eventId == vh.eventId).Select(m => m.eventImage).FirstOrDefault();
+                                }
+                                <div class="col-12 col-md-4">
+                                    <div class="image-container">
+                                        <img src="@Url.Content("~/Content/Events/" + imgs)" class="img-fluid rounded" alt="Event Image">
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-12 col-md-8 d-flex align-items-center">
-                                <div class="card-body">
-                                    <h5 class="card-title fw-bold">@vh.eventTitle</h5>
-                                    <p class="card-text">
-                                        <i class="bi bi-geo-alt-fill"></i> @vh.location<br>
-                                        @vh.eventDescription
-                                    </p>
-                                    <p class="card-text">
-                                        <i class="bi bi-calendar-event-fill"></i> Start Date: @vh.dateStart<br>
-                                        <i class="bi bi-calendar-event-fill"></i> End Date: @vh.dateEnd
-                                    </p>
-                                    <div class="d-flex align-items-center">
-                                        <div>
-                                            Skill Utilized:
-                                            <span class="badge text-white border">@vh.skillName</span>
-                                        </div>
-                                        <div class="ml-auto event-rating mt-1" style="margin-left: 15px; color: #ffa500;">
-                                            @{
-                                                var rating = Model.rating.Where(m => m.userId == vh.userId && m.skillId == vh.skillId).Select(m => m.rate).FirstOrDefault();
-                                            }
-                                            @if (rating.HasValue)
-                                            {
-                                                <span class="rate-number">@rating.Value &nbsp;</span>
-                                                for (int i = 0; i < rating.Value; i++)
-                                                {
-                                                    <span>★</span>
+                                <div class="col-12 col-md-8 d-flex align-items-center">
+                                    <div class="card-body">
+                                        <h5 class="card-title fw-bold">@vh.eventTitle</h5>
+                                        <p class="card-text">
+                                            <i class="bi bi-geo-alt-fill"></i> @vh.location<br>
+                                            @vh.eventDescription
+                                        </p>
+                                        <p class="card-text">
+                                            <i class="bi bi-calendar-event-fill"></i> Start Date: @vh.dateStart<br>
+                                            <i class="bi bi-calendar-event-fill"></i> End Date: @vh.dateEnd
+                                        </p>
+                                        <div class="d-flex align-items-center">
+                                            <div>
+                                                Skill Utilized:
+                                                <span class="badge text-white border">@vh.skillName</span>
+                                            </div>
+                                            <div class="ml-auto event-rating mt-1" style="margin-left: 15px; color: #ffa500;">
+                                                @{
+                                                    var rating = Model.rating.Where(m => m.userId == vh.userId && m.skillId == vh.skillId).Select(m => m.rate).FirstOrDefault();
                                                 }
-                                                for (int i = rating.Value; i < 5; i++)
+                                                @if (rating.HasValue)
                                                 {
-                                                    <span>☆</span>
+                                                    <span class="rate-number">@rating.Value &nbsp;</span>
+                                                    for (int i = 0; i < rating.Value; i++)
+                                                    {
+                                                        <span>★</span>
+                                                    }
+                                                    for (int i = rating.Value; i < 5; i++)
+                                                    {
+                                                        <span>☆</span>
+                                                    }
                                                 }
-                                            }
-                                            else
-                                            {
-                                                <span>No Rating</span>
-                                            }
+                                                else
+                                                {
+                                                    <span>No Rating</span>
+                                                }
+                                            </div>
+                                            <hr />
                                         </div>
-                                        <hr />
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            }
-        </div>
-    }
-    else
-    {
-        <div class="container mt-5">
-            <div class="card custom-card-no-content">
-                <div class="card-body">
-                    <div class="mt-2">
-                        <div class="center-message">
-                            You have no Event History.
+                }
+            </div>
+        }
+        else
+        {
+            <div class="container mt-5">
+                <div class="card custom-card-no-content">
+                    <div class="card-body">
+                        <div class="mt-2">
+                            <div class="center-message">
+                                You have no Event History.
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    }
+        }
+    </div>
 </div>
-
 <br />
 
-<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-<script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script>
+
+    // Function to filter and sort only the Ongoing Events section
+    function filterOngoingEvents() {
+        const filter = document.getElementById('ongoingEventFilter').value;
+        const eventCards = document.querySelectorAll('#ongoingEventsContainer .event-card');
+
+        // Sorting logic specific to the ongoing events section
+        sortOngoingEvents(eventCards, filter);
+    }
+
+    // Function to filter and sort only the Pending Requests section
+    function filterPendingEvents() {
+        const filter = document.getElementById('pendingEventFilter').value;
+        const eventCards = document.querySelectorAll('#pendingEventsContainer .event-card');
+
+        // Sorting logic specific to the pending requests section
+        sortPendingEvents(eventCards, filter);
+    }
+
+    // Sorting function for Ongoing Events
+    function sortOngoingEvents(eventCards, filter) {
+        const container = document.getElementById('ongoingEventsContainer');
+        const cardsArray = Array.from(eventCards);
+
+        cardsArray.sort((a, b) => {
+            let aValue, bValue;
+
+            switch (filter) {
+                case 'startSoonest':
+                    aValue = new Date(a.getAttribute('data-start-date'));
+                    bValue = new Date(b.getAttribute('data-start-date'));
+                    return aValue - bValue;
+                case 'longestDuration':
+                    const aDuration = new Date(a.getAttribute('data-end-date')) - new Date(a.getAttribute('data-start-date'));
+                    const bDuration = new Date(b.getAttribute('data-end-date')) - new Date(b.getAttribute('data-start-date'));
+                    return bDuration - aDuration;
+                case 'shortestDuration':
+                    const aDurationShort = new Date(a.getAttribute('data-end-date')) - new Date(a.getAttribute('data-start-date'));
+                    const bDurationShort = new Date(b.getAttribute('data-end-date')) - new Date(b.getAttribute('data-start-date'));
+                    return aDurationShort - bDurationShort;
+            }
+        });
+
+        // Re-arrange sorted elements in the ongoing events container
+        cardsArray.forEach(card => container.appendChild(card));
+    }
+
+    // Sorting function for Pending Requests
+    function sortPendingEvents(eventCards, filter) {
+        const container = document.getElementById('pendingEventsContainer');
+        const cardsArray = Array.from(eventCards);
+
+        cardsArray.sort((a, b) => {
+            let aValue, bValue;
+
+            switch (filter) {
+                case 'startSoonest':
+                    aValue = new Date(a.getAttribute('data-start-date'));
+                    bValue = new Date(b.getAttribute('data-start-date'));
+                    return aValue - bValue;
+                case 'longestDuration':
+                    const aDuration = new Date(a.getAttribute('data-end-date')) - new Date(a.getAttribute('data-start-date'));
+                    const bDuration = new Date(b.getAttribute('data-end-date')) - new Date(b.getAttribute('data-start-date'));
+                    return bDuration - aDuration;
+                case 'shortestDuration':
+                    const aDurationShort = new Date(a.getAttribute('data-end-date')) - new Date(a.getAttribute('data-start-date'));
+                    const bDurationShort = new Date(b.getAttribute('data-end-date')) - new Date(b.getAttribute('data-start-date'));
+                    return aDurationShort - bDurationShort;
+            }
+        });
+
+        // Re-arrange sorted elements in the pending requests container
+        cardsArray.forEach(card => container.appendChild(card));
+    }
+
     function showSection(sectionId, element) {
         $('.content-section').removeClass('active');
         $('#' + sectionId).addClass('active');
@@ -412,7 +520,7 @@
                                 icon: 'success',
                                 confirmButtonText: 'OK'
                             }).then(() => {
-                                location.reload();
+                                window.location.href = '@Url.Action("Participate", "Volunteer")?section=pendingSection';
                             });
                         }
                     },
@@ -431,7 +539,7 @@
 
     function filterEvents() {
         const filter = document.getElementById('eventFilter').value;
-        const eventCards = document.querySelectorAll('.event-card');
+        const eventCards = document.querySelectorAll('#historyEventsContainer .event-card');
 
         eventCards.forEach(card => {
             const rating = parseInt(card.getAttribute('data-rating')) || 0;
@@ -519,4 +627,4 @@
             });
         });
     });
-</script>
+    </script>

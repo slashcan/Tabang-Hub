@@ -14,7 +14,7 @@ namespace Tabang_Hub
     public partial class sp_GetUserDonatedInformations_Result
     {
         public int orgUserDonatedId { get; set; }
-        public Nullable<int> eventId { get; set; }
+        public int eventId { get; set; }
         public string eventTitle { get; set; }
         public string eventDescription { get; set; }
         public Nullable<decimal> targetAmount { get; set; }
@@ -25,6 +25,6 @@ namespace Tabang_Hub
         public string eventImage { get; set; }
         public Nullable<decimal> amount { get; set; }
         public Nullable<System.DateTime> donatedAt { get; set; }
-        public string Status { get; set; }
+        public Nullable<int> Status { get; set; }
     }
 }

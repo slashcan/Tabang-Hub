@@ -201,7 +201,7 @@
 
             <section class="section-padding">
                 <div class="container">
-                    <div class="row">
+                    <div class="row" id="eventsContainer">
 
                         <div class="col-lg-10 col-12 text-center mx-auto">
                             <h2 class="mb-5">Welcome to Tabang Hub Volunteering Community</h2>
@@ -209,10 +209,10 @@
 
                         @foreach (var evt in Model.listOfEvents.Where(m => m.End_Date >= DateTime.Now))
                         {
-                            <div class="col-lg-4 col-md-6 mt-2 col-12 mb-4 mb-lg-0">
+                            <div class="col-lg-4 col-md-6 mt-2 col-12 mb-4 mb-lg-0 event-card">
                                 <div class="custom-block-wrap">
                                     @*<img src="~/Content/images2/causes/Basak.jpg" class="custom-block-image img-fluid" alt="">*@
-                                    @{ 
+                                    @{
                                         var imgs = Model.detailsEventImage.Where(m => m.eventId == evt.Event_Id).Select(m => m.eventImage).FirstOrDefault();
                                     }
                                     <img src="@Url.Content("~/Content/Events/" + imgs)" class="custom-block-image img-fluid" alt="">
@@ -274,6 +274,21 @@
                             </div>
                         }
                     </div>
+                    <!-- Pagination Controls -->
+                    <nav aria-label="Page navigation" class="mt-4" id="eventsContainer-pagination">
+                        <ul class="pagination justify-content-center">
+                            <li class="page-item">
+                                <button class="page-link" onclick="prevPage('eventsContainer')" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </button>
+                            </li>
+                            <li class="page-item">
+                                <button class="page-link" onclick="nextPage('eventsContainer')" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </button>
+                            </li>
+                        </ul>
+                    </nav>
                 </div>
             </section>
 
@@ -347,46 +362,6 @@
                     </div>
                 </div>
             </section>
-
-
-            @*<section class="about-section section-padding">
-                <div class="container">
-                    <div class="row">
-
-                        <div class="col-lg-6 col-md-5 col-12">
-                            <img src="~/Content/images2/portrait-volunteer-who-organized-donations-charity.jpg" class="about-image ms-lg-auto bg-light shadow-lg img-fluid" alt="">
-                        </div>
-
-                        <div class="col-lg-5 col-md-7 col-12">
-                            <div class="custom-text-block">
-                                <h2 class="mb-0">Sandy Chan</h2>
-
-                                <p class="text-muted mb-lg-4 mb-md-4">Co-Founding Partner</p>
-
-                                <p>Lorem Ipsum dolor sit amet, consectetur adipsicing kengan omeg kohm tokito Professional charity theme based</p>
-
-                                <p>You are not allowed to redistribute this template ZIP file on any other template collection website. Please contact TemplateMo for more information.</p>
-
-                                <ul class="social-icon mt-4">
-                                    <li class="social-icon-item">
-                                        <a href="#" class="social-icon-link bi-twitter"></a>
-                                    </li>
-
-                                    <li class="social-icon-item">
-                                        <a href="#" class="social-icon-link bi-facebook"></a>
-                                    </li>
-
-                                    <li class="social-icon-item">
-                                        <a href="#" class="social-icon-link bi-instagram"></a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-            </section>*@
-
             <!-- Anhi nato ibutang ang About sa Member, Solo picture -->
             <section class="cta-section section-padding section-padding">
                 <div class="container">
@@ -422,9 +397,54 @@
         <script src="~/Content/Js2/Template-js/custom.js"></script>
 
         <script>
+
+            const pageSize = 9; // Number of items per page
+            let currentPage = 1;
+
+            function showPage(eventsContainerId) {
+                const cards = document.querySelectorAll(`#${eventsContainerId} .event-card`);
+                const totalPages = Math.ceil(cards.length / pageSize);
+
+                // Display only the events for the current page
+                cards.forEach((card, index) => {
+                    card.style.display = (index >= (currentPage - 1) * pageSize && index < currentPage * pageSize) ? 'block' : 'none';
+                });
+
+                // Toggle the disabled state of pagination buttons
+                const prevButton = document.querySelector(`#${eventsContainerId}-pagination .page-link[aria-label="Previous"]`).parentElement;
+                const nextButton = document.querySelector(`#${eventsContainerId}-pagination .page-link[aria-label="Next"]`).parentElement;
+
+                prevButton.classList.toggle('disabled', currentPage === 1);
+                nextButton.classList.toggle('disabled', currentPage === totalPages);
+            }
+
+            function nextPage(eventsContainerId) {
+                const cards = document.querySelectorAll(`#${eventsContainerId} .event-card`);
+                const totalPages = Math.ceil(cards.length / pageSize);
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    showPage(eventsContainerId);
+                    // Scroll to the events section only when the next button is clicked
+                    document.getElementById(eventsContainerId).scrollIntoView({ behavior: 'smooth' });
+                }
+            }
+
+            function prevPage(eventsContainerId) {
+                if (currentPage > 1) {
+                    currentPage--;
+                    showPage(eventsContainerId);
+                    // Scroll to the events section only when the prev button is clicked
+                    document.getElementById(eventsContainerId).scrollIntoView({ behavior: 'smooth' });
+                }
+            }
+
+            document.addEventListener('DOMContentLoaded', () => {
+                showPage('eventsContainer');
+            });
+
         function redirectToDetails(eventId) {
             window.location.href = '@Url.Action("EventDetails", "Volunteer")' + '?eventId=' + eventId;
-        }
+            }
         </script>
 </div>
 </body>

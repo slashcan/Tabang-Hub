@@ -154,15 +154,6 @@ namespace Tabang_Hub
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_RemoveEvent", eventIdParameter);
         }
     
-        public virtual ObjectResult<sp_GetUserDonatedInformations_Result> sp_GetUserDonatedInformations(Nullable<int> userId)
-        {
-            var userIdParameter = userId.HasValue ?
-                new ObjectParameter("userId", userId) :
-                new ObjectParameter("userId", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_GetUserDonatedInformations_Result>("sp_GetUserDonatedInformations", userIdParameter);
-        }
-    
         public virtual ObjectResult<sp_VolunteerHistory_Result> sp_VolunteerHistory(Nullable<int> userId)
         {
             var userIdParameter = userId.HasValue ?
@@ -196,6 +187,15 @@ namespace Tabang_Hub
                 new ObjectParameter("skillId", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_AcceptAndUpdateVolunteerStatus", userIdParameter, eventIdParameter, skillIdParameter);
+        }
+    
+        public virtual ObjectResult<sp_GetUserDonatedInformations_Result> sp_GetUserDonatedInformations(Nullable<int> userId)
+        {
+            var userIdParameter = userId.HasValue ?
+                new ObjectParameter("userId", userId) :
+                new ObjectParameter("userId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_GetUserDonatedInformations_Result>("sp_GetUserDonatedInformations", userIdParameter);
         }
     }
 }

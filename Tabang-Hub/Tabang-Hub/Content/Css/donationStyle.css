@@ -1,6 +1,6 @@
 ﻿.view-more i {
     font-size: 1.2em;
-    color: #137af0;
+    color: #3b93f7;
     transition: color 0.2s ease;
 }
 
@@ -9,6 +9,19 @@
         cursor: pointer;
         color: #2bb1ff;
     }
+
+.data-hover:hover .view-more i {
+    color: #2bb1ff;
+}
+
+tr:hover {
+    cursor: default;
+    background-color: #c2f5ff;
+}
+
+strong {
+    cursor: default;
+}
 
 @media (max-width: 768px) {
     .view-more i {
