@@ -641,7 +641,7 @@ namespace Tabang_Hub.Controllers
                 eventId = eventId,
                 amount = amount,
                 donatedAt = DateTime.Now,
-                Status = "Paid"
+                Status = 1
             };
 
             db.UserDonated.Add(donation);
@@ -716,7 +716,7 @@ namespace Tabang_Hub.Controllers
                 eventId = eventId,
                 amount = amount,
                 donatedAt = DateTime.Now,
-                Status = "Failed"
+                Status = 0
             };
 
             db.UserDonated.Add(donation);

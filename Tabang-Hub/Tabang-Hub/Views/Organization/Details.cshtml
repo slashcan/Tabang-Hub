@@ -256,7 +256,7 @@
 
                                     foreach (var donated in Model.listofUserDonated)
                                     {
-                                        if(donated.Status != "Failed")
+                                        if(donated.Status != 1)
                                         {
                                             raisedAmount += donated.amount;
                                         }
