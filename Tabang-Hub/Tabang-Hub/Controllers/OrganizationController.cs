@@ -22,11 +22,43 @@ namespace Tabang_Hub.Controllers
         public ActionResult Index()
         {
             var orgInfo = _organizationManager.GetOrgInfoByUserId(UserId);
+            var totalVolunteer = _organizationManager.GetTotalVolunteerByUserId(UserId);
+            var totalDonation = _organizationManager.GetTotalDonationByUserId(UserId);
+            var totalEvents = _organizationManager.GetOrgEventsByUserId(UserId);
+            
             //var profile = _organizationManager.GetProfileByProfileId(orgInfo.profileId);
+
+            var pendingVol = new List<Volunteers>();
+            var donated = new List<UserDonated>();
+
+            foreach (var events in totalEvents)
+            {
+                var volunteers = _organizationManager.GetPendingVolunteersByEventId(events.eventId);
+                var userDonated = _organizationManager.ListOfUserDonated(events.eventId);
+
+                foreach (var volDonated in userDonated)
+                { 
+                    donated.Add(volDonated);
+                }
+                foreach (var vol in volunteers)
+                { 
+                    pendingVol.Add(vol);
+                }
+            }
+
+            var recentDonations = donated
+               .OrderByDescending(d => d.donatedAt)
+               .Take(7)
+               .ToList();
 
             var indexModel = new Lists()
             {
                 OrgInfo = orgInfo,
+                totalVolunteer = totalVolunteer,
+                totalDonation = totalDonation,
+                orgEvents = totalEvents,
+                volunteers = pendingVol,
+                listofUserDonated = recentDonations
                 //profilePic = profile,
             };
             return View(indexModel);
@@ -252,25 +284,49 @@ namespace Tabang_Hub.Controllers
         }
         [HttpPost]
         public JsonResult InviteVolunteer(List<int> selectedVolunteers, int eventId)
-       {
+        {
             string errMsg = string.Empty;
             var events = _organizationManager.GetEventByEventId(eventId);
+            List<int> alreadyJoinedUsers = new List<int>();
+            List<int> alreadyInvitedUsers = new List<int>();
+            List<int> newlyInvitedUsers = new List<int>();
 
-            // Process the selected volunteers by userId
             foreach (var userId in selectedVolunteers)
             {
-                if (_organizationManager.InviteVolunteer(userId, eventId, ref errMsg) != ErrorCode.Success)
+                // Check if the user is already joined
+                var volunteer = _organizationManager.GetVolunteerById(userId, eventId);
+                if (volunteer != null)
                 {
-                    return Json(new { success = false, message = errMsg });
+                    if (volunteer.Status != 3)
+                    {
+                        alreadyJoinedUsers.Add(userId);
+                        continue; // Skip to next user if they are already joined
+                    }
+                    else if (volunteer.Status == 3)
+                    {
+                        alreadyInvitedUsers.Add(userId);
+                        // Optionally, you can choose to skip inviting again
+                        // continue;
+                    }
+                }
+                else
+                {
+                    // Process the invitation for users who are not yet joined
+                    if (_organizationManager.InviteVolunteer(userId, eventId, ref errMsg) != ErrorCode.Success)
+                    {
+                        return Json(new { success = false, message = errMsg });
+                    }
+                    newlyInvitedUsers.Add(userId);
                 }
 
+                // Send notification
                 var notification = new Notification
                 {
                     userId = userId,
-                    senderUserId = UserId,
+                    senderUserId = UserId, // Ensure UserId is properly set
                     relatedId = events.eventId,
                     type = "Invitation",
-                    content = $"You have been invited to join in {events.eventTitle} event.",
+                    content = $"You have been invited to join the {events.eventTitle} event.",
                     broadcast = 0,
                     status = 0,
                     createdAt = DateTime.Now,
@@ -278,11 +334,18 @@ namespace Tabang_Hub.Controllers
                 };
 
                 db.Notification.Add(notification);
-                db.SaveChanges(); // Save the notification
+                db.SaveChanges();
             }
 
-            // Return JSON indicating success
-            return Json(new { success = true, redirectUrl = Url.Action("Details", "Organization", new { id = eventId }) });
+            // Return JSON indicating success, listing already joined, already invited, and newly invited users
+            return Json(new
+            {
+                success = true,
+                redirectUrl = Url.Action("Details", "Organization", new { id = eventId }),
+                alreadyJoinedUsers = alreadyJoinedUsers,
+                alreadyInvitedUsers = alreadyInvitedUsers,
+                newlyInvitedUsers = newlyInvitedUsers
+            });
         }
         [HttpPost]
         public ActionResult EditEvent(Lists events, Dictionary<string, int> skills, string[] skillsToRemove, HttpPostedFileBase[] images, int eventId)

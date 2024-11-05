@@ -733,16 +733,33 @@ else
                 data: $(this).serialize(), // Serialize the form data
                 success: function (response) {
                     if (response.success) {
-                        // Redirect to the provided URL in the response
-                        window.location.href = response.redirectUrl;
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Invitation Summary',
+                            html: `<p>Already Joined: <strong>${response.alreadyJoinedUsers.length}</strong></p>
+                           <p>Already Invited: <strong>${response.alreadyInvitedUsers.length}</strong></p>
+                           <p>Newly Invited: <strong>${response.newlyInvitedUsers.length}</strong></p>`,
+                            confirmButtonText: 'OK'
+                        }).then(() => {
+                            // Redirect after confirmation
+                            window.location.href = response.redirectUrl;
+                        });
                     } else {
-                        // If an error occurred, display an alert or handle the error
-                        alert(response.message);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: response.message,
+                            confirmButtonText: 'OK'
+                        });
                     }
                 },
-                error: function (xhr, status, error) {
-                    // Handle any errors that occur during the AJAX request
-                    alert("An error occurred while sending the invitations.");
+                error: function () {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'An error occurred while sending the invitations.',
+                        confirmButtonText: 'OK'
+                    });
                 }
             });
         });

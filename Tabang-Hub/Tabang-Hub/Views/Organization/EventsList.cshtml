@@ -218,13 +218,28 @@
                         </div>
                         <div class="mb-3">
                             <label>Volunteer Skills Requirements</label>
-                            <div class="added-skills" id="added-skills"></div>
+                            <div class="table-responsive" style="max-height: 200px; overflow-y: auto;">
+                                <table class="table table-bordered">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Skill</th>
+                                            <th>Volunteers Needed</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="skills-table-body">
+                                        <!-- Dynamic rows will be added here -->
+                                    </tbody>
+                                </table>
+                            </div>
                             <span class="error" id="CreateEvents_skills_error"></span>
                         </div>
+
+                        <!-- Skill Buttons to Add Skills -->
                         <div class="skills-container mb-3">
                             @foreach (var skills in Model.listOfSkills)
                             {
-                                <button type="button" class="btn btn-outline-primary skill-button" onclick="addSkill('@skills.skillName')" id="skill-@skills.skillName">@skills.skillName</button>
+                                <button type="button" class="btn btn-outline-primary skill-button" onclick="addSkillToTable('@skills.skillName')" id="skill-@skills.skillName">@skills.skillName</button>
                             }
                         </div>
                         <div class="mb-3">
@@ -321,10 +336,12 @@
         }
 
         // Validate skills
-        const addedSkills = document.getElementById('added-skills').querySelectorAll('.skill-badge');
+        const addedSkills = document.getElementById('skills-table-body').querySelectorAll('tr');
         if (addedSkills.length === 0) {
             document.getElementById('CreateEvents_skills_error').innerText = 'At least one skill is required.';
             isValid = false;
+        } else {
+            document.getElementById('CreateEvents_skills_error').innerText = ''; // Clear error if skills are added
         }
 
         // Check if total volunteers match maximum volunteers
@@ -373,51 +390,58 @@
         xhr.send(formData);
     }
 
-    function addSkill(skill) {
-        const skillsContainer = document.getElementById('added-skills');
+    function addSkillToTable(skill) {
+        const tableBody = document.getElementById('skills-table-body');
         const skillButton = document.getElementById(`skill-${skill}`);
 
         // Disable the button once the skill is added
         skillButton.disabled = true;
 
-        const skillItem = document.createElement('div');
-        skillItem.className = 'skill-item';
+        // Create a new table row for the skill
+        const row = document.createElement('tr');
+        row.setAttribute('data-skill', skill);
 
-        const skillBadge = document.createElement('span');
-        skillBadge.className = 'skill-badge';
-        skillBadge.innerText = skill;
+        // Skill name cell
+        const skillNameCell = document.createElement('td');
+        skillNameCell.textContent = skill;
+        row.appendChild(skillNameCell);
 
-        const removeButton = document.createElement('span');
-        removeButton.className = 'remove-skill';
-        removeButton.innerText = ' ×';
-        removeButton.onclick = function () {
-            removeSkill(skill, skillItem, skillButton);
-        };
-
-        skillBadge.appendChild(removeButton);
-        skillItem.appendChild(skillBadge);
-
-        // Create an input for the skill count
+        // Volunteers needed input cell
+        const volunteerInputCell = document.createElement('td');
         const skillInput = document.createElement('input');
         skillInput.type = 'number';
         skillInput.name = `skills[${skill}]`;
         skillInput.value = 1; // Default value
         skillInput.min = 1;
-        skillInput.className = 'form-control skill-count';
+        skillInput.className = 'form-control';
         skillInput.onchange = updateTotalVolunteers;
-        skillItem.appendChild(skillInput);
+        volunteerInputCell.appendChild(skillInput);
+        row.appendChild(volunteerInputCell);
 
-        skillsContainer.appendChild(skillItem);
+        // Remove skill action cell
+        const actionCell = document.createElement('td');
+        const removeButton = document.createElement('button');
+        removeButton.type = 'button';
+        removeButton.className = 'btn btn-danger btn-sm';
+        removeButton.textContent = 'Remove';
+        removeButton.onclick = function () {
+            removeSkillFromTable(skill, row, skillButton);
+        };
+        actionCell.appendChild(removeButton);
+        row.appendChild(actionCell);
+
+        // Append the row to the table body
+        tableBody.appendChild(row);
 
         // Update the total volunteers count
         updateTotalVolunteers();
     }
 
-    function removeSkill(skill, skillItem, skillButton) {
-        const skillsContainer = document.getElementById('added-skills');
-        skillsContainer.removeChild(skillItem);
+    function removeSkillFromTable(skill, row, skillButton) {
+        const tableBody = document.getElementById('skills-table-body');
+        tableBody.removeChild(row);
 
-        // Enable the skill button when the skill is removed
+        // Re-enable the skill button when the skill is removed
         skillButton.disabled = false;
 
         // Update the total volunteers count

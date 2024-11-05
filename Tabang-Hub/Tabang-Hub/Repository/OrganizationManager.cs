@@ -67,7 +67,7 @@ namespace Tabang_Hub.Repository
             _vwVollunterSkills = new BaseRepository<vw_VolunteerSkills>();
         }
 
-
+        [HttpPost]
         public ErrorCode CreateEvents(OrgEvents orgEvents, List<string> imageFileNames, Dictionary<string, int> skills, ref string errMsg)
         {
             // Create the event
@@ -501,6 +501,10 @@ namespace Tabang_Hub.Repository
         public List<Volunteers> GetTotalVolunteerByEventId(int eventId)
         {
             return _eventVolunteers._table.Where(m => m.eventId == eventId).ToList();
+        }
+        public List<Volunteers> GetPendingVolunteersByEventId(int eventId)
+        { 
+            return _eventVolunteers._table.Where(m => m.eventId == eventId && m.Status == 0).ToList();
         }
         public List<UserAccount> GetListOfVolunteer()
         {
