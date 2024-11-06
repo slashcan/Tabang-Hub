@@ -515,7 +515,7 @@ namespace Tabang_Hub.Controllers
                 );
 
                 // Return JSON response indicating success with redirect URL to event details page
-                return Json(new { success = true, message = "Volunteer confirmed successfully.", redirectUrl = Url.Action("Details", "Organization", new { eventId }) });
+                return Json(new { success = true, message = "Volunteer confirmed successfully.", redirectUrl = Url.Action("Details", "Organization", new { id = eventId }) });
             }
             else
             {
@@ -542,7 +542,7 @@ namespace Tabang_Hub.Controllers
                 );
 
                 // Return JSON response indicating success with redirect URL to event details page
-                return Json(new { success = true, message = "Volunteer declined successfully.", redirectUrl = Url.Action("Details", "Organization", new { eventId }) });
+                return Json(new { success = true, message = "Volunteer declined successfully.", redirectUrl = Url.Action("Details", "Organization", new { id = eventId }) });
             }
             else
             {

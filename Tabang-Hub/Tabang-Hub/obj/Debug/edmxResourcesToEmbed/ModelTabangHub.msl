@@ -49,16 +49,6 @@
         </ComplexTypeMapping>
       </ResultMapping>
     </FunctionImportMapping>
-    <FunctionImportMapping FunctionImportName="sp_ListOfGc" FunctionName="TabangHubModel.Store.sp_ListOfGc">
-      <ResultMapping>
-        <ComplexTypeMapping TypeName="TabangHubModel.sp_ListOfGc_Result">
-          <ScalarProperty Name="groupChatId" ColumnName="groupChatId" />
-          <ScalarProperty Name="userId" ColumnName="userId" />
-          <ScalarProperty Name="eventId" ColumnName="eventId" />
-          <ScalarProperty Name="eventTitle" ColumnName="eventTitle" />
-        </ComplexTypeMapping>
-      </ResultMapping>
-    </FunctionImportMapping>
     <FunctionImportMapping FunctionImportName="sp_GetAllMessage1" FunctionName="TabangHubModel.Store.sp_GetAllMessage1">
       <ResultMapping>
         <ComplexTypeMapping TypeName="TabangHubModel.sp_GetAllMessage1_Result">
@@ -516,5 +506,15 @@
       </ResultMapping>
     </FunctionImportMapping>
     <FunctionImportMapping FunctionImportName="sp_AcceptAndUpdateVolunteerStatus" FunctionName="TabangHubModel.Store.sp_AcceptAndUpdateVolunteerStatus" />
+    <FunctionImportMapping FunctionImportName="sp_ListOfGc" FunctionName="TabangHubModel.Store.sp_ListOfGc">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="TabangHubModel.sp_ListOfGc_Result">
+          <ScalarProperty Name="groupChatId" ColumnName="groupChatId" />
+          <ScalarProperty Name="userId" ColumnName="userId" />
+          <ScalarProperty Name="eventId" ColumnName="eventId" />
+          <ScalarProperty Name="eventTitle" ColumnName="eventTitle" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
   </EntityContainerMapping>
 </Mapping>

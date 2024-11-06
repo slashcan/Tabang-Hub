@@ -22,9 +22,6 @@
       <Parameter Name="userId" Mode="In" Type="Int32" />
       <Parameter Name="eventId" Mode="In" Type="Int32" />
     </FunctionImport>
-    <FunctionImport Name="sp_ListOfGc" ReturnType="Collection(TabangHubModel.sp_ListOfGc_Result)">
-      <Parameter Name="userId" Mode="In" Type="Int32" />
-    </FunctionImport>
     <FunctionImport Name="sp_GetAllMessage1" ReturnType="Collection(TabangHubModel.sp_GetAllMessage1_Result)">
       <Parameter Name="groupChatId" Mode="In" Type="Int32" />
     </FunctionImport>
@@ -165,6 +162,9 @@
       <Parameter Name="eventId" Mode="In" Type="Int32" />
       <Parameter Name="skillId" Mode="In" Type="Int32" />
     </FunctionImport>
+    <FunctionImport Name="sp_ListOfGc" ReturnType="Collection(TabangHubModel.sp_ListOfGc_Result)">
+      <Parameter Name="userId" Mode="In" Type="Int32" />
+    </FunctionImport>
   </EntityContainer>
   <ComplexType Name="sp_GetSkills_Result">
     <Property Type="Int32" Name="skillId" Nullable="false" />
@@ -195,12 +195,6 @@
     <Property Type="Int32" Name="skillId" Nullable="true" />
     <Property Type="Int32" Name="userId" Nullable="true" />
     <Property Type="String" Name="skillName" Nullable="true" MaxLength="255" />
-  </ComplexType>
-  <ComplexType Name="sp_ListOfGc_Result">
-    <Property Type="Int32" Name="groupChatId" Nullable="false" />
-    <Property Type="Int32" Name="userId" Nullable="true" />
-    <Property Type="Int32" Name="eventId" Nullable="true" />
-    <Property Type="String" Name="eventTitle" Nullable="true" MaxLength="255" />
   </ComplexType>
   <ComplexType Name="sp_GetAllMessage1_Result">
     <Property Type="Int32" Name="groupChatId" Nullable="false" />
@@ -929,5 +923,11 @@
     <Property Type="DateTime" Name="appliedAt" Nullable="true" />
     <Property Type="DateTime" Name="dateStart" Nullable="true" Precision="23" />
     <Property Type="DateTime" Name="dateEnd" Nullable="true" Precision="23" />
+  </ComplexType>
+  <ComplexType Name="sp_ListOfGc_Result">
+    <Property Type="Int32" Name="groupChatId" Nullable="false" />
+    <Property Type="Int32" Name="userId" Nullable="true" />
+    <Property Type="Int32" Name="eventId" Nullable="true" />
+    <Property Type="String" Name="eventTitle" Nullable="true" MaxLength="255" />
   </ComplexType>
 </Schema>

@@ -364,19 +364,9 @@
                                             <div class="ms-auto d-flex gap-2">
                                                 <a href="@Url.Action("VolunteerDetails", "Organization", new { userId = volunteer.userId })" class="btn btn-outline-primary btn-sm">View</a>
 
-                                                <!-- Accept Button -->
-                                                <form action="@Url.Action("ConfirmApplicants", "Organization")" method="post" class="d-inline">
-                                                    <input type="hidden" name="id" value="@volunteer.userId" />
-                                                    <input type="hidden" name="eventId" value="@volunteer.eventId" />
-                                                    <button type="submit" class="btn btn-outline-success btn-sm">Accept</button>
-                                                </form>
+                                                <button type="button" class="btn btn-outline-success btn-sm accept-btn" data-id="@volunteer.userId" data-event-id="@volunteer.eventId">Accept</button>
 
-                                                <!-- Decline Button -->
-                                                <form action="@Url.Action("DeclineApplicants", "Organization")" method="post" class="d-inline">
-                                                    <input type="hidden" name="id" value="@volunteer.userId" />
-                                                    <input type="hidden" name="eventId" value="@volunteer.eventId" />
-                                                    <button type="submit" class="btn btn-outline-danger btn-sm">Decline</button>
-                                                </form>
+                                                <button type="button" class="btn btn-outline-danger btn-sm decline-btn" data-id="@volunteer.userId" data-event-id="@volunteer.eventId">Decline</button>
                                             </div>
                                         </div>
                                     }
@@ -846,61 +836,63 @@ else
             element.classList.add('active');
         }
 
-        // Add an event listener for the Accept button click
-        document.querySelectorAll('.confirm-form').forEach(form => {
-            form.addEventListener('submit', function (event) {
-                event.preventDefault(); // Prevent the default form submission
+       // Add an event listener for Accept button clicks
+document.querySelectorAll('.accept-btn').forEach(button => {
+    button.addEventListener('click', function () {
+        const userId = this.getAttribute('data-id');
+        const eventId = this.getAttribute('data-event-id');
 
-                $.ajax({
-                    url: $(this).attr('action'), // Use the action URL defined in the form
-                    type: 'POST',
-                    data: $(this).serialize(), // Serialize the form data
-                    success: function (response) {
-                        if (response.success) {
-                            // Redirect to the provided URL in the response if successful
-                            if (response.redirectUrl) {
-                                window.location.href = response.redirectUrl;
-                            } else {
-                                alert('Confirmation successful, but no redirect URL was provided.');
-                            }
-                        } else {
-                            alert('Error: ' + response.message);
-                        }
-                    },
-                    error: function () {
-                        alert('Error confirming the volunteer.');
+        $.ajax({
+            url: '@Url.Action("ConfirmApplicants", "Organization")',
+            type: 'POST',
+            data: { id: userId, eventId: eventId },
+            success: function (response) {
+                if (response.success) {
+                    // Redirect to the details page if the confirmation was successful
+                    if (response.redirectUrl) {
+                        window.location.href = response.redirectUrl;
+                    } else {
+                        alert('Confirmation successful, but no redirect URL was provided.');
                     }
-                });
-            });
+                } else {
+                    alert('Error: ' + response.message);
+                }
+            },
+            error: function () {
+                alert('Error confirming the volunteer.');
+            }
         });
+    });
+});
 
-        // Add an event listener for the Decline button click
-        document.querySelectorAll('.decline-form').forEach(form => {
-            form.addEventListener('submit', function (event) {
-                event.preventDefault(); // Prevent the default form submission
+        // Add an event listener for Decline button clicks
+document.querySelectorAll('.decline-btn').forEach(button => {
+    button.addEventListener('click', function () {
+        const userId = this.getAttribute('data-id');
+        const eventId = this.getAttribute('data-event-id');
 
-                $.ajax({
-                    url: $(this).attr('action'), // Use the action URL defined in the form
-                    type: 'POST',
-                    data: $(this).serialize(), // Serialize the form data
-                    success: function (response) {
-                        if (response.success) {
-                            // Redirect to the provided URL in the response if successful
-                            if (response.redirectUrl) {
-                                window.location.href = response.redirectUrl;
-                            } else {
-                                alert('Decline successful, but no redirect URL was provided.');
-                            }
-                        } else {
-                            alert('Error: ' + response.message);
-                        }
-                    },
-                    error: function () {
-                        alert('Error declining the volunteer.');
+        $.ajax({
+            url: '@Url.Action("DeclineApplicants", "Organization")',
+            type: 'POST',
+            data: { id: userId, eventId: eventId },
+            success: function (response) {
+                if (response.success) {
+                    // Redirect to the details page if the decline action was successful
+                    if (response.redirectUrl) {
+                        window.location.href = response.redirectUrl;
+                    } else {
+                        alert('Decline successful, but no redirect URL was provided.');
                     }
-                });
-            });
+                } else {
+                    alert('Error: ' + response.message);
+                }
+            },
+            error: function () {
+                alert('Error declining the volunteer.');
+            }
         });
+    });
+});
 
         // Real-time validation for date and time inputs
         var editEventDateStart = document.getElementById('EditEvent_dateStart');
