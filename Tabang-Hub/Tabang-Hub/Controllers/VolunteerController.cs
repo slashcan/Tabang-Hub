@@ -290,11 +290,11 @@ namespace Tabang_Hub.Controllers
         {
             try
             {
-                var checkVolunteer = _volunteers.GetAll().Where(m => m.userId == UserId && m.eventId == eventId && m.Status == 3).FirstOrDefault();
+                var checkVolunteer = _volunteers.GetAll().Where(m => m.userId == UserId && m.eventId == eventId && m.Status == 2).FirstOrDefault();
                 var checkDateOrgEvents = _orgEvents.GetAll().Where(m => m.eventId == eventId).FirstOrDefault();
 
                 // Check if the user has already accepted an invitation for this event
-                if (!checkVolunteer.Status.Equals(3))
+                if (!checkVolunteer.Status.Equals(2))
                 {
                     return Json(new { success = false, message = "Already accepted invitation" });
                 }
@@ -321,11 +321,11 @@ namespace Tabang_Hub.Controllers
                     {
                         if (userEvent.Status == 0)
                         {
-                            return Json(new { success = false, message = "Conflict with another applied event" });
-                        }
-                        else
-                        {
                             return Json(new { success = false, message = "Conflict with another registered event" });
+                        }
+                        else if (userEvent.Status == 1)
+                        {
+                            return Json(new { success = false, message = "Conflict with another applied event" });
                         }
                     }
                 }
@@ -347,6 +347,19 @@ namespace Tabang_Hub.Controllers
             catch (Exception)
             {
                 return Json(new { success = false, message = "Error accepting invitation!" });
+            }
+        }
+        [HttpPost]
+        public JsonResult DeclineInvite(int eventId)
+        {
+            try
+            {
+                db.sp_CancelRequest(eventId, UserId);
+                return Json(new { success = true, message = "Invitation declined" });
+            }
+            catch (Exception)
+            {
+                return Json(new { success = false, message = "error message" });
             }
         }
         [HttpPost]

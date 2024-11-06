@@ -127,15 +127,6 @@ namespace Tabang_Hub
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_matchSkill_Result>("sp_matchSkill", userIdParameter, eventIdParameter);
         }
     
-        public virtual ObjectResult<sp_ListOfGc_Result> sp_ListOfGc(Nullable<int> userId)
-        {
-            var userIdParameter = userId.HasValue ?
-                new ObjectParameter("userId", userId) :
-                new ObjectParameter("userId", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_ListOfGc_Result>("sp_ListOfGc", userIdParameter);
-        }
-    
         public virtual ObjectResult<sp_GetAllMessage1_Result> sp_GetAllMessage1(Nullable<int> groupChatId)
         {
             var groupChatIdParameter = groupChatId.HasValue ?
@@ -161,6 +152,15 @@ namespace Tabang_Hub
                 new ObjectParameter("userId", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_VolunteerHistory_Result>("sp_VolunteerHistory", userIdParameter);
+        }
+    
+        public virtual ObjectResult<sp_GetUserDonatedInformations_Result> sp_GetUserDonatedInformations(Nullable<int> userId)
+        {
+            var userIdParameter = userId.HasValue ?
+                new ObjectParameter("userId", userId) :
+                new ObjectParameter("userId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_GetUserDonatedInformations_Result>("sp_GetUserDonatedInformations", userIdParameter);
         }
     
         public virtual ObjectResult<sp_UserListEvent_Result> sp_UserListEvent(Nullable<int> userId)
@@ -189,13 +189,13 @@ namespace Tabang_Hub
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_AcceptAndUpdateVolunteerStatus", userIdParameter, eventIdParameter, skillIdParameter);
         }
     
-        public virtual ObjectResult<sp_GetUserDonatedInformations_Result> sp_GetUserDonatedInformations(Nullable<int> userId)
+        public virtual ObjectResult<sp_ListOfGc_Result> sp_ListOfGc(Nullable<int> userId)
         {
             var userIdParameter = userId.HasValue ?
                 new ObjectParameter("userId", userId) :
                 new ObjectParameter("userId", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_GetUserDonatedInformations_Result>("sp_GetUserDonatedInformations", userIdParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_ListOfGc_Result>("sp_ListOfGc", userIdParameter);
         }
     }
 }

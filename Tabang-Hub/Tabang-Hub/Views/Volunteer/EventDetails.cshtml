@@ -227,7 +227,7 @@
                                                 Accept Invitation
                                             </button>
                                             <!-- Decline Button -->
-                                            <button type="button" class="btn btn-danger flex-fill ms-1" data-event-id="@orgDetails.eventId" id="declineButton">
+                                            <button type="button" class="btn btn-danger flex-fill ms-1" onclick="declineInvite('@orgDetails.eventId')" data-event-id="@orgDetails.eventId" id="declineButton">
                                                 Decline Invitation
                                             </button>
                                         </div>
@@ -579,16 +579,16 @@ else
                         </p>
 
                         <p>
-                            <i style="font-size:15px" class="fa">&#xf1a0;</i> @info.orgEmail <a href="#">organization@gmail.com</a>
+                            <i style="font-size:15px" class="fa">&#xf1a0;</i> @info.orgEmail <a href="#">@*organization@gmail.com*@</a>
                         </p>
 
-                        <p>
+                        @*<p>
                             <i style="font-size:15px" class="fa">&#xf09a;</i> <a href="#">Tabang.Hub</a>
                         </p>
 
                         <p>
                             <i style="font-size:15px" class="fa">&#xf16d;</i> <a href="#">TabangHub</a>
-                        </p>
+                        </p>*@
                     </div>
                 }
             </div>
@@ -800,12 +800,44 @@ function submitDonation(eventId) {
     }
 
     //DECLINE THE INVITATION
-    const decline = document.getElementById('declineButton');
-
-    decline.addEventListener('click', function () {
-        const eventId = this.dataset.eventId;
-        console.log(eventId);
+    function declineInvite(eventId) {
+        Swal.fire({
+        title: '',
+        text: 'Do you really want to decline this invitation?',
+        icon: 'info',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: '@Url.Action("DeclineInvite", "Volunteer")',
+                type: 'POST',
+                data: { eventId: eventId },
+                success: function (response) {
+                    if (response.success) {
+                        Swal.fire({
+                            title: response.message,
+                            text: '',
+                            icon: 'success',
+                            confirmButtonText: 'OK'
+                        }).then(() => {
+                            location.reload();
+                        });
+                    }
+                },
+                error: function (xhr, status, error) {
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'An error occurred. Please try again.',
+                        icon: 'error',
+                        confirmButtonText: 'Ok'
+                    });
+                }
+            });
+        }
     });
+    }
 
     const track = document.querySelector('.carousel-track-opportunities');
     const prevButton = document.querySelector('.prev-button-opportunities');
