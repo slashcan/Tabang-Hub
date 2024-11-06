@@ -49,7 +49,6 @@ namespace Tabang_Hub.Controllers
                             // Move each volunteer record to VolunteersHistory
                             foreach (var volunteer in getVolEvent)
                             {
-                                // Assuming you have a VolunteersHistory entity and a way to add it to the history table
                                 var volunteerHistory = new VolunteersHistory
                                 {
                                     eventId = volunteer.eventId,
@@ -102,7 +101,7 @@ namespace Tabang_Hub.Controllers
                             volunteersSkills = getVolunteerSkills,
                             skills = getSkills,
                             picture = getProfile,
-                            listOfEvents = filteredEvent,
+                            listOfEvents = filteredEvent.OrderByDescending(m => m.Event_Id).ToList(),
                             volunteers = getVolunteers,
                             orgInfos = getOrgInfo,
                             listofUserDonated = getUserDonated,

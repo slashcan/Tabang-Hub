@@ -186,7 +186,7 @@
                             </div>
                         </div>
 
-                        <label id="counter">Volunteer counter</label>
+                        <label id="counter">Number of Volunteers</label>
                         <div class="progress">
                             @{
                                 double? Vol = Model.volunteers.Where(m => m.Status == 1).Count();
@@ -421,21 +421,22 @@ else
                         {
                             if (!Model.volunteersStatusEvent.Count().Equals(0))
                             {
-                                foreach (var status in Model.volunteersStatusEvent)
+                                var getVolStatus = Model.volunteersStatusEvent.Select(m => m.Status).FirstOrDefault();
+                                //foreach (var status in Model.volunteersStatusEvent)
+                                //{
+                                if (getVolStatus.Equals(1) && Model.volunteersStatusEvent.Count() != 0)
                                 {
-                                    if (status.Status.Equals(1) && Model.volunteersStatusEvent.Count() != 0)
-                                    {
-                                        <button style="width: 100%" onclick="leaveEvent('@orgDetails.eventId')" class="btn btnRequest">
-                                            Leave event
-                                        </button>
-                                    }
-                                    else if (status.Status.Equals(0) && Model.volunteersStatusEvent.Count() != 0)
-                                    {
-                                        <button style="width: 100%" onclick="cancelEvent('@orgDetails.eventId')" class="btn btnRequest">
-                                            Cancel application
-                                        </button>
-                                    }
+                                    <button style="width: 100%" onclick="leaveEvent('@orgDetails.eventId')" class="btn btnRequest">
+                                        Leave event
+                                    </button>
                                 }
+                                else if (getVolStatus.Equals(0) && Model.volunteersStatusEvent.Count() != 0)
+                                {
+                                    <button style="width: 100%" onclick="cancelEvent('@orgDetails.eventId')" class="btn btnRequest">
+                                        Cancel application
+                                    </button>
+                                }
+                                //}
                             }
                             if (Model.volunteersStatusEvent.Count().Equals(0))
                             {
@@ -445,7 +446,7 @@ else
 
                                 <div class="join-button mt-2">
                                     <!-- Button to open the join modal -->
-                                    <button style="width: 100%" type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#joinModal">
+                                    <button style="width: 100%" type="button" class="btn btn-primary btn-block" onclick="applyEvent('@orgDetails.eventId')" @*data-toggle="modal" data-target="#joinModal"*@>
                                         Join now
                                     </button>
                                 </div>
@@ -482,7 +483,7 @@ else
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                <button type="button" class="btn btn-primary" onclick="applyEvent('@orgDetails.eventId')">Submit</button>
+                                                <button type="button" class="btn btn-primary" @*onclick="applyEvent('@orgDetails.eventId')"*@>Submit</button>
                                             </div>
                                         </div>
                                     </div>
@@ -575,11 +576,11 @@ else
                     <div class="col-md-3">
                         <h6>Contact us</h6>
                         <p>
-                            <i style="font-size:15px" class="fa">&#xf095;</i> @info.phoneNum 09123456789
+                            <i style="font-size:15px" class="fa">&#xf095;</i> @info.phoneNum
                         </p>
 
                         <p>
-                            <i style="font-size:15px" class="fa">&#xf1a0;</i> @info.orgEmail <a href="#">@*organization@gmail.com*@</a>
+                            <i style="font-size:15px" class="fa">&#xf1a0;</i> @*@info.orgEmail*@ <a href="#">@info.orgEmail@*organization@gmail.com*@</a>
                         </p>
 
                         @*<p>
@@ -637,14 +638,14 @@ function submitDonation(eventId) {
     });
 }
     function applyEvent(eventId) {
-        var selectedSkill = document.querySelector('input[name="skill"]:checked').value;
+        //var selectedSkill = document.querySelector('input[name="skill"]:checked').value;
 
         $.ajax({
         url: '@Url.Action("ApplyVolunteer", "Volunteer")',
         type: 'POST',
         data: {
             eventId: eventId,
-            skill: selectedSkill
+            //skill: selectedSkill
         },
         success: function (response) {
             if (response.success) {

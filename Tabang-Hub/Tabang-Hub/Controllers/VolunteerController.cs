@@ -253,7 +253,7 @@ namespace Tabang_Hub.Controllers
                     var getEvents = _listsOfEvent.GetAll().Where(m => m.Event_Id == getOrgInfo.eventId).ToList();
                     var getVolunteers = _volunteers.GetAll().Where(m => m.eventId == eventId).ToList();
                     var listofUserDonated = db.UserDonated.Where(m => m.eventId == eventId).ToList();
-                    var volunteerStatusEvent = _volunteersStatusEvent.GetAll().Where(m => m.userId == UserId && m.eventId == eventId).ToList();
+                    //var volunteerStatusEvent = _volunteersStatusEvent.GetAll().Where(m => m.userId == UserId && m.eventId == eventId).ToList();
                     var volunteer = _volunteerManager.GetVolunteerByUserId(UserId, (int)eventId);
 
                     var indexModel = new Lists()
@@ -269,7 +269,7 @@ namespace Tabang_Hub.Controllers
                         listOfEvents = getEvents,
                         volunteers = getVolunteers,
                         listofUserDonated = listofUserDonated,
-                        volunteersStatusEvent = volunteerStatusEvent,
+                        volunteersStatusEvent = _volunteersStatusEvent.GetAll().Where(m => m.userId == UserId && m.eventId == eventId).ToList(),
                         matchSkill = db.sp_matchSkill(UserId, eventId).ToList(),
                         volunteer = volunteer,
                     };
@@ -363,7 +363,7 @@ namespace Tabang_Hub.Controllers
             }
         }
         [HttpPost]
-        public JsonResult ApplyVolunteer(int eventId, string skill)
+        public JsonResult ApplyVolunteer(int eventId/*, string skill*/)
         {
             try
             {
@@ -407,24 +407,38 @@ namespace Tabang_Hub.Controllers
                     }
                 }
 
-                var getEventRequiredSkills = _skillRequirement.GetAll().Where(m => m.eventId == eventId).Select(m => m.skillId).ToList();
+                var getEventRequiredSkills = _skillRequirement.GetAll().Where(m => m.eventId == eventId).ToList();
                 var volSkill = _volunteerSkills.GetAll().Where(m => m.userId == UserId).Select(m => m.skillId).ToList();
 
-                bool skillMatch = getEventRequiredSkills.Any(skll => volSkill.Contains(skll));
-
-                if (!skillMatch)
+                Volunteers apply = new Volunteers();
+                foreach (var eventReq in getEventRequiredSkills)
                 {
-                    return Json(new { success = false, message = "Your skills do not match the requirements" });
+                    apply = new Volunteers()
+                    {
+                        userId = UserId,
+                        eventId = eventId,
+                        Status = 0,
+                        skillId = db.Skills.Where(m => m.skillId == eventReq.skillId).Select(m => m.skillId).FirstOrDefault(),
+                        appliedAt = DateTime.Now
+                    };
+                    _volunteers.Create(apply);
                 }
 
-                var apply = new Volunteers()
-                {
-                    userId = UserId,
-                    eventId = eventId,
-                    Status = 0,
-                    skillId = db.Skills.Where(m => m.skillName == skill).Select(m => m.skillId).FirstOrDefault(),
-                    appliedAt = DateTime.Now
-                };
+                //bool skillMatch = getEventRequiredSkills.Any(skll => volSkill.Contains(skll.eventId));
+
+                //if (!skillMatch)
+                //{
+                //    return Json(new { success = false, message = "Your skills do not match the requirements" });
+                //}
+
+                //var apply = new Volunteers()
+                //{
+                //    userId = UserId,
+                //    eventId = eventId,
+                //    Status = 0,
+                //    skillId = db.Skills.Where(m => m.skillName == skill).Select(m => m.skillId).FirstOrDefault(),
+                //    appliedAt = DateTime.Now
+                //};
 
                 //var updateVolunteerNeeded = db.OrgEvents.Where(m => m.eventId == eventId).FirstOrDefault();
 
@@ -446,7 +460,7 @@ namespace Tabang_Hub.Controllers
                     // Send real-time notification if the organization is online
                     var context = GlobalHost.ConnectionManager.GetHubContext<NotificationHub>();
                     context.Clients.User(organizationId.ToString()).receiveNotification(notificationType, notificationMessage);
-                    _volunteers.Create(apply);
+                    //_volunteers.Create(apply);
 
                     return Json(new { success = true, message = "Application sent" });
                 }

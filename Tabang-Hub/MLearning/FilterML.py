@@ -31,7 +31,7 @@ def calculate_similarity(user_skills, event_skills):
 
     return np.dot(user_vector, event_vector) / (user_norm * event_norm)
 
-# Route 1: Skill Filtering and Attendance Prediction
+# Route 1: Skill Filtering and Attendance Prediction with Full Skill Match Requirement
 @app.route('/predict', methods=['POST'])
 def predict_for_user():
     data = request.get_json()
@@ -56,27 +56,28 @@ def predict_for_user():
     else:
         predicted_events = event_data
 
-    # Step 2: Use Content-Based Filtering to filter events by skills
+    # Step 2: Filter events such that all required skills are matched by the volunteer's skills
     filtered_events = []
+    volunteer_skills = set(user_skills_data['skillId'].tolist())
+
     for _, event_row in predicted_events.iterrows():
         event_id = event_row['eventId']
-        required_skills = event_skills_data[event_skills_data['eventId'] == event_id]['skillId'].tolist()
+        required_skills = set(event_skills_data[event_skills_data['eventId'] == event_id]['skillId'].tolist())
 
-        # Calculate similarity score between user skills and required event skills
-        similarity_score = calculate_similarity(user_skills_data['skillId'].tolist(), required_skills)
-
-        # Add only events with a good skill match (similarity score threshold)
-        if similarity_score >= 0.5:
-            filtered_events.append({
-                'eventId': event_id,
-                'eventDescription': event_row['eventDescription'],
-                'requiredSkills': required_skills,
-                'similarityScore': similarity_score
-            })
+        # Ensure all required event skills are present in the volunteer's skills
+        if required_skills.issubset(volunteer_skills):
+            similarity_score = calculate_similarity(volunteer_skills, required_skills)
+            if similarity_score >= 0.5:  # This threshold can be adjusted as needed
+                filtered_events.append({
+                    'eventId': event_id,
+                    'eventDescription': event_row['eventDescription'],
+                    'requiredSkills': list(required_skills),
+                    'similarityScore': similarity_score
+                })
 
     return jsonify(filtered_events)
 
-# Route 2: Recruitment Filtering with Volunteer History
+# Route 2: Recruitment Filtering with Full Skill Match and Rating Sorting
 @app.route('/recruit', methods=['POST'])
 def recruit_for_event():
     data = request.get_json()
@@ -102,30 +103,26 @@ def recruit_for_event():
     else:
         predicted_events = event_data
 
-    # Step 2: Filter volunteers based on required skills
+    # Step 2: Filter volunteers based on full required skill match for each event
     event_id = predicted_events['eventId'].values[0]
-    required_skills = event_skills_data[event_skills_data['eventId'] == event_id]['skillId'].tolist()
+    required_skills = set(event_skills_data[event_skills_data['eventId'] == event_id]['skillId'].tolist())
 
-    matching_volunteers = user_skills_data[user_skills_data['skillId'].isin(required_skills)]
-
-    # Step 3: Rank volunteers based on matching skills and ratings
     filtered_volunteers = []
-    for user_id, group in matching_volunteers.groupby('userId'):
-        volunteer_skills = group['skillId'].tolist()
+    for user_id, group in user_skills_data.groupby('userId'):
+        volunteer_skills = set(group['skillId'].tolist())
         volunteer_ratings = group['rating'].mean()
 
-        user_skill_vector = [1 if skill in volunteer_skills else 0 for skill in required_skills]
-        event_skill_vector = [1 for _ in required_skills]
-        similarity_score = cosine_similarity([user_skill_vector], [event_skill_vector])[0][0]
+        # Ensure all required skills are in the volunteer's skills
+        if required_skills.issubset(volunteer_skills):
+            similarity_score = calculate_similarity(volunteer_skills, required_skills)
+            filtered_volunteers.append({
+                'userId': user_id,
+                'matchedSkills': list(volunteer_skills),
+                'rating': volunteer_ratings,
+                'similarityScore': similarity_score
+            })
 
-        filtered_volunteers.append({
-            'userId': user_id,
-            'matchedSkills': volunteer_skills,
-            'rating': volunteer_ratings,
-            'similarityScore': similarity_score
-        })
-
-    # Step 4: Sort volunteers by rating and similarity score
+    # Step 3: Sort volunteers by rating and similarity score
     ranked_volunteers = sorted(filtered_volunteers, key=lambda x: (-x['rating'], -x['similarityScore']))
 
     return jsonify(ranked_volunteers)
