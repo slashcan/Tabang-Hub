@@ -810,17 +810,20 @@ namespace Tabang_Hub.Controllers
                 // Fetching all accepted and pending events for the volunteer
                 var getVolunteerInfo = db.VolunteerInfo.Where(m => m.userId == UserId).ToList();
                 var acceptedEvents = _volunteers.GetAll().Where(m => m.userId == UserId && m.Status == 1).ToList();
-                var pendingEvents = _volunteers.GetAll().Where(m => m.userId == UserId && m.Status == 0).ToList();
+                //var pendingEvents = _volunteers.GetAll().Where(m => m.userId == UserId && m.Status == 0).ToList();
                 var getOrgImages = _eventImages.GetAll().ToList();
                 var userProfile = db.ProfilePicture.Where(m => m.userId == UserId).ToList();
+
+                List<Volunteers> pendings = _volunteerManager.GetVolunteersEventPendingByUserId(UserId);
+                List<Volunteers> accepted = _volunteerManager.GetVolunteersEventParticipateByUserId(UserId);
 
                 var indexModel = new Lists()
                 {
                     picture = userProfile,
                     volunteers = acceptedEvents,
-                    orgEvents = acceptedEvents.Select(e => _orgEvents.GetAll().FirstOrDefault(o => o.eventId == e.eventId)).ToList(),
+                    orgEvents = accepted.OrderByDescending(m => m.applyVolunteerId).Select(e => _orgEvents.GetAll().FirstOrDefault(o => o.eventId == e.eventId)).ToList(),
                     orgEventHistory = db.OrgEventHistory.Where(m => m.userId == UserId).ToList(),
-                    pendingOrgDetails = pendingEvents.Select(e => _pendingOrgDetails.GetAll().FirstOrDefault(p => p.eventId == e.eventId)).ToList(),
+                    pendingOrgDetails = pendings.OrderByDescending(m => m.applyVolunteerId).Select(e => _pendingOrgDetails.GetAll().FirstOrDefault(p => p.eventId == e.eventId)).ToList(),
                     volunteersInfo = getVolunteerInfo,
                     volunteersHistories = db.sp_VolunteerHistory(UserId).ToList(),
                     rating = db.Rating.Where(m => m.userId == UserId).ToList(),
@@ -885,7 +888,7 @@ namespace Tabang_Hub.Controllers
             try
             {
                 db.sp_CancelRequest(eventId, UserId);
-                return Json(new { success = true, message = "Cancel Request" });
+                return Json(new { success = true, message = "Request Cancelled" });
             }
             catch (Exception)
             {

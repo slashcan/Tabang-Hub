@@ -25,9 +25,6 @@
     <FunctionImport Name="sp_GetAllMessage1" ReturnType="Collection(TabangHubModel.sp_GetAllMessage1_Result)">
       <Parameter Name="groupChatId" Mode="In" Type="Int32" />
     </FunctionImport>
-    <FunctionImport Name="sp_RemoveEvent">
-      <Parameter Name="eventId" Mode="In" Type="Int32" />
-    </FunctionImport>
     <FunctionImport Name="sp_VolunteerHistory" ReturnType="Collection(TabangHubModel.sp_VolunteerHistory_Result)">
       <Parameter Name="userId" Mode="In" Type="Int32" />
     </FunctionImport>
@@ -164,6 +161,9 @@
     </FunctionImport>
     <FunctionImport Name="sp_ListOfGc" ReturnType="Collection(TabangHubModel.sp_ListOfGc_Result)">
       <Parameter Name="userId" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_RemoveEvent">
+      <Parameter Name="eventId" Mode="In" Type="Int32" />
     </FunctionImport>
   </EntityContainer>
   <ComplexType Name="sp_GetSkills_Result">

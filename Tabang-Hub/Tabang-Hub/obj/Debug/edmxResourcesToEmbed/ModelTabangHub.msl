@@ -516,5 +516,6 @@
         </ComplexTypeMapping>
       </ResultMapping>
     </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="sp_RemoveEvent" FunctionName="TabangHubModel.Store.sp_RemoveEvent" />
   </EntityContainerMapping>
 </Mapping>
