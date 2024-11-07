@@ -67,8 +67,7 @@ namespace Tabang_Hub.Repository
             _vwVollunterSkills = new BaseRepository<vw_VolunteerSkills>();
         }
 
-        [HttpPost]
-        public ErrorCode CreateEvents(OrgEvents orgEvents, List<string> imageFileNames, Dictionary<string, int> skills, ref string errMsg)
+        public ErrorCode CreateEvents(OrgEvents orgEvents, List<string> imageFileNames, List<string> skills, ref string errMsg)
         {
             // Create the event
             if (_orgEvents.Create(orgEvents, out errMsg) != ErrorCode.Success)
@@ -93,12 +92,11 @@ namespace Tabang_Hub.Repository
             // Add each skill associated with the eventId            
             foreach (var skill in skills)
             {
-                var skillId = GetSkillIdBySkillName(skill.Key);
+                var skillId = GetSkillIdBySkillName(skill);
                 var skillRequirement = new OrgSkillRequirement
                 {
                     eventId = eventId,
                     skillId = skillId.skillId,
-                    totalNeeded = skill.Value
                 };
 
                 if (_orgSkillRequirements.Create(skillRequirement, out errMsg) != ErrorCode.Success)
@@ -123,6 +121,7 @@ namespace Tabang_Hub.Repository
             }
             return ErrorCode.Success;
         }
+
 
         public ErrorCode EditOrgInfo(OrgInfo orgInformation, int id, ref string errMsg)
         {
@@ -154,7 +153,7 @@ namespace Tabang_Hub.Repository
 
             return ErrorCode.Success;
         }
-        public ErrorCode EditEvent(OrgEvents orgEvents, Dictionary<string, int> skills, string[] skillsToRemove, List<string> imageFileNames, int eventId, ref string errMsg)
+        public ErrorCode EditEvent(OrgEvents orgEvents, List<string> skills, string[] skillsToRemove, List<string> imageFileNames, int eventId, ref string errMsg)
         {
             // Get the existing skills for the event
             var oldSkills = listOfSkillRequirement(eventId);
@@ -173,43 +172,31 @@ namespace Tabang_Hub.Repository
                 skillsToRemove = new string[0]; // Initialize as an empty array
             }
 
-            var skillsToActuallyRemove = skillsToRemove.Except(skills.Keys).ToArray();
+            var skillsToActuallyRemove = skillsToRemove.Except(skills).ToArray();
 
             // Step 2: Update existing skills where totalNeeded has changed
             foreach (var oldSkill in oldSkills)
             {
-                if (skills.ContainsKey(oldSkill.Skills.skillName))
+                // Update the skill requirement in the database
+                if (_orgSkillRequirements.Update(oldSkill.skillRequirementId, oldSkill, out errMsg) != ErrorCode.Success)
                 {
-                    var newTotalNeeded = skills[oldSkill.Skills.skillName];
-                    if (oldSkill.totalNeeded != newTotalNeeded)
-                    {
-                        // Update the totalNeeded value
-                        oldSkill.totalNeeded = newTotalNeeded;
-
-                        // Update the skill requirement in the database
-                        if (_orgSkillRequirements.Update(oldSkill.skillRequirementId, oldSkill, out errMsg) != ErrorCode.Success)
-                        {
-                            // Return an error if the update fails
-                            return ErrorCode.Error;
-                        }
-                    }
-
-                    // Remove the skill from skills dictionary as it's already processed
-                    skills.Remove(oldSkill.Skills.skillName);
+                    // Return an error if the update fails
+                    return ErrorCode.Error;
                 }
+                // Remove the skill from skills dictionary as it's already processed
+                skills.Remove(oldSkill.Skills.skillName);
             }
 
             // Step 3: Create new skills that do not exist in oldSkills
             foreach (var skill in skills)
             {
                 // Get the skillId by skill name
-                var tempSkill = GetSkillIdBySkillName(skill.Key);
+                var tempSkill = GetSkillIdBySkillName(skill);
 
                 var newSkillRequirement = new OrgSkillRequirement
                 {
                     eventId = eventId,
                     skillId = tempSkill.skillId,
-                    totalNeeded = skill.Value
                 };
 
                 // Create the new skill requirement entry in the database
@@ -265,7 +252,6 @@ namespace Tabang_Hub.Repository
 
             // Step 6: Ensure that maxVolunteer is calculated by summing up totalNeeded for each skill in the event
             var updatedOldSkills = listOfSkillRequirement(eventId); // Refresh the oldSkills list
-            orgEvents.maxVolunteer = updatedOldSkills.Sum(s => s.totalNeeded);
 
             var oldObj = GetEventsByEventId(eventId);
 
@@ -287,7 +273,6 @@ namespace Tabang_Hub.Repository
 
             return ErrorCode.Success;
         }
-
         public List<vw_ListOfEvent> ListOfEvents(int userId)
         {
             return _listOfEvents.GetAll().Where(m => m.User_Id == userId).ToList();
@@ -534,9 +519,9 @@ namespace Tabang_Hub.Repository
         {
             return _orgInfo._table.Where(m => m.userId == id).FirstOrDefault();
         }
-        public vw_ListOfEvent GetEventById(int id)
+        public OrgEvents GetEventById(int id)
         {
-            return _listOfEvents._table.Where(m => m.Event_Id == id).FirstOrDefault();
+            return _orgEvents._table.Where(m => m.eventId == id).FirstOrDefault();
         }
         public OrgEvents GetEventsByEventId(int id)
         {

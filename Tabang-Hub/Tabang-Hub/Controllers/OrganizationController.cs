@@ -146,14 +146,17 @@ namespace Tabang_Hub.Controllers
             return View(indexModel);
         }
         [HttpPost]
-        public ActionResult CreateEvents(Lists events, Dictionary<string, int> skills, HttpPostedFileBase[] images)
+        public ActionResult CreateEvents(Lists events, List<string> skills, HttpPostedFileBase[] images)
         {
             // Sanitize skill names
-            var sanitizedSkills = new Dictionary<string, int>();
-            foreach (var skill in skills)
+            var sanitizedSkills = new List<string>();
+            if (skills != null)
             {
-                var sanitizedSkillName = skill.Key.Replace(" x", "").Trim();
-                sanitizedSkills[sanitizedSkillName] = skill.Value;
+                foreach (var skill in skills)
+                {
+                    var sanitizedSkillName = skill.Replace(" x", "").Trim();
+                    sanitizedSkills.Add(sanitizedSkillName);
+                }
             }
 
             events.CreateEvents.userId = UserId;
@@ -196,19 +199,6 @@ namespace Tabang_Hub.Controllers
             if (images == null || images.Length == 0)
             {
                 ModelState.AddModelError("CreateEvents.images", "At least one image is required.");
-            }
-
-            // Ensure the total volunteers from skills matches the maximum volunteers
-            int totalVolunteers = 0;
-            foreach (var skillCount in sanitizedSkills.Values)
-            {
-                totalVolunteers += skillCount;
-            }
-            events.CreateEvents.maxVolunteer = totalVolunteers;
-            if (totalVolunteers != events.CreateEvents.maxVolunteer)
-            {
-                ModelState.AddModelError(string.Empty, "Total volunteers assigned to skills must equal the maximum number of volunteers.");
-                return RedirectToAction("EventsList");
             }
 
             // Image processing
@@ -348,7 +338,7 @@ namespace Tabang_Hub.Controllers
             });
         }
         [HttpPost]
-        public ActionResult EditEvent(Lists events, Dictionary<string, int> skills, string[] skillsToRemove, HttpPostedFileBase[] images, int eventId)
+        public ActionResult EditEvent(Lists events, List<string> skills, string[] skillsToRemove, HttpPostedFileBase[] images, int eventId)
         {
             string errMsg = string.Empty;
             var allowedExtensions = new List<string> { ".jpg", ".jpeg", ".png", ".gif" };
@@ -391,15 +381,6 @@ namespace Tabang_Hub.Controllers
                 }
             }
 
-            // Calculate total volunteers
-            int totalVolunteers = 0;
-            if (skills != null && skills.Count > 0)
-            {
-                totalVolunteers = skills.Values.Sum();
-            }
-            events.CreateEvents.maxVolunteer = totalVolunteers;
-
-
             if (Request.Form["events.CreateEvents.targetAmount"] != null)
             {
                 var targetAmountString = Request.Form["events.CreateEvents.targetAmount"];
@@ -433,7 +414,7 @@ namespace Tabang_Hub.Controllers
                 return RedirectToAction("Details", new { id = eventId });
             }
 
-            var volunteers = _organizationManager.GetVolunteersByEventId(eventId);           
+            var volunteers = _organizationManager.GetVolunteersByEventId(eventId);
 
             foreach (var vol in volunteers)
             {
@@ -441,21 +422,22 @@ namespace Tabang_Hub.Controllers
                 {
                     userId = vol.userId,
                     senderUserId = UserId,
-                    relatedId = events.eventDetails.Event_Id,
+                    relatedId = events.eventDetails.eventId,
                     type = "Donation",
                     content = $"{events.CreateEvents.eventTitle} Event has been Edited.",
                     broadcast = 0,
                     status = 0,
                     createdAt = DateTime.Now,
-                    readAt = null                    
+                    readAt = null
                 };
 
                 db.Notification.Add(notification);
                 db.SaveChanges(); // Save the notification
-            }          
+            }
 
             return RedirectToAction("Details", new { id = eventId });
         }
+
         [HttpPost]
         public ActionResult Delete(int eventId)
         {

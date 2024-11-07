@@ -167,7 +167,7 @@
     }
 </style>
 
-@if (Model.eventDetails.End_Date > DateTime.Now)
+@if (Model.eventDetails.dateEnd > DateTime.Now)
 {
     <div class="container mt-5">
         <!-- Navbar -->
@@ -240,15 +240,15 @@
                         </div>
                         <div class="card-body d-flex flex-column">
                             <ul class="list-group list-group-flush flex-grow-1">
-                                <h5 class="card-title">@Model.eventDetails.Event_Name</h5>
-                                <p class="card-text">@Model.eventDetails.Description</p>
-                                <li class="list-group-item"><i class="bi bi-people me-2"></i><strong>Max Volunteer:</strong> @Model.eventDetails.Maximum_Volunteer</li>
-                                <li class="list-group-item"><i class="bi bi-calendar me-2"></i><strong>Date Started:</strong> @Model.eventDetails.Start_Date</li>
-                                <li class="list-group-item"><i class="bi bi-calendar me-2"></i><strong>Date Ended:</strong> @Model.eventDetails.End_Date</li>
-                                <li class="list-group-item"><i class="bi bi-geo-alt me-2"></i><strong>Location:</strong> @Model.eventDetails.Location</li>
+                                <h5 class="card-title">@Model.eventDetails.eventTitle</h5>
+                                <p class="card-text">@Model.eventDetails.eventDescription</p>
+                                <li class="list-group-item"><i class="bi bi-people me-2"></i><strong>Max Volunteer:</strong> @Model.eventDetails.maxVolunteer</li>
+                                <li class="list-group-item"><i class="bi bi-calendar me-2"></i><strong>Date Started:</strong> @Model.eventDetails.dateStart</li>
+                                <li class="list-group-item"><i class="bi bi-calendar me-2"></i><strong>Date Ended:</strong> @Model.eventDetails.dateEnd</li>
+                                <li class="list-group-item"><i class="bi bi-geo-alt me-2"></i><strong>Location:</strong> @Model.eventDetails.location</li>
                             </ul>
                         </div>
-                        @if (Model.eventDetails.Target_Amount != null)
+                        @if (Model.eventDetails.targetAmount != null)
                         {
                             <div class="card-body">
                                 <h5 class="card-title">Target Amount</h5>
@@ -263,13 +263,13 @@
                                         }
                                     }
 
-                                    var percentage = (raisedAmount / Model.eventDetails.Target_Amount) * 100;
+                                    var percentage = (raisedAmount / Model.eventDetails.targetAmount) * 100;
                                 }
                                 <div class="progress-bar-container">
                                     <div class="progress">
-                                        <div class="progress-bar" role="progressbar" style="width: @percentage%" aria-valuenow="@raisedAmount" aria-valuemin="0" aria-valuemax="@Model.eventDetails.Target_Amount"></div>
+                                        <div class="progress-bar" role="progressbar" style="width: @percentage%" aria-valuenow="@raisedAmount" aria-valuemin="0" aria-valuemax="@Model.eventDetails.targetAmount"></div>
                                         <div class="progress-text">
-                                            @($"{raisedAmount:₱#,##0.00}") / @($"{Model.eventDetails.Target_Amount:₱#,##0.00}")
+                                            @($"{raisedAmount:₱#,##0.00}") / @($"{Model.eventDetails.targetAmount:₱#,##0.00}")
                                         </div>
                                     </div>
                                 </div>
@@ -382,36 +382,38 @@
         <div class="modal fade" id="editEventModal" tabindex="-1" aria-labelledby="editEventModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
+                    <!-- Modal Header -->
                     <div class="modal-header">
                         <h5 class="modal-title" id="editEventModalLabel">Edit Event</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
+                    <!-- Modal Body -->
                     <div class="modal-body">
-                        <form method="post" enctype="multipart/form-data" action="@Url.Action("EditEvent", "Organization")">
+                        <form id="edit-event-form" method="post" enctype="multipart/form-data" action="@Url.Action("EditEvent", "Organization")">
                             <!-- Event ID -->
-                            <input type="hidden" name="eventId" value="@Model.eventDetails.Event_Id" />
+                            <input type="hidden" name="eventId" value="@Model.eventDetails.eventId" />
 
                             <!-- Event Title -->
                             <div class="mb-3">
                                 <label for="EditEvent_eventTitle" class="form-label">Event Title</label>
-                                <input type="text" class="form-control" id="EditEvent_eventTitle" name="events.CreateEvents.eventTitle" value="@Model.eventDetails.Event_Name" placeholder="Enter event title">
+                                <input type="text" class="form-control" id="EditEvent_eventTitle" name="events.CreateEvents.eventTitle" value="@Model.eventDetails.eventTitle" placeholder="Enter event title">
                                 <span class="error" id="EditEvent_eventTitle_error"></span>
                             </div>
 
                             <!-- Event Description -->
                             <div class="mb-3">
                                 <label for="EditEvent_eventDescription" class="form-label">Event Description</label>
-                                <textarea class="form-control" id="EditEvent_eventDescription" name="events.CreateEvents.eventDescription" rows="4" placeholder="Enter event description">@Model.eventDetails.Description</textarea>
+                                <textarea class="form-control" id="EditEvent_eventDescription" name="events.CreateEvents.eventDescription" rows="4" placeholder="Enter event description">@Model.eventDetails.eventDescription</textarea>
                                 <span class="error" id="EditEvent_eventDescription_error"></span>
                             </div>
 
                             <!-- Target Amount -->
                             <div class="mb-3">
                                 <div class="form-check form-switch">
-                                    <input class="form-check-input" type="checkbox" id="editSwitchCheckDefault" onchange="toggleTargetAmount(this)" @(Model.eventDetails.Target_Amount != null ? "checked" : "")>
+                                    <input class="form-check-input" type="checkbox" id="editSwitchCheckDefault" onchange="toggleTargetAmount(this)" @(Model.eventDetails.targetAmount != null ? "checked" : "")>
                                     <label class="form-check-label" for="editSwitchCheckDefault">Enable Target Amount</label>
                                 </div>
-                                <input type="text" class="form-control mt-2" id="EditEvent_targetAmount" name="events.CreateEvents.targetAmount" value="@(Model.eventDetails.Target_Amount?.ToString() ?? "")" placeholder="Enter target amount in Peso" @(Model.eventDetails.Target_Amount == null ? "disabled" : "")>
+                                <input type="text" class="form-control mt-2" id="EditEvent_targetAmount" name="events.CreateEvents.targetAmount" value="@(Model.eventDetails.targetAmount?.ToString() ?? "")" placeholder="Enter target amount in Peso" @(Model.eventDetails.targetAmount == null ? "disabled" : "")>
                                 <span class="error" id="EditEvent_targetAmount_error"></span>
                             </div>
 
@@ -419,51 +421,72 @@
                             <div class="mb-3 row">
                                 <div class="col">
                                     <label for="EditEvent_dateStart" class="form-label">Start Date and Time</label>
-                                    <input type="datetime-local" class="form-control" id="EditEvent_dateStart" name="events.CreateEvents.dateStart" value="@(Model.eventDetails.Start_Date.HasValue ? Model.eventDetails.Start_Date.Value.ToString("yyyy-MM-ddTHH:mm") : "")">
+                                    <input type="datetime-local" class="form-control" id="EditEvent_dateStart" name="events.CreateEvents.dateStart" value="@(Model.eventDetails.dateStart.HasValue ? Model.eventDetails.dateStart.Value.ToString("yyyy-MM-ddTHH:mm") : "")">
                                     <span class="error" id="EditEvent_dateStart_error"></span>
                                 </div>
                                 <div class="col">
                                     <label for="EditEvent_dateEnd" class="form-label">End Date and Time</label>
-                                    <input type="datetime-local" class="form-control" id="EditEvent_dateEnd" name="events.CreateEvents.dateEnd" value="@(Model.eventDetails.End_Date.HasValue ? Model.eventDetails.End_Date.Value.ToString("yyyy-MM-ddTHH:mm") : "")">
+                                    <input type="datetime-local" class="form-control" id="EditEvent_dateEnd" name="events.CreateEvents.dateEnd" value="@(Model.eventDetails.dateEnd.HasValue ? Model.eventDetails.dateEnd.Value.ToString("yyyy-MM-ddTHH:mm") : "")">
                                     <span class="error" id="EditEvent_dateEnd_error"></span>
                                 </div>
+                            </div>
+
+                            <!-- Map for selecting location -->
+                            <div class="mb-3">
+                                <div id="map" style="height: 400px;"></div>
                             </div>
 
                             <!-- Location -->
                             <div class="mb-3">
                                 <label for="EditEvent_location" class="form-label">Location</label>
-                                <input type="text" class="form-control" id="EditEvent_location" name="events.CreateEvents.location" value="@Model.eventDetails.Location" placeholder="Enter location">
+                                <input type="text" class="form-control" id="EditEvent_location" name="events.CreateEvents.location" value="@Model.eventDetails.location" placeholder="Enter location">
                                 <span class="error" id="EditEvent_location_error"></span>
                             </div>
 
+                            <!-- Maximum Volunteers -->
+                            <div class="mb-3">
+                                <label for="EditEvent_maxVolunteer" class="form-label">Maximum Volunteers</label>
+                                <input type="number" class="form-control" id="EditEvent_maxVolunteer" name="events.CreateEvents.maxVolunteer" min="1" value="@Model.eventDetails.maxVolunteer" placeholder="Enter maximum number of volunteers">
+                                <span class="error" id="EditEvent_maxVolunteer_error"></span>
+                            </div>
+                            <div id="skillsToRemoveContainer"></div>
                             <!-- Volunteer Skills Requirements -->
                             <div class="mb-3">
                                 <label>Volunteer Skills Requirements</label>
-                                <div class="added-skills" id="edit-added-skills">
-                                    @foreach (var skill in Model.detailsSkillRequirement)
-                                    {
-                                        <div class="skill-item" id="skill-item-@skill.Skills.skillName">
-                                            <span>@skill.Skills.skillName</span>
-                                            <input type="number" class="form-control skill-count" name="skills[@skill.Skills.skillName]" value="@skill.totalNeeded" min="1" onchange="updateTotalVolunteers()" />
-                                            <span class="remove-skill" onclick="removeEditSkill('@skill.Skills.skillName', this.parentNode, document.getElementById('edit-skill-@skill.Skills.skillName'))">&times;</span>
-                                        </div>
-                                    }
+                                <!-- Skills Table -->
+                                <div class="table-responsive" style="max-height: 200px; overflow-y: auto;">
+                                    <table class="table table-bordered">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th>Skill</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="edit-skills-table-body">
+                                            <!-- Existing skills populated here -->
+                                            @foreach (var skill in Model.detailsSkillRequirement)
+                                            {
+                                                <tr data-skill="@skill.Skills.skillName">
+                                                    <td>@skill.Skills.skillName</td>
+                                                    <td>
+                                                        <button type="button" class="btn btn-danger btn-sm" onclick="removeEditSkillFromTable('@skill.Skills.skillName', this)">Remove</button>
+                                                        <input type="hidden" name="skills" value="@skill.Skills.skillName" />
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
                                 </div>
-                                <!-- Hidden inputs for skills to remove -->
-                                <div id="skillsToRemoveContainer"></div>
-                                <!-- Skill buttons -->
-                                <div class="skills-container mb-3">
-                                    @foreach (var skills in Model.listOfSkills)
-                                    {
-                                        <button type="button" class="btn btn-outline-primary skill-button" onclick="addEditSkill('@skills.skillName')" id="edit-skill-@skills.skillName" @(Model.detailsSkillRequirement.Any(s => s.Skills.skillName == skills.skillName) ? "disabled" : "")>@skills.skillName</button>
-                                    }
-                                </div>
+                                <span class="error" id="EditEvent_skills_error"></span>
                             </div>
 
-                            <!-- Display Total Volunteers -->
-                            <div class="mb-3">
-                                <label for="totalVolunteers" class="form-label">Total Volunteers Needed</label>
-                                <input type="text" class="form-control" id="totalVolunteers" name="events.CreateEvents.maxVolunteer" readonly>
+                            <!-- Skill Buttons to Add Skills -->
+                            <div class="skills-container mb-3">
+                                @foreach (var skills in Model.listOfSkills)
+                                {
+                                    var isSkillAdded = Model.detailsSkillRequirement.Any(s => s.Skills.skillName == skills.skillName);
+                                    <button type="button" class="btn btn-outline-primary skill-button" onclick="addEditSkillToTable('@skills.skillName')" id="edit-skill-@skills.skillName" @(isSkillAdded ? "disabled" : "")>@skills.skillName</button>
+                                }
                             </div>
 
                             <!-- Upload Images -->
@@ -474,12 +497,14 @@
                                 <div class="preview-container" id="edit-image-preview"></div>
                             </div>
 
+                            <!-- Submit Button -->
                             <button class="btn btn-primary" type="submit">Save Changes</button>
                         </form>
                     </div>
                 </div>
             </div>
         </div>
+
     </div>
 
     <!-- Invite Volunteer Modal -->
@@ -493,7 +518,7 @@
                 <div class="modal-body">
                     <form id="inviteForm" action="@Url.Action("InviteVolunteer", "Organization")" method="post">
                         <!-- Hidden input to pass eventId -->
-                        <input type="hidden" name="eventId" value="@Model.eventDetails.Event_Id" />
+                        <input type="hidden" name="eventId" value="@Model.eventDetails.eventId" />
 
                         <!-- Matched Volunteers -->
                         <div class="mb-3">
@@ -590,15 +615,15 @@ else
                         </div>
                         <div class="card-body d-flex flex-column">
                             <ul class="list-group list-group-flush flex-grow-1">
-                                <h5 class="card-title">@Model.eventDetails.Event_Name</h5>
-                                <p class="card-text">@Model.eventDetails.Description</p>
-                                <li class="list-group-item"><i class="bi bi-people me-2"></i><strong>Max Volunteer:</strong> @Model.eventDetails.Maximum_Volunteer</li>
-                                <li class="list-group-item"><i class="bi bi-calendar me-2"></i><strong>Date Started:</strong> @Model.eventDetails.Start_Date</li>
-                                <li class="list-group-item"><i class="bi bi-calendar me-2"></i><strong>Date Ended:</strong> @Model.eventDetails.End_Date</li>
-                                <li class="list-group-item"><i class="bi bi-geo-alt me-2"></i><strong>Location:</strong> @Model.eventDetails.Location</li>
+                                <h5 class="card-title">@Model.eventDetails.eventTitle</h5>
+                                <p class="card-text">@Model.eventDetails.eventDescription</p>
+                                <li class="list-group-item"><i class="bi bi-people me-2"></i><strong>Max Volunteer:</strong> @Model.eventDetails.maxVolunteer</li>
+                                <li class="list-group-item"><i class="bi bi-calendar me-2"></i><strong>Date Started:</strong> @Model.eventDetails.dateStart</li>
+                                <li class="list-group-item"><i class="bi bi-calendar me-2"></i><strong>Date Ended:</strong> @Model.eventDetails.dateEnd</li>
+                                <li class="list-group-item"><i class="bi bi-geo-alt me-2"></i><strong>Location:</strong> @Model.eventDetails.location</li>
                             </ul>
                         </div>
-                        @if (Model.eventDetails.Target_Amount != null)
+                        @if (Model.eventDetails.targetAmount != null)
                         {
                             <div class="card-body">
                                 <h5 class="card-title">Target Amount</h5>
@@ -610,13 +635,13 @@ else
                                         raisedAmount += donated.amount;
                                     }
 
-                                    var percentage = (raisedAmount / Model.eventDetails.Target_Amount) * 100;
+                                    var percentage = (raisedAmount / Model.eventDetails.targetAmount) * 100;
                                 }
                                 <div class="progress-bar-container">
                                     <div class="progress">
-                                        <div class="progress-bar" role="progressbar" style="width: @percentage%" aria-valuenow="@raisedAmount" aria-valuemin="0" aria-valuemax="@Model.eventDetails.Target_Amount"></div>
+                                        <div class="progress-bar" role="progressbar" style="width: @percentage%" aria-valuenow="@raisedAmount" aria-valuemin="0" aria-valuemax="@Model.eventDetails.targetAmount"></div>
                                         <div class="progress-text">
-                                            @($"{raisedAmount:₱#,##0.00}") / @($"{Model.eventDetails.Target_Amount:₱#,##0.00}")
+                                            @($"{raisedAmount:₱#,##0.00}") / @($"{Model.eventDetails.targetAmount:₱#,##0.00}")
                                         </div>
                                     </div>
                                 </div>
@@ -754,6 +779,51 @@ else
             });
         });
 
+        $('#editEventModal').on('shown.bs.modal', function () {
+            console.log('Modal shown. Initializing map.');
+
+            // Coordinates for Lapu-Lapu City
+            const lapuLapuCoords = [10.3140, 123.9495];
+
+            // Initialize the map centered on Lapu-Lapu City
+            window.leafletMap = L.map('map').setView(lapuLapuCoords, 13);
+
+            // Add OpenStreetMap tile layer
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: 'Map data © OpenStreetMap contributors'
+            }).addTo(window.leafletMap);
+
+            // Add click event to the map
+            window.leafletMap.on('click', function (e) {
+                const latlng = e.latlng;
+                const lat = latlng.lat;
+                const lon = latlng.lng;
+
+                // Use reverse geocoding to get the address
+                const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lon}`;
+
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        const address = data.display_name;
+                        document.getElementById('EditEvent_location').value = address;
+                    })
+                    .catch(error => {
+                        console.error('Error in reverse geocoding:', error);
+                        document.getElementById('EditEvent_location').value = `${lat}, ${lon}`;
+                    });
+            });
+        });
+
+        // Destroy the map when the modal is hidden
+        $('#editEventModal').on('hidden.bs.modal', function () {
+            if (window.leafletMap) {
+                console.log('Modal hidden. Removing map.');
+                window.leafletMap.remove();
+                window.leafletMap = null;
+            }
+        });
+
         // Event listener for Submit All Ratings button
         var submitAllRatingsButton = document.getElementById('submitAllRatings');
         if (submitAllRatingsButton) {
@@ -783,7 +853,7 @@ else
                         type: 'POST',
                         contentType: 'application/json',
                         data: JSON.stringify({
-                            eventId: @Model.eventDetails.Event_Id,
+                            eventId: @Model.eventDetails.eventId,
                             volunteerIds: volunteerIds,
                             ratings: ratingsData,
                             attendance: attendanceData // Added attendance data
@@ -984,101 +1054,88 @@ document.querySelectorAll('.decline-btn').forEach(button => {
         }
     }
 
-    function addEditSkill(skillName) {
-        const addedSkillsContainer = document.getElementById('edit-added-skills');
-        const skillButton = document.getElementById(`edit-skill-${skillName}`);
+    function addEditSkillToTable(skill) {
+        const tableBody = document.getElementById('edit-skills-table-body');
+        const skillButton = document.getElementById(`edit-skill-${skill}`);
+
+        // Disable the button once the skill is added
         skillButton.disabled = true;
 
-        const skillItem = document.createElement('div');
-        skillItem.className = 'skill-item';
-        skillItem.id = `skill-item-${skillName}`;
+        // Create a new table row for the skill
+        const row = document.createElement('tr');
+        row.setAttribute('data-skill', skill);
 
-        const skillSpan = document.createElement('span');
-        skillSpan.textContent = skillName;
-        skillItem.appendChild(skillSpan);
+        // Skill name cell
+        const skillNameCell = document.createElement('td');
+        skillNameCell.textContent = skill;
+        row.appendChild(skillNameCell);
 
+        // Action cell with Remove button and hidden input
+        const actionCell = document.createElement('td');
+
+        // Hidden input to include the skill in the form submission
         const skillInput = document.createElement('input');
-        skillInput.type = 'number';
-        skillInput.className = 'form-control skill-count';
-        skillInput.name = `skills[${skillName}]`;
-        skillInput.min = '1';
-        skillInput.value = '1';
-        skillInput.onchange = updateTotalVolunteers;
-        skillItem.appendChild(skillInput);
+        skillInput.type = 'hidden';
+        skillInput.name = 'skills';
+        skillInput.value = skill;
+        actionCell.appendChild(skillInput);
 
-        const removeSpan = document.createElement('span');
-        removeSpan.className = 'remove-skill';
-        removeSpan.innerHTML = '&times;';
-        removeSpan.onclick = function () {
-            removeEditSkill(skillName, skillItem, skillButton);
+        // Remove button
+        const removeButton = document.createElement('button');
+        removeButton.type = 'button';
+        removeButton.className = 'btn btn-danger btn-sm';
+        removeButton.textContent = 'Remove';
+        removeButton.onclick = function () {
+            removeEditSkillFromTable(skill, this);
         };
-        skillItem.appendChild(removeSpan);
+        actionCell.appendChild(removeButton);
 
-        addedSkillsContainer.appendChild(skillItem);
+        row.appendChild(actionCell);
 
-        // Remove the hidden input for the skill if it exists
-        const existingInput = document.querySelector(`input[name="skillsToRemove"][value="${skillName}"]`);
-        if (existingInput) {
-            existingInput.remove();
+        // Append the row to the table body
+        tableBody.appendChild(row);
+
+        // Remove the skill from skillsToRemoveContainer if it exists
+        const skillsToRemoveContainer = document.getElementById('skillsToRemoveContainer');
+        if (skillsToRemoveContainer) {
+            const inputs = skillsToRemoveContainer.querySelectorAll('input[name^="skillsToRemove"]');
+            inputs.forEach(input => {
+                if (input.value === skill) {
+                    skillsToRemoveContainer.removeChild(input);
+                }
+            });
         }
-
-        updateTotalVolunteers();
     }
 
-    function removeEditSkill(skillName, skillItem, skillButton) {
-        const skillsContainer = document.getElementById('edit-added-skills');
-        if (skillsContainer.contains(skillItem)) {
-            skillsContainer.removeChild(skillItem);
-        }
+    function removeEditSkillFromTable(skill, button) {
+        const row = button.closest('tr');
+        row.parentNode.removeChild(row);
 
-        // Enable the skill button when the skill is removed
+        // Re-enable the skill button when the skill is removed
+        const skillButton = document.getElementById(`edit-skill-${skill}`);
         if (skillButton) {
             skillButton.disabled = false;
         }
 
-        // Check if the hidden input already exists
-        const existingInput = document.querySelector(`input[name="skillsToRemove"][value="${skillName}"]`);
-        if (!existingInput) {
-            // Add a hidden input for the removed skill
-            const skillsToRemoveContainer = document.getElementById('skillsToRemoveContainer');
-            const removedSkillInput = document.createElement('input');
-            removedSkillInput.type = 'hidden';
-            removedSkillInput.name = 'skillsToRemove';
-            removedSkillInput.value = skillName;
-            skillsToRemoveContainer.appendChild(removedSkillInput);
-        }
+        // Add a hidden input to include the removed skill in the form submission
+        const skillsToRemoveContainer = document.getElementById('skillsToRemoveContainer');
+        if (skillsToRemoveContainer) {
+            // Check if the skill is already marked for removal
+            const existingInput = Array.from(skillsToRemoveContainer.querySelectorAll('input[name^="skillsToRemove"]'))
+                .find(input => input.value === skill);
 
-        updateTotalVolunteers();
-    }
-
-    function updateTotalVolunteers() {
-        let totalVolunteers = 0;
-        document.querySelectorAll('.skill-count').forEach(function (input) {
-            totalVolunteers += parseInt(input.value) || 0;
-        });
-        const totalVolunteersInput = document.getElementById('totalVolunteers');
-        if (totalVolunteersInput) {
-            totalVolunteersInput.value = totalVolunteers;
+            if (!existingInput) {
+                const index = skillsToRemoveContainer.childElementCount;
+                const removedSkillInput = document.createElement('input');
+                removedSkillInput.type = 'hidden';
+                removedSkillInput.name = `skillsToRemove[${index}]`;
+                removedSkillInput.value = skill;
+                skillsToRemoveContainer.appendChild(removedSkillInput);
+            }
         }
     }
 
-    function previewImages() {
-        const previewContainer = document.getElementById('image-preview');
-        const files = document.getElementById('CreateEvents_uploadImage').files;
-        previewContainer.innerHTML = '';
-        for (let i = 0; i < files.length; i++) {
-            const file = files[i];
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                const img = document.createElement('img');
-                img.src = e.target.result;
-                img.classList.add('img-thumbnail', 'me-2', 'mb-2');
-                previewContainer.appendChild(img);
-            };
-            reader.readAsDataURL(file);
-        }
-    }
-
+    // Function to preview uploaded images in the Edit Event modal
     function previewEditImages() {
         const previewContainer = document.getElementById('edit-image-preview');
         const files = document.getElementById('EditEvent_uploadImage').files;
@@ -1096,66 +1153,100 @@ document.querySelectorAll('.decline-btn').forEach(button => {
         }
     }
 
-    function validateEditForm() {
+    // Validation for the Edit Event form
+    function validateEditForm(event) {
+        event.preventDefault();
         let isValid = true;
-        const form = document.getElementById('edit-event-form');
-        const title = form['EditEvent.eventTitle'].value.trim();
-        const description = form['EditEvent.eventDescription'].value.trim();
-        const maxVolunteer = form['EditEvent.maxVolunteer'].value.trim();
-        const dateStart = form['EditEvent.dateStart'].value.trim();
-        const dateEnd = form['EditEvent.dateEnd'].value.trim();
-        const location = form['EditEvent.location'].value.trim();
-        const targetAmount = form['EditEvent.targetAmount'].value.trim();
 
-        if (title === '') {
-            document.getElementById('EditEvent_eventTitle_error').textContent = 'Title is required';
+        // Clear previous errors
+        document.querySelectorAll('.error').forEach(e => e.innerHTML = '');
+
+        // Validate event title
+        const eventTitle = document.getElementById('EditEvent_eventTitle');
+        if (eventTitle.value.trim() === '') {
+            document.getElementById('EditEvent_eventTitle_error').innerText = 'Event title is required.';
             isValid = false;
-        } else {
-            document.getElementById('EditEvent_eventTitle_error').textContent = '';
         }
 
-        if (description === '') {
-            document.getElementById('EditEvent_eventDescription_error').textContent = 'Description is required';
+        // Validate event description
+        const eventDescription = document.getElementById('EditEvent_eventDescription');
+        if (eventDescription.value.trim() === '') {
+            document.getElementById('EditEvent_eventDescription_error').innerText = 'Event description is required.';
             isValid = false;
-        } else {
-            document.getElementById('EditEvent_eventDescription_error').textContent = '';
         }
 
-        if (maxVolunteer === '' || isNaN(maxVolunteer) || parseInt(maxVolunteer) <= 0) {
-            document.getElementById('EditEvent_maxVolunteer_error').textContent = 'Enter a valid number for max volunteers';
+        // Validate maximum volunteers
+        const maxVolunteersInput = document.getElementById('EditEvent_maxVolunteer');
+        const maxVolunteers = parseInt(maxVolunteersInput.value);
+        if (isNaN(maxVolunteers) || maxVolunteers <= 0) {
+            document.getElementById('EditEvent_maxVolunteer_error').innerText = 'Maximum volunteers must be a positive number.';
             isValid = false;
         } else {
-            document.getElementById('EditEvent_maxVolunteer_error').textContent = '';
+            document.getElementById('EditEvent_maxVolunteer_error').innerText = '';
         }
 
-        if (dateStart === '') {
-            document.getElementById('EditEvent_dateStart_error').textContent = 'Start date is required';
+        // Validate skills
+        const addedSkills = document.querySelectorAll('#edit-skills-table-body input[name="skills"]');
+        if (addedSkills.length === 0) {
+            document.getElementById('EditEvent_skills_error').innerText = 'At least one skill is required.';
             isValid = false;
         } else {
-            document.getElementById('EditEvent_dateStart_error').textContent = '';
+            document.getElementById('EditEvent_skills_error').innerText = ''; // Clear error if skills are added
         }
 
-        if (dateEnd === '') {
-            document.getElementById('EditEvent_dateEnd_error').textContent = 'End date is required';
+        // Validate date start and end
+        const dateStartInput = document.getElementById('EditEvent_dateStart');
+        const dateEndInput = document.getElementById('EditEvent_dateEnd');
+
+        const dateStart = new Date(dateStartInput.value);
+        const dateEnd = new Date(dateEndInput.value);
+        const now = new Date();
+
+        if (isNaN(dateStart.getTime())) {
+            document.getElementById('EditEvent_dateStart_error').innerText = 'Start date and time is required.';
+            isValid = false;
+        } else if (dateStart < now) {
+            document.getElementById('EditEvent_dateStart_error').innerText = 'Start date and time must be in the future.';
             isValid = false;
         } else {
-            document.getElementById('EditEvent_dateEnd_error').textContent = '';
+            document.getElementById('EditEvent_dateStart_error').innerText = '';
         }
 
-        if (location === '') {
-            document.getElementById('EditEvent_location_error').textContent = 'Location is required';
+        if (isNaN(dateEnd.getTime())) {
+            document.getElementById('EditEvent_dateEnd_error').innerText = 'End date and time is required.';
+            isValid = false;
+        } else if (dateEnd <= dateStart) {
+            document.getElementById('EditEvent_dateEnd_error').innerText = 'End date and time must be after start date and time.';
             isValid = false;
         } else {
-            document.getElementById('EditEvent_location_error').textContent = '';
+            document.getElementById('EditEvent_dateEnd_error').innerText = '';
         }
 
-        if (document.getElementById('editSwitchCheckDefault').checked && (targetAmount === '' || isNaN(targetAmount) || parseInt(targetAmount) <= 0)) {
-            document.getElementById('EditEvent_targetAmount_error').textContent = 'Enter a valid target amount';
+        // Validate location
+        const locationInput = document.getElementById('EditEvent_location');
+        if (locationInput.value.trim() === '') {
+            document.getElementById('EditEvent_location_error').innerText = 'Location is required.';
             isValid = false;
-        } else {
-            document.getElementById('EditEvent_targetAmount_error').textContent = '';
         }
 
-        return isValid;
+        // Validate target amount if enabled
+        const targetAmountInput = document.getElementById('EditEvent_targetAmount');
+        const targetAmountCheckbox = document.getElementById('editSwitchCheckDefault');
+        if (targetAmountCheckbox.checked) {
+            const targetAmountValue = parseFloat(targetAmountInput.value);
+            if (isNaN(targetAmountValue) || targetAmountValue <= 0) {
+                document.getElementById('EditEvent_targetAmount_error').innerText = 'Enter a valid target amount.';
+                isValid = false;
+            } else {
+                document.getElementById('EditEvent_targetAmount_error').innerText = '';
+            }
+        }
+
+        if (!isValid) {
+            return false;
+        }
+
+        // Submit the form
+        document.getElementById('edit-event-form').submit();
     }
 </script>

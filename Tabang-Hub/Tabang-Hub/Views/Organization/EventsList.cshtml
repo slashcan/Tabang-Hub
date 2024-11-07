@@ -211,10 +211,19 @@
                                 <span class="error" id="CreateEvents_dateEnd_error"></span>
                             </div>
                         </div>
+                        <!-- Map Container -->
+                        <div class="mb-3">
+                            <div id="map" style="height: 400px;"></div>
+                        </div>
                         <div class="mb-3">
                             <label for="CreateEvents_location" class="form-label">Location</label>
                             <input type="text" class="form-control" id="CreateEvents_location" name="CreateEvents.location" placeholder="Enter location">
                             <span class="error" id="CreateEvents_location_error"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label for="CreateEvents_maxVolunteer" class="form-label">Maximum Volunteers</label>
+                            <input type="number" class="form-control" id="CreateEvents_maxVolunteer" name="CreateEvents.maxVolunteer" min="1" placeholder="Enter maximum number of volunteers">
+                            <span class="error" id="CreateEvents_maxVolunteer_error"></span>
                         </div>
                         <div class="mb-3">
                             <label>Volunteer Skills Requirements</label>
@@ -223,7 +232,6 @@
                                     <thead class="table-light">
                                         <tr>
                                             <th>Skill</th>
-                                            <th>Volunteers Needed</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -256,7 +264,6 @@
         </div>
     </div>
 </div>
-
 <!-- SweetAlert JS -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -265,6 +272,52 @@
 <script src="~/Content/js/main.js"></script>
 
 <script>
+
+    $('#createEventModal').on('shown.bs.modal', function () {
+        console.log('Modal shown. Initializing map.');
+
+        // Coordinates for Lapu-Lapu City
+        const lapuLapuCoords = [10.3140, 123.9495];
+
+        // Initialize the map centered on Lapu-Lapu City
+        window.leafletMap = L.map('map').setView(lapuLapuCoords, 13);
+
+        // Add OpenStreetMap tile layer
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: 'Map data © OpenStreetMap contributors'
+        }).addTo(window.leafletMap);
+
+        // Add click event to the map
+        window.leafletMap.on('click', function (e) {
+            const latlng = e.latlng;
+            const lat = latlng.lat;
+            const lon = latlng.lng;
+
+            // Use reverse geocoding to get the address
+            const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lon}`;
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    const address = data.display_name;
+                    document.getElementById('CreateEvents_location').value = address;
+                })
+                .catch(error => {
+                    console.error('Error in reverse geocoding:', error);
+                    document.getElementById('CreateEvents_location').value = `${lat}, ${lon}`;
+                });
+        });
+    });
+
+    // Destroy the map when the modal is hidden
+    $('#createEventModal').on('hidden.bs.modal', function () {
+        if (window.leafletMap) {
+            console.log('Modal hidden. Removing map.');
+            window.leafletMap.remove();
+            window.leafletMap = null;
+        }
+    });
+
     document.getElementById('flexSwitchCheckDefault').addEventListener('change', function () {
         const targetAmountInput = document.getElementById('CreateEvents_targetAmount');
         if (this.checked) {
@@ -317,6 +370,7 @@
         if (hoursDifference < 3) {
             document.getElementById('CreateEvents_dateEnd_error').innerText = 'Event duration must be at least 3 hours.';
             document.getElementById('CreateEvents_dateEnd').value = '';
+            isValid = false;
         } else {
             document.getElementById('CreateEvents_dateEnd_error').innerText = '';
         }
@@ -335,29 +389,21 @@
             isValid = false;
         }
 
+        // Validate maximum volunteers
+        const maxVolunteersInput = document.getElementById('CreateEvents_maxVolunteer');
+        const maxVolunteers = parseInt(maxVolunteersInput.value);
+        if (isNaN(maxVolunteers) || maxVolunteers <= 0) {
+            document.getElementById('CreateEvents_maxVolunteer_error').innerText = 'Maximum volunteers must be a positive number.';
+            isValid = false;
+        }
+
         // Validate skills
-        const addedSkills = document.getElementById('skills-table-body').querySelectorAll('tr');
+        const addedSkills = document.querySelectorAll('input[name="skills"]');
         if (addedSkills.length === 0) {
             document.getElementById('CreateEvents_skills_error').innerText = 'At least one skill is required.';
             isValid = false;
         } else {
             document.getElementById('CreateEvents_skills_error').innerText = ''; // Clear error if skills are added
-        }
-
-        // Check if total volunteers match maximum volunteers
-        let totalVolunteers = 0;
-        document.querySelectorAll('input[name^="skills"]').forEach(input => {
-            totalVolunteers += parseInt(input.value);
-        });
-
-        // Display an error if total volunteers doesn't match max volunteers
-        const maxVolunteers = totalVolunteers; // For this example, assuming max volunteers should match total volunteers
-        if (totalVolunteers === 0) {
-            document.getElementById('CreateEvents_skills_error').innerText = 'Total volunteers cannot be zero.';
-            isValid = false;
-        } else if (totalVolunteers !== maxVolunteers) {
-            document.getElementById('CreateEvents_skills_error').innerText = `Total volunteers assigned (${totalVolunteers}) must equal the maximum number of volunteers (${maxVolunteers}).`;
-            isValid = false;
         }
 
         if (!isValid) {
@@ -406,17 +452,12 @@
         skillNameCell.textContent = skill;
         row.appendChild(skillNameCell);
 
-        // Volunteers needed input cell
-        const volunteerInputCell = document.createElement('td');
+        // Hidden input to include the skill in the form submission
         const skillInput = document.createElement('input');
-        skillInput.type = 'number';
-        skillInput.name = `skills[${skill}]`;
-        skillInput.value = 1; // Default value
-        skillInput.min = 1;
-        skillInput.className = 'form-control';
-        skillInput.onchange = updateTotalVolunteers;
-        volunteerInputCell.appendChild(skillInput);
-        row.appendChild(volunteerInputCell);
+        skillInput.type = 'hidden';
+        skillInput.name = 'skills';
+        skillInput.value = skill;
+        row.appendChild(skillInput);
 
         // Remove skill action cell
         const actionCell = document.createElement('td');
@@ -432,9 +473,6 @@
 
         // Append the row to the table body
         tableBody.appendChild(row);
-
-        // Update the total volunteers count
-        updateTotalVolunteers();
     }
 
     function removeSkillFromTable(skill, row, skillButton) {
@@ -443,18 +481,6 @@
 
         // Re-enable the skill button when the skill is removed
         skillButton.disabled = false;
-
-        // Update the total volunteers count
-        updateTotalVolunteers();
-    }
-
-    function updateTotalVolunteers() {
-        let totalVolunteers = 0;
-        document.querySelectorAll('input[name^="skills"]').forEach(input => {
-            totalVolunteers += parseInt(input.value);
-        });
-
-        document.getElementById('CreateEvents_skills_error').innerText = totalVolunteers === 0 ? 'Total volunteers cannot be zero.' : '';
     }
 
     function previewImages() {

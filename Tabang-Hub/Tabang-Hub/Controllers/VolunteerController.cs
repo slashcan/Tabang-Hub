@@ -483,7 +483,7 @@ namespace Tabang_Hub.Controllers
             var listofImage = _organizationManager.listOfEventImage(eventId);
             var getSkillRequirmenet = _skillRequirement.GetAll().Where(m => m.eventId == getOrgInfo.eventId).ToList();
             var donation = _organizationManager.GetEventById(eventId);
-            var orgInfo = _organizationManager.GetOrgInfoByUserId(donation.User_Id);
+            var orgInfo = _organizationManager.GetOrgInfoByUserId(donation.userId);
             var getProfile = db.ProfilePicture.Where(m => m.userId == UserId).ToList();
 
             var indexModel = new Utils.Lists()

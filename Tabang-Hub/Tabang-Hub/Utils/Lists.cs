@@ -9,7 +9,7 @@ namespace Tabang_Hub.Utils
     {
         public OrgEvents CreateEvents {  get; set; }
         public OrgSkillRequirement skillRequirement { get; set; }       
-        public vw_ListOfEvent eventDetails { get; set; }
+        public OrgEvents eventDetails { get; set; }
         public UserAccount userAccount { get; set; }
         public OrgInfo OrgInfo { get; set; }
         public ProfilePicture profilePic { get; set; }
