@@ -159,11 +159,11 @@
       <Parameter Name="eventId" Mode="In" Type="Int32" />
       <Parameter Name="skillId" Mode="In" Type="Int32" />
     </FunctionImport>
-    <FunctionImport Name="sp_ListOfGc" ReturnType="Collection(TabangHubModel.sp_ListOfGc_Result)">
-      <Parameter Name="userId" Mode="In" Type="Int32" />
-    </FunctionImport>
     <FunctionImport Name="sp_RemoveEvent">
       <Parameter Name="eventId" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_ListOfGc" ReturnType="Collection(TabangHubModel.sp_ListOfGc_Result)">
+      <Parameter Name="userId" Mode="In" Type="Int32" />
     </FunctionImport>
   </EntityContainer>
   <ComplexType Name="sp_GetSkills_Result">

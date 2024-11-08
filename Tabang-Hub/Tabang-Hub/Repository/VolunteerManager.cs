@@ -1,11 +1,16 @@
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web;
+using System.Web.Mvc;
 using System.Web.Security;
 using Tabang_Hub.Contracts;
+using Tabang_Hub.Controllers;
 using Tabang_Hub.Utils;
 
 
@@ -19,6 +24,8 @@ namespace Tabang_Hub.Repository
         public BaseRepository<vw_ListOfEvent> _vw_listOfEvent;
         public BaseRepository<VolunteersHistory> _volunteersHistory;
 
+        public BaseRepository<OrgEvents> _orgEvents;
+
         public TabangHubEntities db = new TabangHubEntities();
         public OrganizationManager OrganizationManager;
         public VolunteerManager() 
@@ -27,6 +34,8 @@ namespace Tabang_Hub.Repository
             _userDonated = new BaseRepository<UserDonated>();
             _volunteers = new BaseRepository<Volunteers>();
             _vw_listOfEvent = new BaseRepository<vw_ListOfEvent>();
+
+            _orgEvents = new BaseRepository<OrgEvents>();
 
             OrganizationManager = new OrganizationManager();
             db = new TabangHubEntities();
@@ -102,6 +111,40 @@ namespace Tabang_Hub.Repository
                     db.sp_RemoveEvent(volunteer.eventId);
                 }
             }
+        }
+
+         public async Task<List<FilteredEvent>> RunRecommendation(int UserId)
+         {
+            // Prepare the data to pass to Flask
+            var datas = new
+            {
+                user_skills = db.VolunteerSkill.Where(m => m.userId == UserId).Select(m => new { userId = m.userId, skillId = m.skillId }).ToList(),
+                event_data = _orgEvents.GetAll().Where(m => m.dateEnd >= DateTime.Now).Select(m => new { eventId = m.eventId, eventDescription = m.eventDescription }).ToList(),
+                event_skills = db.OrgSkillRequirement.Select(es => new { eventId = es.eventId, skillId = es.skillId }).ToList(),
+                volunteer_history = db.VolunteersHistory.Where(vh => vh.userId == UserId).Select(vh => new { eventId = vh.eventId, attended = vh.attended }).ToList()
+            };
+
+            string flaskApiUrl = "http://127.0.0.1:5000/predict"; // Flask API URL
+            List<FilteredEvent> recommendedEvents = new List<FilteredEvent>();
+
+            using (var client = new HttpClient())
+            {
+                // Step 1: Send POST request to Flask API with the requestData
+                var response = await client.PostAsJsonAsync(flaskApiUrl, datas);
+                var jsonResponse = await response.Content.ReadAsStringAsync();
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new Exception("Error calling the Python API: " + response.ReasonPhrase);
+                }
+                else
+                {
+                    // Step 2: Deserialize Flask API response to a list of recommended events
+                    recommendedEvents = JsonConvert.DeserializeObject<List<FilteredEvent>>(jsonResponse);
+                }
+            }
+
+            return recommendedEvents; // Return the list of recommended events
         }
     }
 }

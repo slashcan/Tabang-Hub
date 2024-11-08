@@ -4,98 +4,8 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @*<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">*@
-
-<style>
-    #profilePicPreview {
-        width: 150px;
-        height: 150px;
-        object-fit: cover;
-    }
-    #profilePicPreview {
-        border-radius: 50%;
-        width: 150px;
-        height: 150px;
-        object-fit: cover;
-    }
-
-
-
-    .event-card {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        border-bottom: 1px solid #ddd;
-        padding: 15px;
-        margin-bottom: 15px;
-        background-color: #fff;
-        /*font-size: 0.9em;*/
-    }
-
-        .event-card:last-child {
-            border-bottom: none;
-        }
-
-    .event-title {
-        font-weight: bold;
-        color: #28a745;
-        margin-bottom: 5px;
-        font-size: 1.1em;
-    }
-
-    .event-description {
-        font-size: 0.9em;
-        color: #666;
-        margin-bottom: 5px;
-    }
-
-    .event-details {
-        flex-grow: 1;
-    }
-
-    .event-dates {
-        font-size: 0.8em;
-        color: #666;
-        margin-bottom: 5px;
-    }
-
-    .event-pricing {
-        text-align: right;
-        font-size: 0.9em;
-    }
-
-    .event-rating {
-        display: flex;
-        align-items: center;
-        font-size: 1.1em;
-        color: #ffa500;
-    }
-
-        .event-rating span {
-            margin-right: 5px;
-        }
-        .event-rating .rate-number {
-            font-size: 1em; /* Adjust the size of the number separately */
-            margin-right: 8px; /* Space between the number and the stars */
-        }
-
-    .skill-badge {
-        background-color: #28a745;
-        color: white;
-        padding: 3px 7px;
-        border-radius: 12px;
-        font-size: 0.8em;
-        margin-top: 5px;
-        display: inline-block;
-    }
-    .view-more {
-        color: #137af0;
-        margin-left: 10px;
-    }
-        .view-more:hover {
-            color: #2bb1ff;
-        }
-
-</style>
+<link href="~/Content/css2/nav.css" rel="stylesheet" />
+<link href="~/Content/css2/Profile.css" rel="stylesheet" />
 
 <div class="container mt-5">
     <div class="card">
@@ -293,12 +203,12 @@
             </div>
         </div>
     </div>
-    
+
     <div class="card mt-3">
         <div class="card-body">
             <h5>Event History</h5>
             <!-- Static Example of a Compact Event History Entry -->
-            @foreach (var vh in Model.volunteersHistories)
+            @foreach (var vh in Model.volunteersHistories.Take(2))
             {
                 <div class="event-card">
                     <!-- Event Details Section -->

@@ -26,6 +26,7 @@ namespace Tabang_Hub.Utils
         public List<Skills> allSkill { get; set; }
         public List<Skills> listOfSkills { get; set; }
         public List<vw_OrganizationAccounts> organizationAccounts { get; set; }
+        public List<OrgEventImage> detailsEventImageOne { get; set; }
         public List<OrgEventImage> detailsEventImage { get; set; }
         public List<OrgSkillRequirement> detailsSkillRequirement { get; set; }
         public List<UserAccount> userAccounts { get; set; }
@@ -65,6 +66,7 @@ namespace Tabang_Hub.Utils
 
         //View
         public List<vw_ListOfEvent> listOfEvents { get; set; }
+        public List<vw_ListOfEvent> listOfEventsOne {  get; set; }
 
         public decimal totalDonation { get; set; }
         public int totalVolunteer { get; set; }

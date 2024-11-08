@@ -28,12 +28,21 @@ namespace Tabang_Hub.Controllers
         {
             return View();
         }
-        public ActionResult VolunteerProfile()
+        public async Task<ActionResult> VolunteerProfile()
         {
             var getUserAccount = db.UserAccount.Where(m => m.userId == UserId).ToList();
             var getVolunteerInfo = db.VolunteerInfo.Where(m => m.userId == UserId).ToList();
             var getVolunteerSkills = db.VolunteerSkill.Where(m => m.userId == UserId).ToList();
             var getProfile = db.ProfilePicture.Where(m => m.userId == UserId).ToList();
+
+            var recommendedEvents = await _volunteerManager.RunRecommendation(UserId);
+
+            var filteredEvent = new List<vw_ListOfEvent>();
+            foreach (var recommendedEvent in recommendedEvents)
+            {
+                var matchedEvents = _listsOfEvent.GetAll().Where(m => m.Event_Id == recommendedEvent.EventID).ToList();
+                filteredEvent.AddRange(matchedEvents);
+            }
 
             var getUniqueSkill = db.sp_GetSkills(UserId).ToList();
             if (getProfile.Count() <= 0)
@@ -58,6 +67,8 @@ namespace Tabang_Hub.Controllers
                 volunteersHistories = db.sp_VolunteerHistory(UserId).ToList(),
                 rating = db.Rating.Where(m => m.userId == UserId).ToList(),
                 orgEventHistory = db.OrgEventHistory.Where(m => m.userId == UserId).ToList(),
+                listOfEvents = filteredEvent.OrderByDescending(m => m.Event_Id).ToList(),
+                detailsEventImage = _eventImages.GetAll().ToList()
             };
 
             return View(listModel);
@@ -235,10 +246,20 @@ namespace Tabang_Hub.Controllers
                 return Json(new { success = false, message = "Error" });
             }
         }
-        public ActionResult EventDetails(int? eventId)
+        public async Task<ActionResult> EventDetails(int? eventId)
         {
             try
             {
+                var recommendedEvents = await _volunteerManager.RunRecommendation(UserId);
+
+                var filteredEvent = new List<vw_ListOfEvent>();
+                foreach (var recommendedEvent in recommendedEvents)
+                {
+                    var matchedEvents = _listsOfEvent.GetAll().Where(m => m.Event_Id == recommendedEvent.EventID).ToList();
+                    filteredEvent.AddRange(matchedEvents);
+                }
+
+
                 var checkEventID = _listsOfEvent.Get(eventId);
                 if (checkEventID != null)
                 {
@@ -247,7 +268,6 @@ namespace Tabang_Hub.Controllers
                     var getOrgInfo = db.OrgEvents.Where(m => m.eventId == eventId).FirstOrDefault();
                     var getInfo = _orgInfo.GetAll().Where(m => m.userId == getOrgInfo.userId).ToList();
                     var getSkillRequirmenet = _skillRequirement.GetAll().Where(m => m.eventId == getOrgInfo.eventId).ToList();
-                    var getOrgImages = _eventImages.GetAll().Where(m => m.eventId == getOrgInfo.eventId).ToList();
                     var getEvent = _orgEvents.GetAll().Where(m => m.eventId == getOrgInfo.eventId).ToList();
                     var getOrgOtherEvent = db.sp_OtherEvent(getOrgInfo.userId).ToList();
                     var getEvents = _listsOfEvent.GetAll().Where(m => m.Event_Id == getOrgInfo.eventId).ToList();
@@ -255,7 +275,7 @@ namespace Tabang_Hub.Controllers
                     var listofUserDonated = db.UserDonated.Where(m => m.eventId == eventId).ToList();
                     //var volunteerStatusEvent = _volunteersStatusEvent.GetAll().Where(m => m.userId == UserId && m.eventId == eventId).ToList();
                     var volunteer = _volunteerManager.GetVolunteerByUserId(UserId, (int)eventId);
-
+                    var c = db.sp_matchSkill(UserId, eventId).ToList().Count();
                     var indexModel = new Lists()
                     {
                         volunteersInfo = getVolInfo,
@@ -263,15 +283,18 @@ namespace Tabang_Hub.Controllers
                         orgInfos = getInfo,
                         detailsSkillRequirement = getSkillRequirmenet,
                         skills = _skills.GetAll().ToList(),
-                        detailsEventImage = getOrgImages,
+                        detailsEventImageOne = _eventImages.GetAll().Where(m => m.eventId == getOrgInfo.eventId).ToList(),
+                        detailsEventImage = _eventImages.GetAll().ToList(),
                         orgEvents = getEvent,
                         orgOtherEvent = getOrgOtherEvent,
-                        listOfEvents = getEvents,
+                        listOfEventsOne = getEvents,
+                        listOfEvents = filteredEvent.OrderByDescending(m => m.Event_Id).ToList(),
                         volunteers = getVolunteers,
                         listofUserDonated = listofUserDonated,
                         volunteersStatusEvent = _volunteersStatusEvent.GetAll().Where(m => m.userId == UserId && m.eventId == eventId).ToList(),
                         matchSkill = db.sp_matchSkill(UserId, eventId).ToList(),
                         volunteer = volunteer,
+                        volunteersSkills = db.VolunteerSkill.Where(m => m.userId == UserId).ToList(),
                     };
                     return View(indexModel);
                 }
@@ -782,7 +805,7 @@ namespace Tabang_Hub.Controllers
 
             return View(listModel);
         }
-        public ActionResult DonationHistory()
+        public async Task<ActionResult> DonationHistory()
         {
 
             var orgEvents = new List<OrgEvents>();
@@ -793,17 +816,28 @@ namespace Tabang_Hub.Controllers
                 orgEvents.AddRange(evnt);
             }
 
+            var recommendedEvents = await _volunteerManager.RunRecommendation(UserId);
+
+            var filteredEvent = new List<vw_ListOfEvent>();
+            foreach (var recommendedEvent in recommendedEvents)
+            {
+                var matchedEvents = _listsOfEvent.GetAll().Where(m => m.Event_Id == recommendedEvent.EventID).ToList();
+                filteredEvent.AddRange(matchedEvents);
+            }
+
             var listModel = new Lists()
             {
                 picture = db.ProfilePicture.Where(m => m.userId == UserId).ToList(),
                 volunteersInfo = db.VolunteerInfo.Where(m => m.userId == UserId).ToList(),
                 listofUserDonated = db.UserDonated.Where(m => m.userId == UserId).ToList(),
                 orgEvents = orgEvents,
-                userDonatedInformations = db.sp_GetUserDonatedInformations(UserId).ToList()
+                userDonatedInformations = db.sp_GetUserDonatedInformations(UserId).ToList(),
+                listOfEvents = filteredEvent.OrderByDescending(m => m.Event_Id).ToList(),
+                detailsEventImage = _eventImages.GetAll().ToList()
             };
             return View(listModel);
         }
-        public ActionResult Participate(string section = null)
+        public async Task<ActionResult> Participate(string section = null)
         {
             try
             {
@@ -817,6 +851,15 @@ namespace Tabang_Hub.Controllers
                 List<Volunteers> pendings = _volunteerManager.GetVolunteersEventPendingByUserId(UserId);
                 List<Volunteers> accepted = _volunteerManager.GetVolunteersEventParticipateByUserId(UserId);
 
+                var recommendedEvents = await _volunteerManager.RunRecommendation(UserId);
+
+                var filteredEvent = new List<vw_ListOfEvent>();
+                foreach (var recommendedEvent in recommendedEvents)
+                {
+                    var matchedEvents = _listsOfEvent.GetAll().Where(m => m.Event_Id == recommendedEvent.EventID).ToList();
+                    filteredEvent.AddRange(matchedEvents);
+                }
+
                 var indexModel = new Lists()
                 {
                     picture = userProfile,
@@ -828,7 +871,8 @@ namespace Tabang_Hub.Controllers
                     volunteersHistories = db.sp_VolunteerHistory(UserId).ToList(),
                     rating = db.Rating.Where(m => m.userId == UserId).ToList(),
                     detailsEventImage = getOrgImages,
-                    orgEventImageHistories = db.OrgEventImageHistory.ToList()
+                    orgEventImageHistories = db.OrgEventImageHistory.ToList(),
+                    listOfEvents = filteredEvent.OrderByDescending(m => m.Event_Id).ToList(),
                 };
 
                 ViewBag.SectionToShow = section;

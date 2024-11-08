@@ -199,13 +199,16 @@
     <Content Include="Content\css1\widgets\chat.css" />
     <Content Include="Content\css1\widgets\todo.css" />
     <Content Include="Content\css2\CustomeStyle.css" />
+    <Content Include="Content\css2\Eventdetails.css" />
     <Content Include="Content\css2\generalskill.css" />
     <Content Include="Content\css2\generalStyle.css" />
     <Content Include="Content\css2\message.css" />
+    <Content Include="Content\css2\nav.css" />
     <Content Include="Content\css2\notif.css" />
     <Content Include="Content\css2\opportunityCarousel.css" />
     <Content Include="Content\css2\Participate.css" />
     <Content Include="Content\css2\popup.css" />
+    <Content Include="Content\css2\Profile.css" />
     <Content Include="Content\css2\progress.css" />
     <Content Include="Content\css2\Style.css" />
     <Content Include="Content\css2\Template-css\bootstrap-icons.css" />
@@ -220,6 +223,7 @@
     <Content Include="Content\Css\Participate.css" />
     <Content Include="Content\Css\popup.css" />
     <Content Include="Content\Css\progress.css" />
+    <Content Include="Content\css2\Search.css" />
     <Content Include="Content\Css\Style.css" />
     <Content Include="Content\IdPicture\cats dogs 3.jpg" />
     <Content Include="Content\IdPicture\cats dogs.jpg" />

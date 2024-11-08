@@ -1,14 +1,14 @@
 ﻿@model Tabang_Hub.Utils.Lists
-    @if(Model.userAccount != null && Model.userAccount.roleId == 2)
-    {
-        ViewBag.Title = "Message";
-        Layout = "~/Views/Shared/_Organization.cshtml";
-    }
-    else
-    {
-        ViewBag.Title = "Message";
-        Layout = "~/Views/Shared/_Layout.cshtml";
-    }
+@if (Model.userAccount != null && Model.userAccount.roleId == 2)
+{
+    ViewBag.Title = "Message";
+    Layout = "~/Views/Shared/_Organization.cshtml";
+}
+else
+{
+    ViewBag.Title = "Message";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
 
 <link href="~/Content/Css/message.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -39,7 +39,7 @@
             foreach (var gc in Model.listOfGc)
             {
                 <div class="chat-item" onclick="selectGroup('@gc.groupChatId', event)">
-                    @{ 
+                    @{
                         var gcImage = Model.detailsEventImage.Where(m => m.eventId == gc.eventId).Select(m => m.eventImage).FirstOrDefault();
                     }
                     <img src="@Url.Content("~/Content/Events/" + gcImage)" alt="Profile">
@@ -85,7 +85,7 @@
         // Start SignalR connection when a group is selected
         $.connection.hub.start().done(function () {
             var chat = $.connection.chatHub;
-
+            console.log(currentUserId);
             // Load existing messages for the selected group
             chat.server.getAllMessages(selectedGcID);
 

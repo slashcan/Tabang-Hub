@@ -6,101 +6,14 @@
 
     string activeSection = Request.QueryString["section"] ?? "participatingSection";
 }
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
 <style>
-    .custom-navbar {
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        position: relative;
-        z-index: 1;
+    body{
+        margin-top: 100px;
     }
-
-    .dropdown-menu {
-        z-index: 1050;
-    }
-
-    .content-section {
-        display: none;
-    }
-
-        .content-section.active {
-            display: block;
-        }
-
-    .section-title-container {
-        display: flex;
-        justify-content: center;
-        position: relative;
-        margin-bottom: 20px;
-        overflow-x: auto;
-        white-space: nowrap;
-    }
-
-    .section-title {
-        margin: 0 15px;
-        padding-bottom: 5px;
-        cursor: pointer;
-        white-space: nowrap;
-    }
-
-    .underline {
-        position: absolute;
-        bottom: 0;
-        height: 3px;
-        background-color: #4E86FF;
-        transition: left 0.3s ease, width 0.3s ease;
-    }
-
-    .center-message {
-        text-align: center;
-        margin: 82.9px;
-        font-size: 18px;
-        color: #666;
-    }
-
-    .custom-card {
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        margin-bottom: 20px;
-    }
-
-    .custom-card-no-content {
-        background-color: transparent;
-        border: none;
-    }
-
-    /* Adjusted for image fit */
-    .image-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 250px;
-        overflow: hidden;
-        border-radius: 10px;
-    }
-
-        .image-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover; /* Ensures the image covers the container without distorting the aspect ratio */
-            border-radius: 10px;
-        }
-
-    .badge {
-        padding: 8px 12px;
-        font-size: 0.85rem;
-        margin-right: 5px;
-        background-color: mediumseagreen;
-        border: 1px solid #ccc;
-        cursor: default;
-        color: white;
-    }
-
-    .event-card {
-        margin-bottom: 20px;
-    }
-
 </style>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<link href="~/Content/css2/nav.css" rel="stylesheet" />
 <link href="~/Content/Css/Participate.css" rel="stylesheet" />
 
 <nav class="navbar navbar-expand-sm navbar-light bg-light custom-navbar mb-4">
@@ -302,7 +215,7 @@
                     var vh = group.Event;
                     <div class="container mt-5 event-card">
                         <div class="card custom-card shadow-lg" data-bs-toggle="modal" data-bs-target="#eventModal-@vh.eventId">
-                            <div class="row g-0">
+                            <div class="row g-0 history-card">
                                 @{
                                     var imgs = Model.detailsEventImage.Where(m => m.eventId == vh.eventId).Select(m => m.eventImage).FirstOrDefault();
                                 }

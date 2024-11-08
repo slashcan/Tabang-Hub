@@ -15,6 +15,7 @@ using System.Web.Security;
 using Tabang_Hub.Repository;
 using Tabang_Hub.Utils;
 using System.Collections.ObjectModel;
+using System.Data.Entity;
 
 namespace Tabang_Hub.Controllers
 {
@@ -37,7 +38,6 @@ namespace Tabang_Hub.Controllers
                         var getProfile = db.ProfilePicture.Where(m => m.userId == UserId).ToList();
 
                         var getOrgInfo = _orgInfo.GetAll().ToList();
-                        var getOrgImages = _eventImages.GetAll().ToList();
 
                         _volunteerManager.CheckVolunteerEventEndByUserId(UserId);
                         var getVolunteers = _volunteers.GetAll().ToList();
@@ -50,17 +50,7 @@ namespace Tabang_Hub.Controllers
                             getUserDonated = _userDonated.GetAll().Where(m => m.eventId == eventId).ToList();
                         }
 
-
-                        // Prepare the data to pass to Flask
-                        var datas = new
-                        {
-                            user_skills = db.VolunteerSkill.Where(m => m.userId == UserId).Select(m => new { userId = m.userId, skillId = m.skillId }).ToList(),
-                            event_data = _orgEvents.GetAll().Where(m => m.dateEnd >= DateTime.Now).Select(m => new { eventId = m.eventId, eventDescription = m.eventDescription }).ToList(),
-                            event_skills = db.OrgSkillRequirement.Select(es => new { eventId = es.eventId, skillId = es.skillId }).ToList(),
-                            volunteer_history = db.VolunteersHistory.Where(vh => vh.userId == user.userId).Select(vh => new { eventId = vh.eventId, attended = vh.attended }).ToList()
-                        };
-
-                        var recommendedEvents = await RunRecommendation(datas);
+                        var recommendedEvents = await _volunteerManager.RunRecommendation(UserId);
 
                         var filteredEvent = new List<vw_ListOfEvent>();
                         foreach (var recommendedEvent in recommendedEvents)
@@ -79,7 +69,7 @@ namespace Tabang_Hub.Controllers
                             volunteers = getVolunteers,
                             orgInfos = getOrgInfo,
                             listofUserDonated = getUserDonated,
-                            detailsEventImage = getOrgImages
+                            detailsEventImage = _eventImages.GetAll().ToList()
                         };
                         return View(indexModel);
                     case 2:
@@ -90,32 +80,20 @@ namespace Tabang_Hub.Controllers
             }
             return View();
         }
-
-        public async Task<List<FilteredEvent>> RunRecommendation(object requestData)
+        public JsonResult GetFilteredEvents(string searchTerm)
         {
-            string flaskApiUrl = "http://127.0.0.1:5000/predict"; // Flask API URL
-            List<FilteredEvent> recommendedEvents = new List<FilteredEvent>();
+            var events = db.vw_ListOfEvent
+                          .Where(e => e.End_Date >= DateTime.Now && e.Event_Name.Contains(searchTerm))
+                          .Select(e => new
+                          {
+                              e.Event_Id,
+                              e.Event_Name,
+                              EventImage = db.OrgEventImage.Where(m => m.eventId == e.Event_Id).Select(m => m.eventImage).FirstOrDefault() // Adjust as needed
+                          })
+                          .ToList();
 
-            using (var client = new HttpClient())
-            {
-                // Step 1: Send POST request to Flask API with the requestData
-                var response = await client.PostAsJsonAsync(flaskApiUrl, requestData);
-                var jsonResponse = await response.Content.ReadAsStringAsync();
-
-                if (!response.IsSuccessStatusCode)
-                {
-                    ViewBag.PythonOutput = "Error calling the Python API: " + response.ReasonPhrase;
-                }
-                else
-                {
-                    // Step 2: Deserialize Flask API response to a list of recommended events
-                    recommendedEvents = JsonConvert.DeserializeObject<List<FilteredEvent>>(jsonResponse);
-                }
-            }
-
-            return recommendedEvents; // Return the list of recommended events
+            return Json(events, JsonRequestBehavior.AllowGet);
         }
-
         [AllowAnonymous]
         public ActionResult ChooseRegister()
         {

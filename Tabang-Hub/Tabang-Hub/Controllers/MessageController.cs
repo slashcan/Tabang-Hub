@@ -56,7 +56,9 @@ namespace Tabang_Hub.Controllers
 
                     var checkVolunteers = db.Volunteers.Where(m => m.userId == UserId).FirstOrDefault();
 
-                    var getOrgEvent = _orgEvents.GetAll().Where(m => m.eventId == checkVolunteers.eventId).ToList();
+                    var getOrgEvent = checkVolunteers != null
+                    ? _orgEvents.GetAll().Where(m => m.eventId == checkVolunteers.eventId).ToList()
+                    : new List<OrgEvents>(); // Return an empty list if null
 
                     var eventImage = new List<OrgEventImage>();
 

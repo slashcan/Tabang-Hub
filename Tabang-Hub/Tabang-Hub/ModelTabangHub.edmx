@@ -1055,11 +1055,11 @@ FROM [dbo].[vw_VolunteerSkills] AS [vw_VolunteerSkills]</DefiningQuery>
             <Parameter Name="eventId" Mode="In" Type="Int32" />
             <Parameter Name="skillId" Mode="In" Type="Int32" />
           </FunctionImport>
-          <FunctionImport Name="sp_ListOfGc" ReturnType="Collection(TabangHubModel.sp_ListOfGc_Result)">
-          <Parameter Name="userId" Mode="In" Type="Int32" />
-          </FunctionImport>
           <FunctionImport Name="sp_RemoveEvent">
-            <Parameter Name="eventId" Mode="In" Type="Int32" />
+          <Parameter Name="eventId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="sp_ListOfGc" ReturnType="Collection(TabangHubModel.sp_ListOfGc_Result)">
+            <Parameter Name="userId" Mode="In" Type="Int32" />
           </FunctionImport>
           </EntityContainer>
         <ComplexType Name="sp_GetSkills_Result">
@@ -2337,6 +2337,7 @@ FROM [dbo].[vw_VolunteerSkills] AS [vw_VolunteerSkills]</DefiningQuery>
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="sp_AcceptAndUpdateVolunteerStatus" FunctionName="TabangHubModel.Store.sp_AcceptAndUpdateVolunteerStatus" />
+          <FunctionImportMapping FunctionImportName="sp_RemoveEvent" FunctionName="TabangHubModel.Store.sp_RemoveEvent" />
           <FunctionImportMapping FunctionImportName="sp_ListOfGc" FunctionName="TabangHubModel.Store.sp_ListOfGc">
             <ResultMapping>
               <ComplexTypeMapping TypeName="TabangHubModel.sp_ListOfGc_Result">
@@ -2347,7 +2348,6 @@ FROM [dbo].[vw_VolunteerSkills] AS [vw_VolunteerSkills]</DefiningQuery>
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="sp_RemoveEvent" FunctionName="TabangHubModel.Store.sp_RemoveEvent" />
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
