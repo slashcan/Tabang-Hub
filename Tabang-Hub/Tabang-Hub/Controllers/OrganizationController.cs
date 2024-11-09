@@ -41,8 +41,11 @@ namespace Tabang_Hub.Controllers
                     donated.Add(volDonated);
                 }
                 foreach (var vol in volunteers)
-                { 
-                    pendingVol.Add(vol);
+                {
+                    if (!pendingVol.Any(v => v.userId == vol.userId && v.eventId == vol.eventId))
+                    {
+                        pendingVol.Add(vol);
+                    }
                 }
             }
 
@@ -181,7 +184,7 @@ namespace Tabang_Hub.Controllers
                 ModelState.AddModelError("CreateEvents.dateStart", "Start Date and End Date are required.");
             }
             if (events.CreateEvents.dateStart < DateTime.Now)
-            {
+            { 
                 ModelState.AddModelError("CreateEvents.dateStart", "Start date and time cannot be before the current date and time.");
             }
             if (events.CreateEvents.dateEnd <= events.CreateEvents.dateStart)
@@ -238,16 +241,57 @@ namespace Tabang_Hub.Controllers
             var orgInfo = _organizationManager.GetOrgInfoByUserId(UserId);
             var listOfEventVolunteers = _organizationManager.ListOfEventVolunteers(id);
             var volunteerSkills = _organizationManager.ListOfEventVolunteerSkills();
+
             //var matchedSkill = _organizationManager.GetMatchedVolunteers(id);
             var matchedSkill = await _organizationManager.GetMatchedVolunteers(id);
             //var profile = _organizationManager.GetProfileByProfileId(orgInfo.profileId);
             var listOfSkill = _organizationManager.ListOfSkills();
-
+            var pendingVol = new List<Volunteers>();
+            var rating = new List<Rating>();    
             var usrRank = new List<UserAccount>();
             foreach (var data in matchedSkill)
             {
                 var usrs = _userAcc.GetAll().Where(m => m.userId == data.userId).ToList();
                 usrRank.AddRange(usrs);
+            }
+            foreach (var data in listOfEventVolunteers)
+            {
+                if (!pendingVol.Any(v => v.userId == data.userId))
+                {
+                    var toAppend = new Volunteers()
+                    {
+                        applyVolunteerId = data.applyVolunteerId,
+                        userId = data.userId,
+                        eventId = data.eventId,
+                        Status = data.Status,
+                        skillId = data.skillId,
+                        attended = data.attended,
+                        appliedAt = data.appliedAt,
+
+                        OrgEvents = data.OrgEvents,
+                        Skills = data.Skills,
+                        UserAccount = data.UserAccount,
+                    };
+
+                    pendingVol.Add(toAppend);
+
+                    var rate = _organizationManager.GetVolunteerRatingsByUserId((int)data.userId);
+
+                    foreach (var r in rate)
+                    {
+                        var rateToAppend = new Rating()
+                        {
+                            ratingId = r.ratingId,
+                            eventId = r.eventId,
+                            userId = r.userId,
+                            skillId = r.skillId,
+                            rate = r.rate,
+                            ratedAt = r.ratedAt,
+                        };
+
+                        rating.Add(rateToAppend);
+                    }
+                }
             }
 
             var indexModel = new Lists()
@@ -257,9 +301,10 @@ namespace Tabang_Hub.Controllers
                 listOfSkills = listOfSkill,
                 detailsEventImage = listofImage,
                 detailsSkillRequirement = listOfSkills,
-                listOfEventVolunteers = listOfEventVolunteers,
+                listOfEventVolunteers = pendingVol,
                 volunteersSkills = volunteerSkills,
                 listofUserDonated = listofUserDonated,
+                listOfRatings = rating,
                 matchedSkills = usrRank,
                 //filteredVolunteers = matchedSkill,
                 //matchedSkills = matchedSkill,

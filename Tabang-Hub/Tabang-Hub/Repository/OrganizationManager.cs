@@ -556,6 +556,10 @@ namespace Tabang_Hub.Repository
         {
             return _volunteerSkills.GetAll();
         }
+        public List<Rating> GetVolunteerRatingsByUserId(int userId)
+        {
+            return _ratings._table.Where(m => m.userId == userId).ToList();
+        }
         public List<VolunteerSkill> GetListOfVolunteerSkillByUserId(int userId)
         {
             return _volunteerSkills.GetAll().Where(m => m.userId == userId).ToList();

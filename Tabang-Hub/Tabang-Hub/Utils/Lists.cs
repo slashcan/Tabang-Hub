@@ -32,6 +32,7 @@ namespace Tabang_Hub.Utils
         public List<UserAccount> userAccounts { get; set; }
         public List<VolunteerInfo> volunteersInfo { get; set; }
         public List<VolunteerSkill> volunteersSkills { get; set; }
+        public List<VolunteerSkill> appliedVolunteersSkills { get; set; }
         public List<Skills> skills { get; set; }
         public List<ProfilePicture> picture { get; set; }
         public List<OrgInfo> orgInfos { get; set; }
@@ -41,6 +42,7 @@ namespace Tabang_Hub.Utils
         public List<Volunteers> volunteersStatusEvent { get; set; }
         public UserDonated userDonated { get; set; }
         public List<UserDonated> listofUserDonated { get; set; }
+        public List<Rating> listOfRatings { get; set; }
         public List<Volunteers> listOfEventVolunteers { get; set; }
         public List<OrgEvents> recentEvents { get; set; }
         public Dictionary<string, int> totalSkills { get; set; }
