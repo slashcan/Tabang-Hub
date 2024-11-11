@@ -20,7 +20,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link href="~/Content/css2/nav.css" rel="stylesheet" />
+    @*<link href="~/Content/css2/nav.css" rel="stylesheet" />*@
     <link href="~/Content/css2/CustomeStyle.css" rel="stylesheet" />
     <style>
         html, body {
@@ -37,6 +37,45 @@
         nav, main {
             flex: 1;
         }
+
+        .search-container {
+            width: 90%; /* Set to 100% to ensure it centers properly */
+            display: flex;
+            justify-content: center;
+        }
+
+        .position-relative {
+            width: 80%; /* Adjust the width of the input as needed */
+            max-width: 500px; /* Set a max width to prevent it from being too wide */
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%; /* Ensure the input takes the full width of its container */
+            padding-top: 20px; /* Adjust to create space for the label */
+        }
+
+        .search-label {
+            position: absolute;
+            top: 50%; /* Center vertically */
+            left: 15px; /* Adjust horizontal padding */
+            transform: translateY(-50%); /* Center the text */
+            color: #6c757d; /* Label color */
+            font-size: 1rem; /* Adjust font size */
+            transition: 0.3s ease-in-out;
+        }
+
+        .search-input:focus + .search-label,
+        .search-input:not(:placeholder-shown) + .search-label {
+            top: 0; /* Move label to the top */
+            left: 10px; /* Adjust for alignment */
+            font-size: 0.8rem; /* Smaller size when focused */
+            color: #007bff; /* Keep color consistent */
+            background-color: white;
+            padding: 0 4px; /* Add padding to prevent overlap */
+        }
+
+
     </style>
 </head>
 <body>
@@ -55,14 +94,14 @@
                     <div class="step-header">
                         <h2>Personal Information</h2>
                     </div>
-                    <p class="subtext">Please fill in your personal details</p>
+                    <p class="subtext">Please fill out your personal details</p>
                     <form id="personalInfoForm">
                         <div class="form-group">
-                            <input type="text" class="form-control" id="firstName" placeholder="Firstname" required oninput="validateTextOnly(this)" onblur="validateTextOnly(this)">
+                            <input type="text" class="form-control" id="firstName" placeholder="First name" required oninput="validateTextOnly(this)" onblur="validateTextOnly(this)">
                             <span class="error-message" id="firstNameError"></span>
                         </div>
                         <div class="form-group">
-                            <input type="text" class="form-control" id="lastName" placeholder="Lastname" required oninput="validateTextOnly(this)" onblur="validateTextOnly(this)">
+                            <input type="text" class="form-control" id="lastName" placeholder="Last name" required oninput="validateTextOnly(this)" onblur="validateTextOnly(this)">
                             <span class="error-message" id="lastNameError"></span>
                         </div>
                         <div class="form-group">
@@ -87,7 +126,7 @@
                             <span class="error-message" id="provinceError"></span>
                         </div>
                         <div class="form-group">
-                            <input type="text" class="form-control" id="zipCode" placeholder="Zip code" required oninput="validateZipCode(this)" onblur="validateZipCode(this)" maxlength="4">
+                            <input type="text" class="form-control" id="zipCode" placeholder="Zip Code" required oninput="validateZipCode(this)" onblur="validateZipCode(this)" maxlength="4">
                             <span class="error-message" id="zipCodeError"></span>
                         </div>
                         <div class="form-group">
@@ -111,23 +150,32 @@
                     <div class="btn-container">
                         <button type="button" class="btn btn-primary btn-lg btn-block btn-disabled" id="nextButton" onclick="nextStep()" disabled>Next</button>
                     </div>
-                    <div class="step-indicator">
-                        <span class="step-number">1</span> of 2
-                    </div>
+                    @*<div class="step-indicator">
+                <span class="step-number">1</span> of 2
+            </div>*@
                 </div>
 
                 <!-- Second Step: Skill Selection -->
                 <div class="step-container" id="step2" style="display: none;">
                     <div class="step-header">
                         <i class="fas fa-arrow-left back-icon" onclick="prevStep()"></i>
-                        <h2>What skills do you have?</h2>
+                        <h2>Select your skills</h2>
                     </div>
                     <p class="subtext">This will customize your new home feed</p>
+
+                    <!-- Centered Search Skill Bar -->
+                    <div class="search-container mb-3">
+                        <div class="position-relative">
+                            <input type="text" id="search-skill" class="form-control search-input" onfocus="handleFocus(this)" onblur="handleBlur(this)" placeholder="" onkeyup="filterSkills()">
+                            <label for="search-skill" class="search-label">Search skill</label>
+                        </div>
+                    </div>
+
                     <div class="step-content">
-                        <div class="grid-container">
+                        <div class="grid-container" id="skillsGrid">
                             @foreach (var skillImage in Model.skills)
                             {
-                                <div class="grid-item" onclick="toggleSkill(this)">
+                                <div class="grid-item" onclick="toggleSkill(this)" data-skill-name="@skillImage.skillName.ToLower()">
                                     <img src="~/SkillsImages/@skillImage.skillImage" class="selectable" data-skill="@skillImage.skillName">
                                     <span>@skillImage.skillName</span>
                                 </div>
@@ -136,9 +184,6 @@
                     </div>
                     <div class="step-footer">
                         <button class="btn btn-disabled" id="completeButton" onclick="completeRegistration()" disabled>Submit</button>
-                    </div>
-                    <div class="step-indicator">
-                        <span class="step-number">2</span> of 2
                     </div>
                 </div>
             </div>
@@ -397,6 +442,36 @@
         <script src="~/Content/Js2/Template-js/custom.js"></script>
 
         <script>
+            function filterSkills() {
+                const searchInput = document.getElementById('search-skill').value.toLowerCase();
+                const skillItems = document.querySelectorAll('#skillsGrid .grid-item');
+
+                skillItems.forEach(item => {
+                    const skillName = item.getAttribute('data-skill-name');
+                    if (skillName.startsWith(searchInput)) { // Filters based on the first letter(s)
+                        item.style.display = 'block';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            }
+
+            function handleFocus(input) {
+                if (input.value === '') {
+                    input.nextElementSibling.classList.add('focused');
+                }
+            }
+
+            function handleBlur(input) {
+                if (input.value === '') {
+                    input.nextElementSibling.classList.remove('focused');
+                }
+            }
+
+
+        </script>
+
+        <script>
 
             const pageSize = 9; // Number of items per page
             let currentPage = 1;
@@ -446,6 +521,6 @@
             window.location.href = '@Url.Action("EventDetails", "Volunteer")' + '?eventId=' + eventId;
             }
         </script>
-</div>
+    </div>
 </body>
 </html>

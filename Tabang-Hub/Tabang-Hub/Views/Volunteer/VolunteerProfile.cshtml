@@ -4,7 +4,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @*<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">*@
-<link href="~/Content/css2/nav.css" rel="stylesheet" />
+@*<link href="~/Content/css2/nav.css" rel="stylesheet" />*@
 <link href="~/Content/css2/Profile.css" rel="stylesheet" />
 
 <div class="container mt-5">
@@ -208,48 +208,63 @@
         <div class="card-body">
             <h5>Event History</h5>
             <!-- Static Example of a Compact Event History Entry -->
-            @foreach (var vh in Model.volunteersHistories.Take(2))
+            @{
+                var groupedEvents = Model.volunteersHistories
+                    .GroupBy(vh => vh.eventId)
+                    .Select(g => new
+                    {
+                        Event = g.First(),
+                        Skills = g.Select(vh => new
+                        {
+                            vh.skillName,
+                            Rating = Model.rating.Where(m => m.userId == vh.userId && m.skillId == vh.skillId && m.eventId == vh.eventId).Select(m => m.rate).FirstOrDefault()
+                        }).ToList()
+                    })
+                    .ToList();
+            }
+            @foreach (var evt in groupedEvents.Take(2))
             {
+                var vh = evt.Event;
+                DateTime? originalDateStart = vh.dateStart;
+                string formattedDateStart = originalDateStart.HasValue ? originalDateStart.Value.ToString("MMMM dd, yyyy") : "N/A";
+
+                DateTime? originalDateEnd = vh.dateEnd;
+                string formattedDateEnd = originalDateEnd.HasValue ? originalDateEnd.Value.ToString("MMMM dd, yyyy") : "N/A";
                 <div class="event-card">
                     <!-- Event Details Section -->
                     <div class="event-details">
                         <h3 class="event-title">@vh.eventTitle</h3>
                         <p class="event-description">@vh.eventDescription</p>
                         <div class="event-dates">
-                            Start Date: @vh.dateStart - End Date: @vh.dateEnd
+                            Start Date: <strong>@formattedDateStart -</strong> End Date: <strong>@formattedDateEnd</strong>
                         </div>
-                        <div class="d-flex align-items-center">
-                            <!-- Skills Section -->
-                            <div>
-                                Skill Utilized:
-                                <span class="skill-badge">@vh.skillName</span>
-                            </div>
-                            <!-- Rating Section, right aligned to the skill -->
-                            <div class="ml-auto event-rating mt-1" style="margin-left: 15px; color: #ffa500;">
-                                @{
-                                    var rating = Model.rating
-                                        .Where(m => m.userId == vh.userId && m.skillId == vh.skillId)
-                                        .Select(m => m.rate)
-                                        .FirstOrDefault();
-                                }
-                                @if (rating.HasValue)
-                                {
-                                    <span class="rate-number">@rating.Value &nbsp;</span>
-                                    for (int i = 0; i < rating.Value; i++)
-                                    {
-                                        <span>★</span>
-                                    }
-                                    for (int i = rating.Value; i < 5; i++)
-                                    {
-                                        <span>☆</span>
-                                    }
-                                }
-                                else
-                                {
-                                    <span>No Rating</span>
-                                }
-                            </div>
-                            <hr />
+
+                        <!-- Skills Section -->
+                        <div class="skills-row d-flex justify-content-start flex-wrap mt-2">
+                            @foreach (var skill in evt.Skills)
+                            {
+                                <div class="skill-item text-center" style="display: inline-flex; flex-direction: column; margin-right: 10px;">
+                                    <span class="skill-badge">@skill.skillName</span>
+                                    <div class="skill-rating" style="color: #ffa500;">
+                                        @if (skill.Rating.HasValue)
+                                        {
+                                            <span>@skill.Rating.Value &nbsp;</span>
+                                            for (int i = 0; i < skill.Rating.Value; i++)
+                                            {
+                                                <span>★</span>
+                                            }
+                                            for (int i = skill.Rating.Value; i < 5; i++)
+                                            {
+                                                <span>☆</span>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <span>No Rating</span>
+                                        }
+                                    </div>
+                                </div>
+                            }
                         </div>
                     </div>
                 </div>
@@ -259,6 +274,7 @@
             </div>
         </div>
     </div>
+
 
 
 </div>

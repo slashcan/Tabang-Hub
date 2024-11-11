@@ -1,11 +1,9 @@
 ﻿.navbar {
     position: fixed;
     top: 0;
-    z-index: 1000;
     width: 100%;
     background-color: #f8f9fa;
 }
-
 
 /* Container styling for navbar */
 .navbar-container {

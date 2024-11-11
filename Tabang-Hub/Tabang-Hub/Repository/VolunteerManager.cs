@@ -21,10 +21,12 @@ namespace Tabang_Hub.Repository
         public BaseRepository<Skills> _skills;
         public BaseRepository<UserDonated> _userDonated;
         public BaseRepository<Volunteers> _volunteers;
-        public BaseRepository<vw_ListOfEvent> _vw_listOfEvent;
         public BaseRepository<VolunteersHistory> _volunteersHistory;
-
         public BaseRepository<OrgEvents> _orgEvents;
+
+        public BaseRepository<vw_ListOfEvent> _vw_listOfEvent;
+
+        public BaseRepository<sp_VolunteerHistory_Result> _sp_VolunteerHistory;
 
         public TabangHubEntities db = new TabangHubEntities();
         public OrganizationManager OrganizationManager;
@@ -33,9 +35,11 @@ namespace Tabang_Hub.Repository
             _skills = new BaseRepository<Skills>();
             _userDonated = new BaseRepository<UserDonated>();
             _volunteers = new BaseRepository<Volunteers>();
+            _orgEvents = new BaseRepository<OrgEvents>();
+
             _vw_listOfEvent = new BaseRepository<vw_ListOfEvent>();
 
-            _orgEvents = new BaseRepository<OrgEvents>();
+            _sp_VolunteerHistory = new BaseRepository<sp_VolunteerHistory_Result>();
 
             OrganizationManager = new OrganizationManager();
             db = new TabangHubEntities();
@@ -85,12 +89,12 @@ namespace Tabang_Hub.Repository
         }
         public void CheckVolunteerEventEndByUserId(int userId)
         {
-            var getEvents = _vw_listOfEvent.GetAll().ToList();
-            var endedEvent = getEvents.Where(m => m.End_Date < DateTime.Now).ToList();
+            var getEvents = _orgEvents.GetAll().ToList();
+            var endedEvent = getEvents.Where(m => m.dateEnd < DateTime.Now && m.status == 1).ToList();  
 
             foreach (var evt in endedEvent)
             {
-                var getVolEvent = _volunteers.GetAll().Where(m => m.eventId == evt.Event_Id && m.Status == 1).ToList();
+                var getVolEvent = _volunteers.GetAll().Where(m => m.eventId == evt.eventId && m.userId == userId).ToList();
                 // Move each volunteer record to VolunteersHistory
                 foreach (var volunteer in getVolEvent.Where(m => m.userId == userId))
                 {
@@ -111,6 +115,20 @@ namespace Tabang_Hub.Repository
                     db.sp_RemoveEvent(volunteer.eventId);
                 }
             }
+        }
+        public List<sp_VolunteerHistory_Result> GetVolunteersHistoryByUserId(int userId)
+        {
+            List<sp_VolunteerHistory_Result> userEventHistory = new List<sp_VolunteerHistory_Result>();
+            var checkVol = db.sp_VolunteerHistory(userId).ToList().Where(m => m.status == 1).ToList();
+            if (!checkVol.Equals(0))
+            {
+                foreach (var volHistory in checkVol)
+                {
+                    userEventHistory.Add(volHistory);
+                }
+                return userEventHistory;
+            }
+            return userEventHistory;
         }
 
          public async Task<List<FilteredEvent>> RunRecommendation(int UserId)

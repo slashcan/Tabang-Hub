@@ -61,23 +61,6 @@
         </ComplexTypeMapping>
       </ResultMapping>
     </FunctionImportMapping>
-    <FunctionImportMapping FunctionImportName="sp_VolunteerHistory" FunctionName="TabangHubModel.Store.sp_VolunteerHistory">
-      <ResultMapping>
-        <ComplexTypeMapping TypeName="TabangHubModel.sp_VolunteerHistory_Result">
-          <ScalarProperty Name="VolHistoryId" ColumnName="VolHistoryId" />
-          <ScalarProperty Name="userId" ColumnName="userId" />
-          <ScalarProperty Name="eventId" ColumnName="eventId" />
-          <ScalarProperty Name="skillId" ColumnName="skillId" />
-          <ScalarProperty Name="skillName" ColumnName="skillName" />
-          <ScalarProperty Name="eventImage" ColumnName="eventImage" />
-          <ScalarProperty Name="eventTitle" ColumnName="eventTitle" />
-          <ScalarProperty Name="location" ColumnName="location" />
-          <ScalarProperty Name="eventDescription" ColumnName="eventDescription" />
-          <ScalarProperty Name="dateStart" ColumnName="dateStart" />
-          <ScalarProperty Name="dateEnd" ColumnName="dateEnd" />
-        </ComplexTypeMapping>
-      </ResultMapping>
-    </FunctionImportMapping>
     <FunctionImportMapping FunctionImportName="sp_GetUserDonatedInformations" FunctionName="TabangHubModel.Store.sp_GetUserDonatedInformations">
       <ResultMapping>
         <ComplexTypeMapping TypeName="TabangHubModel.sp_GetUserDonatedInformations_Result">
@@ -514,6 +497,24 @@
           <ScalarProperty Name="userId" ColumnName="userId" />
           <ScalarProperty Name="eventId" ColumnName="eventId" />
           <ScalarProperty Name="eventTitle" ColumnName="eventTitle" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="sp_VolunteerHistory" FunctionName="TabangHubModel.Store.sp_VolunteerHistory">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="TabangHubModel.sp_VolunteerHistory_Result">
+          <ScalarProperty Name="VolHistoryId" ColumnName="VolHistoryId" />
+          <ScalarProperty Name="userId" ColumnName="userId" />
+          <ScalarProperty Name="eventId" ColumnName="eventId" />
+          <ScalarProperty Name="eventTitle" ColumnName="eventTitle" />
+          <ScalarProperty Name="eventImage" ColumnName="eventImage" />
+          <ScalarProperty Name="location" ColumnName="location" />
+          <ScalarProperty Name="eventDescription" ColumnName="eventDescription" />
+          <ScalarProperty Name="dateStart" ColumnName="dateStart" />
+          <ScalarProperty Name="dateEnd" ColumnName="dateEnd" />
+          <ScalarProperty Name="status" ColumnName="status" />
+          <ScalarProperty Name="skillId" ColumnName="skillId" />
+          <ScalarProperty Name="skillName" ColumnName="skillName" />
         </ComplexTypeMapping>
       </ResultMapping>
     </FunctionImportMapping>

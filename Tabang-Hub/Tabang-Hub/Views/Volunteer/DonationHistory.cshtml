@@ -4,15 +4,13 @@
     ViewBag.Title = "PaymentHistory";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<link href="~/Content/Css/donationStyle.css" rel="stylesheet" />
-<link href="~/Content/css2/nav.css" rel="stylesheet" />
 <style>
-    body{
+    body {
         padding-top: 100px;
     }
 </style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link href="~/Content/Css/donationStyle.css" rel="stylesheet" />
 <!-- Center the card on the page -->
 <div class="d-flex justify-content-center align-items-center mt-5">
     <!-- Bootstrap Card for a cleaner look -->
@@ -38,7 +36,7 @@
                 <table class="table table-borderless align-middle" id="donationTable">
                     <thead>
                         <tr style="background-color: #5BC1AC; color: black">
-                            <th scope="col">Date Donated</th>
+                            <th scope="col">Donation Date</th>
                             <th scope="col">Event Title</th>
                             <th scope="col">Event Description</th>
                             <th scope="col">Status</th>
@@ -109,7 +107,7 @@
                         @(eventInfo.dateEnd.HasValue ? eventInfo.dateEnd.Value.ToString("MMMM dd, yyyy") : "N/A")
                     </p>
                     <p>
-                        <i class="fa fa-calendar" aria-hidden="true"></i> <strong>Date:</strong>
+                        <i class="fa fa-calendar" aria-hidden="true"></i> <strong>Donation Date:</strong>
                         @formattedDate
                     </p>
                     <p><i class="fa fa-map-marker" aria-hidden="true"></i> <strong>Location:</strong> @evnt_info.location</p>

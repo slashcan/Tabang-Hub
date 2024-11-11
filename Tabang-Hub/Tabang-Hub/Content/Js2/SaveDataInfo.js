@@ -1,8 +1,33 @@
 ﻿function nextStep() {
-    document.getElementById('step1').style.display = 'none';
-    document.getElementById('step2').style.display = 'flex';
-    validateSkills(); // Initial validation check for the second step
+    const phoneNumber = document.getElementById('phoneNumber').value;
+    const phoneNumberError = document.getElementById('phoneNumberError');
+
+    // AJAX call to check if the phone number is already in use
+    $.ajax({
+        type: 'POST',
+        url: '/Volunteer/CheckPhoneNumber', // Endpoint to validate phone number
+        contentType: 'application/json',
+        data: JSON.stringify({ phoneNumber: phoneNumber }),
+        success: function (response) {
+            if (response.success) {
+                // Phone number is valid, proceed to the next step
+                phoneNumberError.textContent = ''; // Clear any previous error message
+                document.getElementById('step1').style.display = 'none';
+                document.getElementById('step2').style.display = 'flex';
+                validateSkills(); // Initial validation check for the second step
+            } else {
+                // Display error message if phone number is already in use
+                phoneNumberError.textContent = response.message;
+                phoneNumberError.style.color = 'red';
+            }
+        },
+        error: function (xhr, status, error) {
+            phoneNumberError.textContent = 'There was an issue validating the phone number. Please try again.';
+            phoneNumberError.style.color = 'red';
+        }
+    });
 }
+
 
 function prevStep() {
     document.getElementById('step2').style.display = 'none';
@@ -48,7 +73,7 @@ function SaveDatas(formData, storeSkill) {
             
             Swal.fire({
                 title: '',
-                text: 'Your information has been saved successfully.',
+                text: 'Your information has been saved successfully!',
                 icon: 'success',
                 confirmButtonText: 'Ok'
             }).then(() => {

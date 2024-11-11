@@ -8,8 +8,11 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <link href="~/Content/css2/Eventdetails.css" rel="stylesheet" />
-<link href="~/Content/css2/nav.css" rel="stylesheet" />
-
+<style>
+    body{
+        padding-top: 100px;
+    }
+</style>
 @if (Model.volunteer != null && Model.volunteer.Status == 2)
 {
     <div class="container mt-5">
@@ -55,6 +58,12 @@
                 <div class="col-md-4 event-details" style="border-radius: 1rem; background-color: #FFFF">
                     @foreach (var location in Model.listOfEventsOne)
                     {
+                        DateTime? originalDateStart = location.Start_Date;
+                        string formattedDateStart = originalDateStart.HasValue ? originalDateStart.Value.ToString("MMMM dd, yyyy") : "N/A";
+
+                        DateTime? originalDateEnd = location.End_Date;
+                        string formattedDateEnd = originalDateEnd.HasValue ? originalDateEnd.Value.ToString("MMMM dd, yyyy") : "N/A";
+
                         <i class="bi bi-geo-alt" style="font-size:24px;"></i> @location.Location
 
                         <div class="skills-required">
@@ -72,7 +81,7 @@
                         <div style="margin-top: 50px; color: dimgray" class="org-info">
                             <div class="d-flex align-items-center mb-2">
                                 <i class="bi bi-calendar me-2" style="font-size:16px;"></i>
-                                <span>@location.Start_Date <strong>-</strong> @location.End_Date</span>
+                                <span>@formattedDateStart <strong>-</strong> @formattedDateEnd</span>
                             </div>
                         </div>
 
@@ -176,7 +185,7 @@
                             foreach (var evnt in Model.listOfEventsOne)
                             {
                                 <div class="donation-progress">
-                                    <label>Fund Raised</label>
+                                    <label>Funds raised</label>
                                     <div class="progress">
                                         @{
                                             decimal? raisedAmount = 0;
@@ -204,7 +213,7 @@
                                     <div class="modal-dialog" role="document">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <h5 class="modal-title" id="donationModalLabel">Make a Donation</h5>
+                                                <h5 class="modal-title" id="donationModalLabel">Amount</h5>
                                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                     <span aria-hidden="true">&times;</span>
                                                 </button>
@@ -279,10 +288,16 @@ else
                 <div class="col-md-4 event-details" style="border-radius: 1rem; background-color: #FFFF">
                     @foreach (var location in Model.listOfEventsOne)
                     {
+                        DateTime? originalDateStart = location.Start_Date;
+                        string formattedDateStart = originalDateStart.HasValue ? originalDateStart.Value.ToString("MMMM dd, yyyy") : "N/A";
+
+                        DateTime? originalDateEnd = location.End_Date;
+                        string formattedDateEnd = originalDateEnd.HasValue ? originalDateEnd.Value.ToString("MMMM dd, yyyy") : "N/A";
+
                         <i class="bi bi-geo-alt" style="font-size:24px;"></i> @location.Location
 
                         <div class="skills-required">
-                            <h5>Skills Required</h5>
+                            <h5>Skill/s Required</h5>
                             @foreach (var rk in Model.detailsSkillRequirement)
                             {
 
@@ -296,7 +311,7 @@ else
                         <div style="margin-top: 50px; color: dimgray" class="org-info">
                             <div class="d-flex align-items-center mb-2">
                                 <i class="bi bi-calendar me-2" style="font-size:16px;"></i>
-                                <span>@location.Start_Date <strong>-</strong> @location.End_Date</span>
+                                <span>@formattedDateStart <strong>-</strong> @formattedDateEnd</span>
                             </div>
                         </div>
 
@@ -384,7 +399,7 @@ else
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                <button type="button" class="btn btn-primary" @*onclick="applyEvent('@orgDetails.eventId')"*@>Submit</button>
+                                                <button type="button" class="btn btn-primary" onclick="applyEvent('@orgDetails.eventId')">Submit</button>
                                             </div>
                                         </div>
                                     </div>
@@ -424,7 +439,7 @@ else
                                         <div class="modal-dialog" role="document">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h5 class="modal-title" id="donationModalLabel">Make a Donation</h5>
+                                                    <h5 class="modal-title" id="donationModalLabel">Amount</h5>
                                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                         <span aria-hidden="true">&times;</span>
                                                     </button>

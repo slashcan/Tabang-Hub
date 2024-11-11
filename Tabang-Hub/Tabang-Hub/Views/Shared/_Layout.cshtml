@@ -11,7 +11,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css" rel="stylesheet">
-    <link href="~/Content/css2/Style.css" rel="stylesheet" />
 
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="~/Scripts/jquery-1.6.4.min.js"></script>
@@ -19,63 +18,136 @@
     <script src="~/signalr/hubs"></script>
 
     <!-- CSS Template -->
-    <link href="~/Content/css2/Template-css/bootstrap.min.css" rel="stylesheet" />
-    <link href="~/Content/css2/" rel="stylesheet" />
+    @*<link href="~/Content/css2/Template-css/bootstrap.min.css" rel="stylesheet" />*@
+    <link href="~/Content/css2/Style.css" rel="stylesheet" />
     <link href="~/Content/css2/Template-css/templatemo-kind-heart-charity.css" rel="stylesheet" />
     <link href="~/Content/css2/notif.css" rel="stylesheet" />
     <link href="~/Content/css2/Search.css" rel="stylesheet" />
     <style>
-        .suggestion-image {
-            width: 40px; /* Adjust width as needed */
-            height: 40px; /* Adjust height as needed */
-            border-radius: 5px; /* Optional: Add a border radius for a rounded effect */
-            object-fit: cover; /* Ensures the image doesn't stretch */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: #f8f9fa;
+        }
+        .search-container {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            max-width: 500px;
+            margin: auto;
+            position: relative;
         }
 
         #suggestions {
-            max-height: 250px; /* Adjust the height as needed to display 5 items */
-            overflow-y: auto; /* Enables scrolling if content exceeds max-height */
-            border: 1px solid #ccc; /* Optional: Add a border for better visibility */
-            border-radius: 5px; /* Optional: Rounded corners */
+            max-width: 500px;
+            margin-top: 2px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            z-index: 1000;
+            display: none;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .suggestion-item {
+            padding: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+
+            .suggestion-item:hover {
+                background-color: #f1f1f1;
+            }
+
+        .suggestion-image {
+            width: 40px;
+            height: 40px;
+            border-radius: 5px;
+            margin-right: 10px;
+            object-fit: cover;
+        }
+
+        .navbar {
+            flex-wrap: nowrap;
+        }
+
+        .offcanvas {
+            width: 250px;
+        }
+
+        .offcanvas-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .user-sidebar-profile {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+            .user-sidebar-profile img {
+                border-radius: 50%;
+                width: 60px;
+                height: 60px;
+                margin-bottom: 10px;
+            }
+
+            .user-sidebar-profile .user-name {
+                font-size: 1rem;
+                font-weight: bold;
+                margin-bottom: 5px;
+            }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
         }
     </style>
 </head>
 <body id="section_1">
+    <!-- Overlay -->
+    <div class="overlay" id="overlay"></div>
+
     <nav class="navbar navbar-expand-lg bg-light shadow-lg">
-        <div class="container">
+        <div class="container-fluid">
             <a class="navbar-brand" href="/">
                 <img src="~/Content/images2/tabanghub3-No-Background.png" class="logo-i img-fluid" alt="Tabang Hub Volunteering Community">
-                <span>
-                    Tabang Hub
-                    <small>Volunteering Community</small>
-                </span>
             </a>
-
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
             <div class="collapse navbar-collapse" id="navbarNav">
                 @if (User.Identity.IsAuthenticated)
                 {
                     if (ViewBag.Title != "Message")
                     {
                         <!-- SEARCH BAR -->
-                        <div class="search-container">
-                            <div class="input-wrapper">
-                                <input type="text" id="search-input" placeholder=" " oninput="filterSuggestions()" onfocus="showSuggestions()" onblur="hideSuggestions()">
-                                <label for="search-input" class="floating-label">Search event</label>
+                        <div class="search-container mx-auto">
+                            <div class="input-wrapper d-flex">
+                                <input type="text" id="search-input" placeholder="Search event" class="form-control" oninput="filterSuggestions()" onfocus="showSuggestions()" onblur="hideSuggestions()">
+                                <button class="btn btn-primary" id="search-button">
+                                    <i class="fa fa-search"></i>
+                                </button>
                             </div>
-                            <button class="search-button">
-                                <i class="fa fa-search"></i>
-                            </button>
 
                             <!-- Suggestion Item with Online Image -->
                             <div id="suggestions" class="suggestions">
                                 @foreach (var eventSuggest in Model.listOfEvents.Where(m => m.End_Date >= DateTime.Now))
                                 {
-                                    <div class="suggestion-item d-flex align-items-center" 
-                                         data-event-name="@eventSuggest.Event_Name" 
+                                    <div class="suggestion-item d-flex align-items-center"
+                                         data-event-name="@eventSuggest.Event_Name"
                                          data-event-id="@eventSuggest.Event_Id"
                                          onclick="handleSuggestionClick(this)">
                                         @{
@@ -91,7 +163,6 @@
                         </div>
                     }
 
-
                     <ul class="navbar-nav ms-auto">
                         <li class="nav-item">
                             <a class="nav-link click-scroll" href="#top">Home</a>
@@ -102,7 +173,7 @@
                         </li>
 
                         <!-- Notification Bell -->
-                        <li class="nav-item dropdown">
+                        <li class="nav-item">
                             <a class="nav-link" href="#" id="notificationBell" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="bi bi-bell-fill"></i>
                                 <span id="notificationCount" class="badge rounded-pill bg-danger" style="display: none;">0</span>
@@ -118,12 +189,11 @@
                             </a>
                         </li>
 
-
                         <!-- User Profile Dropdown -->
                         <li class="nav-item dropdown">
                             @foreach (var pf in Model.volunteersInfo)
                             {
-                                <a class="nav-link " href="#" id="userDropdown" data-bs-toggle="dropdown">
+                                <a class="nav-link" href="#" id="userDropdown" data-bs-toggle="dropdown">
                                     <div class="user-menu d-flex">
                                         <div class="user-name text-end me-3">
                                             @if (!string.IsNullOrEmpty(pf.lName) && !string.IsNullOrEmpty(pf.fName))
@@ -163,14 +233,67 @@
                     </ul>
                 }
             </div>
+            @if (User.Identity.IsAuthenticated)
+            {
+                <!-- Burger icon for sidebar -->
+                <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileSidebar" onclick="toggleSidebar()">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            }
         </div>
     </nav>
+    @if (User.Identity.IsAuthenticated)
+    {
+
+
+        <!-- Sidebar for mobile -->
+        <div class="offcanvas offcanvas-start" tabindex="-1" id="mobileSidebar" aria-labelledby="mobileSidebarLabel" data-bs-backdrop="false">
+            <div class="offcanvas-header">
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close" onclick="closeSidebar()"></button>
+            </div>
+            <div class="offcanvas-body">
+                @foreach (var pf in Model.volunteersInfo)
+                {
+                    <div class="user-sidebar-profile">
+                        @if (Model.picture.Count() > 0)
+                        {
+                            foreach (var pic in Model.picture)
+                            {
+                                <img src="~/UserProfile/@pic.profilePath" alt="Profile">
+                            }
+                        }
+                        else
+                        {
+                            <i class="icon-mid bi bi-person" style="font-size: 2.5rem;"></i>
+                        }
+                        <div class="user-name">
+                            @pf.fName.Substring(0, 1).ToUpper()@pf.fName.Substring(1) @pf.lName.Substring(0, 1).ToUpper()@pf.lName.Substring(1)
+                        </div>
+                    </div>
+                    <hr>
+                }
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="~/Volunteer/DonationHistory"><i class="bi bi-wallet2 me-2"></i>Donation History</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="~/Volunteer/Participate"><i class="bi bi-kanban me-2"></i>Manage Events</a>
+                    </li>
+                    <hr>
+                    <li class="nav-item">
+                        <a class="nav-link" href="~/Page/Logout"><i class="bi bi-box-arrow-left me-2"></i>Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    }
+
     @RenderBody()
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-    
+
     <!--<script src="~/Content/Js/JavaScript.js"></script>-->
     <!-- JS for fetching notifications and handling SignalR -->
     @if (User.Identity.IsAuthenticated)
@@ -255,6 +378,17 @@
                     });
                 });
             });
+
+
+            function toggleSidebar() {
+                document.getElementById('mobileSidebar').classList.add('show');
+                document.getElementById('overlay').style.display = 'block';
+            }
+
+            function closeSidebar() {
+                document.getElementById('mobileSidebar').classList.remove('show');
+                document.getElementById('overlay').style.display = 'none';
+            }
 
             function showSuggestions() {
                 document.getElementById("suggestions").style.display = "block";

@@ -64,7 +64,7 @@ namespace Tabang_Hub.Controllers
                 uniqueSkill = getUniqueSkill,
                 picture = getProfile,
                 skills = _skills.GetAll().ToList(),
-                volunteersHistories = db.sp_VolunteerHistory(UserId).ToList(),
+                volunteersHistories = _volunteerManager.GetVolunteersHistoryByUserId(UserId),
                 rating = db.Rating.Where(m => m.userId == UserId).ToList(),
                 orgEventHistory = db.OrgEventHistory.Where(m => m.userId == UserId).ToList(),
                 listOfEvents = filteredEvent.OrderByDescending(m => m.Event_Id).ToList(),
@@ -246,6 +246,46 @@ namespace Tabang_Hub.Controllers
                 return Json(new { success = false, message = "Error" });
             }
         }
+        [HttpPost]
+        public JsonResult CheckPhoneNumber(string phoneNumber)
+        {
+            //var existingUser = db.VolunteerInfo.FirstOrDefault(m => m.phoneNum == phoneNumber);
+            var logUser = db.VolunteerInfo.Where(m => m.userId == UserId).FirstOrDefault();
+            var existingUser = db.VolunteerInfo.FirstOrDefault(m => m.phoneNum == phoneNumber);
+
+            // If both user and phone number do not exist
+            if (logUser == null && existingUser == null)
+            {
+                return Json(new { success = true, message = "Phone number is valid." });
+            }
+
+            // If the user exists and the phone number is the same as their current one
+            if (logUser != null && logUser.phoneNum == phoneNumber)
+            {
+                return Json(new { success = true, message = "Phone number is valid." });
+            }
+
+            // If the user exists but the phone number is used by another account
+            if (logUser != null && existingUser != null && logUser.phoneNum != phoneNumber)
+            {
+                return Json(new { success = false, message = "This number is linked to another account. Please try a different one." });
+            }
+
+            // If the user exists and the phone number is not used by anyone else
+            if (logUser != null && existingUser == null)
+            {
+                return Json(new { success = true, message = "Phone number is valid." });
+            }
+
+            // If the phone number is already used by another user
+            if (existingUser != null)
+            {
+                return Json(new { success = false, message = "This number is linked to another account. Please try a different one." });
+            }
+
+            return Json(new { success = true, message = "Phone number is valid." });
+        }
+
         public async Task<ActionResult> EventDetails(int? eventId)
         {
             try
@@ -433,35 +473,38 @@ namespace Tabang_Hub.Controllers
                 var getEventRequiredSkills = _skillRequirement.GetAll().Where(m => m.eventId == eventId).ToList();
                 var volSkill = _volunteerSkills.GetAll().Where(m => m.userId == UserId).Select(m => m.skillId).ToList();
 
-                Volunteers apply = new Volunteers();
-                foreach (var eventReq in getEventRequiredSkills)
+                //===========================================================================
+                //Volunteers apply = new Volunteers();
+                //foreach (var eventReq in getEventRequiredSkills)
+                //{
+                //    apply = new Volunteers()
+                //    {
+                //        userId = UserId,
+                //        eventId = eventId,
+                //        Status = 0,
+                //        skillId = db.Skills.Where(m => m.skillId == eventReq.skillId).Select(m => m.skillId).FirstOrDefault(),
+                //        appliedAt = DateTime.Now
+                //    };
+                //    _volunteers.Create(apply);
+                //}
+                //===========================================================================
+
+
+                bool skillMatch = getEventRequiredSkills.All(skll => volSkill.Contains(skll.skillId));
+
+                if (!skillMatch)
                 {
-                    apply = new Volunteers()
-                    {
-                        userId = UserId,
-                        eventId = eventId,
-                        Status = 0,
-                        skillId = db.Skills.Where(m => m.skillId == eventReq.skillId).Select(m => m.skillId).FirstOrDefault(),
-                        appliedAt = DateTime.Now
-                    };
-                    _volunteers.Create(apply);
+                    return Json(new { success = false, message = "Your skills do not match the requirements" });
                 }
 
-                //bool skillMatch = getEventRequiredSkills.Any(skll => volSkill.Contains(skll.eventId));
-
-                //if (!skillMatch)
-                //{
-                //    return Json(new { success = false, message = "Your skills do not match the requirements" });
-                //}
-
-                //var apply = new Volunteers()
-                //{
-                //    userId = UserId,
-                //    eventId = eventId,
-                //    Status = 0,
-                //    skillId = db.Skills.Where(m => m.skillName == skill).Select(m => m.skillId).FirstOrDefault(),
-                //    appliedAt = DateTime.Now
-                //};
+                var apply = new Volunteers()
+                {
+                    userId = UserId,
+                    eventId = eventId,
+                    Status = 0,
+                    //skillId = db.Skills.Where(m => m.skillName == skill).Select(m => m.skillId).FirstOrDefault(),
+                    appliedAt = DateTime.Now
+                };
 
                 //var updateVolunteerNeeded = db.OrgEvents.Where(m => m.eventId == eventId).FirstOrDefault();
 
@@ -483,9 +526,9 @@ namespace Tabang_Hub.Controllers
                     // Send real-time notification if the organization is online
                     var context = GlobalHost.ConnectionManager.GetHubContext<NotificationHub>();
                     context.Clients.User(organizationId.ToString()).receiveNotification(notificationType, notificationMessage);
-                    //_volunteers.Create(apply);
+                    _volunteers.Create(apply);
 
-                    return Json(new { success = true, message = "Application sent" });
+                    return Json(new { success = true, message = "Application sent!" });
                 }
                 else
                 {
@@ -868,7 +911,7 @@ namespace Tabang_Hub.Controllers
                     orgEventHistory = db.OrgEventHistory.Where(m => m.userId == UserId).ToList(),
                     pendingOrgDetails = pendings.OrderByDescending(m => m.applyVolunteerId).Select(e => _pendingOrgDetails.GetAll().FirstOrDefault(p => p.eventId == e.eventId)).ToList(),
                     volunteersInfo = getVolunteerInfo,
-                    volunteersHistories = db.sp_VolunteerHistory(UserId).ToList(),
+                    volunteersHistories = _volunteerManager.GetVolunteersHistoryByUserId(UserId),
                     rating = db.Rating.Where(m => m.userId == UserId).ToList(),
                     detailsEventImage = getOrgImages,
                     orgEventImageHistories = db.OrgEventImageHistory.ToList(),
@@ -914,7 +957,7 @@ namespace Tabang_Hub.Controllers
                     db.Notification.Add(notification);
                     db.SaveChanges(); // Save the notification
 
-                    return Json(new { success = true, message = "Leave successfully" });
+                    return Json(new { success = true, message = "Left Successfully!" });
                 }
                 else
                 {

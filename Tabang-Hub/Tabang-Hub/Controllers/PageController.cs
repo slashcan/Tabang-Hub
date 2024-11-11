@@ -695,7 +695,7 @@ namespace Tabang_Hub.Controllers
                     switch (user.roleId)
                     {
                         case 1: // User role
-                            redirectUrl = Url.Action("Index", "User");
+                            redirectUrl = Url.Action("Index", "Page");
                             break;
                         case 3: // Admin role
                             redirectUrl = Url.Action("Index", "Admin");

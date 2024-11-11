@@ -7,13 +7,16 @@
     string activeSection = Request.QueryString["section"] ?? "participatingSection";
 }
 <style>
-    body{
-        margin-top: 100px;
+    body {
+        padding-top: 100px;
+    }
+    .dropdown-icon {
+        font-size: 1rem;
+        color: #6c757d;
     }
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<link href="~/Content/css2/nav.css" rel="stylesheet" />
 <link href="~/Content/Css/Participate.css" rel="stylesheet" />
 
 <nav class="navbar navbar-expand-sm navbar-light bg-light custom-navbar mb-4">
@@ -40,20 +43,27 @@
             <!-- Dropdown for Ongoing Events -->
             <div class="mb-3">
                 <div class="col-11 d-flex justify-content-end">
-                    <div class="form-group mb-0">
-                        <select class="form-control" id="ongoingEventFilter" style="width: auto;" onchange="filterOngoingEvents()">
+                    <div class="form-group mb-0 position-relative" style="display: inline-block;">
+                        <select class="form-control" id="ongoingEventFilter" style="padding-right: 2.5rem; width: auto;" onchange="filterOngoingEvents()">
                             <option value="startSoonest">Earliest Start Date</option>
                             <option value="longestDuration">Longest Duration</option>
                             <option value="shortestDuration">Shortest Duration</option>
                         </select>
+                        <i class="bi bi-caret-down-fill dropdown-icon" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); pointer-events: none;"></i>
                     </div>
                 </div>
             </div>
             foreach (var org in Model.orgEvents)
             {
+                DateTime? originalDateStart = org.dateStart;
+                string formattedDateStart = originalDateStart.HasValue ? originalDateStart.Value.ToString("MMMM dd, yyyy") : "N/A";
+
+                DateTime? originalDateEnd = org.dateEnd;
+                string formattedDateEnd = originalDateEnd.HasValue ? originalDateEnd.Value.ToString("MMMM dd, yyyy") : "N/A";
+
             <div class="container mt-5 event-card"
-                 data-start-date="@org.dateStart"
-                 data-end-date="@org.dateEnd">
+                 data-start-date="@formattedDateStart"
+                 data-end-date="@formattedDateEnd">
                 <div class="card custom-card shadow-lg">
                     <div class="row g-0">
                         @{
@@ -74,8 +84,8 @@
                                     @org.eventDescription
                                 </p>
                                 <p class="card-text">
-                                    <i class="bi bi-calendar-event-fill"></i> Start Date: @org.dateStart<br>
-                                    <i class="bi bi-calendar-event-fill"></i> End Date: @org.dateEnd
+                                    <i class="bi bi-calendar-event-fill"></i> Start Date: @formattedDateStart<br>
+                                    <i class="bi bi-calendar-event-fill"></i> End Date: @formattedDateEnd
                                 </p>
                                 <p class="card-text">
                                     <button class="btn btn-outline-danger" onclick="LeaveBtn('@org.eventId')">Leave Event</button>
@@ -94,7 +104,7 @@
                     <div class="card-body">
                         <div class="mt-2">
                             <div class="center-message">
-                                You have not joined any events yet.
+                                You are not currently participating in any events.
                             </div>
                         </div>
                     </div>
@@ -111,20 +121,26 @@
             <!-- Dropdown for Pending Requests -->
             <div class="mb-3">
                 <div class="col-11 d-flex justify-content-end">
-                    <div class="form-group mb-0">
-                        <select class="form-control" id="pendingEventFilter" style="width: auto;" onchange="filterPendingEvents()">
+                    <div class="form-group mb-0 position-relative" style="display: inline-block;">
+                        <select class="form-control" id="pendingEventFilter" style="padding-right: 2.5rem; width: auto;" onchange="filterPendingEvents()">
                             <option value="startSoonest">Earliest Start Date</option>
                             <option value="longestDuration">Longest Duration</option>
                             <option value="shortestDuration">Shortest Duration</option>
                         </select>
+                        <i class="bi bi-caret-down-fill dropdown-icon" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); pointer-events: none;"></i>
                     </div>
                 </div>
             </div>
             foreach (var pendingOrg in Model.pendingOrgDetails)
             {
+                DateTime? originalDateStart = pendingOrg.dateStart;
+                string formattedDateStart = originalDateStart.HasValue ? originalDateStart.Value.ToString("MMMM dd, yyyy") : "N/A";
+
+                DateTime? originalDateEnd = pendingOrg.dateEnd;
+                string formattedDateEnd = originalDateEnd.HasValue ? originalDateEnd.Value.ToString("MMMM dd, yyyy") : "N/A";
             <div class="container mt-5 event-card"
-                 data-start-date="@pendingOrg.dateStart"
-                 data-end-date="@pendingOrg.dateEnd">
+                 data-start-date="@formattedDateStart"
+                 data-end-date="@formattedDateEnd">
                 <div class="card custom-card shadow-lg">
                     <div class="row g-0">
                         @{
@@ -145,8 +161,8 @@
                                     @pendingOrg.eventDescription
                                 </p>
                                 <p class="card-text">
-                                    <i class="bi bi-calendar-event-fill"></i> Start Date: @pendingOrg.dateStart<br>
-                                    <i class="bi bi-calendar-event-fill"></i> End Date: @pendingOrg.dateEnd
+                                    <i class="bi bi-calendar-event-fill"></i> Start Date: @formattedDateStart<br>
+                                    <i class="bi bi-calendar-event-fill"></i> End Date: @formattedDateEnd
                                 </p>
                                 <p class="card-text">
                                     <button class="btn btn-outline-danger" onclick="CancelRequestBtn('@pendingOrg.eventId')">Cancel Request</button>
@@ -181,8 +197,8 @@
         {
             <div class="mb-3">
                 <div class="col-11 d-flex justify-content-end">
-                    <div class="form-group mb-0">
-                        <select class="form-control" id="eventFilter" style="width: auto;" onchange="filterEvents()">
+                    <div class="form-group mb-0 position-relative" style="display: inline-block;">
+                        <select class="form-control" id="eventFilter" style="padding-right: 2.5rem; width: auto;" onchange="filterEvents()">
                             <option value="recent">Sort To Newest</option>
                             <option value="past">Sort To Oldest</option>
                             <option value="highestRating">Highest Rating</option>
@@ -190,6 +206,7 @@
                             <option value="longestDuration">Longest Duration</option>
                             <option value="shortestDuration">Shortest Duration</option>
                         </select>
+                        <i class="bi bi-caret-down-fill dropdown-icon" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); pointer-events: none;"></i>
                     </div>
                 </div>
             </div>
@@ -213,6 +230,12 @@
                 @foreach (var group in groupedEvents)
                 {
                     var vh = group.Event;
+                    DateTime? originalDateStart = vh.dateStart;
+                    string formattedDateStart = originalDateStart.HasValue ? originalDateStart.Value.ToString("MMMM dd, yyyy") : "N/A";
+
+                    DateTime? originalDateEnd = vh.dateEnd;
+                    string formattedDateEnd = originalDateEnd.HasValue ? originalDateEnd.Value.ToString("MMMM dd, yyyy") : "N/A";
+
                     <div class="container mt-5 event-card">
                         <div class="card custom-card shadow-lg" data-bs-toggle="modal" data-bs-target="#eventModal-@vh.eventId">
                             <div class="row g-0 history-card">
@@ -232,8 +255,8 @@
                                             @vh.eventDescription
                                         </p>
                                         <p class="card-text">
-                                            <i class="bi bi-calendar-event-fill"></i> Start Date: @vh.dateStart<br>
-                                            <i class="bi bi-calendar-event-fill"></i> End Date: @vh.dateEnd
+                                            <i class="bi bi-calendar-event-fill"></i> Start Date: @formattedDateStart<br>
+                                            <i class="bi bi-calendar-event-fill"></i> End Date: @formattedDateEnd
                                         </p>
                                     </div>
                                 </div>
@@ -255,8 +278,8 @@
                                     </div>
                                     <p><i class="bi bi-geo-alt-fill"></i> @vh.location</p>
                                     <p>@vh.eventDescription</p>
-                                    <p><i class="bi bi-calendar-event-fill"></i> Start Date: @vh.dateStart</p>
-                                    <p><i class="bi bi-calendar-event-fill"></i> End Date: @vh.dateEnd</p>
+                                    <p><i class="bi bi-calendar-event-fill"></i> Start Date: @formattedDateStart</p>
+                                    <p><i class="bi bi-calendar-event-fill"></i> End Date: @formattedDateEnd</p>
                                     <div class="skills-container mb-3">
                                         <div class="d-flex align-items-start">
                                             <strong class="me-2">Skills Utilized:</strong>
@@ -306,7 +329,7 @@
                     <div class="card-body">
                         <div class="mt-2">
                             <div class="center-message">
-                                You have no Event History.
+                                You have not participated in any events yet.
                             </div>
                         </div>
                     </div>

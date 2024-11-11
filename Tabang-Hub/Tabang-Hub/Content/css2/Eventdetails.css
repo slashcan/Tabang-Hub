@@ -1,7 +1,4 @@
-﻿body{
-    margin-top: 60px;
-}
-.carousel-inner img {
+﻿.carousel-inner img {
     width: 100%;
     height: 500px; /* Set a fixed height for consistency */
     object-fit: cover;
