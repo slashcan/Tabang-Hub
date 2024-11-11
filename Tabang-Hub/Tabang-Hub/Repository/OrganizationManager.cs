@@ -275,8 +275,12 @@ namespace Tabang_Hub.Repository
         }
         public List<vw_ListOfEvent> ListOfEvents(int userId)
         {
-            return _listOfEvents.GetAll().Where(m => m.User_Id == userId).ToList();
+            return _listOfEvents.GetAll()
+                                .Where(m => m.User_Id == userId)
+                                .OrderByDescending(m => m.Start_Date) // Replace `Event_Date` with the appropriate property for ordering
+                                .ToList();
         }
+
 
         public decimal GetTotalDonationByUserId(int userId)
         {

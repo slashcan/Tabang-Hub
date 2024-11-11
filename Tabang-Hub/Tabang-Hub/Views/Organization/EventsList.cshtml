@@ -172,7 +172,8 @@
 
 <!-- Create Event Modal -->
 <div class="container mt-5">
-    <div class="modal fade" id="createEventModal" tabindex="-1" aria-labelledby="createEventModalLabel" aria-hidden="true">
+    <div class="modal fade" id="createEventModal" tabindex="-1" aria-labelledby="createEventModalLabel" aria-hidden="true"
+         data-bs-backdrop="static" data-bs-keyboard="false">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
@@ -211,7 +212,6 @@
                                 <span class="error" id="CreateEvents_dateEnd_error"></span>
                             </div>
                         </div>
-                        <!-- Map Container -->
                         <div class="mb-3">
                             <div id="map" style="height: 400px;"></div>
                         </div>
@@ -242,8 +242,6 @@
                             </div>
                             <span class="error" id="CreateEvents_skills_error"></span>
                         </div>
-
-                        <!-- Skill Buttons to Add Skills -->
                         <div class="skills-container mb-3">
                             @foreach (var skills in Model.listOfSkills)
                             {
@@ -256,7 +254,6 @@
                             <span class="error" id="CreateEvents_uploadImage_error"></span>
                             <div class="preview-container" id="image-preview"></div>
                         </div>
-
                         <button class="btn btn-primary" type="submit">Create Event</button>
                     </form>
                 </div>
@@ -264,6 +261,7 @@
         </div>
     </div>
 </div>
+
 <!-- SweetAlert JS -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -287,11 +285,21 @@
             attribution: 'Map data © OpenStreetMap contributors'
         }).addTo(window.leafletMap);
 
-        // Add click event to the map
+        // Variable to hold the current marker
+        let currentMarker;
+
+        // Add click event to the map to place a pin
         window.leafletMap.on('click', function (e) {
             const latlng = e.latlng;
             const lat = latlng.lat;
             const lon = latlng.lng;
+
+            // If a marker already exists, move it; otherwise, create a new one
+            if (currentMarker) {
+                currentMarker.setLatLng(latlng);
+            } else {
+                currentMarker = L.marker(latlng).addTo(window.leafletMap);
+            }
 
             // Use reverse geocoding to get the address
             const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lon}`;
@@ -309,8 +317,22 @@
         });
     });
 
-    // Destroy the map when the modal is hidden
+    // Reset form data and destroy the map when the modal is closed
     $('#createEventModal').on('hidden.bs.modal', function () {
+        // Clear all input fields and reset any validation error messages
+        document.getElementById('create-event-form').reset();
+        document.querySelectorAll('.error').forEach(e => e.innerText = '');
+
+        // Clear any dynamically added skills or preview images
+        document.getElementById('skills-table-body').innerHTML = '';
+        document.getElementById('image-preview').innerHTML = '';
+
+        // Re-enable all skill buttons
+        document.querySelectorAll('.skill-button').forEach(button => {
+            button.disabled = false;
+        });
+
+        // Destroy the map if it exists
         if (window.leafletMap) {
             console.log('Modal hidden. Removing map.');
             window.leafletMap.remove();
@@ -364,15 +386,6 @@
             document.getElementById('CreateEvents_dateEnd_error').innerText = 'End date and time must be after start date and time.';
             document.getElementById('CreateEvents_dateEnd').value = '';
             isValid = false;
-        }
-
-        const hoursDifference = (dateEnd - dateStart) / (1000 * 60 * 60);
-        if (hoursDifference < 3) {
-            document.getElementById('CreateEvents_dateEnd_error').innerText = 'Event duration must be at least 3 hours.';
-            document.getElementById('CreateEvents_dateEnd').value = '';
-            isValid = false;
-        } else {
-            document.getElementById('CreateEvents_dateEnd_error').innerText = '';
         }
 
         // Validate location
@@ -575,13 +588,6 @@
                 document.getElementById('CreateEvents_dateEnd_error').innerText = 'End date and time must be after start date and time.';
                 document.getElementById('CreateEvents_dateEnd').value = '';
                 return;
-            }
-            const hoursDifference = (dateEnd - dateStart) / (1000 * 60 * 60);
-            if (hoursDifference < 3) {
-                document.getElementById('CreateEvents_dateEnd_error').innerText = 'Event duration must be at least 3 hours.';
-                document.getElementById('CreateEvents_dateEnd').value = '';
-            } else {
-                document.getElementById('CreateEvents_dateEnd_error').innerText = '';
             }
         }
     });
