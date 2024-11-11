@@ -266,9 +266,16 @@
                         {
                             <i class="icon-mid bi bi-person" style="font-size: 2.5rem;"></i>
                         }
-                        <div class="user-name">
-                            @pf.fName.Substring(0, 1).ToUpper()@pf.fName.Substring(1) @pf.lName.Substring(0, 1).ToUpper()@pf.lName.Substring(1)
-                        </div>
+                        @if (pf.lName == null && pf.fName == null)
+                        {
+                            <p class="mb-0 text-sm text-gray-600"></p>
+                        }
+                        else
+                        {
+                            <div class="user-name">
+                                @pf.fName.Substring(0, 1).ToUpper()@pf.fName.Substring(1) @pf.lName.Substring(0, 1).ToUpper()@pf.lName.Substring(1)
+                            </div>
+                        }
                     </div>
                     <hr>
                 }
