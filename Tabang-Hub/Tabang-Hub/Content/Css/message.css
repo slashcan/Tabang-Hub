@@ -3,29 +3,37 @@
     margin: 0;
     font-family: Arial, sans-serif;
     height: 87.1vh;
-    background-color: #f2f7ff;
-    overflow: hidden; /* Prevent page scrolling */
+    background-color: #eaf3ff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
 }
 
 .chat-list {
     width: 25%;
-    background-color: #fff;
-    color: #5A6F80;
+    background-color: #ffffff;
+    color: #3b4c5b;
     overflow-y: auto;
+    border-right: 1px solid #d9dfe6;
+    border-radius: 10px 0 0 10px;
 }
 
 .chat-item-head {
-    padding: 10px;
-    border-bottom: 1px solid #3a3d41;
-    /*text-align: center;*/
+    padding: 15px;
+    border-bottom: 1px solid #d9dfe6;
+    text-align: center;
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #2c3e50;
 }
 
 .chat-item {
     display: flex;
     align-items: center;
-    padding: 10px 20px;
-    /*border-bottom: 1px solid #3a3d41;*/
+    padding: 10px;
     cursor: pointer;
+    border-bottom: 1px solid #d9dfe6;
+    transition: background-color 0.3s;
 }
 
     .chat-item:hover {
@@ -54,10 +62,41 @@
     flex-grow: 1;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    background-color: #f2f7ff;
-    color: #fff;
-    height: 85vh;
+    background-color: #dce8f5;
+    padding: 15px;
+    border-radius: 0 10px 10px 0;
+}
+
+.chat-header {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    background-color: #ffffff;
+    border-bottom: 2px solid #d9dfe6;
+    border-radius: 10px 10px 0 0;
+    margin-bottom: 10px;
+    position: relative;
+}
+
+    .chat-header img {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        margin-right: 10px;
+    }
+
+    .chat-header span {
+        font-weight: bold;
+        font-size: 1.2em;
+        color: #2c3e50;
+    }
+
+.chat-back-icon {
+    font-size: 1.2em;
+    margin-right: 10px;
+    cursor: pointer;
+    color: #2c3e50;
+    display: none; /* Hide by default */
 }
 
 .user-name {
@@ -123,44 +162,61 @@
         cursor: pointer;
     }
 
-/* Media Query for mobile responsiveness */
+/* General styles */
+.chat-toggle-icon {
+    display: none; /* Hidden by default */
+    font-size: 1.5em;
+    cursor: pointer;
+    padding: 5px;
+    color: #3b4c5b;
+    z-index: 20; /* Ensure it's above other elements */
+    position: relative;
+    margin-right: 10px;
+}
+
+/* Media Query for 600px width */
 @media (max-width: 600px) {
-    .message-body {
-        flex-direction: column;
+    .chat-toggle-icon {
+        display: inline-block; /* Show the toggle icon */
     }
 
     .chat-list {
-        width: 100%;
-        height: auto;
-        display: flex;
-        flex-direction: row;
-        overflow-x: auto;
-        overflow-y: hidden;
-        white-space: nowrap;
+        display: block; /* Ensure it's visible */
+        position: absolute; /* Position inside the chat area */
+        width: 0; /* Start with width 0 for sliding effect */
+        height: 100%;
+        z-index: 15; /* Ensure it is on top of the chat area */
+        background-color: #ffffff;
+        border-right: 1px solid #d9dfe6;
+        overflow-y: auto;
+        transition: width 0.3s ease-in-out; /* Smooth slide animation */
+        margin-top: 8px;
     }
+
+        .chat-list.show {
+            width: 60px; /* Full width when shown */
+        }
 
     .chat-area {
         width: 100%;
-        height: calc(100vh - 120px); /* Adjust height to account for chat list and header height */
+        position: relative; /* Ensure it contains the chat list */
+        transition: margin-left 0.3s ease-in-out;
     }
 
-    .chat-item {
-        flex: none;
-        display: inline-block;
-        border-bottom: none; /* Remove bottom border for horizontal layout */
-    }
+        .chat-area.shift {
+            margin-left: 60px; /* Shift the chat area to the right */
+        }
 
     .chat-item-head {
-        width: 100%;
-        text-align: center;
+        display: none; /* Hide "Group Chat" heading */
     }
-
-    .chat-header {
-        width: 100%;
-        background-color: #2c2f33;
-        color: #fff;
-        text-align: center;
-        padding: 10px;
-        border-bottom: 1px solid #3a3d41;
+    .message span{
+        margin-right: 2%;
+        font-size: small;
+    }
+    #chatHeaderTitle {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 }

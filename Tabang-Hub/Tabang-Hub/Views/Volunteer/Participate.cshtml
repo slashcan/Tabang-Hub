@@ -61,40 +61,90 @@
                 DateTime? originalDateEnd = org.dateEnd;
                 string formattedDateEnd = originalDateEnd.HasValue ? originalDateEnd.Value.ToString("MMMM dd, yyyy") : "N/A";
 
-            <div class="container mt-5 event-card"
-                 data-start-date="@formattedDateStart"
-                 data-end-date="@formattedDateEnd">
-                <div class="card custom-card shadow-lg">
-                    <div class="row g-0">
-                        @{
-                            var imgs = Model.detailsEventImage.Where(m => m.eventId == org.eventId).Select(m => m.eventImage).FirstOrDefault();
-                        }
-                        <!-- Image Section -->
-                        <div class="col-12 col-md-4">
-                            <div class="image-container">
-                                <img src="@Url.Content("~/Content/Events/" + imgs)" class="img-fluid rounded" alt="Event Image">
+                <div class="container mt-5 event-card" data-bs-toggle="modal" data-bs-target="#ongoingModal-@org.eventId"
+                     data-start-date="@formattedDateStart"
+                     data-end-date="@formattedDateEnd">
+                    <div class="card custom-card shadow-lg">
+                        <div class="row g-0">
+                            @{
+                                var imgs = Model.detailsEventImage.Where(m => m.eventId == org.eventId).Select(m => m.eventImage).FirstOrDefault();
+                            }
+                            <!-- Image Section -->
+                            <div class="col-12 col-md-4">
+                                <div class="image-container">
+                                    <img src="@Url.Content("~/Content/Events/" + imgs)" class="img-fluid rounded" alt="Event Image">
+                                </div>
                             </div>
-                        </div>
-                        <!-- Text Content Section -->
-                        <div class="col-12 col-md-8 d-flex align-items-center">
-                            <div class="card-body">
-                                <h5 class="card-title fw-bold">@org.eventTitle</h5>
-                                <p class="card-text">
-                                    <i class="bi bi-geo-alt-fill"></i> @org.eventTitle<br>
-                                    @org.eventDescription
-                                </p>
-                                <p class="card-text">
-                                    <i class="bi bi-calendar-event-fill"></i> Start Date: @formattedDateStart<br>
-                                    <i class="bi bi-calendar-event-fill"></i> End Date: @formattedDateEnd
-                                </p>
-                                <p class="card-text">
-                                    <button class="btn btn-outline-danger" onclick="LeaveBtn('@org.eventId')">Leave Event</button>
-                                </p>
+                            <!-- Text Content Section -->
+                            <div class="col-12 col-md-8 d-flex align-items-center">
+                                <div class="card-body">
+                                    <h5 class="card-title fw-bold">@org.eventTitle</h5>
+                                    <p class="card-text">
+                                        <i class="bi bi-geo-alt-fill"></i> @org.location<br>
+                                        @org.eventDescription
+                                    </p>
+                                    <p class="card-text">
+                                        <i class="bi bi-calendar-event-fill"></i> Start Date: @formattedDateStart<br>
+                                        <i class="bi bi-calendar-event-fill"></i> End Date: @formattedDateEnd
+                                    </p>
+                                    <p class="card-text">
+                                        <button class="btn btn-outline-danger" onclick="LeaveBtn('@org.eventId')">Leave Event</button>
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+
+
+                <div class="modal fade" id="ongoingModal-@org.eventId" tabindex="-1" aria-labelledby="ongoingModalLabel-@org.eventId" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title fw-bold" id="ongoingModalLabel-@org.eventId">@org.eventTitle</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="image-container mb-3">
+                                    <img src="@Url.Content("~/Content/Events/" + imgs)" class="img-fluid rounded" alt="Event Image">
+                                </div>
+                                <p><i class="bi bi-geo-alt-fill"></i> @org.location</p>
+                                <p>@org.eventDescription</p>
+                                <p><i class="bi bi-calendar-event-fill"></i> Start Date: @formattedDateStart</p>
+                                <p><i class="bi bi-calendar-event-fill"></i> End Date: @formattedDateEnd</p>
+                            </div>
+                            <div class="d-flex align-items-start">
+                                <strong class="me-2 px-2">Skill/s Required:</strong>
+                                <div>
+                                    @{
+                                        var skills = Model.detailsSkillRequirement
+                                            .Where(ds => ds.eventId == org.eventId)
+                                            .Select(ds => new
+                                            {
+                                                ds.skillId,
+                                                SkillNames = Model.allSkill
+                                                    .Where(r => r.skillId == ds.skillId)
+                                                    .Select(r => r.skillName)
+                                                    .FirstOrDefault()
+                                            })
+                                            .ToList();
+                                    }
+
+                                    @foreach (var skll in skills)
+                                    {
+                                        <div class="d-inline-block mb-2">
+                                            <span class="badge text-white border">@skll.SkillNames</span><br />
+                                        </div>
+                                    }
+                                    </div>
+                                </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
             }
         }
         else
@@ -138,40 +188,92 @@
 
                 DateTime? originalDateEnd = pendingOrg.dateEnd;
                 string formattedDateEnd = originalDateEnd.HasValue ? originalDateEnd.Value.ToString("MMMM dd, yyyy") : "N/A";
-            <div class="container mt-5 event-card"
-                 data-start-date="@formattedDateStart"
-                 data-end-date="@formattedDateEnd">
-                <div class="card custom-card shadow-lg">
-                    <div class="row g-0">
-                        @{
-                            var imgs = Model.detailsEventImage.Where(m => m.eventId == pendingOrg.eventId).Select(m => m.eventImage).FirstOrDefault();
-                        }
-                        <!-- Image Section -->
-                        <div class="col-12 col-md-4">
-                            <div class="image-container">
-                                <img src="@Url.Content("~/Content/Events/" + imgs)" class="img-fluid rounded" alt="Event Image">
+                <div class="container mt-5 event-card" data-bs-toggle="modal" data-bs-target="#pendingModal-@pendingOrg.eventId"
+                     data-start-date="@formattedDateStart"
+                     data-end-date="@formattedDateEnd">
+                    <div class="card custom-card shadow-lg">
+                        <div class="row g-0">
+                            @{
+                                var imgs = Model.detailsEventImage.Where(m => m.eventId == pendingOrg.eventId).Select(m => m.eventImage).FirstOrDefault();
+                            }
+                            <!-- Image Section -->
+                            <div class="col-12 col-md-4">
+                                <div class="image-container">
+                                    <img src="@Url.Content("~/Content/Events/" + imgs)" class="img-fluid rounded" alt="Event Image">
+                                </div>
                             </div>
-                        </div>
-                        <!-- Text Content Section -->
-                        <div class="col-12 col-md-8 d-flex align-items-center">
-                            <div class="card-body">
-                                <h5 class="card-title fw-bold">@pendingOrg.eventTitle</h5>
-                                <p class="card-text">
-                                    <i class="bi bi-geo-alt-fill"></i> @pendingOrg.eventTitle<br>
-                                    @pendingOrg.eventDescription
-                                </p>
-                                <p class="card-text">
-                                    <i class="bi bi-calendar-event-fill"></i> Start Date: @formattedDateStart<br>
-                                    <i class="bi bi-calendar-event-fill"></i> End Date: @formattedDateEnd
-                                </p>
-                                <p class="card-text">
-                                    <button class="btn btn-outline-danger" onclick="CancelRequestBtn('@pendingOrg.eventId')">Cancel Request</button>
-                                </p>
+                            <!-- Text Content Section -->
+                            <div class="col-12 col-md-8 d-flex align-items-center">
+                                <div class="card-body">
+                                    <h5 class="card-title fw-bold">@pendingOrg.eventTitle</h5>
+                                    <p class="card-text">
+                                        <i class="bi bi-geo-alt-fill"></i> @pendingOrg.eventTitle<br>
+                                        @pendingOrg.eventDescription
+                                    </p>
+                                    <p class="card-text">
+                                        <i class="bi bi-calendar-event-fill"></i> Start Date: @formattedDateStart<br>
+                                        <i class="bi bi-calendar-event-fill"></i> End Date: @formattedDateEnd
+                                    </p>
+                                    <p class="card-text">
+                                        <button class="btn btn-outline-danger" onclick="CancelRequestBtn('@pendingOrg.eventId')">Cancel Request</button>
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+
+
+                <div class="modal fade" id="pendingModal-@pendingOrg.eventId" tabindex="-1" aria-labelledby="pendingModalLabel-@pendingOrg.eventId" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title fw-bold" id="pendingModalLabel-@pendingOrg.eventId">@pendingOrg.eventTitle</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="image-container mb-3">
+                                    <img src="@Url.Content("~/Content/Events/" + imgs)" class="img-fluid rounded" alt="Event Image">
+                                </div>
+                                <p><i class="bi bi-geo-alt-fill"></i> @pendingOrg.location</p>
+                                <p>@pendingOrg.eventDescription</p>
+                                <p><i class="bi bi-calendar-event-fill"></i> Start Date: @formattedDateStart</p>
+                                <p><i class="bi bi-calendar-event-fill"></i> End Date: @formattedDateEnd</p>
+                            </div>
+
+                            <div class="d-flex align-items-start">
+                                <strong class="me-2 px-2">Skill/s Required:</strong>
+                                <div>
+                                    @{
+                                        var skills = Model.detailsSkillRequirement
+                                            .Where(ds => ds.eventId == pendingOrg.eventId)
+                                            .Select(ds => new
+                                            {
+                                                ds.skillId,
+                                                SkillNames = Model.allSkill
+                                                    .Where(r => r.skillId == ds.skillId)
+                                                    .Select(r => r.skillName)
+                                                    .FirstOrDefault()
+                                            })
+                                            .ToList();
+                                    }
+
+                                    @foreach (var skll in skills)
+                                    {
+                                        <div class="d-inline-block mb-2">
+                                            <span class="badge text-white border">@skll.SkillNames</span><br />
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             }
         }
         else
