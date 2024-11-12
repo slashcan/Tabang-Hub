@@ -317,73 +317,9 @@ namespace Tabang_Hub.Controllers
             }
             return RedirectToAction("EventsManagement");
         }
+
         [HttpPost]
-        public JsonResult InviteVolunteer(List<int> selectedVolunteers, int eventId)
-        {
-            string errMsg = string.Empty;
-            var events = _organizationManager.GetEventByEventId(eventId);
-            List<int> alreadyJoinedUsers = new List<int>();
-            List<int> alreadyInvitedUsers = new List<int>();
-            List<int> newlyInvitedUsers = new List<int>();
-
-            foreach (var userId in selectedVolunteers)
-            {
-                // Check if the user is already joined
-                var volunteer = _organizationManager.GetVolunteerById(userId, eventId);
-                if (volunteer != null)
-                {
-                    if (volunteer.Status != 3)
-                    {
-                        alreadyJoinedUsers.Add(userId);
-                        continue; // Skip to next user if they are already joined
-                    }
-                    else if (volunteer.Status == 3)
-                    {
-                        alreadyInvitedUsers.Add(userId);
-                        // Optionally, you can choose to skip inviting again
-                        // continue;
-                    }
-                }
-                else
-                {
-                    // Process the invitation for users who are not yet joined
-                    if (_organizationManager.InviteVolunteer(userId, eventId, ref errMsg) != ErrorCode.Success)
-                    {
-                        return Json(new { success = false, message = errMsg });
-                    }
-                    newlyInvitedUsers.Add(userId);
-                }
-
-                // Send notification
-                var notification = new Notification
-                {
-                    userId = userId,
-                    senderUserId = UserId, // Ensure UserId is properly set
-                    relatedId = events.eventId,
-                    type = "Invitation",
-                    content = $"You have been invited to join the {events.eventTitle} event.",
-                    broadcast = 0,
-                    status = 0,
-                    createdAt = DateTime.Now,
-                    readAt = null
-                };
-
-                db.Notification.Add(notification);
-                db.SaveChanges();
-            }
-
-            // Return JSON indicating success, listing already joined, already invited, and newly invited users
-            return Json(new
-            {
-                success = true,
-                redirectUrl = Url.Action("Details", "Organization", new { id = eventId }),
-                alreadyJoinedUsers = alreadyJoinedUsers,
-                alreadyInvitedUsers = alreadyInvitedUsers,
-                newlyInvitedUsers = newlyInvitedUsers
-            });
-        }
-        [HttpPost]
-        public ActionResult EditEvent(Lists events, List<string> skills, string[] skillsToRemove, HttpPostedFileBase[] images, int eventId)
+        public JsonResult EditEvent(Lists events, List<string> skills, string[] skillsToRemove, HttpPostedFileBase[] images, int eventId)
         {
             string errMsg = string.Empty;
             var allowedExtensions = new List<string> { ".jpg", ".jpeg", ".png", ".gif" };
@@ -401,8 +337,7 @@ namespace Tabang_Hub.Controllers
 
                         if (!allowedExtensions.Contains(extension))
                         {
-                            ModelState.AddModelError(string.Empty, "Invalid file type. Only JPG, JPEG, PNG, and GIF files are allowed.");
-                            return RedirectToAction("Details", new { id = eventId });
+                            return Json(new { success = false, message = "Invalid file type. Only JPG, JPEG, PNG, and GIF files are allowed." });
                         }
 
                         var inputFileName = Path.GetFileName(image.FileName);
@@ -419,8 +354,7 @@ namespace Tabang_Hub.Controllers
                         }
                         catch (Exception ex)
                         {
-                            ModelState.AddModelError(string.Empty, $"Error processing file {inputFileName}: {ex.Message}");
-                            return RedirectToAction("Details", new { id = eventId });
+                            return Json(new { success = false, message = $"Error processing file {inputFileName}: {ex.Message}" });
                         }
                     }
                 }
@@ -442,8 +376,7 @@ namespace Tabang_Hub.Controllers
                     }
                     else
                     {
-                        ModelState.AddModelError(string.Empty, "Please enter a valid target amount.");
-                        return RedirectToAction("Details", new { id = eventId });
+                        return Json(new { success = false, message = "Please enter a valid target amount." });
                     }
                 }
             }
@@ -452,13 +385,83 @@ namespace Tabang_Hub.Controllers
                 // If the field is not present, set targetAmount to null
                 events.CreateEvents.targetAmount = null;
             }
+
+            // Fetch the current event from the database
+            var currentEvent = _organizationManager.GetEventByEventId(eventId);
+            if (currentEvent == null)
+            {
+                return Json(new { success = false, message = "Event not found." });
+            }
+
+            // Compare the event details to detect changes
+            bool hasChanges = false;
+            bool skillsChanged = false;
+            bool imagesChanged = false;
+
+            if (events.CreateEvents.eventTitle != currentEvent.eventTitle)
+            {
+                hasChanges = true;
+            }
+            if (events.CreateEvents.eventDescription != currentEvent.eventDescription)
+            {
+                hasChanges = true;
+            }
+            if (events.CreateEvents.dateStart != currentEvent.dateStart)
+            {
+                hasChanges = true;
+            }
+            if (events.CreateEvents.dateEnd != currentEvent.dateEnd)
+            {
+                hasChanges = true;
+            }
+            if (events.CreateEvents.location != currentEvent.location)
+            {
+                hasChanges = true;
+            }
+            if (events.CreateEvents.targetAmount != currentEvent.targetAmount)
+            {
+                hasChanges = true;
+            }
+            // Add comparisons for other fields as necessary
+
+            // Check for skills changes
+            var currentSkills = _organizationManager.listOfSkillRequirement(eventId);
+            var currentSkillsSet = new HashSet<string>(currentSkills.Select(s => s.Skills.skillName));
+            var newSkillsSet = new HashSet<string>(skills);
+
+            if (!currentSkillsSet.SetEquals(newSkillsSet))
+            {
+                skillsChanged = true;
+                hasChanges = true;
+            }
+            // Check if skills are to be removed
+            if (skillsToRemove != null && skillsToRemove.Length > 0)
+            {
+                skillsChanged = true;
+                hasChanges = true;
+            }
+
+            // Check for image changes
+            if (uploadedFiles.Count > 0)
+            {
+                imagesChanged = true;
+                hasChanges = true;
+            }
+            // Note: If you also handle image deletions, include that logic here
+
+            // Handle no changes
+            if (!hasChanges)
+            {
+                return Json(new { success = false, message = "No changes were made to the event." });
+            }
+
             // Proceed to update the event details in the database
             if (_organizationManager.EditEvent(events.CreateEvents, skills, skillsToRemove, uploadedFiles, eventId, ref errMsg) != ErrorCode.Success)
             {
-                ModelState.AddModelError(string.Empty, errMsg);
-                return RedirectToAction("Details", new { id = eventId });
+                return Json(new { success = false, message = errMsg });
             }
 
+            // Send notifications to volunteers regardless of the changes
             var volunteers = _organizationManager.GetVolunteersByEventId(eventId);
 
             foreach (var vol in volunteers)
@@ -468,8 +471,8 @@ namespace Tabang_Hub.Controllers
                     userId = vol.userId,
                     senderUserId = UserId,
                     relatedId = events.eventDetails.eventId,
-                    type = "Donation",
-                    content = $"{events.CreateEvents.eventTitle} Event has been Edited.",
+                    type = "Event Update",
+                    content = $"{events.CreateEvents.eventTitle} Event has been edited.",
                     broadcast = 0,
                     status = 0,
                     createdAt = DateTime.Now,
@@ -477,10 +480,10 @@ namespace Tabang_Hub.Controllers
                 };
 
                 db.Notification.Add(notification);
-                db.SaveChanges(); // Save the notification
             }
+            db.SaveChanges(); // Save the notifications
 
-            return RedirectToAction("Details", new { id = eventId });
+            return Json(new { success = true, message = "Event edited successfully.", redirectUrl = Url.Action("Details", new { id = eventId }) });
         }
 
         [HttpPost]
