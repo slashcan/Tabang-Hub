@@ -4,7 +4,7 @@
     ViewBag.Title = "VolunteerDetails";
     Layout = "~/Views/Shared/_Organization.cshtml";
 }
-<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+<link href="~/Content/css2/Profile.css" rel="stylesheet" />
 
 <div class="container mt-5">
     <div class="card">
@@ -15,9 +15,6 @@
                     {
                         <img src="~/UserProfile/@pic.profilePath" id="profilePicPreview" class="rounded-circle img-fluid" alt="Profile Picture">
                     }
-                    <div id="profile" class="d-none">
-                        <input type="file" class="form-control-file d-none" id="profilePic" accept="image/*" onchange="previewProfilePic()">
-                    </div>
                 </div>
                 @foreach (var VolInfo in Model.volunteersInfo)
                 {
@@ -29,34 +26,12 @@
                             @VolInfo.city.Substring(0, 1).ToUpper()@VolInfo.city.Substring(1) City,
                             @VolInfo.province.Substring(0, 1).ToUpper()@VolInfo.province.Substring(1)
                         </p>
-                        <div id="addressInput" class="d-none">
-                            <input type="text" id="streetInput" class="form-control mb-1" value="@VolInfo.street" placeholder="Street" required>
-                            <span class="error-message text-danger"></span>
-                            <input type="text" id="cityInput" class="form-control mb-1" value="@VolInfo.city" placeholder="City" required>
-                            <span class="error-message text-danger"></span>
-                            <input type="text" id="provinceInput" class="form-control mb-1" value="@VolInfo.province" placeholder="Province" required>
-                            <span class="error-message text-danger"></span>
-                        </div>
 
                         <p class="mb-1"><strong>Contact number: </strong><span id="phone">@VolInfo.phoneNum</span></p>
-                        <input type="text" id="phoneInput" class="form-control d-none" value="@VolInfo.phoneNum" required pattern="^09[0-9]{9}$" title="Phone number should start with 09 and contain 11 digits">
-                        <span class="error-message text-danger"></span>
 
                         <p class="mb-1"><strong>Email: </strong><span id="email">@VolInfo.UserAccount.email</span></p>
-                        <input type="email" id="emailInput" class="form-control d-none" value="@VolInfo.UserAccount.email" required>
-                        <span class="error-message text-danger"></span>
 
                         <p class="mb-1"><strong>Availability: </strong><span id="availability">@VolInfo.availability</span></p>
-                        <div id="availabilityInput" class="d-none">
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="availability" id="fullTime" value="Full Time" @(VolInfo.availability == "Full Time" ? "checked" : "")>
-                                <label class="form-check-label" for="fullTime">Full Time</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="availability" id="partTime" value="Part Time" @(VolInfo.availability == "Part Time" ? "checked" : "")>
-                                <label class="form-check-label" for="partTime">Part Time</label>
-                            </div>
-                        </div>
                     </div>
                 }
             </div>
@@ -74,7 +49,6 @@
                                 @aboutVolunteer.aboutMe
                             </span>
                         </p>
-                        <textarea rows="5" id="aboutMeInput" class="form-control d-none">@aboutVolunteer.aboutMe</textarea>
                     }
                 </div>
                 <div class="col-md-5">
@@ -82,8 +56,9 @@
                     <div id="skillsDisplay">
                         @foreach (var UserSkill in Model.volunteersSkills)
                         {
-                            <span class="badge badge-secondary skill-badge" data-skill-id="@UserSkill.skillId">
-                                @UserSkill.Skills.skillName
+                            var skillName = Model.skills.Where(m => m.skillId == UserSkill.skillId).Select(m => m.skillName).FirstOrDefault();
+                            <span style="background-color: mediumseagreen; cursor: pointer" class="skill-badge" data-skill-id="@UserSkill.skillId">
+                                @Html.Raw(skillName)
                             </span>
                         }
                     </div>
@@ -91,53 +66,99 @@
             </div>
         </div>
     </div>
+
     <div class="card mt-3">
         <div class="card-body">
-            <h5 class="text-center">Activity History</h5>
             <div class="row">
-                <div class="col-md-4">
-                    <h6>Top 1 Activity</h6>
-                    <p>June 2019 - March 2020</p>
-                    <h6>Top 2 Activity</h6>
-                    <p>June 2019 - March 2020</p>
-                    <h6>Top 3 Activity</h6>
-                    <p>June 2019 - March 2020</p>
+                <!-- Volunteer Summary Section -->
+                <div class="col-md-5">
+                    <h5>Volunteer Summary</h5>
+                    <div class="mt-4">
+                        @{
+                            int? getRate = 0;
+                            int count = Model.rating.Count();
+                            int calculateRate = 0;
+
+                            if (count > 0)
+                            {
+                                foreach (var rt in Model.rating.Select(m => m.rate))
+                                {
+                                    getRate += rt;
+                                }
+                                calculateRate = getRate.Value / count;
+                            }
+                        }
+                        <div>
+                            <span class="rate-number">
+                                <span>My Rate: &nbsp;</span>
+                                <span style="color: #FFA500"><strong>@calculateRate &nbsp;</strong></span>
+                            </span>
+                            @for (int i = 0; i < calculateRate; i++)
+                            {
+                                <span style="color: #FFA500">★</span>
+                            }
+                            @for (int i = calculateRate; i < 5; i++)
+                            {
+                                <span style="color: #FFA500">☆</span>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="mt-3">
+                        Number of event(s) participated: &nbsp;<strong style="color: #FFA500">@Model.volunteersHistories.Count()</strong>
+                    </div>
+                    <div class="mt-3">
+                        Number of skill(s): &nbsp;<strong style="color: #FFA500">@Model.volunteersSkills.Count()</strong>
+                    </div>
                 </div>
-                <div class="col-md-4">
-                    <h6>Top 4 Activity</h6>
-                    <p>June 2019 - March 2020</p>
-                    <h6>Top 5 Activity</h6>
-                    <p>June 2019 - March 2020</p>
-                    <h6>Top 6 Activity</h6>
-                    <p>June 2019 - March 2020</p>
-                </div>
-                <div class="col-md-4">
-                    <h6>Top 7 Activity</h6>
-                    <p>June 2019 - March 2020</p>
-                    <h6>Top 8 Activity</h6>
-                    <p>June 2019 - March 2020</p>
-                    <h6>Top 9 Activity</h6>
-                    <p>June 2019 - March 2020</p>
+
+                <!-- Rank Skill Section with Dropdown next to the heading -->
+                <div class="col-md-7">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Ratings</h5>
+                        <div class="form-group mb-0">
+                            <select class="form-control" id="skillRankFilter" style="width: 200px;" onchange="filterSkills()">
+                                <option value="Highest">Highest</option>
+                                <option value="Lowest">Lowest</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <ul id="rankedSkillsList" class="list-group mt-3" style="max-height: 190px; overflow-y: auto;">
+                        @foreach (var UserSkill in Model.volunteersSkills)
+                        {
+                            var skillName = Model.skills.Where(m => m.skillId == UserSkill.skillId).Select(m => m.skillName).FirstOrDefault();
+                            var rating = Model.rating.Where(m => m.userId == UserSkill.userId && m.skillId == UserSkill.skillId).Select(m => m.rate).FirstOrDefault();
+
+                            <li class="list-group-item skill-item" data-rating="@rating">
+                                <strong>@Html.Raw(skillName)</strong> - @(rating > 0 ? $"{rating} stars" : "No rating available")
+                                <div class="event-rating" style="color: #ffa500;">
+                                    @if (rating.HasValue)
+                                    {
+                                        for (int i = 0; i < rating.Value; i++)
+                                        {
+                                            <span>★</span>
+                                        }
+                                        for (int i = rating.Value; i < 5; i++)
+                                        {
+                                            <span>☆</span>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <span>No Rating</span>
+                                    }
+                                </div>
+                            </li>
+                        }
+                    </ul>
                 </div>
             </div>
         </div>
     </div>
-    @if(Model.userAccount.status == 1)
-    {
-
-    }
-    else
-    { 
-        <div class="d-flex justify-content-center mt-3">
-            <form action="@Url.Action("ConfirmApplicants", "Organization")" method="post" style="display: inline;">
-                <input type="hidden" name="id" value="@Model.userAccount.userId" />
-                <button type="submit" class="btn btn-success btn-sm">Confirm</button>
-            </form>
-            <a href="@Url.Action("ConfirmApplicants", "Organization", new { id = Model.userAccount.userId })" class="btn btn-danger btn-sm">Decline</a>
-        </div>
-    }
 </div>
 <br />
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<script src="~/Content/Js/profile.js"></script>
+<script src="~/Content/Js2/profile.js"></script>
+<script src="~/Content/Js2/rankskill.js"></script>

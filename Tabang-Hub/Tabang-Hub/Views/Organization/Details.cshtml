@@ -309,6 +309,7 @@
                                                 <th scope="col">Email</th>
                                                 <th scope="col">Skills</th>
                                                 <th scope="col">Ratings</th>
+                                                <th scope="col">Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -372,7 +373,7 @@
                                                         <td>@volunteer.UserAccount.email</td>
                                                         <td>@Html.Raw(skillsHtml.ToString())</td>
                                                         <td>@Html.Raw(ratingsHtml.ToString())</td>
-                                                        <td>
+                                                        <td><a href="@Url.Action("VolunteerDetails", "Organization", new { userId = volunteer.userId })" class="btn btn-outline-primary btn-sm">View</a></td>
                                                     </tr>
                                                 }
                                             }

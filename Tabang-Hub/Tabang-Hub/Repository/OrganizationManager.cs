@@ -372,10 +372,9 @@ namespace Tabang_Hub.Repository
         public List<OrgEvents> GetRecentOngoingEventsByUserId(int userId)
         {
             var recentEvents = _orgEvents._table
-                .Where(m => m.userId == userId && m.dateStart.HasValue && m.dateEnd.HasValue &&
-                            m.dateStart.Value <= DateTime.Now && m.dateEnd.Value > DateTime.Now)
+                .Where(m => m.userId == userId && m.dateStart.HasValue && m.dateEnd.HasValue)
                 // Events that have started but not yet ended
-                .OrderByDescending(m => m.dateStart.Value) // Order by dateStart, most recent first
+                .OrderByDescending(m => m.eventId) // Order by dateStart, most recent first
                 .Take(5) // Get the top 5 most recent events
                 .ToList();
 
@@ -421,14 +420,22 @@ namespace Tabang_Hub.Repository
                     // Count the occurrence of each skill by its name
                     foreach (var skill in skills)
                     {
-                        if (skillFrequency.ContainsKey(skill.Skills.skillName)) // Assuming SkillName is a string representing the skill's name
+                        var req = listOfSkillRequirement(eventItem.Event_Id);
+
+                        foreach (var require in req)
                         {
-                            skillFrequency[skill.Skills.skillName]++; // Increment count if skill already exists
-                        }
-                        else
-                        {
-                            skillFrequency[skill.Skills.skillName] = 1; // Initialize with count 1 if it doesn't exist
-                        }
+                            if (skill.skillId == require.skillId && volunteer.Status == 1)
+                            {
+                                if (skillFrequency.ContainsKey(skill.Skills.skillName)) // Assuming SkillName is a string representing the skill's name
+                                {
+                                    skillFrequency[skill.Skills.skillName]++; // Increment count if skill already exists
+                                }
+                                else
+                                {
+                                    skillFrequency[skill.Skills.skillName] = 1; // Initialize with count 1 if it doesn't exist
+                                }
+                            }
+                        }                       
                     }
                 }
             }
@@ -466,6 +473,10 @@ namespace Tabang_Hub.Repository
         public List<Volunteers> GetVolunteersByEventId(int eventId)
         {
             return _eventVolunteers._table.Where(m => m.eventId == eventId).ToList();
+        }
+        public List<VolunteerSkill> GetVolunteerSkillByUserId(int userId)
+        { 
+            return _volunteerSkills._table.Where(m => m.userId == userId).ToList();
         }
         public List<VolunteerSkill> GetVolunteerSkillsByUserId(int? userId)
         {
