@@ -30,6 +30,7 @@
             width: 100%;
             background-color: #f8f9fa;
         }
+
         .search-container {
             display: flex;
             align-items: center;
@@ -127,6 +128,10 @@
         <div class="container-fluid">
             <a class="navbar-brand" href="/">
                 <img src="~/Content/images2/tabanghub3-No-Background.png" class="logo-i img-fluid" alt="Tabang Hub Volunteering Community">
+                <span>
+                    Tabang Hub
+                    <small>Volunteering Community</small>
+                </span>
             </a>
             <div class="collapse navbar-collapse" id="navbarNav">
                 @if (User.Identity.IsAuthenticated)
@@ -164,13 +169,13 @@
                     }
 
                     <ul class="navbar-nav ms-auto">
-                        <li class="nav-item">
-                            <a class="nav-link click-scroll" href="#top">Home</a>
-                        </li>
+                        @*<li class="nav-item">
+                                <a class="nav-link click-scroll" href="#top">Home</a>
+                            </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link click-scroll" href="#section_2">About</a>
-                        </li>
+                            <li class="nav-item">
+                                <a class="nav-link click-scroll" href="#section_2">About</a>
+                            </li>*@
 
                         <!-- Notification Bell -->
                         <li class="nav-item">
@@ -184,7 +189,7 @@
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link click-scroll" href="@Url.Action("Message", "Message")">
+                            <a class="nav-link" href="@Url.Action("Message", "Message")">
                                 <i class="bi bi-chat-right-heart-fill"></i>
                             </a>
                         </li>
@@ -280,6 +285,11 @@
                     <hr>
                 }
                 <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="@Url.Action("Message", "Message")">
+                            <i class="bi bi-chat-right-heart-fill me-2"></i>Messages
+                        </a>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link" href="~/Volunteer/DonationHistory"><i class="bi bi-wallet2 me-2"></i>Donation History</a>
                     </li>
