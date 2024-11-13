@@ -140,7 +140,7 @@
                     </div>
 
                     <!-- Separate Containers for Monthly Event Summary, Recent Events, Recent Donators, Top 5 Skills -->
-                    <div class="col-12 col-lg-9">
+                    <div class="col-12 col-lg-8">
                         <!-- Monthly Event Summary -->
                         <div class="dashboard-section">
                             <div class="card">
@@ -166,7 +166,7 @@
                         </div>
                     </div>
 
-                    <div class="col-12 col-lg-3">
+                    <div class="col-12 col-lg-4">
                         <!-- Recent Events -->
                         <div class="dashboard-section">
                             <div class="card mb-3" style="min-height: 475px;">
@@ -382,7 +382,7 @@
             </div>
 
             <!-- Separate Containers for Monthly Event Summary, Recent Events, Recent Donators, Top 5 Skills -->
-            <div class="col-12 col-lg-9">
+            <div class="col-12 col-lg-8">
                 <!-- Monthly Event Summary -->
                 <div class="dashboard-section">
                     <div class="card">
@@ -408,7 +408,7 @@
                 </div>
             </div>
 
-            <div class="col-12 col-lg-3">
+            <div class="col-12 col-lg-4">
                 <!-- Recent Events -->
                 <div class="dashboard-section">
                     <div class="card mb-3" style="min-height: 475px;">
@@ -443,34 +443,31 @@
                     </div>
                 </div>
 
-                <!-- Recent Donators -->
                 <div class="dashboard-section">
                     <div class="card" style="min-height: 475px;">
                         <div class="card-header">
-                            <h4>Newly Created Organization</h4>
+                            <h4>Newly Created Organizations</h4>
                         </div>
                         <div class="card-body overflow-auto mt-4">
-                            @*@if (Model.recentDonators.Any())
+                            @if (Model.recentOrgAcc != null && Model.recentOrgAcc.Any())
                             {
-                                foreach (var recent in Model.recentDonators)
+                                foreach (var org in Model.recentOrgAcc)
                                 {
                                     <div class="recent-message d-flex align-items-center mb-3">
                                         <div class="avatar avatar-lg">
-                                            <img src="~/Content/images1/faces/4.jpg" class="rounded-circle" alt="Donor Image">
+                                            <img src="~/Content/images1/faces/4.jpg" class="rounded-circle" alt="Organization Image">
                                         </div>
-                                        <div class="ms-3 w-100">
-                                            <h5 class="mb-1 text-md" data-bs-toggle="tooltip" title="@recent.UserAccount.email">
-                                                @recent.UserAccount.email
-                                            </h5>
-                                            <p class="text-muted mb-0 text-sm">@recent.amount</p>
+                                        <div class="ms-3">
+                                            <h5 class="mb-1">@org.orgName</h5>
+                                            <p class="text-muted mb-0">@org.orgEmail</p>
                                         </div>
                                     </div>
                                 }
                             }
                             else
                             {
-                                <p class="text-muted">No recent donators.</p>
-                            }*@
+                                <p class="text-muted">No recent organizations.</p>
+                            }
                         </div>
                     </div>
                 </div>

@@ -5,16 +5,23 @@
     Layout = "~/Views/Shared/_Admin.cshtml";
 }
 
-<div class="container mt-4">
-    <div class="mb-3 d-flex justify-content-between">
-        <button type="button" class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#createAccountModal">Create Account</button>
-        <input type="text" class="form-control w-25" placeholder="Search" />
+<div class="container">
+    <div class="mb-3 d-flex justify-content-between align-items-center">
+        <div>
+            <button type="button" class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#createAccountModal">Create Account</button>
+        </div>
+        <div class="d-flex">
+            <select id="sortDropdown" class="form-select me-2 w-auto">
+                <option value="newest">Newest</option>
+                <option value="oldest">Oldest</option>
+            </select>
+        </div>
     </div>
 
     <div class="active-accounts">
         <h5 class="text-start">Active Accounts</h5>
-        <div class="table-responsive border rounded p-2 mb-5">
-            <table class="table table-striped table-hover">
+        <div class="table-responsive border rounded p-2 mb-5" style="min-height: 300px; max-height: 300px; overflow-y: auto;">
+            <table class="table table-striped table-hover" id="activeAccountsTable">
                 <thead class="table-dark">
                     <tr class="text-nowrap text-center">
                         <th class="small">Last Name</th>
@@ -27,7 +34,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var list in Model.volunteerAccounts)
+                    @foreach (var list in Model.volunteerAccounts.OrderByDescending(v => v.User_Id))
                     {
                         if (list.Status == 1)
                         {
@@ -51,8 +58,8 @@
 
     <div class="not-active-accounts">
         <h5 class="text-start">None-Active Accounts</h5>
-        <div class="table-responsive border rounded p-2">
-            <table class="table table-striped table-hover">
+        <div class="table-responsive border rounded p-2" style="min-height: 300px; max-height: 300px; overflow-y: auto;">
+            <table class="table table-striped table-hover" id="notActiveAccountsTable">
                 <thead class="table-dark">
                     <tr class="text-nowrap text-center">
                         <th class="small">Last Name</th>
@@ -65,7 +72,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var list in Model.volunteerAccounts)
+                    @foreach (var list in Model.volunteerAccounts.OrderByDescending(v => v.User_Id))
                     {
                         if (list.Status == 0)
                         {
@@ -127,14 +134,14 @@
     </div>
 </div>
 
-
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 <script>
     $(document).ready(function () {
+        // Event listener for volunteer row click to redirect to details page
         $('.volunteer-row').click(function () {
             var userId = $(this).data('user-id');
-            window.location.href = '@Url.Action("UserDetails", "Admin")' + '?userId=' + userId;
+            window.location.href = '@Url.Action("VolunteerDetails", "Admin")' + '?userId=' + userId;
         });
 
         // Prevent row click when delete button is clicked
@@ -176,5 +183,30 @@
                 }
             });
         });
+
+        // Event listener for sorting by Newest or Oldest
+        $('#sortDropdown').change(function () {
+            var sortOrder = $(this).val();
+            sortTables(sortOrder);
+        });
+
+        function sortTables(order) {
+            ['#activeAccountsTable', '#notActiveAccountsTable'].forEach(function (tableId) {
+                var rows = $(tableId + ' tbody tr').get();
+                rows.sort(function (a, b) {
+                    var keyA = parseInt($(a).data('user-id'));
+                    var keyB = parseInt($(b).data('user-id'));
+
+                    if (order === 'newest') {
+                        return keyB - keyA;
+                    } else {
+                        return keyA - keyB;
+                    }
+                });
+                $.each(rows, function (index, row) {
+                    $(tableId + ' tbody').append(row);
+                });
+            });
+        }
     });
 </script>

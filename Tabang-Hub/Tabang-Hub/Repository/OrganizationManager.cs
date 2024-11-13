@@ -77,6 +77,7 @@ namespace Tabang_Hub.Repository
         public ErrorCode CreateEvents(OrgEvents orgEvents, List<string> imageFileNames, List<string> skills, ref string errMsg)
         {
             // Create the event
+            orgEvents.status = 1;
             if (_orgEvents.Create(orgEvents, out errMsg) != ErrorCode.Success)
             {
                 return ErrorCode.Error;

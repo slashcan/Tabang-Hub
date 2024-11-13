@@ -222,6 +222,13 @@ namespace Tabang_Hub.Controllers
                 return View();
             }
 
+            string registrationMessage = $"A new organization named {o.orgName} has been registered.";
+            if (_organizationManager.SentNotif(3, u.userId, u.userId, "Registration", registrationMessage, 0, ref ErrorMessage) != ErrorCode.Success)
+            {
+                TempData["ErrorMessage"] = ErrorMessage;
+                return View();
+            }
+
             // Store email and account information in TempData and Session
             TempData["email"] = u.email;
             Session["email"] = u.email;

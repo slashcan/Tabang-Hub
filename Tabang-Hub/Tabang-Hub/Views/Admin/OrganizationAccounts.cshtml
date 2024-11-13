@@ -1,23 +1,28 @@
-﻿﻿@model Tabang_Hub.Utils.Lists
+﻿@model Tabang_Hub.Utils.Lists
 
 @{
     ViewBag.Title = "OrganizationAccounts";
     Layout = "~/Views/Shared/_Admin.cshtml";
 }
 
-<div class="container mt-4">
+<div class="container">
     <div class="mb-3 d-flex justify-content-between align-items-center">
         <div>
             <button type="button" class="btn btn-success me-2" data-bs-toggle="modal" data-bs-target="#createAccountModal">Create Account</button>
             <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#pendingApprovalModal">Pending Approval</button>
         </div>
-        <input type="text" class="form-control w-25" placeholder="Search" />
+        <div class="d-flex">
+            <select id="sortDropdown" class="form-select me-2 w-auto">
+                <option value="newest">Newest</option>
+                <option value="oldest">Oldest</option>
+            </select>
+        </div>
     </div>
 
     <div class="active-accounts">
         <h5 class="text-start">Active Accounts</h5>
-        <div class="table-responsive border rounded p-2 mb-5">
-            <table class="table table-striped table-hover">
+        <div class="table-responsive border rounded p-2 mb-5" style="min-height: 300px; max-height: 300px; overflow-y: auto;">
+            <table class="table table-striped table-hover" id="activeAccountsTable">
                 <thead class="table-dark">
                     <tr class="text-nowrap text-center">
                         <th class="small">Org. Name</th>
@@ -28,9 +33,9 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var list in Model.organizationAccounts)
+                    @foreach (var list in Model.organizationAccounts.OrderByDescending(o => o.User_Id))
                     {
-                        if (list.Status == 1)
+                        if (list.Status == 1) // Active accounts
                         {
                             <tr class="text-center organization-row" data-org-id="@list.User_Id" style="cursor: pointer;">
                                 <td>@list.Org_Name</td>
@@ -50,8 +55,8 @@
 
     <div class="not-active-accounts">
         <h5 class="text-start">None-Active Accounts</h5>
-        <div class="table-responsive border rounded p-2">
-            <table class="table table-striped table-hover">
+        <div class="table-responsive border rounded p-2" style="min-height: 300px; max-height: 300px; overflow-y: auto;">
+            <table class="table table-striped table-hover" id="notActiveAccountsTable">
                 <thead class="table-dark">
                     <tr class="text-nowrap text-center">
                         <th class="small">Org. Name</th>
@@ -62,9 +67,9 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var list in Model.organizationAccounts)
+                    @foreach (var list in Model.organizationAccounts.OrderByDescending(o => o.User_Id))
                     {
-                        if (list.Status == 0)
+                        if (list.Status == 0) // Non-active accounts
                         {
                             <tr class="text-center organization-row" data-org-id="@list.User_Id" style="cursor: pointer;">
                                 <td>@list.Org_Name</td>
@@ -72,6 +77,7 @@
                                 <td>@list.Org_Type</td>
                                 <td>@list.Contact_No</td>
                                 <td>
+                                    <button type="button" class="btn btn-sm btn-success reactivate-button" data-org-id="@list.User_Id">Reactivate</button>
                                     <button type="button" class="btn btn-sm btn-danger delete-button" data-org-id="@list.User_Id">Delete</button>
                                 </td>
                             </tr>
@@ -247,51 +253,75 @@
             });
         });
 
-        // Event listener for table rows (redirect to details)
+        // Event listener for active and non-active table rows (redirect to details)
         $('.organization-row').click(function () {
-            var orgId = $(this).data('org-id');
-            window.location.href = '@Url.Action("OrgDetails", "Admin")' + '?orgId=' + orgId;
+            var userId = $(this).data('org-id');
+            window.location.href = '@Url.Action("OrgProfile", "Admin")' + '?userId=' + userId;
         });
 
-        // Event listener for approve buttons
-        $('.approve-button').click(function (event) {
-            event.stopPropagation();
-            var userId = $(this).data('org-id');
+        // Event listener for sorting by Newest or Oldest
+        $('#sortDropdown').change(function () {
+            var sortOrder = $(this).val();
+            sortTables(sortOrder);
+        });
 
-            // Confirmation dialog before approval
-            Swal.fire({
-                title: 'Approve this account?',
-                text: "The organization will now be able to use their account.",
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonColor: '#28a745',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, approve it!'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $.ajax({
-                        url: '@Url.Action("Approve")',
-                        type: 'POST',
-                        data: { userId: userId },
-                        success: function (response) {
-                            if (response.success) {
-                                Swal.fire(
-                                    'Approved!',
-                                    'The account has been approved.',
-                                    'success'
-                                ).then(() => {
-                                    location.reload();
-                                });
-                            } else {
-                                Swal.fire('Error!', 'Failed to approve the account: ' + response.message, 'error');
-                            }
-                        },
-                        error: function () {
-                            Swal.fire('Error!', 'An error occurred. Please try again.', 'error');
-                        }
-                    });
+        function sortTables(order) {
+            ['#activeAccountsTable', '#notActiveAccountsTable'].forEach(function (tableId) {
+                var rows = $(tableId + ' tbody tr').get();
+                rows.sort(function (a, b) {
+                    var keyA = parseInt($(a).data('org-id'));
+                    var keyB = parseInt($(b).data('org-id'));
+
+                    if (order === 'newest') {
+                        return keyB - keyA;
+                    } else {
+                        return keyA - keyB;
+                    }
+                });
+                $.each(rows, function (index, row) {
+                    $(tableId + ' tbody').append(row);
+                });
+            });
+        }
+    });
+
+    // Event listener for reactivate buttons
+$('.reactivate-button').click(function (event) {
+    event.stopPropagation(); // Prevent the row click event
+    var userId = $(this).data('org-id');
+
+    Swal.fire({
+        title: 'Reactivate this account?',
+        text: "The organization will be reactivated.",
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#28a745',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, reactivate it!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: '@Url.Action("Reactivate")',
+                type: 'POST',
+                data: { userId: userId },
+                success: function (response) {
+                    if (response.success) {
+                        Swal.fire(
+                            'Reactivated!',
+                            'The account has been reactivated.',
+                            'success'
+                        ).then(() => {
+                            location.reload(); // Reload the page to reflect changes
+                        });
+                    } else {
+                        Swal.fire('Error!', response.message, 'error');
+                    }
+                },
+                error: function () {
+                    Swal.fire('Error!', 'An error occurred. Please try again.', 'error');
                 }
             });
-        });
+        }
     });
+});
 </script>

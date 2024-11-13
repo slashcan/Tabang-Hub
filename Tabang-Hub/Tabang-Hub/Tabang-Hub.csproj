@@ -2188,6 +2188,9 @@
     <Content Include="Views\Page\AdminApprove.cshtml" />
     <Content Include="Views\Volunteer\PaymentSuccess.cshtml" />
     <Content Include="Views\Volunteer\PaymentFailed.cshtml" />
+    <Content Include="Views\Admin\OrgProfile.cshtml" />
+    <Content Include="Views\Admin\VolunteerDetails.cshtml" />
+    <Content Include="Views\Admin\History.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

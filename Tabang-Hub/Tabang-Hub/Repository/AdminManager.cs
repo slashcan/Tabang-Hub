@@ -103,7 +103,10 @@ namespace Tabang_Hub.Repository
         {
             return _volunteers.GetAll().Where(m => m.eventId == eventId).ToList();
         }
-
+        public List<UserAccount> GetAllUser()
+        {
+            return _userAccount.GetAll();
+        }
         public List<OrgValidation> GetListOrgValidationsByUserId(int userId)
         {
             return _orgValidation.GetAll().Where(m => m.userId == userId).ToList();
@@ -136,6 +139,10 @@ namespace Tabang_Hub.Repository
         public List<VolunteerSkill> GetAllSkills()
         { 
             return _volunteerSkill.GetAll();
+        }
+        public List<OrgSkillRequirement> GetOrgSkillRequirementsByEventId(int eventId)
+        { 
+            return _orgSkillRequirement._table.Where(m => m.eventId == eventId).ToList();
         }
         public List<VolunteerSkillsHistory> GetAllHistorySkills()
         {
@@ -192,9 +199,28 @@ namespace Tabang_Hub.Repository
             // Step 4: Return the dictionary containing the skills and their counts
             return skillFrequency;
         }
+        public List<OrgInfo> GetRecentOrgAccount()
+        {
+            return _orgInfo.GetAll()
+                       .Where(u => u.UserAccount.roleId == 2) // Filter to only organization accounts
+                       .OrderByDescending(u => u.userId) // Sort by the 'CreatedDate' property in descending order for recent accounts
+                       .Take(5) // Limit the result to the most recent 10 accounts (adjust as needed)
+                       .ToList();
+        }
+        public List<UserDonated> GetRecentDonated()
+        {
+            return _userDonated.GetAll()
+                        .OrderByDescending(u => u.donatedAt)
+                        .Take(5)
+                        .ToList();
+        }
         public List<OrgEvents> GetAllEvents()
         { 
             return _orgEvents.GetAll();
+        }
+        public List<UserDonated> GetAllDonators()
+        {
+            return _userDonated.GetAll();
         }
         public List<OrgEvents> GetAllRecentOrgEvents()
         {
@@ -257,6 +283,10 @@ namespace Tabang_Hub.Repository
         public List<VolunteerInfo> GetVolunteerAccount()
         {
             return _volunteerInfo.GetAll();
+        }
+        public List<UserAccount> GetPendingOrg()
+        { 
+            return _userAccount._table.Where(m => m.status == 3).ToList();
         }
         public List<OrgInfo> GetOrganizationAccount()
         {
@@ -459,7 +489,24 @@ namespace Tabang_Hub.Repository
         {
             var skill = GetSkillById(skillId);
             var volunteerSkill = GetVolunteerSkillsBySkillId(skillId);
+            var events = GetAllEvents();
 
+            foreach (var evnt in events)
+            {
+                var skillReq = GetOrgSkillRequirementsByEventId(evnt.eventId);
+
+                foreach (var skllrq in skillReq)
+                {
+                    if (skllrq.skillId == skillId)
+                    {
+                        if (_orgSkillRequirement.Delete(skllrq.skillRequirementId) != ErrorCode.Success)
+                        {
+                            return ErrorCode.Error;
+                        }
+                    }
+                }
+            }
+            
             if (volunteerSkill != null)
             {
                 foreach (var skills in volunteerSkill)
@@ -483,6 +530,20 @@ namespace Tabang_Hub.Repository
         {
             var user = GetUserById(userId);
             user.status = 0;
+
+            if (user != null)
+            {
+                if (_userAccount.Update(user.userId, user, out errMsg) != ErrorCode.Success)
+                {
+                    return ErrorCode.Error;
+                }
+            }
+            return ErrorCode.Success;
+        }
+        public ErrorCode ReactivateAccount(int userId, ref string errMsg)
+        {
+            var user = GetUserById(userId);
+            user.status = 1;
 
             if (user != null)
             {
