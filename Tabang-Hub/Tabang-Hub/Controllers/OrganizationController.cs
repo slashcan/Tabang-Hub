@@ -94,6 +94,18 @@ namespace Tabang_Hub.Controllers
         {
             string errMsg = string.Empty;
 
+            // Ensure the email cannot be changed by reassigning the original email from the database
+            var existingOrgInfo = _organizationManager.GetOrgInfoByUserId(UserId); // Retrieve existing organization info by UserId
+            if (existingOrgInfo != null)
+            {
+                orgProfile.OrgInfo.orgEmail = existingOrgInfo.orgEmail; // Maintain the original email
+            }
+            else
+            {
+                return Json(new { success = false, message = "Organization information not found." });
+            }
+
+            // Handle profile picture upload
             if (profilePic != null && profilePic.ContentLength > 0)
             {
                 var inputFileName = Path.GetFileName(profilePic.FileName);
@@ -106,6 +118,7 @@ namespace Tabang_Hub.Controllers
                 orgProfile.OrgInfo.profilePath = "~/Content/IdPicture/" + inputFileName;
             }
 
+            // Handle cover photo upload
             if (coverPic != null && coverPic.ContentLength > 0)
             {
                 var coverFileName = Path.GetFileName(coverPic.FileName);
@@ -118,6 +131,7 @@ namespace Tabang_Hub.Controllers
                 orgProfile.OrgInfo.coverPhoto = "~/Content/CoverPhotos/" + coverFileName;
             }
 
+            // Update organization profile info
             var result = _organizationManager.EditOrgInfo(orgProfile.OrgInfo, UserId, ref errMsg);
 
             if (result == ErrorCode.Success)
@@ -580,12 +594,12 @@ namespace Tabang_Hub.Controllers
                 return Json(new { success = false, message = errMsg });
             }
         }
-        public async Task<ActionResult> VolunteerDetails(int userId)
+        public async Task<ActionResult> VolunteerDetails(int userId, int? eventId = null)
         {
-           var getUserAccount = db.UserAccount.Where(m => m.userId == UserId).ToList();
-            var getVolunteerInfo = db.VolunteerInfo.Where(m => m.userId == UserId).ToList();
-            var getVolunteerSkills =_organizationManager.GetVolunteerSkillByUserId(userId);
-            var getProfile = db.ProfilePicture.Where(m => m.userId == UserId).ToList();
+           var getUserAccount = _organizationManager.GetUserByUserId(userId);
+            var getVolunteerInfo = _organizationManager.GetVolunteerInfoByUserId(getUserAccount.userId);
+            var getVolunteerSkills =_organizationManager.GetVolunteerSkillByUserId(getUserAccount.userId);
+            var getProfile = _organizationManager.GetProfileByUserId(getUserAccount.userId);
             var orgInfo = _organizationManager.GetOrgInfoByUserId(UserId);
 
             var recommendedEvents = await _volunteerManager.RunRecommendation(UserId);
@@ -597,30 +611,33 @@ namespace Tabang_Hub.Controllers
                 filteredEvent.AddRange(matchedEvents);
            }
 
-            var getUniqueSkill = db.sp_GetSkills(UserId).ToList();
+            var getUniqueSkill = db.sp_GetSkills(getUserAccount.userId).ToList();
             if (getProfile.Count() <= 0)
             {
                 var defaultPicture = new ProfilePicture
                 {
-                    userId = UserId,
+                    userId = getUserAccount.userId,
                     profilePath = "default.jpg"
                 };
                 _profilePic.Create(defaultPicture);
 
-                getProfile = db.ProfilePicture.Where(m => m.userId == UserId).ToList();
+                getProfile = db.ProfilePicture.Where(m => m.userId == getUserAccount.userId).ToList();
             }
+
+            ViewBag.EventId = eventId;
+
             var listModel = new Lists()
             {
                 OrgInfo = orgInfo,
-                userAccounts = getUserAccount,
-                volunteersInfo = getVolunteerInfo,
+                userAccount = getUserAccount,
+                volunteerInfo = getVolunteerInfo,
                 volunteersSkills = getVolunteerSkills,
                 uniqueSkill = getUniqueSkill,
                 picture = getProfile,
                 skills = _skills.GetAll().ToList(),
-                volunteersHistories = _volunteerManager.GetVolunteersHistoryByUserId(UserId),
-                rating = db.Rating.Where(m => m.userId == UserId).ToList(),
-                orgEventHistory = db.OrgEventHistory.Where(m => m.userId == UserId).ToList(),
+                volunteersHistories = _volunteerManager.GetVolunteersHistoryByUserId(getUserAccount.userId),
+                rating = db.Rating.Where(m => m.userId == getUserAccount.userId).ToList(),
+                orgEventHistory = db.OrgEventHistory.Where(m => m.userId == getUserAccount.userId).ToList(),
                 //listOfEvents = filteredEvent.OrderByDescending(m => m.Event_Id).ToList(),
                 detailsEventImage = _eventImages.GetAll().ToList()
             };
@@ -736,6 +753,7 @@ namespace Tabang_Hub.Controllers
 
             return File(fileBytes, "text/csv", "OrganizationDataExport.csv");
         }
+        [HttpGet]
         public JsonResult GetUnreadNotifications()
         {
             int organizationId = UserId;

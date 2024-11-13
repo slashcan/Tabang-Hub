@@ -38,7 +38,7 @@ namespace Tabang_Hub.Repository
         { 
             return _userAcc._table.Where(m => m.userId == id).FirstOrDefault();
         }
-        public ErrorCode Login(String email, String password, ref String errMsg)
+        public ErrorCode Login(string email, string password, ref string errMsg)
         {
             var userLogin = GetUserByEmail(email);
             if (userLogin == null)
@@ -53,18 +53,21 @@ namespace Tabang_Hub.Repository
                 return ErrorCode.Error;
             }
 
-            // Check if roleId is not equal to 3
-            if (userLogin.roleId != 3)
+            // Check if the user status is pending admin approval (status 3)
+            if (userLogin.status == 3)
             {
-                // Ensure the email is a Gmail address
-                if (!email.EndsWith("@gmail.com", StringComparison.OrdinalIgnoreCase))
-                {
-                    errMsg = "Only Gmail addresses are allowed for this role";
-                    return ErrorCode.Error;
-                }
+                errMsg = "Your registration is pending admin approval.";
+                return ErrorCode.Error;
             }
 
-            // User exists, password is correct, and role/email checks passed
+            // Ensure only Gmail addresses are allowed for roles other than admin (roleId != 3)
+            if (userLogin.roleId != 3 && !email.EndsWith("@gmail.com", StringComparison.OrdinalIgnoreCase))
+            {
+                errMsg = "Only Gmail addresses are allowed for this role";
+                return ErrorCode.Error;
+            }
+
+            // User exists, password is correct, and all checks passed
             errMsg = "Login successful";
             return ErrorCode.Success;
         }

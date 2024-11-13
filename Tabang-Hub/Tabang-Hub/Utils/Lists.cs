@@ -14,7 +14,8 @@ namespace Tabang_Hub.Utils
         public OrgInfo OrgInfo { get; set; }
         public ProfilePicture profilePic { get; set; }
         public OrgValidation orgValidation { get; set; }
-        public Volunteers volunteer { get; set; } 
+        public Volunteers volunteer { get; set; }
+        public VolunteerInfo volunteerInfo { get; set; }
 
         //Tables List
         //public List<UserAccount> userAccounts { get; set; }

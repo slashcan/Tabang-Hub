@@ -510,23 +510,10 @@ namespace Tabang_Hub.Controllers
 
                 if (checkVolunteer == null)
                 {
-                    //updateVolunteerNeeded.maxVolunteer = updateVolunteerNeeded.maxVolunteer - 1;
-                    //db.SaveChanges();
-
                     var organizationId = checkDateOrgEvents.userId;
-
-                    // Save the notification to the database
-                    var notificationMessage = $"A new volunteer has applied for your event (Event ID: {eventId}).";
-                    var notificationType = "New Application";
-
-                    // Instantiate NotificationHub and save the notification
-                    var notificationHub = new NotificationHub();
-                    notificationHub.SendNotification((int)organizationId, UserId, eventId, notificationType, notificationMessage);
-
-                    // Send real-time notification if the organization is online
-                    var context = GlobalHost.ConnectionManager.GetHubContext<NotificationHub>();
-                    context.Clients.User(organizationId.ToString()).receiveNotification(notificationType, notificationMessage);
                     _volunteers.Create(apply);
+
+                    _organizationManager.SentNotif((int)organizationId, UserId, eventId, "New Applicant", $"A new volunteer has applied for your event (Event Name: {checkDateOrgEvents.eventTitle}).", 0,  ref ErrorMessage );
 
                     return Json(new { success = true, message = "Application sent!" });
                 }

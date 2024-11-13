@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -37,6 +38,9 @@ namespace Tabang_Hub.Repository
         private BaseRepository<GroupMessagesHistory> _groupMessagesHistory;
         private BaseRepository<Rating> _ratings;
         private BaseRepository<vw_VolunteerSkills> _vwVollunterSkills;
+        private BaseRepository<VolunteerInfo> _volunteerInfo;
+        private BaseRepository<ProfilePicture> _profile;
+        private BaseRepository<Notification> _notification;
 
         public OrganizationManager()
         {
@@ -65,6 +69,9 @@ namespace Tabang_Hub.Repository
             _groupMessagesHistory = new BaseRepository<GroupMessagesHistory>();
             _ratings = new BaseRepository<Rating>();
             _vwVollunterSkills = new BaseRepository<vw_VolunteerSkills>();
+            _volunteerInfo = new BaseRepository<VolunteerInfo>();
+            _profile = new BaseRepository<ProfilePicture>();
+            _notification = new BaseRepository<Notification>();
         }
 
         public ErrorCode CreateEvents(OrgEvents orgEvents, List<string> imageFileNames, List<string> skills, ref string errMsg)
@@ -474,6 +481,38 @@ namespace Tabang_Hub.Repository
         {
             return _eventVolunteers._table.Where(m => m.eventId == eventId).ToList();
         }
+        public List<ProfilePicture> GetProfileByUserId(int userId)
+        {
+            return _profile._table.Where(m => m.userId == userId).ToList();
+        }
+        public ErrorCode SentNotif(int userId, int senderId, int relatedId, string type, string content, int broadcast, ref string errMsg)
+        {
+            var notif = new Notification()
+            {
+                userId = userId,
+                senderUserId = senderId,
+                relatedId = relatedId,
+                type = type,
+                content = content,
+                broadcast = broadcast,
+                status = 0,
+                createdAt = DateTime.Now,
+
+            };
+            try
+            {
+                if (_notification.Create(notif, out errMsg) != ErrorCode.Success)
+                { 
+                    return ErrorCode.Error;
+                } 
+            }
+            catch (Exception ex)
+            {
+                errMsg = ex.Message;
+            }
+
+            return ErrorCode.Success;
+        }
         public List<VolunteerSkill> GetVolunteerSkillByUserId(int userId)
         { 
             return _volunteerSkills._table.Where(m => m.userId == userId).ToList();
@@ -583,10 +622,15 @@ namespace Tabang_Hub.Repository
         {
             return _userAccount._table.Where(m => m.userId == userId).FirstOrDefault();
         }
+        public VolunteerInfo GetVolunteerInfoByUserId(int userId)
+        {
+            return _volunteerInfo._table.Where(m => m.userId == userId).FirstOrDefault();
+        }
         public List<OrgEventHistory> GetEventHistoryByUserId(int userId)
         {
             return _orgEventHistory.GetAll().Where(m => m.userId == userId).ToList();
         }
+
         public GroupChat GetGroupChatByEventId(int eventId)
         {
             return _groupChat._table.Where(m => m.eventId == eventId).FirstOrDefault();

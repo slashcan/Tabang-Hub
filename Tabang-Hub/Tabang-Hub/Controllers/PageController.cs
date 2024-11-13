@@ -113,6 +113,18 @@ namespace Tabang_Hub.Controllers
             o.profilePath = "~/Content/IdPicture/download (4).jpg";
             o.orgEmail = u.email;
 
+            // Check if phone number starts with '09' and has 11 digits
+            if (string.IsNullOrWhiteSpace(o.phoneNum) || !Regex.IsMatch(o.phoneNum, @"^09\d{9}$"))
+            {
+                validationErrors.Add("Phone number must start with '09' and be 11 digits long.");
+            }
+
+            // Check if zip code has exactly 4 digits
+            if (string.IsNullOrWhiteSpace(o.zipCode) || !Regex.IsMatch(o.zipCode, @"^\d{4}$"))
+            {
+                validationErrors.Add("Zip code must be exactly 4 digits.");
+            }
+
             // Check if email is provided
             if (string.IsNullOrWhiteSpace(u.email))
             {
@@ -505,6 +517,13 @@ namespace Tabang_Hub.Controllers
 
             if (_userManager.Login(username, password, ref ErrorMessage) == ErrorCode.Success)
             {
+                // Check if the user's status is pending admin approval (status 3)
+                if (user.status == 3)
+                {
+                    ViewBag.Error = "Your registration is pending admin approval. Please wait for further updates.";
+                    return View();
+                }
+
                 if (user.status != (int)Status.Active)
                 {
                     TempData["email"] = user.email;
@@ -520,92 +539,82 @@ namespace Tabang_Hub.Controllers
                     string subject = "Welcome to Tabang Hub!";
                     string userEmail = user.email;
                     string body = $@"
-        <html>
-        <head>
-            <style>
-                body {{
-                    font-family: Arial, sans-serif;
-                    background-color: #f0f8ff;
-                    color: #333;
-                }}
-                .container {{
-                    width: 100%;
-                    max-width: 600px;
-                    margin: 0 auto;
-                    padding: 20px;
-                    background-color: #ffffff;
-                    border-radius: 8px;
-                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-                    overflow: hidden;
-                }}
-                .header {{
-                    background-color: #007bff;
-                    padding: 10px 20px;
-                    color: white;
-                    text-align: center;
-                }}
-                .header img {{
-                    max-width: 100px;
-                    display: block;
-                    margin: 0 auto;
-                }}
-                .header h1 {{
-                    margin: 0;
-                    font-size: 24px;
-                    font-weight: bold;
-                }}
-                .content {{
-                    padding: 20px;
-                    font-size: 16px;
-                    line-height: 1.6;
-                    color: #333;
-                }}
-                .otp {{
-                    display: block;
-                    width: fit-content;
-                    margin: 20px auto;
-                    padding: 10px 20px;
-                    background-color: #007bff;
-                    color: #ffffff;
-                    border-radius: 5px;
-                    font-size: 24px;
-                    text-align: center;
-                }}
-                .footer {{
-                    text-align: center;
-                    margin-top: 20px;
-                    padding: 10px;
-                    background-color: #f1f1f1;
-                    color: #555;
-                    font-size: 14px;
-                }}
-                .footer a {{
-                    color: #007bff;
-                    text-decoration: none;
-                }}
-            </style>
-        </head>
-        <body>
-            <div class='container'>
-                <div class='header'>
-                    <h1>Welcome to Tabang Hub!</h1>
-                </div>
-                <div class='content'>
-                    <p>Dear {user.email},</p>
-                    <p>Thank you for joining <strong>Tabang Hub</strong>. We're excited to have you as part of our community. To complete your registration, please verify your email address by entering the following One-Time Password (OTP) on the verification page:</p>
-                    <div class='otp'>{randomOTP}</div>
-                    <p>Thank you,<br>The Tabang Hub Team</p>
-                </div>
-                <div class='footer'>
-                    <p>&copy; 2024 Tabang Hub. All rights reserved.</p>
-                    <p>
-                        <a href='https://www.tabanghub.com/terms'>Terms of Service</a> |
-                        <a href='https://www.tabanghub.com/privacy'>Privacy Policy</a>
-                    </p>
-                </div>
-            </div>
-        </body>
-        </html>";
+<html>
+<head>
+    <style>
+        body {{
+            font-family: Arial, sans-serif;
+            background-color: #f0f8ff;
+            color: #333;
+        }}
+        .container {{
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }}
+        .header {{
+            background-color: #007bff;
+            padding: 10px 20px;
+            color: white;
+            text-align: center;
+        }}
+        .content {{
+            padding: 20px;
+            font-size: 16px;
+            line-height: 1.6;
+            color: #333;
+        }}
+        .otp {{
+            display: block;
+            width: fit-content;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #ffffff;
+            border-radius: 5px;
+            font-size: 24px;
+            text-align: center;
+        }}
+        .footer {{
+            text-align: center;
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f1f1f1;
+            color: #555;
+            font-size: 14px;
+        }}
+        .footer a {{
+            color: #007bff;
+            text-decoration: none;
+        }}
+    </style>
+</head>
+<body>
+    <div class='container'>
+        <div class='header'>
+            <h1>Welcome to Tabang Hub!</h1>
+        </div>
+        <div class='content'>
+            <p>Dear {user.email},</p>
+            <p>Thank you for joining <strong>Tabang Hub</strong>. We're excited to have you as part of our community. To complete your registration, please verify your email address by entering the following One-Time Password (OTP) on the verification page:</p>
+            <div class='otp'>{randomOTP}</div>
+            <p>Thank you,<br>The Tabang Hub Team</p>
+        </div>
+        <div class='footer'>
+            <p>&copy; 2024 Tabang Hub. All rights reserved.</p>
+            <p>
+                <a href='https://www.tabanghub.com/terms'>Terms of Service</a> |
+                <a href='https://www.tabanghub.com/privacy'>Privacy Policy</a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>";
 
                     string errorResponse = "";
 
@@ -616,6 +625,7 @@ namespace Tabang_Hub.Controllers
                     }
                 }
 
+                // Authenticate user and redirect based on role
                 FormsAuthentication.SetAuthCookie(username, false);
 
                 if (user.roleId == 1)
@@ -633,11 +643,12 @@ namespace Tabang_Hub.Controllers
             }
             else
             {
-                ViewBag.Error = "Incorrect password. Please try again.";
+                ViewBag.Error = ErrorMessage;
             }
 
             return View();
         }
+
 
         [AllowAnonymous]
         public ActionResult Verify()
@@ -677,30 +688,39 @@ namespace Tabang_Hub.Controllers
             {
                 string redirectUrl;
 
-                // If the user is an organization admin, redirect to the Admin Approval page
+                // Check if the user is an organization admin (role ID 2)
                 if (user.roleId == 2)
                 {
-                    _userManager.UpdateUserStatus(user.userId, 3, ref ErrorMessage); // 3 is assumed to be 'Pending Approval'
+                    // Update status to 'Pending Approval' for organization users
+                    if (_userManager.UpdateUserStatus(user.userId, 3, ref ErrorMessage) != ErrorCode.Success)
+                    {
+                        return Json(new { success = false, message = "Failed to update user status. Please try again." });
+                    }
+
+                    // Redirect to admin approval page
                     redirectUrl = Url.Action("AdminApprove", "Page");
                 }
                 else
                 {
-                    // Update user status to Active
-                    _userManager.UpdateUserStatus(user.userId, (int)Status.Active, ref ErrorMessage);
+                    // For other roles, update status to 'Active'
+                    if (_userManager.UpdateUserStatus(user.userId, (int)Status.Active, ref ErrorMessage) != ErrorCode.Success)
+                    {
+                        return Json(new { success = false, message = "Failed to update user status. Please try again." });
+                    }
 
                     // Set authentication cookie
                     FormsAuthentication.SetAuthCookie(user.email, false);
 
-                    // Determine redirect based on user role
+                    // Determine redirect URL based on role
                     switch (user.roleId)
                     {
-                        case 1: // User role
+                        case 1: // Regular user role
                             redirectUrl = Url.Action("Index", "Page");
                             break;
                         case 3: // Admin role
                             redirectUrl = Url.Action("Index", "Admin");
                             break;
-                        default: // Other roles (if applicable)
+                        default:
                             redirectUrl = Url.Action("Login");
                             break;
                     }
@@ -710,10 +730,11 @@ namespace Tabang_Hub.Controllers
             }
             else
             {
-                // Return error message if OTP is incorrect
+                // Return error if OTP is incorrect
                 return Json(new { success = false, message = "Incorrect OTP. Please try again!" });
             }
         }
+        [AllowAnonymous]
         public ActionResult AdminApprove()
         {
             return View();

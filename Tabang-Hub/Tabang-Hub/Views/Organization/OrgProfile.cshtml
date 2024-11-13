@@ -33,8 +33,7 @@
                     <div class="ms-3">
                         <h2 class="card-title mb-1" id="orgNameDisplay">@Model.OrgInfo.orgName</h2>
                         <input type="text" id="orgNameInput" name="orgProfile.OrgInfo.orgName" class="form-control d-none" value="@Model.OrgInfo.orgName">
-                        <p class="text-muted mb-1" id="orgEmailDisplay">@Model.OrgInfo.orgEmail</p>
-                        <input type="email" id="orgEmailInput" name="orgProfile.OrgInfo.orgEmail" class="form-control d-none" value="@Model.OrgInfo.orgEmail">
+                        <p class="text-muted mb-1">@Model.OrgInfo.orgEmail</p> <!-- Display-only email -->
                     </div>
                     <button type="button" class="btn btn-primary ms-auto" id="editButton" onclick="toggleEditMode()">Edit Profile</button>
                     <button type="button" class="btn btn-success ms-auto d-none" id="saveButton" onclick="submitForm()">Save</button>
