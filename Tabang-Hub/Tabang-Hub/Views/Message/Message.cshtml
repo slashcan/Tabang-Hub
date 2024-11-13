@@ -1,4 +1,4 @@
-﻿@model Tabang_Hub.Utils.Lists
+﻿﻿@model Tabang_Hub.Utils.Lists
 @if (Model.userAccount != null && Model.userAccount.roleId == 2)
 {
     ViewBag.Title = "Message";
@@ -9,28 +9,32 @@ else
     ViewBag.Title = "Message";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
 <link href="~/Content/Css/message.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
+<style>
+    body {
+        padding-top: 100px;
+        overflow-y: hidden;
+    }
+</style>
 <div class="message-body">
-    <div class="chat-list">
+    <div class="chat-list" id="chatList">
         <div class="chat-item-head">
-            <h2>Group Chats</h2>
+            <h2>Group Chat</h2>
         </div>
-        @if (Model.listOfGc == null || Model.listOfGc.Count().Equals(0))
+        @if (Model.listOfGc == null || !Model.listOfGc.Any())
         {
             <script type="text/javascript">
                 Swal.fire({
                     icon: 'info',
                     title: 'No Group Chats available!',
                     text: 'Group chat will appear if you join an event.',
-                    allowOutsideClick: false, // Prevent closing by clicking outside
-                    allowEscapeKey: false,    // Prevent closing by pressing escape key
-                    confirmButtonText: 'OK'   // Custom button text
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    confirmButtonText: 'OK'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        window.location.href = '@Url.Action("Index", "Page")'; // Redirect to Index page
+                        window.location.href = '@Url.Action("Index", "Page")';
                     }
                 });
             </script>
@@ -39,43 +43,68 @@ else
         {
             foreach (var gc in Model.listOfGc)
             {
-                <div class="chat-item" onclick="selectGroup('@gc.groupChatId', event)">
-                    @{
-                        var gcImage = Model.detailsEventImage.Where(m => m.eventId == gc.eventId).Select(m => m.eventImage).FirstOrDefault();
-                    }
+                var gcImage = Model.detailsEventImage
+                    .Where(m => m.eventId == gc.eventId)
+                    .Select(m => m.eventImage)
+                    .FirstOrDefault();
+                <div class="chat-item" onclick="selectGroup('@gc.groupChatId', '@Url.Content("~/Content/Events/" + gcImage)', '@gc.eventTitle', event)">
                     <img src="@Url.Content("~/Content/Events/" + gcImage)" alt="Profile">
                     <span>@gc.eventTitle</span>
-                    <input type="hidden" value="@gc.groupChatId" id="groupId" />
-                    <input type="hidden" value="@gc.userId" id="userId" />
                 </div>
-
             }
         }
     </div>
 
-    <!-- Chat area for displaying messages -->
+    <!-- Chat area -->
     <div class="chat-area">
+        <div class="chat-header" id="chatHeader">
+            <div class="chat-toggle-icon" onclick="toggleChatList()">
+                <i class="fas fa-bars"></i> <!-- Replace with your desired icon -->
+            </div>
+
+            <img id="chatHeaderImage" src="@Url.Content("~/Content/Images/default-avatar.png")" alt="Group Avatar">
+            <span id="chatHeaderTitle">Group Chat</span>
+        </div>
         <div class="messages"></div>
         <div class="message-input">
-            <input type="text" id="message" placeholder="Type a message">
-            <button id="sendmessage">Send</button>
+            <input type="text" id="message" placeholder="Aa">
+            <button id="sendmessage">
+                <i class="fas fa-paper-plane"></i>
+            </button>
         </div>
     </div>
 </div>
 
+
 <script type="text/javascript">
+    function toggleChatList() {
+        var chatList = document.getElementById('chatList');
+        var chatArea = document.querySelector('.chat-area');
+
+        if (chatList.classList.contains('show')) {
+            chatList.classList.remove('show'); // Hide the chat list
+            chatArea.classList.remove('shift'); // Reset chat area position
+        } else {
+            chatList.classList.add('show'); // Show the chat list
+            chatArea.classList.add('shift'); // Shift chat area
+        }
+    }
+
+
 
     var currentUserId = '@ViewBag.UserId'.toString();
     console.log("currentUserId: ", currentUserId);
 
-    var selectedGcID = null;
-    function selectGroup(groupId, event) {
+    var selectedGcID;
+    function selectGroup(groupId, groupImage, groupTitle, event) {
         console.log("Group ID: ", groupId);
+
+        // Update chat header with the selected group's profile image and name
+        document.getElementById('chatHeaderImage').src = groupImage;
+        document.getElementById('chatHeaderTitle').textContent = groupTitle;
 
         // Remove 'selected' class from any previously selected item
         $('.chat-item').removeClass('selected');
-
-        // Add 'selected' class to the clicked item
         $(event.currentTarget).addClass('selected');
 
         selectedGcID = groupId;
@@ -130,20 +159,26 @@ else
         }
         // Function to display a message (appends to the chat-area)
         chat.client.broadcastMessage = function (userName, senderId, message, groupId) {
-            var messageClass = senderId.toString() === currentUserId ? 'sent' : 'received';
+            if (groupId.toString() == selectedGcID.toString()) {
+                var messageClass = senderId.toString() === currentUserId ? 'sent' : 'received';
 
-            var messageHtml = '<div class="message-container ' + messageClass + '">';
-            if (messageClass === 'received') {
-                messageHtml += '<strong class="user-name">' + userName + '</strong>';
+                var messageHtml = '<div class="message-container ' + messageClass + '">';
+                if (messageClass === 'received') {
+                    messageHtml += '<strong class="user-name">' + userName + '</strong>';
+                }
+                messageHtml += '<div class="message ' + messageClass + '"><span>' + htmlEncode(message) + '</span></div>';
+                messageHtml += '</div>';
+
+                // Append the message to the chat area
+                $('.messages').append(messageHtml);
+
+                // Auto-scroll to the bottom after adding the message
+                $('.messages').scrollTop($('.messages')[0].scrollHeight);
+
+                console.log("Displayed message in group: " + groupId);
+            } else {
+                console.log("Message not displayed. Current group ID: " + selectedGcID + ", Message group ID: " + groupId);
             }
-            messageHtml += '<div class="message ' + messageClass + '"><span>' + htmlEncode(message) + '</span></div>';
-            messageHtml += '</div>';
-
-            // Append the message to the chat area
-            $('.messages').append(messageHtml);
-
-            // Auto-scroll to the bottom after adding the message
-            $('.messages').scrollTop($('.messages')[0].scrollHeight);
         };
 
         // Function to load all previous messages when the page loads

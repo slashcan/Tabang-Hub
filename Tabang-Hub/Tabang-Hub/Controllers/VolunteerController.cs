@@ -713,8 +713,18 @@ namespace Tabang_Hub.Controllers
             }
             return false; // Signature is invalid
         }
-        public ActionResult PaymentSuccess(int eventId, decimal amount, string referenceNumber)
+        public async Task<ActionResult> PaymentSuccess(int eventId, decimal amount, string referenceNumber)
         {
+
+            var recommendedEvents = await _volunteerManager.RunRecommendation(UserId);
+
+            var filteredEvent = new List<vw_ListOfEvent>();
+            foreach (var recommendedEvent in recommendedEvents)
+            {
+                var matchedEvents = _listsOfEvent.GetAll().Where(m => m.Event_Id == recommendedEvent.EventID).ToList();
+                filteredEvent.AddRange(matchedEvents);
+            }
+
             // Save the donation to the database
             var donation = new UserDonated
             {
@@ -782,15 +792,24 @@ namespace Tabang_Hub.Controllers
                 picture = getProfile,
                 CreateEvents = events,
                 skills = _skills.GetAll().ToList(),
+                listOfEvents = filteredEvent.OrderByDescending(m => m.Event_Id).ToList(),
+                detailsEventImage = _eventImages.GetAll().ToList()
             };
 
             return View(listModel);
         }
 
         // Payment failed handler
-        public ActionResult PaymentFailed(int eventId, decimal amount)
+        public async Task<ActionResult> PaymentFailed(int eventId, decimal amount)
         {
+            var recommendedEvents = await _volunteerManager.RunRecommendation(UserId);
 
+            var filteredEvent = new List<vw_ListOfEvent>();
+            foreach (var recommendedEvent in recommendedEvents)
+            {
+                var matchedEvents = _listsOfEvent.GetAll().Where(m => m.Event_Id == recommendedEvent.EventID).ToList();
+                filteredEvent.AddRange(matchedEvents);
+            }
             // Save the donation to the database
             var donation = new UserDonated
             {
@@ -831,6 +850,8 @@ namespace Tabang_Hub.Controllers
                 CreateEvents = events,
                 picture = getProfile,
                 skills = _skills.GetAll().ToList(),
+                listOfEvents = filteredEvent.OrderByDescending(m => m.Event_Id).ToList(),
+                detailsEventImage = _eventImages.GetAll().ToList()
             };
 
             return View(listModel);
@@ -903,6 +924,8 @@ namespace Tabang_Hub.Controllers
                     detailsEventImage = getOrgImages,
                     orgEventImageHistories = db.OrgEventImageHistory.ToList(),
                     listOfEvents = filteredEvent.OrderByDescending(m => m.Event_Id).ToList(),
+                    detailsSkillRequirement = _skillRequirement.GetAll(),
+                    allSkill = db.Skills.ToList()
                 };
 
                 ViewBag.SectionToShow = section;
