@@ -1,11 +1,11 @@
-﻿﻿.message-body {
+﻿.message-body {
     display: flex;
     margin: 0;
-    font-family: Arial, sans-serif;
-    height: 87.1vh;
-    background-color: #eaf3ff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    height: 87vh;
+    background-color: #f3f4f6; /* Light background */
     border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     overflow: hidden;
 }
 
@@ -14,17 +14,19 @@
     background-color: #ffffff;
     color: #3b4c5b;
     overflow-y: auto;
-    border-right: 1px solid #d9dfe6;
+    border-right: 1px solid #e5e7eb; /* Light gray */
     border-radius: 10px 0 0 10px;
+    padding: 10px 0;
 }
 
 .chat-item-head {
     padding: 15px;
-    border-bottom: 1px solid #d9dfe6;
+    border-bottom: 1px solid #e5e7eb; /* Light gray */
     text-align: center;
     font-size: 1.2em;
     font-weight: bold;
-    color: #2c3e50;
+    color: #374151; /* Dark gray */
+    background-color: #f9fafb; /* Slightly darker background */
 }
 
 .chat-item {
@@ -32,89 +34,82 @@
     align-items: center;
     padding: 10px;
     cursor: pointer;
-    border-bottom: 1px solid #d9dfe6;
-    transition: background-color 0.3s;
+    border-bottom: 1px solid #e5e7eb; /* Light gray */
+    transition: background-color 0.3s, transform 0.3s;
 }
 
     .chat-item:hover {
-        background-color: #f2f7ff;
+        background-color: #f1f5f9; /* Slight hover effect */
+        transform: translateX(2px); /* Subtle movement */
     }
 
     .chat-item img {
-        width: 40px;
-        height: 40px;
+        width: 45px;
+        height: 45px;
         border-radius: 50%;
         margin-right: 10px;
+        border: 1px solid #e5e7eb; /* Border for better visibility */
     }
 
     .chat-item span {
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+        font-size: 1rem;
+        color: #1f2937; /* Darker color */
     }
 
     .chat-item.selected {
-        background-color: #d3e0f5; /* Light blue background for the selected chat */
-        border-left: 4px solid #3b82f6; /* Blue border to indicate selection */
+        background-color: #e0f2fe; /* Light blue for selected item */
+        border-left: 4px solid #3b82f6; /* Blue indicator */
     }
 
 .chat-area {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
-    background-color: #dce8f5;
-    padding: 15px;
+    background-color: #e0f2fe; /* Light gray background */
+    padding: 20px;
     border-radius: 0 10px 10px 0;
+    position: relative;
+    margin-bottom: 10px;
 }
 
 .chat-header {
     display: flex;
     align-items: center;
-    padding: 10px;
+    padding: 15px;
     background-color: #ffffff;
-    border-bottom: 2px solid #d9dfe6;
+    border-bottom: 1px solid #d1d5db; /* Medium gray */
     border-radius: 10px 10px 0 0;
     margin-bottom: 10px;
-    position: relative;
 }
 
     .chat-header img {
-        width: 40px;
-        height: 40px;
+        width: 45px;
+        height: 45px;
         border-radius: 50%;
-        margin-right: 10px;
+        margin-right: 15px;
+        border: 1px solid #d1d5db; /* Medium gray */
     }
 
     .chat-header span {
         font-weight: bold;
-        font-size: 1.2em;
-        color: #2c3e50;
+        font-size: 1.25em;
+        color: #1f2937; /* Darker color */
     }
 
-.chat-back-icon {
-    font-size: 1.2em;
-    margin-right: 10px;
-    cursor: pointer;
-    color: #2c3e50;
-    display: none; /* Hide by default */
-}
-
-.user-name {
-    font-size: 0.85em;
-    color: #5A6F80;
-    font-weight: bold;
-    margin-bottom: 3px; /* Adjust space between name and message */
-    padding-left: 8px; /* Optional padding */
-}
-
 .messages {
-    padding: 10px;
+    padding: 15px;
     flex-grow: 1;
     overflow-y: auto;
+    background-color: #f8fafc; /* Slightly lighter background for contrast */
+    border-radius: 10px;
+    margin-bottom: 10px;
 }
 
 .message {
-    margin: 5px 0;
+    margin: 10px 0;
 }
 
     .message.sent {
@@ -127,98 +122,114 @@
 
     .message span {
         display: inline-block;
-        background-color: #38517a;
-        padding: 15px;
+        background-color: #38517a; /* Blue */
+        color: #ffffff;
+        padding: 10px 15px;
         border-radius: 15px;
-        color: #fff;
-        max-width: 60%;
+        max-width: 70%;
         word-wrap: break-word;
     }
 
     .message.sent span {
-        background-color: #7289da;
+        background-color: #7289da; /* Slightly different shade for sent messages */
     }
-
+.user-name {
+    font-size: 0.85em;
+    color: #5A6F80;
+    font-weight: bold;
+    margin-bottom: 3px; /* Adjust space between name and message */
+    padding-left: 8px; /* Optional padding */
+}
 .message-input {
     display: flex;
-    padding: 10px;
-    border-top: 1px solid #3a3d41;
+    border-top: 1px solid #d1d5db; /* Medium gray */
 }
 
     .message-input input {
         flex-grow: 1;
-        padding: 10px;
-        border: none;
+        padding: 12px;
+        border: 1px solid #d1d5db; /* Medium gray */
         border-radius: 5px;
         margin-right: 10px;
+        font-size: 1rem;
     }
 
     .message-input button {
         padding: 10px 20px;
+        background-color: #3b82f6; /* Blue */
         border: none;
         border-radius: 5px;
-        background-color: #7289da;
-        color: #fff;
+        color: #ffffff;
+        font-size: 1rem;
         cursor: pointer;
+        transition: background-color 0.2s;
     }
 
-/* General styles */
+        .message-input button:hover {
+            background-color: #2563eb; /* Darker blue */
+        }
+
+/* Toggle icon for smaller screens */
 .chat-toggle-icon {
-    display: none; /* Hidden by default */
+    display: none;
     font-size: 1.5em;
     cursor: pointer;
     padding: 5px;
     color: #3b4c5b;
-    z-index: 20; /* Ensure it's above other elements */
+    z-index: 20;
     position: relative;
     margin-right: 10px;
 }
 
-/* Media Query for 600px width */
+/* Responsive adjustments */
 @media (max-width: 600px) {
     .chat-toggle-icon {
-        display: inline-block; /* Show the toggle icon */
+        display: inline-block;
     }
 
     .chat-list {
         display: block; /* Ensure it's visible */
-        position: absolute; /* Position inside the chat area */
-        width: 0; /* Start with width 0 for sliding effect */
+        position: absolute;
+        width: 0;
         height: 100%;
-        z-index: 15; /* Ensure it is on top of the chat area */
+        z-index: 15;
         background-color: #ffffff;
         border-right: 1px solid #d9dfe6;
         overflow-y: auto;
-        transition: width 0.3s ease-in-out; /* Smooth slide animation */
+        transition: width 0.3s ease-in-out;
         margin-top: 8px;
     }
-
+    .chat-item-head {
+        display: none; /* Hide "Group Chat" heading */
+    }
         .chat-list.show {
-            width: 60px; /* Full width when shown */
+            width: 70px; /* Adjust width for minimized state */
         }
+
+            .chat-list.show .chat-item img {
+                display: block; /* Show images when toggled */
+                margin-right: 0; /* Adjust margin */
+            }
+
+            .chat-list.show .chat-item span,
+            .chat-list.show .chat-item-head {
+                display: none; /* Hide text and the heading */
+            }
 
     .chat-area {
         width: 100%;
-        position: relative; /* Ensure it contains the chat list */
         transition: margin-left 0.3s ease-in-out;
     }
 
         .chat-area.shift {
-            margin-left: 60px; /* Shift the chat area to the right */
+            margin-left: 60px; /* Adjust chat area margin */
         }
 
-    .chat-item-head {
-        display: none; /* Hide "Group Chat" heading */
+    .chat-header img {
+        display: block; /* Ensure header image remains visible */
     }
 
     .message span {
-        margin-right: 2%;
-        font-size: small;
-    }
-
-    #chatHeaderTitle {
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
+        font-size: 0.9rem; /* Smaller text for smaller screens */
     }
 }
