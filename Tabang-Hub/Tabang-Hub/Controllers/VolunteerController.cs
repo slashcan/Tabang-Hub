@@ -983,8 +983,25 @@ namespace Tabang_Hub.Controllers
         {
             try
             {
-                db.sp_CancelRequest(eventId, UserId);
+                var evnt = _organizationManager.GetEventByEventId(eventId);
+                var vol = _organizationManager.GetUserByUserId(UserId);
+
+                if (evnt != null)
+                {
+                    var orga = _organizationManager.GetUserByUserId((int)evnt.userId);
+
+                    db.sp_CancelRequest(eventId, UserId);
+
+                    if (_organizationManager.SentNotif(orga.userId, UserId, eventId, "Cancel Application", $"Volunteer {vol.email} canceled his application og event {evnt.eventTitle}!", 0, ref ErrorMessage) != ErrorCode.Success)
+                    {
+                        return Json(new { success = false, message = "Raquest cancel failed" });
+                    }
+
+                    return Json(new { success = true, message = "Request Cancelled" });
+                }
+
                 return Json(new { success = true, message = "Request Cancelled" });
+
             }
             catch (Exception)
             {
