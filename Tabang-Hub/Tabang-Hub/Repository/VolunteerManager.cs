@@ -90,7 +90,7 @@ namespace Tabang_Hub.Repository
         //public void CheckVolunteerEventEndByUserId(int userId)
         //{
         //    var getEvents = _orgEvents.GetAll().ToList();
-        //    var endedEvent = getEvents.Where(m => m.dateEnd < DateTime.Now && m.status == 1).ToList();  
+        //    var endedEvent = getEvents.Where(m => m.dateEnd < DateTime.Now && m.status == 1).ToList();
 
         //    foreach (var evt in endedEvent)
         //    {
@@ -118,7 +118,7 @@ namespace Tabang_Hub.Repository
         public List<sp_VolunteerHistory_Result> GetVolunteersHistoryByUserId(int userId)
         {
             List<sp_VolunteerHistory_Result> userEventHistory = new List<sp_VolunteerHistory_Result>();
-            var checkVol = db.sp_VolunteerHistory(userId).ToList().Where(m => m.status == 1).ToList();
+            var checkVol = db.sp_VolunteerHistory(userId).ToList();
             if (!checkVol.Equals(0))
             {
                 foreach (var volHistory in checkVol)

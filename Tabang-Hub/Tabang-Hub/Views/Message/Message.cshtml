@@ -66,7 +66,7 @@ else
                 <i class="fas fa-bars"></i> <!-- Replace with your desired icon -->
             </div>
 
-            <img id="chatHeaderImage" src="@Url.Content("~/Content/Images/default-avatar.png")" alt="Group Avatar">
+            <img id="chatHeaderImage" src="@Url.Content("~/Content/Images/team.png")" alt="Group Avatar">
             <span id="chatHeaderTitle">Group Chat</span>
         </div>
         <div class="messages"></div>
@@ -129,6 +129,14 @@ else
                 if (message) {
                     chat.server.send(currentUserId, selectedGcID, message);
                     $('#message').val('').focus(); // Clear the input and refocus
+                }
+            });
+
+            // Send a message when the Enter key is pressed in the input field
+            $('#message').keydown(function (event) {
+                if (event.key === 'Enter' || event.keyCode === 13) {
+                    event.preventDefault(); // Prevent default action (e.g., form submission)
+                    $('#sendmessage').click(); // Trigger the click event on the send button
                 }
             });
         });

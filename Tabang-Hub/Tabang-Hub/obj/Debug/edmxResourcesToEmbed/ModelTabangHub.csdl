@@ -689,11 +689,6 @@
       <End Role="UserAccount" EntitySet="UserAccount" />
       <End Role="Volunteers" EntitySet="Volunteers" />
     </AssociationSet>
-    <FunctionImport Name="sp_AcceptAndUpdateVolunteerStatus">
-      <Parameter Name="userId" Mode="In" Type="Int32" />
-      <Parameter Name="eventId" Mode="In" Type="Int32" />
-      <Parameter Name="skillId" Mode="In" Type="Int32" />
-    </FunctionImport>
     <FunctionImport Name="sp_CancelRequest">
       <Parameter Name="eventId" Mode="In" Type="Int32" />
       <Parameter Name="userId" Mode="In" Type="Int32" />
@@ -732,6 +727,10 @@
     </FunctionImport>
     <FunctionImport Name="sp_VolunteerHistory" ReturnType="Collection(TabangHubModel.sp_VolunteerHistory_Result)">
       <Parameter Name="userId" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_AcceptAndUpdateVolunteerStatus">
+      <Parameter Name="userId" Mode="In" Type="Int32" />
+      <Parameter Name="eventId" Mode="In" Type="Int32" />
     </FunctionImport>
   </EntityContainer>
   <ComplexType Name="sp_GetAllMessage_Result">

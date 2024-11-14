@@ -6,15 +6,50 @@
     width: 150px;
     height: 150px;
     object-fit: cover;
-}
-
-#profilePicPreview {
     border-radius: 50%;
-    width: 150px;
-    height: 150px;
-    object-fit: cover;
 }
 
+/* Flex container for better alignment and centering */
+.profile-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.change-photo-button {
+    margin-top: 10px;
+}
+
+/* Ensure consistent sizing for different screen widths */
+@media (max-width: 1200px) {
+    #profilePicPreview {
+        width: 120px;
+        height: 120px;
+    }
+
+    .change-photo-button {
+        font-size: 12px;
+        padding: 6px 12px;
+    }
+}
+
+/* Additional media queries for better control on smaller devices */
+@media (max-width: 990px) {
+    #profilePicPreview {
+        width: 100px;
+        height: 100px;
+    }
+}
+
+/* Additional media queries for better control on smaller devices */
+@media (max-width: 576px) {
+    #profilePicPreview {
+        width: 100px;
+        height: 100px;
+    }
+}
 
 
 .event-card {

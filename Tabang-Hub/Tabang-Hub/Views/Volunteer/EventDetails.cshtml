@@ -9,8 +9,8 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <link href="~/Content/css2/Eventdetails.css" rel="stylesheet" />
 <style>
-    body{
-        padding-top: 100px;
+    body {
+        padding-top: 70px;
     }
 </style>
 @if (Model.volunteer != null && Model.volunteer.Status == 2)
@@ -98,144 +98,144 @@
                         </div>
                     }
 
-                <div class="apply-button mt-2">
-                    @foreach (var orgDetails in Model.orgEvents)
-                    {
-                        bool hasAllRequiredSkills = Model.detailsSkillRequirement
-                            .All(reqSkill => Model.volunteersSkills.Any(volSkill => volSkill.skillId == reqSkill.skillId));
-
-                        if (hasAllRequiredSkills)
+                    <div class="apply-button mt-2">
+                        @foreach (var orgDetails in Model.orgEvents)
                         {
-                            // Display join buttons if all required skills are met
-                            if (!Model.volunteersStatusEvent.Count().Equals(0))
+                            bool hasAllRequiredSkills = Model.detailsSkillRequirement
+                                .All(reqSkill => Model.volunteersSkills.Any(volSkill => volSkill.skillId == reqSkill.skillId));
+
+                            if (hasAllRequiredSkills)
                             {
-                                foreach (var status in Model.volunteersStatusEvent)
+                                // Display join buttons if all required skills are met
+                                if (!Model.volunteersStatusEvent.Count().Equals(0))
                                 {
-                                    if (status.Status.Equals(1) && Model.volunteersStatusEvent.Count() != 0)
+                                    foreach (var status in Model.volunteersStatusEvent)
                                     {
-                                        <button style="width: 100%" onclick="leaveEvent('@orgDetails.eventId')" class="btn btnRequest">
-                                            Leave event
-                                        </button>
-                                    }
-                                    else if (status.Status.Equals(0) && Model.volunteersStatusEvent.Count() != 0)
-                                    {
-                                        <button style="width: 100%" onclick="cancelEvent('@orgDetails.eventId')" class="btn btnRequest">
-                                            Cancel application
-                                        </button>
-                                    }
-                                    else
-                                    {
-                                        <div class="action-buttons mt-2">
-                                            <div class="d-flex justify-content-between">
-                                                <!-- Accept Button -->
-                                                <button type="button" class="btn btn-success flex-fill me-1" data-toggle="modal" data-target="#acceptEventModal" data-event-id="@orgDetails.eventId" id="acceptButton">
-                                                    Accept Invitation
-                                                </button>
-                                                <!-- Decline Button -->
-                                                <button type="button" class="btn btn-danger flex-fill ms-1" onclick="declineInvite('@orgDetails.eventId')" data-event-id="@orgDetails.eventId" id="declineButton">
-                                                    Decline Invitation
-                                                </button>
+                                        if (status.Status.Equals(1) && Model.volunteersStatusEvent.Count() != 0)
+                                        {
+                                            <button style="width: 100%" onclick="leaveEvent('@orgDetails.eventId')" class="btn btnRequest">
+                                                Leave event
+                                            </button>
+                                        }
+                                        else if (status.Status.Equals(0) && Model.volunteersStatusEvent.Count() != 0)
+                                        {
+                                            <button style="width: 100%" onclick="cancelEvent('@orgDetails.eventId')" class="btn btnRequest">
+                                                Cancel application
+                                            </button>
+                                        }
+                                        else
+                                        {
+                                            <div class="action-buttons mt-2">
+                                                <div class="d-flex justify-content-between">
+                                                    <!-- Accept Button -->
+                                                    <button type="button" class="btn btn-success flex-fill me-1" onclick="acceptEvent('@orgDetails.eventId')" @*data-toggle="modal" data-target="#acceptEventModal"*@ data-event-id="@orgDetails.eventId" id="acceptButton">
+                                                        Accept Invitation
+                                                    </button>
+                                                    <!-- Decline Button -->
+                                                    <button type="button" class="btn btn-danger flex-fill ms-1" onclick="declineInvite('@orgDetails.eventId')" data-event-id="@orgDetails.eventId" id="declineButton">
+                                                        Decline Invitation
+                                                    </button>
+                                                </div>
                                             </div>
-                                        </div>
+                                        }
                                     }
                                 }
                             }
-                        }
-                        <!-- Accept Invitation Modal -->
-                        <div class="modal fade" id="acceptEventModal" tabindex="-1" role="dialog" aria-labelledby="acceptEventModalLabel" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="acceptEventModalLabel">Accept Invitation</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <form id="acceptEventForm">
-                                            <div class="form-group" id="skillSelectSection">
-                                                <label for="skillSelect">Select Required Skill</label>
-                                                <div id="skillSelect">
-                                                    @foreach (var mskill in Model.matchSkill)
-                                                    {
-                                                        var skillName = Model.skills.Where(m => m.skillId == mskill.skillId).Select(m => m.skillName).FirstOrDefault();
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="radio" name="skill" id="skill1" value="@Html.Raw(skillName)" required>
-                                                            <label class="form-check-label" for="@Html.Raw(skillName)">
-                                                                @Html.Raw(skillName)
-                                                            </label>
-                                                        </div>
-                                                    }
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                        <button type="button" class="btn btn-primary" onclick="acceptEvent('@orgDetails.eventId')">Accept Invitation</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-
-
-                        if (orgDetails.targetAmount != null)
-                        {
-                            foreach (var evnt in Model.listOfEventsOne)
-                            {
-                                <div class="donation-progress">
-                                    <label>Funds raised</label>
-                                    <div class="progress">
-                                        @{
-                                            decimal? raisedAmount = 0;
-
-                                            foreach (var donated in Model.listofUserDonated)
-                                            {
-                                                raisedAmount += donated.amount;
-                                            }
-
-                                            var percentage = (raisedAmount / evnt.Target_Amount) * 100;
-                                        }
-                                        <div class="progress-bar" role="progressbar" style="width: @percentage%; background-color: mediumseagreen;" aria-valuenow="@raisedAmount" aria-valuemin="0" aria-valuemax="@evnt.Target_Amount"></div>
-                                        <div class="progress-label">@($"{raisedAmount:₱#,##0.00}") / @($"{evnt.Target_Amount:₱#,##0.00}")</div>
-                                    </div>
-                                </div>
-                                <div class="donate-button mt-2">
-                                    <!-- Button to open the donation modal -->
-                                    <button style="width: 100%" type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#donationModal">
-                                        Donate
-                                    </button>
-                                </div>
-
-                                <!-- Donation Modal -->
-                                <div class="modal fade" id="donationModal" tabindex="-1" role="dialog" aria-labelledby="donationModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="donationModalLabel">Donate</h5>
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <form id="donationForm">
-                                                    <div class="form-group">
-                                                        <label for="donationAmount">Amount</label>
-                                                        <input type="number" class="form-control" id="donationAmount" min="1" required>
+                            <!-- Accept Invitation Modal -->
+                            @*<div class="modal fade" id="acceptEventModal" tabindex="-1" role="dialog" aria-labelledby="acceptEventModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="acceptEventModalLabel">Accept Invitation</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form id="acceptEventForm">
+                                                <div class="form-group" id="skillSelectSection">
+                                                    <label for="skillSelect">Select Required Skill</label>
+                                                    <div id="skillSelect">
+                                                        @foreach (var mskill in Model.matchSkill)
+                                                        {
+                                                            var skillName = Model.skills.Where(m => m.skillId == mskill.skillId).Select(m => m.skillName).FirstOrDefault();
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="radio" name="skill" id="skill1" value="@Html.Raw(skillName)" required>
+                                                                <label class="form-check-label" for="@Html.Raw(skillName)">
+                                                                    @Html.Raw(skillName)
+                                                                </label>
+                                                            </div>
+                                                        }
                                                     </div>
-                                                </form>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-primary" onclick="submitDonation('@orgDetails.eventId')">Donate</button>
-                                            </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            <button type="button" class="btn btn-primary" onclick="acceptEvent('@orgDetails.eventId')">Accept Invitation</button>
                                         </div>
                                     </div>
                                 </div>
+                            </div>*@
+
+
+
+                            if (orgDetails.targetAmount != null)
+                            {
+                                foreach (var evnt in Model.listOfEventsOne)
+                                {
+                                    <div class="donation-progress">
+                                        <label>Funds raised</label>
+                                        <div class="progress">
+                                            @{
+                                                decimal? raisedAmount = 0;
+
+                                                foreach (var donated in Model.listofUserDonated)
+                                                {
+                                                    raisedAmount += donated.amount;
+                                                }
+
+                                                var percentage = (raisedAmount / evnt.Target_Amount) * 100;
+                                            }
+                                            <div class="progress-bar" role="progressbar" style="width: @percentage%; background-color: mediumseagreen;" aria-valuenow="@raisedAmount" aria-valuemin="0" aria-valuemax="@evnt.Target_Amount"></div>
+                                            <div class="progress-label">@($"{raisedAmount:₱#,##0.00}") / @($"{evnt.Target_Amount:₱#,##0.00}")</div>
+                                        </div>
+                                    </div>
+                                    <div class="donate-button mt-2">
+                                        <!-- Button to open the donation modal -->
+                                        <button style="width: 100%" type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#donationModal">
+                                            Donate
+                                        </button>
+                                    </div>
+
+                                    <!-- Donation Modal -->
+                                    <div class="modal fade" id="donationModal" tabindex="-1" role="dialog" aria-labelledby="donationModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="donationModalLabel">Donate</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <form id="donationForm">
+                                                        <div class="form-group">
+                                                            <label for="donationAmount">Amount</label>
+                                                            <input type="number" class="form-control" id="donationAmount" min="1" required>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-primary" onclick="submitDonation('@orgDetails.eventId')">Donate</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
                             }
                         }
-                    }
-                </div>
+                    </div>
                     <br />
                 </div>
             </div>
@@ -327,140 +327,140 @@ else
                         </div>
                     }
 
-                <div class="apply-button mt-2">
-                    @foreach (var orgDetails in Model.orgEvents)
-                    {
-                        if (!Model.volunteersStatusEvent.Count().Equals(0))
+                    <div class="apply-button mt-2">
+                        @foreach (var orgDetails in Model.orgEvents)
                         {
-                            var getVolStatus = Model.volunteersStatusEvent.Select(m => m.Status).FirstOrDefault();
-                            //foreach (var status in Model.volunteersStatusEvent)
-                            //{
-                            if (getVolStatus.Equals(1) && Model.volunteersStatusEvent.Count() != 0)
+                            if (!Model.volunteersStatusEvent.Count().Equals(0))
                             {
-                                <button style="width: 100%" onclick="leaveEvent('@orgDetails.eventId')" class="btn btnRequest">
-                                    Leave event
-                                </button>
+                                var getVolStatus = Model.volunteersStatusEvent.Select(m => m.Status).FirstOrDefault();
+                                //foreach (var status in Model.volunteersStatusEvent)
+                                //{
+                                if (getVolStatus.Equals(1) && Model.volunteersStatusEvent.Count() != 0)
+                                {
+                                    <button style="width: 100%" onclick="leaveEvent('@orgDetails.eventId')" class="btn btnRequest">
+                                        Leave event
+                                    </button>
+                                }
+                                else if (getVolStatus.Equals(0) && Model.volunteersStatusEvent.Count() != 0)
+                                {
+                                    <button style="width: 100%" onclick="cancelEvent('@orgDetails.eventId')" class="btn btnRequest">
+                                        Cancel application
+                                    </button>
+                                }
+                                //}
                             }
-                            else if (getVolStatus.Equals(0) && Model.volunteersStatusEvent.Count() != 0)
+                            if (Model.volunteersStatusEvent.Count().Equals(0))
                             {
-                                <button style="width: 100%" onclick="cancelEvent('@orgDetails.eventId')" class="btn btnRequest">
-                                    Cancel application
-                                </button>
-                            }
-                            //}
-                        }
-                        if (Model.volunteersStatusEvent.Count().Equals(0))
-                        {
-                            @*<button style="width: 100%" onclick="applyEvent('@orgDetails.eventId')" class="btn btn-primary btn-block">
-                    Join now
-                </button>*@
-                            bool hasAllRequiredSkills = Model.detailsSkillRequirement
-                                .All(reqSkill => Model.volunteersSkills.Any(volSkill => volSkill.skillId == reqSkill.skillId));
-                            if (hasAllRequiredSkills)
-                            {
-                                <div class="join-button mt-2">
-                                    <!-- Button to open the join modal -->
-                                    <button style="width: 100%" type="button" class="btn btn-primary btn-block" onclick="applyEvent('@orgDetails.eventId')" @*data-toggle="modal" data-target="#joinModal"*@>
+                                @*<button style="width: 100%" onclick="applyEvent('@orgDetails.eventId')" class="btn btn-primary btn-block">
                                         Join now
-                                    </button>
-                                </div>
-                            }
-
-                            <!-- Join Modal -->
-                            <div class="modal fade" id="joinModal" tabindex="-1" role="dialog" aria-labelledby="joinModalLabel" aria-hidden="true">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="joinModalLabel">Join Event</h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <form id="joinForm">
-                                                <div class="form-group">
-                                                    <label for="skillSelect">Select Required Skill</label>
-                                                    <div id="skillSelect">
-                                                        @foreach (var mskill in Model.matchSkill)
-                                                        {
-                                                            var skillName = Model.skills.Where(m => m.skillId == mskill.skillId).Select(m => m.skillName).FirstOrDefault();
-
-                                                            <div class="form-check">
-                                                                <input class="form-check-input" type="radio" name="skill" id="skill1" value="@Html.Raw(skillName)" required>
-                                                                <label class="form-check-label" for="@Html.Raw(skillName)">
-                                                                    @Html.Raw(skillName)
-                                                                </label>
-                                                            </div>
-                                                        }
-                                                    </div>
-                                                </div>
-                                            </form>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                            <button type="button" class="btn btn-primary" onclick="applyEvent('@orgDetails.eventId')">Submit</button>
-                                        </div>
+                                    </button>*@
+                                bool hasAllRequiredSkills = Model.detailsSkillRequirement
+                                    .All(reqSkill => Model.volunteersSkills.Any(volSkill => volSkill.skillId == reqSkill.skillId));
+                                if (hasAllRequiredSkills)
+                                {
+                                    <div class="join-button mt-2">
+                                        <!-- Button to open the join modal -->
+                                        <button style="width: 100%" type="button" class="btn btn-primary btn-block" onclick="applyEvent('@orgDetails.eventId')" @*data-toggle="modal" data-target="#joinModal"*@>
+                                            Join now
+                                        </button>
                                     </div>
-                                </div>
-                            </div>
-                        }
+                                }
 
-                        if (orgDetails.targetAmount != null)
-                        {
-                            foreach (var evnt in Model.listOfEventsOne)
-                            {
-                                <div class="donation-progress">
-                                    <label>Fund Raised</label>
-                                    <div class="progress">
-                                        @{
-                                            decimal? raisedAmount = 0;
-
-                                            foreach (var donated in Model.listofUserDonated)
-                                            {
-                                                raisedAmount += donated.amount;
-                                            }
-
-                                            var percentage = (raisedAmount / evnt.Target_Amount) * 100;
-                                        }
-                                        <div class="progress-bar" role="progressbar" style="width: @percentage%; background-color: mediumseagreen;" aria-valuenow="@raisedAmount" aria-valuemin="0" aria-valuemax="@evnt.Target_Amount"></div>
-                                        <div class="progress-label">@($"{raisedAmount:₱#,##0.00}") / @($"{evnt.Target_Amount:₱#,##0.00}")</div>
-                                    </div>
-                                </div>
-                                <div class="donate-button mt-2">
-                                    <!-- Button to open the donation modal -->
-                                    <button style="width: 100%" type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#donationModal">
-                                        Donate
-                                    </button>
-                                </div>
-
-                                <!-- Donation Modal -->
-                                <div class="modal fade" id="donationModal" tabindex="-1" role="dialog" aria-labelledby="donationModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                <!-- Join Modal -->
+                                <div class="modal fade" id="joinModal" tabindex="-1" role="dialog" aria-labelledby="joinModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <h5 class="modal-title" id="donationModalLabel">Donate</h5>
+                                                <h5 class="modal-title" id="joinModalLabel">Join Event</h5>
                                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                     <span aria-hidden="true">&times;</span>
                                                 </button>
                                             </div>
                                             <div class="modal-body">
-                                                <form id="donationForm">
+                                                <form id="joinForm">
                                                     <div class="form-group">
-                                                        <label for="donationAmount">Amount</label>
-                                                        <input type="number" class="form-control" id="donationAmount" min="1" required>
+                                                        <label for="skillSelect">Select Required Skill</label>
+                                                        <div id="skillSelect">
+                                                            @foreach (var mskill in Model.matchSkill)
+                                                            {
+                                                                var skillName = Model.skills.Where(m => m.skillId == mskill.skillId).Select(m => m.skillName).FirstOrDefault();
+
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input" type="radio" name="skill" id="skill1" value="@Html.Raw(skillName)" required>
+                                                                    <label class="form-check-label" for="@Html.Raw(skillName)">
+                                                                        @Html.Raw(skillName)
+                                                                    </label>
+                                                                </div>
+                                                            }
+                                                        </div>
                                                     </div>
                                                 </form>
                                             </div>
                                             <div class="modal-footer">
-                                                <button type="button" class="btn btn-primary" onclick="submitDonation('@orgDetails.eventId')">Donate</button>
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                <button type="button" class="btn btn-primary" onclick="applyEvent('@orgDetails.eventId')">Submit</button>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             }
+
+                            if (orgDetails.targetAmount != null)
+                            {
+                                foreach (var evnt in Model.listOfEventsOne)
+                                {
+                                    <div class="donation-progress">
+                                        <label>Fund Raised</label>
+                                        <div class="progress">
+                                            @{
+                                                decimal? raisedAmount = 0;
+
+                                                foreach (var donated in Model.listofUserDonated)
+                                                {
+                                                    raisedAmount += donated.amount;
+                                                }
+
+                                                var percentage = (raisedAmount / evnt.Target_Amount) * 100;
+                                            }
+                                            <div class="progress-bar" role="progressbar" style="width: @percentage%; background-color: mediumseagreen;" aria-valuenow="@raisedAmount" aria-valuemin="0" aria-valuemax="@evnt.Target_Amount"></div>
+                                            <div class="progress-label">@($"{raisedAmount:₱#,##0.00}") / @($"{evnt.Target_Amount:₱#,##0.00}")</div>
+                                        </div>
+                                    </div>
+                                    <div class="donate-button mt-2">
+                                        <!-- Button to open the donation modal -->
+                                        <button style="width: 100%" type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#donationModal">
+                                            Donate
+                                        </button>
+                                    </div>
+
+                                    <!-- Donation Modal -->
+                                    <div class="modal fade" id="donationModal" tabindex="-1" role="dialog" aria-labelledby="donationModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="donationModalLabel">Donate</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <form id="donationForm">
+                                                        <div class="form-group">
+                                                            <label for="donationAmount">Amount</label>
+                                                            <input type="number" class="form-control" id="donationAmount" min="1" required>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-primary" onclick="submitDonation('@orgDetails.eventId')">Donate</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            }
                         }
-                    }
-                </div>
+                    </div>
                     <br />
                 </div>
             </div>
@@ -498,12 +498,12 @@ else
                         </p>
 
                         @*<p>
-                            <i style="font-size:15px" class="fa">&#xf09a;</i> <a href="#">Tabang.Hub</a>
-                        </p>
+                                <i style="font-size:15px" class="fa">&#xf09a;</i> <a href="#">Tabang.Hub</a>
+                            </p>
 
-                        <p>
-                            <i style="font-size:15px" class="fa">&#xf16d;</i> <a href="#">TabangHub</a>
-                        </p>*@
+                            <p>
+                                <i style="font-size:15px" class="fa">&#xf16d;</i> <a href="#">TabangHub</a>
+                            </p>*@
                     </div>
                 }
             </div>
@@ -517,7 +517,7 @@ else
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 <script>
-    // Function to handle donation with PayMongo
+// Function to handle donation with PayMongo
 function submitDonation(eventId) {
     var donationAmount = document.getElementById('donationAmount').value;
 
@@ -530,8 +530,7 @@ function submitDonation(eventId) {
         },
         success: function (response) {
             if (response.success) {
-                // Redirect the user to the checkout URL
-                window.location.href = response.checkoutUrl;
+                window.location.href = response.checkoutUrl; // Redirect to checkout URL
             } else {
                 Swal.fire({
                     title: 'Error',
@@ -551,11 +550,131 @@ function submitDonation(eventId) {
         }
     });
 }
-    function applyEvent(eventId) {
-        //var selectedSkill = document.querySelector('input[name="skill"]:checked').value;
 
-        $.ajax({
+// Function to apply for an event
+function applyEvent(eventId) {
+    $.ajax({
         url: '@Url.Action("ApplyVolunteer", "Volunteer")',
+        type: 'POST',
+        data: { eventId: eventId },
+        success: function (response) {
+            if (response.success) {
+                Swal.fire({
+                    title: response.message,
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                }).then(() => {
+                    location.reload();
+                });
+            } else {
+                let title;
+                if (response.message === "No match Skill.") {
+                    title = "Skill Mismatch!";
+                } else if (response.message === "Already apply.") {
+                    title = "Duplicate Application!";
+                }
+                Swal.fire({
+                    title: response.message,
+                    icon: 'warning',
+                    confirmButtonText: 'OK'
+                });
+            }
+        },
+        error: function (xhr, status, error) {
+            Swal.fire({
+                title: 'Error!',
+                text: 'There was an issue with your application. Please try again later.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+        }
+    });
+}
+
+// Function to cancel an application
+function cancelEvent(eventId) {
+    Swal.fire({
+        title: '',
+        text: 'Do you really want to cancel this application?',
+        icon: 'info',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: '@Url.Action("CancelRequest", "Volunteer")',
+                type: 'POST',
+                data: { eventId: eventId },
+                success: function (response) {
+                    if (response.success) {
+                        Swal.fire({
+                            title: response.message,
+                            icon: 'success',
+                            confirmButtonText: 'OK'
+                        }).then(() => {
+                            location.reload();
+                        });
+                    }
+                },
+                error: function (xhr, status, error) {
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'An error occurred. Please try again.',
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            });
+        }
+    });
+}
+
+// Function to leave an event
+function leaveEvent(eventId) {
+    Swal.fire({
+        title: 'Confirm Leave',
+        text: 'Are you sure you want to leave this event?',
+        icon: 'info',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: '@Url.Action("LeaveEvent", "Volunteer")',
+                type: 'POST',
+                data: { eventId: eventId },
+                success: function (response) {
+                    if (response.success) {
+                        Swal.fire({
+                            title: response.message,
+                            icon: 'success',
+                            confirmButtonText: 'OK'
+                        }).then(() => {
+                            location.reload();
+                        });
+                    }
+                },
+                error: function (xhr, status, error) {
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'An error occurred. Please try again.',
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            });
+        }
+    });
+}
+
+// Function to accept an event invitation
+function acceptEvent(eventId) {
+    //var selectedSkill = document.querySelector('input[name="skill"]:checked').value;
+
+    $.ajax({
+        url: '@Url.Action("AcceptInvite", "Volunteer")',
         type: 'POST',
         data: {
             eventId: eventId,
@@ -565,22 +684,14 @@ function submitDonation(eventId) {
             if (response.success) {
                 Swal.fire({
                     title: response.message,
-                    text: '',
                     icon: 'success',
                     confirmButtonText: 'OK'
                 }).then(() => {
                     location.reload();
                 });
             } else {
-                let title;
-                if (response.message == "No match Skill.") {
-                    title = "Skill Mismatch!"
-                } else if (response.message == "Already apply."){
-                    title = "Duplicate Application!"
-                }
                 Swal.fire({
                     title: response.message,
-                    text: '',
                     icon: 'warning',
                     confirmButtonText: 'OK'
                 });
@@ -594,129 +705,12 @@ function submitDonation(eventId) {
                 confirmButtonText: 'OK'
             });
         }
-    })
-    }
+    });
+}
 
-    function cancelEvent(eventId) {
-        Swal.fire({
-            title: '',
-            text: 'Do you really want to cancel this application?',
-            icon: 'info',
-            showCancelButton: true,
-            confirmButtonText: 'Yes',
-            cancelButtonText: 'No'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $.ajax({
-                    url: '@Url.Action("CancelRequest", "Volunteer")',
-                    type: 'POST',
-                    data: { eventId: eventId },
-                    success: function (response) {
-                        if (response.success) {
-                            Swal.fire({
-                                title: response.message,
-                                text: '',
-                                icon: 'success',
-                                confirmButtonText: 'OK'
-                            }).then(() => {
-                                location.reload();
-                            });
-                        }
-                    },
-                    error: function (xhr, status, error) {
-                        Swal.fire({
-                            title: 'Error',
-                            text: 'An error occurred. Please try again.',
-                            icon: 'error',
-                            confirmButtonText: 'Ok'
-                        });
-                    }
-                });
-            }
-        });
-    }
-    function leaveEvent(eventId) {
-        Swal.fire({
-            title: 'Confirm Leave',
-            text: 'Are you sure you want to leave this event?',
-            icon: 'info',
-            showCancelButton: true,
-            confirmButtonText: 'Yes',
-            cancelButtonText: 'No'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $.ajax({
-                    url: '@Url.Action("LeaveEvent", "Volunteer")',
-                    type: 'POST',
-                    data: { eventId: eventId },
-                    success: function (response) {
-                        if (response.success) {
-                            Swal.fire({
-                                title: response.message,
-                                text: '',
-                                icon: 'success',
-                                confirmButtonText: 'OK'
-                            }).then(() => {
-                                location.reload();
-                            });
-                        }
-                    },
-                    error: function (xhr, status, error) {
-                        Swal.fire({
-                            title: 'Error',
-                            text: 'An error occurred. Please try again.',
-                            icon: 'error',
-                            confirmButtonText: 'Ok'
-                        });
-                    }
-                });
-            }
-        });
-    }
-    //ACCEPT THE INVITATION
-    function acceptEvent(eventId) {
-        var selectedSkill = document.querySelector('input[name="skill"]:checked').value;
-
-        $.ajax({
-        url: '@Url.Action("AcceptInvite", "Volunteer")',
-        type: 'POST',
-        data: {
-            eventId: eventId,
-            skill: selectedSkill
-        },
-        success: function (response) {
-            if (response.success) {
-                Swal.fire({
-                    title: response.message,
-                    text: '',
-                    icon: 'success',
-                    confirmButtonText: 'OK'
-                }).then(() => {
-                    location.reload();
-                });
-            } else {
-                Swal.fire({
-                    title: response.message,
-                    text: '',
-                    icon: 'warning',
-                    confirmButtonText: 'OK'
-                });
-            }
-        },
-        error: function (xhr, status, error) {
-            Swal.fire({
-                title: 'Error!',
-                text: 'There was an issue with your application. Please try again later.',
-                icon: 'error',
-                confirmButtonText: 'OK'
-            });
-        }
-    })
-    }
-
-    //DECLINE THE INVITATION
-    function declineInvite(eventId) {
-        Swal.fire({
+// Function to decline an event invitation
+function declineInvite(eventId) {
+    Swal.fire({
         title: '',
         text: 'Do you really want to decline this invitation?',
         icon: 'info',
@@ -733,7 +727,6 @@ function submitDonation(eventId) {
                     if (response.success) {
                         Swal.fire({
                             title: response.message,
-                            text: '',
                             icon: 'success',
                             confirmButtonText: 'OK'
                         }).then(() => {
@@ -746,73 +739,43 @@ function submitDonation(eventId) {
                         title: 'Error',
                         text: 'An error occurred. Please try again.',
                         icon: 'error',
-                        confirmButtonText: 'Ok'
+                        confirmButtonText: 'OK'
                     });
                 }
             });
         }
     });
-    }
+}
 
-    const track = document.querySelector('.carousel-track-opportunities');
-    const prevButton = document.querySelector('.prev-button-opportunities');
-    const nextButton = document.querySelector('.next-button-opportunities');
-    const cards = Array.from(track.children);
-    const cardWidth = cards[0].getBoundingClientRect().width + 20; // +20 for margin-right
+// Carousel logic
+document.addEventListener('DOMContentLoaded', () => {
+    const prevButton = document.querySelector('.carousel-control-prev');
+    const nextButton = document.querySelector('.carousel-control-next');
+    const carouselInner = document.querySelector('.carousel-inner');
+    const totalItems = carouselInner ? carouselInner.children.length : 0;
 
-    let currentIndex = 0;
-
-    function updateCarousel() {
-        track.style.transform = 'translateX(' + (-currentIndex * cardWidth) + 'px)';
-        // Ensure visibility logic is set correctly
-        toggleNavButtons();
-    }
-
-    nextButton.addEventListener('click', () => {
-        if (currentIndex < cards.length - 3) {
-            currentIndex++;
-        } else {
-            currentIndex = 0; // Reset to the first card to loop
-        }
-        updateCarousel();
-    });
-
-    prevButton.addEventListener('click', () => {
-        if (currentIndex > 0) {
-            currentIndex--;
-        } else {
-            currentIndex = cards.length - 3; // Go to the last possible start position
-        }
-        updateCarousel();
-    });
-
+    // Function to toggle the visibility of carousel navigation buttons
     function toggleNavButtons() {
-        if (cards.length <= 2) {
-            // Hide buttons if there are 2 or fewer cards
+        if (totalItems <= 1) {
             prevButton.style.display = 'none';
             nextButton.style.display = 'none';
         } else {
-            // Show buttons if more than 2 cards
             prevButton.style.display = 'block';
             nextButton.style.display = 'block';
         }
     }
 
-    // Initial setup
-    updateCarousel();
-    toggleNavButtons();
+    toggleNavButtons(); // Initial check for button visibility
 
-    // Window resize listener to adjust visibility of navigation buttons
+    // Window resize listener to adjust button visibility
     window.addEventListener('resize', () => {
         if (window.innerWidth <= 770) {
             prevButton.style.visibility = 'hidden';
             nextButton.style.visibility = 'hidden';
         } else {
-            // Recheck visibility on wider screens
             toggleNavButtons();
         }
     });
-
-    updateCarousel(); // Initial update
+});
 
 </script>

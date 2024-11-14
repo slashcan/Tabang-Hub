@@ -349,7 +349,7 @@ namespace Tabang_Hub.Controllers
             }
         }
         [HttpPost]
-        public JsonResult AcceptInvite(int eventId, string skill)
+        public JsonResult AcceptInvite(int eventId/*, string skill*/)
         {
             try
             {
@@ -402,8 +402,8 @@ namespace Tabang_Hub.Controllers
                 {
                     return Json(new { success = false, message = "Your skills do not match the requirements" });
                 }
-                var selectedSkillID = db.Skills.Where(m => m.skillName == skill).Select(m => m.skillId).FirstOrDefault();
-                db.sp_AcceptAndUpdateVolunteerStatus(UserId, eventId, selectedSkillID);
+                //var selectedSkillID = db.Skills.Where(m => m.skillName == skill).Select(m => m.skillId).FirstOrDefault();
+                db.sp_AcceptAndUpdateVolunteerStatus(UserId, eventId);
 
                 return Json(new { success = true, message = "Invitation accepted" });
             }
@@ -919,7 +919,7 @@ namespace Tabang_Hub.Controllers
                     orgEventHistory = db.OrgEvents.Where(m => m.userId == UserId && m.status == 2).ToList(),
                     pendingOrgDetails = pendings.OrderByDescending(m => m.applyVolunteerId).Select(e => _pendingOrgDetails.GetAll().FirstOrDefault(p => p.eventId == e.eventId)).ToList(),
                     volunteersInfo = getVolunteerInfo,
-                    volunteersHistories = _volunteerManager.GetVolunteersHistoryByUserId(UserId),
+                    volunteersHistories = db.sp_VolunteerHistory(UserId).ToList(),
                     rating = db.Rating.Where(m => m.userId == UserId).ToList(),
                     detailsEventImage = getOrgImages,
                     listOfEvents = filteredEvent.OrderByDescending(m => m.Event_Id).ToList(),

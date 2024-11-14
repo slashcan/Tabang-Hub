@@ -54,23 +54,6 @@ namespace Tabang_Hub
         public DbSet<vw_VolunteerAccounts> vw_VolunteerAccounts { get; set; }
         public DbSet<vw_VolunteerSkills> vw_VolunteerSkills { get; set; }
     
-        public virtual int sp_AcceptAndUpdateVolunteerStatus(Nullable<int> userId, Nullable<int> eventId, Nullable<int> skillId)
-        {
-            var userIdParameter = userId.HasValue ?
-                new ObjectParameter("userId", userId) :
-                new ObjectParameter("userId", typeof(int));
-    
-            var eventIdParameter = eventId.HasValue ?
-                new ObjectParameter("eventId", eventId) :
-                new ObjectParameter("eventId", typeof(int));
-    
-            var skillIdParameter = skillId.HasValue ?
-                new ObjectParameter("skillId", skillId) :
-                new ObjectParameter("skillId", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_AcceptAndUpdateVolunteerStatus", userIdParameter, eventIdParameter, skillIdParameter);
-        }
-    
         public virtual int sp_CancelRequest(Nullable<int> eventId, Nullable<int> userId)
         {
             var eventIdParameter = eventId.HasValue ?
@@ -189,6 +172,19 @@ namespace Tabang_Hub
                 new ObjectParameter("userId", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_VolunteerHistory_Result>("sp_VolunteerHistory", userIdParameter);
+        }
+    
+        public virtual int sp_AcceptAndUpdateVolunteerStatus(Nullable<int> userId, Nullable<int> eventId)
+        {
+            var userIdParameter = userId.HasValue ?
+                new ObjectParameter("userId", userId) :
+                new ObjectParameter("userId", typeof(int));
+    
+            var eventIdParameter = eventId.HasValue ?
+                new ObjectParameter("eventId", eventId) :
+                new ObjectParameter("eventId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_AcceptAndUpdateVolunteerStatus", userIdParameter, eventIdParameter);
         }
     }
 }

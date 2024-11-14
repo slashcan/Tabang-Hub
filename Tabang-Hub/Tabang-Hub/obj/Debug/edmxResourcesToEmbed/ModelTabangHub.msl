@@ -317,7 +317,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <FunctionImportMapping FunctionImportName="sp_AcceptAndUpdateVolunteerStatus" FunctionName="TabangHubModel.Store.sp_AcceptAndUpdateVolunteerStatus" />
     <FunctionImportMapping FunctionImportName="sp_CancelRequest" FunctionName="TabangHubModel.Store.sp_CancelRequest" />
     <FunctionImportMapping FunctionImportName="sp_GetAllMessage" FunctionName="TabangHubModel.Store.sp_GetAllMessage">
       <ResultMapping>
@@ -440,5 +439,6 @@
         </ComplexTypeMapping>
       </ResultMapping>
     </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="sp_AcceptAndUpdateVolunteerStatus" FunctionName="TabangHubModel.Store.sp_AcceptAndUpdateVolunteerStatus" />
   </EntityContainerMapping>
 </Mapping>

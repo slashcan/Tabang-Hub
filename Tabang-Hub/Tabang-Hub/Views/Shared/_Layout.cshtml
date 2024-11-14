@@ -124,11 +124,11 @@
     <!-- Overlay -->
     <div class="overlay" id="overlay"></div>
 
-    <nav class="navbar navbar-expand-lg bg-light shadow-lg">
+    <nav class="navbar navbar-expand bg-light shadow-lg">
         <div class="container-fluid">
             <a class="navbar-brand" href="/">
                 <img src="~/Content/images2/tabanghub3-No-Background.png" class="logo-i img-fluid" alt="Tabang Hub Volunteering Community">
-                <span>
+                <span class="tabang-title">
                     Tabang Hub
                     <small>Volunteering Community</small>
                 </span>
@@ -139,7 +139,7 @@
                     if (ViewBag.Title != "Message")
                     {
                         <!-- SEARCH BAR -->
-                        <div class="search-container mx-auto">
+                        <div class="search-container m-auto">
                             <div class="input-wrapper d-flex">
                                 <input type="text" id="search-input" placeholder="Search event" class="form-control" oninput="filterSuggestions()" onfocus="showSuggestions()" onblur="hideSuggestions()">
                                 <button class="btn btn-primary" id="search-button">
@@ -168,7 +168,7 @@
                         </div>
                     }
 
-                    <ul class="navbar-nav ms-auto">
+                    <ul class="navbar-nav ms-auto align-items-center">
                         @*<li class="nav-item">
                                 <a class="nav-link click-scroll" href="#top">Home</a>
                             </li>
@@ -178,7 +178,7 @@
                             </li>*@
 
                         <!-- Notification Bell -->
-                        <li class="nav-item">
+                        <li class="nav-item me-3" style="margin-left: 15px;">
                             <a class="nav-link" href="#" id="notificationBell" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="bi bi-bell-fill"></i>
                                 <span id="notificationCount" class="badge rounded-pill bg-danger" style="display: none;">0</span>
@@ -188,7 +188,7 @@
                             </ul>
                         </li>
 
-                        <li class="nav-item">
+                        <li class="nav-item me-3 uMessage">
                             <a class="nav-link" href="@Url.Action("Message", "Message")">
                                 <i class="bi bi-chat-right-heart-fill"></i>
                             </a>
@@ -203,7 +203,7 @@
                                         <div class="user-name text-end me-3">
                                             @if (!string.IsNullOrEmpty(pf.lName) && !string.IsNullOrEmpty(pf.fName))
                                             {
-                                                <p class="mb-0 text-sm text-gray-600">
+                                                <p class="mb-0 text-sm text-gray-600 uName">
                                                     @pf.lName.Substring(0, 1).ToUpper()@pf.lName.Substring(1),
                                                     @pf.fName.Substring(0, 1).ToUpper()@pf.fName.Substring(1)
                                                 </p>
@@ -240,10 +240,11 @@
             </div>
             @if (User.Identity.IsAuthenticated)
             {
-                <!-- Burger icon for sidebar -->
-                <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileSidebar" onclick="toggleSidebar()">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+                <div class="burgerIcon">
+                    <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileSidebar" onclick="toggleSidebar()">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                </div>
             }
         </div>
     </nav>

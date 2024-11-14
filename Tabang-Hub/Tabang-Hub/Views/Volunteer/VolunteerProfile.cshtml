@@ -11,21 +11,30 @@
     <div class="card">
         <div class="card-body">
             <div class="row">
-                <div class="col-md-2 text-center">
+                <div class="col-md-2 profile-section">
                     @foreach (var pic in Model.picture)
                     {
-                        <img src="~/UserProfile/@pic.profilePath" id="profilePicPreview" class="rounded-circle img-fluid" alt="Profile Picture">
+                        <img src="~/UserProfile/@pic.profilePath" id="profilePicPreview" class="img-fluid" alt="Profile Picture">
                     }
-                    <div id="profile" class="d-none">
-                        <input type="file" class="form-control-file d-none" id="profilePic" accept="image/*" onchange="previewProfilePic()">
+                    <div id="profile" class="mt-2 d-none">
+                        <!-- Button appears only when in edit mode -->
+                        <label for="profilePic" class="btn btn-outline-success change-photo-button">
+                            <i class="bi bi-camera"></i> Change Photo
+                        </label>
+                        <input type="file" class="form-control-file" id="profilePic" accept="image/*" onchange="previewProfilePic()" style="display: none;">
                     </div>
                 </div>
+
                 @foreach (var VolInfo in Model.volunteersInfo)
                 {
                     <div class="col-md-8">
                         <h4>@VolInfo.lName.ToUpper(), @VolInfo.fName.ToUpper()</h4>
 
+                        <p class="mb-1"><strong>Email: </strong><span id="email">@VolInfo.UserAccount.email</span></p>
+                        <!-- Email input removed from editing -->
+
                         <p id="address">
+                            <strong>Address:</strong>
                             @VolInfo.street.Substring(0, 1).ToUpper()@VolInfo.street.Substring(1),
                             @VolInfo.city.Substring(0, 1).ToUpper()@VolInfo.city.Substring(1) City,
                             @VolInfo.province.Substring(0, 1).ToUpper()@VolInfo.province.Substring(1)
@@ -43,7 +52,7 @@
                         <input type="text" id="phoneInput" class="form-control d-none" value="@VolInfo.phoneNum" pattern="^09[0-9]{9}$" title="Phone number should start with 09 and contain 11 digits" maxlength="11" required>
                         <span class="error-message text-danger"></span>
 
-                        <p class="mb-1"><strong>Email: </strong><span id="email">@VolInfo.UserAccount.email</span></p>
+                        <!--<p class="mb-1"><strong>Email: </strong><span id="email">@VolInfo.UserAccount.email</span></p>-->
                         <!-- Email input removed from editing -->
 
                         <p class="mb-1"><strong>Availability: </strong><span id="availability">@VolInfo.availability</span></p>
