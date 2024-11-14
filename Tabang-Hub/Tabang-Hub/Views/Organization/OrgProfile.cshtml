@@ -26,7 +26,15 @@
             <div class="card-body">
                 <div class="d-flex align-items-center">
                     <div id="profilePicContainer" class="text-center" style="flex-shrink: 0; width: 200px;">
-                        <img src="@Url.Content(Model.OrgInfo.profilePath)" class="rounded-circle border border-light mb-2" alt="Profile Image" id="profilePic" style="width: 200px; height: 200px;">
+                        @if(Model.OrgInfo.profilePath != null)
+                        { 
+                            <img src="@Url.Content(Model.OrgInfo.profilePath)" class="rounded-circle border border-light mb-2" alt="Profile Image" id="profilePic" style="width: 200px; height: 200px;">
+                        }
+                        else
+                        { 
+                            <img src="~/Content/IdPicture/programming 1.jpg" class="rounded-circle border border-light mb-2" alt="Profile Image" id="profilePic" style="width: 200px; height: 200px;">
+                        }
+                        
                         <button type="button" class="btn btn-link d-none" id="changeProfileButton" onclick="document.getElementById('profilePicInput').click()">Change Profile Picture</button>
                         <input type="file" id="profilePicInput" name="profilePic" class="form-control d-none" onchange="previewImage('profilePicInput', 'profilePic')">
                     </div>

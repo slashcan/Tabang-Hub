@@ -145,7 +145,7 @@ namespace Tabang_Hub.Controllers
         }
         public ActionResult EventsList()
         {
-            var lists = _organizationManager.ListOfEvents(UserId);
+            var lists = _organizationManager.ListOfEvents1(UserId);
             var listOfSkill = _organizationManager.ListOfSkills();
             var listofUserDonated = _organizationManager.ListOfUserDonated(UserId);
             var orgInfo = _organizationManager.GetOrgInfoByUserId(UserId);
@@ -254,6 +254,7 @@ namespace Tabang_Hub.Controllers
             var listofUserDonated = _organizationManager.ListOfUserDonated(id);
             var orgInfo = _organizationManager.GetOrgInfoByUserId(UserId);
             var listOfEventVolunteers = _organizationManager.ListOfEventVolunteers(id);
+            var skillReq = _organizationManager.listOfSkillRequirement(events.eventId);
             var volunteerSkills = _organizationManager.ListOfEventVolunteerSkills();
 
             //var matchedSkill = _organizationManager.GetMatchedVolunteers(id);
@@ -320,6 +321,7 @@ namespace Tabang_Hub.Controllers
                 listofUserDonated = listofUserDonated,
                 listOfRatings = rating,
                 matchedSkills = usrRank,
+                skillRequirement1 = skillReq,
                 //filteredVolunteers = matchedSkill,
                 //matchedSkills = matchedSkill,
                 //profilePic = profile,
@@ -637,7 +639,7 @@ namespace Tabang_Hub.Controllers
                 skills = _skills.GetAll().ToList(),
                 volunteersHistories = _volunteerManager.GetVolunteersHistoryByUserId(getUserAccount.userId),
                 rating = db.Rating.Where(m => m.userId == getUserAccount.userId).ToList(),
-                orgEventHistory = db.OrgEventHistory.Where(m => m.userId == getUserAccount.userId).ToList(),
+                orgEventHistory1 = db.OrgEventHistory.Where(m => m.userId == getUserAccount.userId).ToList(),
                 //listOfEvents = filteredEvent.OrderByDescending(m => m.Event_Id).ToList(),
                 detailsEventImage = _eventImages.GetAll().ToList()
             };
@@ -675,6 +677,7 @@ namespace Tabang_Hub.Controllers
             var orgInfo = _organizationManager.GetOrgInfoByUserId(UserId);
             //var profile = _organizationManager.GetProfileByProfileId(orgInfo.profileId);
             var eventHistory = _organizationManager.GetEventHistoryByUserId(UserId);
+
 
             var indexModdel = new Lists()
             {

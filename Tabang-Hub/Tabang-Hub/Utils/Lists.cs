@@ -46,11 +46,13 @@ namespace Tabang_Hub.Utils
         public UserDonated userDonated { get; set; }
         public List<UserDonated> listofUserDonated { get; set; }
         public List<Rating> listOfRatings { get; set; }
+        public List<OrgSkillRequirement> skillRequirement1 { get; set; }
+        public List<OrgEventHistory> orgEventHistory1 { get; set; }
         public List<Volunteers> listOfEventVolunteers { get; set; }
         public List<OrgEvents> recentEvents { get; set; }
         public Dictionary<string, int> totalSkills { get; set; }
         public List<UserDonated> recentDonators { get; set; }
-        public List<OrgEventHistory> orgEventHistory { get; set; }
+        public List<OrgEvents> orgEventHistory { get; set; }
         public List<GroupChat> groupChats { get; set; }
         public List<GroupMessages> groupMessages { get; set; }
         public List<OrgEvents> getAllOrgEvents { get; set; }

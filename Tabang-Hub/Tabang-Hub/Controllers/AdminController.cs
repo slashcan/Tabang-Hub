@@ -113,7 +113,7 @@ namespace Tabang_Hub.Controllers
                 skills = _skills.GetAll().ToList(),
                 volunteersHistories = _volunteerManager.GetVolunteersHistoryByUserId(getUserAccount.userId),
                 rating = db.Rating.Where(m => m.userId == getUserAccount.userId).ToList(),
-                orgEventHistory = db.OrgEventHistory.Where(m => m.userId == getUserAccount.userId).ToList(),
+                orgEventHistory1 = db.OrgEventHistory.Where(m => m.userId == getUserAccount.userId).ToList(),
                 //listOfEvents = filteredEvent.OrderByDescending(m => m.Event_Id).ToList(),
                 detailsEventImage = _eventImages.GetAll().ToList()
             };

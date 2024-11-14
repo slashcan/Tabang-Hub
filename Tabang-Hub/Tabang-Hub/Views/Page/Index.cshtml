@@ -176,7 +176,7 @@
                             @foreach (var skillImage in Model.skills)
                             {
                                 <div class="grid-item" onclick="toggleSkill(this)" data-skill-name="@skillImage.skillName.ToLower()">
-                                    <img src="~/SkillsImages/@skillImage.skillImage" class="selectable" data-skill="@skillImage.skillName">
+                                    <img src="@Url.Content($"~/Content/SkillImages/{skillImage.skillImage}")" class="selectable" data-skill="@skillImage.skillName">
                                     <span>@skillImage.skillName</span>
                                 </div>
                             }

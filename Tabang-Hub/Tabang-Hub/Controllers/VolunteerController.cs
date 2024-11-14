@@ -66,7 +66,7 @@ namespace Tabang_Hub.Controllers
                 skills = _skills.GetAll().ToList(),
                 volunteersHistories = _volunteerManager.GetVolunteersHistoryByUserId(UserId),
                 rating = db.Rating.Where(m => m.userId == UserId).ToList(),
-                orgEventHistory = db.OrgEventHistory.Where(m => m.userId == UserId).ToList(),
+                orgEventHistory1 = db.OrgEventHistory.Where(m => m.userId == UserId).ToList(),
                 listOfEvents = filteredEvent.OrderByDescending(m => m.Event_Id).ToList(),
                 detailsEventImage = _eventImages.GetAll().ToList()
             };
@@ -916,7 +916,7 @@ namespace Tabang_Hub.Controllers
                     picture = userProfile,
                     volunteers = acceptedEvents,
                     orgEvents = accepted.OrderByDescending(m => m.applyVolunteerId).Select(e => _orgEvents.GetAll().FirstOrDefault(o => o.eventId == e.eventId)).ToList(),
-                    orgEventHistory = db.OrgEventHistory.Where(m => m.userId == UserId).ToList(),
+                    orgEventHistory1 = db.OrgEventHistory.Where(m => m.userId == UserId).ToList(),
                     pendingOrgDetails = pendings.OrderByDescending(m => m.applyVolunteerId).Select(e => _pendingOrgDetails.GetAll().FirstOrDefault(p => p.eventId == e.eventId)).ToList(),
                     volunteersInfo = getVolunteerInfo,
                     volunteersHistories = _volunteerManager.GetVolunteersHistoryByUserId(UserId),

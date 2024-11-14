@@ -28,6 +28,23 @@
     <FunctionImport Name="sp_GetUserDonatedInformations" ReturnType="Collection(TabangHubModel.sp_GetUserDonatedInformations_Result)">
       <Parameter Name="userId" Mode="In" Type="Int32" />
     </FunctionImport>
+    <FunctionImport Name="sp_UserListEvent" ReturnType="Collection(TabangHubModel.sp_UserListEvent_Result)">
+      <Parameter Name="userId" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_AcceptAndUpdateVolunteerStatus">
+      <Parameter Name="userId" Mode="In" Type="Int32" />
+      <Parameter Name="eventId" Mode="In" Type="Int32" />
+      <Parameter Name="skillId" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_RemoveEvent">
+      <Parameter Name="eventId" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_ListOfGc" ReturnType="Collection(TabangHubModel.sp_ListOfGc_Result)">
+      <Parameter Name="userId" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_VolunteerHistory" ReturnType="Collection(TabangHubModel.sp_VolunteerHistory_Result)">
+      <Parameter Name="userId" Mode="In" Type="Int32" />
+    </FunctionImport>
     <EntitySet Name="GroupChat" EntityType="TabangHubModel.GroupChat" />
     <EntitySet Name="GroupChatHistory" EntityType="TabangHubModel.GroupChatHistory" />
     <EntitySet Name="GroupMessages" EntityType="TabangHubModel.GroupMessages" />
@@ -148,23 +165,6 @@
       <End Role="UserAccount" EntitySet="UserAccount" />
       <End Role="Volunteers" EntitySet="Volunteers" />
     </AssociationSet>
-    <FunctionImport Name="sp_UserListEvent" ReturnType="Collection(TabangHubModel.sp_UserListEvent_Result)">
-      <Parameter Name="userId" Mode="In" Type="Int32" />
-    </FunctionImport>
-    <FunctionImport Name="sp_AcceptAndUpdateVolunteerStatus">
-      <Parameter Name="userId" Mode="In" Type="Int32" />
-      <Parameter Name="eventId" Mode="In" Type="Int32" />
-      <Parameter Name="skillId" Mode="In" Type="Int32" />
-    </FunctionImport>
-    <FunctionImport Name="sp_RemoveEvent">
-      <Parameter Name="eventId" Mode="In" Type="Int32" />
-    </FunctionImport>
-    <FunctionImport Name="sp_ListOfGc" ReturnType="Collection(TabangHubModel.sp_ListOfGc_Result)">
-      <Parameter Name="userId" Mode="In" Type="Int32" />
-    </FunctionImport>
-    <FunctionImport Name="sp_VolunteerHistory" ReturnType="Collection(TabangHubModel.sp_VolunteerHistory_Result)">
-      <Parameter Name="userId" Mode="In" Type="Int32" />
-    </FunctionImport>
   </EntityContainer>
   <ComplexType Name="sp_GetSkills_Result">
     <Property Type="Int32" Name="skillId" Nullable="false" />
@@ -218,6 +218,35 @@
     <Property Type="Decimal" Name="amount" Nullable="true" Precision="10" Scale="2" />
     <Property Type="DateTime" Name="donatedAt" Nullable="true" Precision="23" />
     <Property Type="Int32" Name="Status" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="sp_UserListEvent_Result">
+    <Property Type="Int32" Name="applyVolunteerId" Nullable="false" />
+    <Property Type="Int32" Name="userId" Nullable="true" />
+    <Property Type="Int32" Name="eventId" Nullable="true" />
+    <Property Type="Int32" Name="Status" Nullable="true" />
+    <Property Type="DateTime" Name="appliedAt" Nullable="true" />
+    <Property Type="DateTime" Name="dateStart" Nullable="true" Precision="23" />
+    <Property Type="DateTime" Name="dateEnd" Nullable="true" Precision="23" />
+  </ComplexType>
+  <ComplexType Name="sp_ListOfGc_Result">
+    <Property Type="Int32" Name="groupChatId" Nullable="false" />
+    <Property Type="Int32" Name="userId" Nullable="true" />
+    <Property Type="Int32" Name="eventId" Nullable="true" />
+    <Property Type="String" Name="eventTitle" Nullable="true" MaxLength="255" />
+  </ComplexType>
+  <ComplexType Name="sp_VolunteerHistory_Result">
+    <Property Type="Int32" Name="VolHistoryId" Nullable="false" />
+    <Property Type="Int32" Name="userId" Nullable="true" />
+    <Property Type="Int32" Name="eventId" Nullable="true" />
+    <Property Type="String" Name="eventTitle" Nullable="true" MaxLength="255" />
+    <Property Type="String" Name="eventImage" Nullable="true" MaxLength="255" />
+    <Property Type="String" Name="location" Nullable="true" MaxLength="255" />
+    <Property Type="String" Name="eventDescription" Nullable="true" MaxLength="Max" />
+    <Property Type="DateTime" Name="dateStart" Nullable="true" Precision="23" />
+    <Property Type="DateTime" Name="dateEnd" Nullable="true" Precision="23" />
+    <Property Type="Int32" Name="status" Nullable="true" />
+    <Property Type="Int32" Name="skillId" Nullable="false" />
+    <Property Type="String" Name="skillName" Nullable="true" MaxLength="255" />
   </ComplexType>
   <EntityType Name="GroupChat">
     <Key>
@@ -567,6 +596,7 @@
     <Property Name="Start_Date" Type="DateTime" Precision="3" />
     <Property Name="End_Date" Type="DateTime" Precision="3" />
     <Property Name="Location" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="Status" Type="Int32" />
   </EntityType>
   <EntityType Name="vw_OrganizationAccounts">
     <Key>
@@ -902,33 +932,4 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <ComplexType Name="sp_UserListEvent_Result">
-    <Property Type="Int32" Name="applyVolunteerId" Nullable="false" />
-    <Property Type="Int32" Name="userId" Nullable="true" />
-    <Property Type="Int32" Name="eventId" Nullable="true" />
-    <Property Type="Int32" Name="Status" Nullable="true" />
-    <Property Type="DateTime" Name="appliedAt" Nullable="true" />
-    <Property Type="DateTime" Name="dateStart" Nullable="true" Precision="23" />
-    <Property Type="DateTime" Name="dateEnd" Nullable="true" Precision="23" />
-  </ComplexType>
-  <ComplexType Name="sp_ListOfGc_Result">
-    <Property Type="Int32" Name="groupChatId" Nullable="false" />
-    <Property Type="Int32" Name="userId" Nullable="true" />
-    <Property Type="Int32" Name="eventId" Nullable="true" />
-    <Property Type="String" Name="eventTitle" Nullable="true" MaxLength="255" />
-  </ComplexType>
-  <ComplexType Name="sp_VolunteerHistory_Result">
-    <Property Type="Int32" Name="VolHistoryId" Nullable="false" />
-    <Property Type="Int32" Name="userId" Nullable="true" />
-    <Property Type="Int32" Name="eventId" Nullable="true" />
-    <Property Type="String" Name="eventTitle" Nullable="true" MaxLength="255" />
-    <Property Type="String" Name="eventImage" Nullable="true" MaxLength="255" />
-    <Property Type="String" Name="location" Nullable="true" MaxLength="255" />
-    <Property Type="String" Name="eventDescription" Nullable="true" MaxLength="Max" />
-    <Property Type="DateTime" Name="dateStart" Nullable="true" Precision="23" />
-    <Property Type="DateTime" Name="dateEnd" Nullable="true" Precision="23" />
-    <Property Type="Int32" Name="status" Nullable="true" />
-    <Property Type="Int32" Name="skillId" Nullable="false" />
-    <Property Type="String" Name="skillName" Nullable="true" MaxLength="255" />
-  </ComplexType>
 </Schema>

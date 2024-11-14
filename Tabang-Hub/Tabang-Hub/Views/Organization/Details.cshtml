@@ -255,7 +255,7 @@
 
                                         foreach (var donated in Model.listofUserDonated)
                                         {
-                                            if (donated.Status != 1)
+                                            if (donated.Status == 1)
                                             {
                                                 raisedAmount += donated.amount;
                                             }
@@ -789,10 +789,14 @@ else
                                                         <strong>Skills:</strong>
                                                         @foreach (var skill in Model.volunteersSkills)
                                                         {
-                                                            if (skill.userId == volunteer.userId)
+                                                            foreach (var skillReq in Model.skillRequirement1)
                                                             {
-                                                                <span class="badge bg-secondary me-1">@skill.Skills.skillName</span>
+                                                                if (skill.userId == volunteer.userId && skillReq.skillId == skill.skillId)
+                                                                {
+                                                                    <span class="badge bg-secondary me-1">@skill.Skills.skillName</span>
+                                                                }
                                                             }
+
                                                         }
                                                     </p>
                                                 </div>

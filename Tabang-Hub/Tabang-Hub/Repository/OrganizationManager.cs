@@ -289,6 +289,13 @@ namespace Tabang_Hub.Repository
                                 .ToList();
         }
 
+        public List<vw_ListOfEvent> ListOfEvents1(int userId)
+        {
+            return _listOfEvents.GetAll()
+                                .Where(m => m.User_Id == userId && m.Status == 1)
+                                .OrderByDescending(m => m.Start_Date) // Replace `Event_Date` with the appropriate property for ordering
+                                .ToList();
+        }
 
         public decimal GetTotalDonationByUserId(int userId)
         {
@@ -627,9 +634,9 @@ namespace Tabang_Hub.Repository
         {
             return _volunteerInfo._table.Where(m => m.userId == userId).FirstOrDefault();
         }
-        public List<OrgEventHistory> GetEventHistoryByUserId(int userId)
+        public List<OrgEvents> GetEventHistoryByUserId(int userId)
         {
-            return _orgEventHistory.GetAll().Where(m => m.userId == userId).ToList();
+            return _orgEvents._table.Where(m => m.userId == userId && m.status == 2).ToList();
         }
 
         public GroupChat GetGroupChatByEventId(int eventId)

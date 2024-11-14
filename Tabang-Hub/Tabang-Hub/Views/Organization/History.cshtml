@@ -11,15 +11,7 @@
             <div class="card">
                 <div class="card-header">
                     <h4 class="card-title">Event History</h4>
-                    <!-- Button to trigger manual history transfer -->
-                    <button type="button" class="btn btn-outline-primary float-right" onclick="confirmTransfer()">
-                        Transfer Events to History
-                    </button>
-                </div>
                 <div class="card-content">
-                    <div class="card-body">
-                        <p>Below is the list of events that have been moved to history.</p>
-                    </div>
                     <!-- table head dark -->
                     <div class="table-responsive">
                         <table class="table mb-0">
@@ -36,6 +28,8 @@
                             <tbody>
                                 @foreach (var history in Model.orgEventHistory)
                                 {
+                                    if(history != null)
+                                    { 
                                     <tr>
                                         <td>@history.eventTitle</td>
                                         <td>@history.targetAmount</td>
@@ -44,6 +38,11 @@
                                         <td>@history.dateEnd</td>
                                         <td>@history.location</td>
                                     </tr>
+                                    }
+                                    else
+                                    { 
+                                        <h4>No event hisotry!</h4>
+                                    }
                                 }
                             </tbody>
                         </table>
