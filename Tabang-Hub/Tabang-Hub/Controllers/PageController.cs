@@ -703,8 +703,7 @@ namespace Tabang_Hub.Controllers
                     {
                         return Json(new { success = false, message = "Failed to update user status. Please try again." });
                     }
-
-                    // Redirect to admin approval page
+                   
                     redirectUrl = Url.Action("AdminApprove", "Page");
                 }
                 else

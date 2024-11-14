@@ -557,6 +557,84 @@ namespace Tabang_Hub.Controllers
             db.SaveChanges();
 
             TempData["SuccessMessage"] = "The account has been approved.";
+
+            // Email notification logic
+            string subject = "Organization Approval Notification";
+            string body = $@"
+<html>
+<head>
+    <style>
+        body {{
+            font-family: Arial, sans-serif;
+            background-color: #f0f8ff;
+            color: #333;
+        }}
+        .container {{
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }}
+        .header {{
+            background-color: #28a745;
+            padding: 10px 20px;
+            color: white;
+            text-align: center;
+        }}
+        .header h1 {{
+            margin: 0;
+            font-size: 24px;
+            font-weight: bold;
+        }}
+        .content {{
+            padding: 20px;
+            font-size: 16px;
+            line-height: 1.6;
+        }}
+        .button {{
+            display: block;
+            width: fit-content;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: #ffffff;
+            border-radius: 5px;
+            text-align: center;
+            text-decoration: none;
+            font-size: 18px;
+        }}
+    </style>
+</head>
+<body>
+    <div class='container'>
+        <div class='header'>
+            <h1>Approval Confirmation</h1>
+        </div>
+        <div class='content'>
+            <p>Dear {organization.email},</p>
+            <p>We are pleased to inform you that your organization account has been approved. You can now access the system using the link below:</p>
+            <a class='button' href='https://localhost:44330/'>Go to System</a>
+            <p>Thank you for being a part of our community.</p>
+            <p>Sincerely,<br>The Tabang Hub Team</p>
+        </div>
+    </div>
+</body>
+</html>";
+
+            // Send the email
+            MailManager sendEmail = new MailManager();
+            string errorResponse = "";
+            bool isEmailSent = sendEmail.SendEmail(organization.email, subject, body, ref errorResponse);
+
+            if (!isEmailSent)
+            {
+                TempData["ErrorMessage"] = "The organization has been approved, but an error occurred while sending the email notification.";
+            }
+
             return RedirectToAction("OrganizationAccounts");
         }
         [HttpPost]

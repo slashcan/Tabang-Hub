@@ -34,6 +34,10 @@ namespace Tabang_Hub.Repository
         {
             return _userAcc._table.Where(m => m.email == email).FirstOrDefault();
         }
+        public List<UserAccount> ListOfAdmin()
+        {
+            return _userAcc._table.Where(m => m.roleId == 3).ToList();
+        }
         public UserAccount GetUserById(int id)
         { 
             return _userAcc._table.Where(m => m.userId == id).FirstOrDefault();
