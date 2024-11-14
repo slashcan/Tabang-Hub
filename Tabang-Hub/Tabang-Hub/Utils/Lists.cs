@@ -47,7 +47,6 @@ namespace Tabang_Hub.Utils
         public List<UserDonated> listofUserDonated { get; set; }
         public List<Rating> listOfRatings { get; set; }
         public List<OrgSkillRequirement> skillRequirement1 { get; set; }
-        public List<OrgEventHistory> orgEventHistory1 { get; set; }
         public List<Volunteers> listOfEventVolunteers { get; set; }
         public List<OrgEvents> recentEvents { get; set; }
         public Dictionary<string, int> totalSkills { get; set; }
@@ -60,7 +59,6 @@ namespace Tabang_Hub.Utils
         public List<VolunteerInfo> getAllVolunteerAccounts { get; set; }
         public List<OrgEvents> getAllOrgEvent { get; set; } 
         public List<UserAccount> matchedSkills { get; set; }
-        public List<OrgEventImageHistory> orgEventImageHistories { get; set; }
         public List<Rating> rating { get; set; }
 
         //Stored Procedure
@@ -81,5 +79,19 @@ namespace Tabang_Hub.Utils
         public Dictionary<int, int> eventSummary { get; set; }
         public Dictionary<int, int> allEventSummary { get; set; }
         public List<FilteredVolunteer> filteredVolunteers { get; set; }
+
+
+        public class VolunteerRatingData
+        {
+            public int VolunteerId { get; set; }
+            public int Attendance { get; set; } // New property for attendance
+            public List<SkillRating> SkillRatings { get; set; }
+        }
+
+        public class SkillRating
+        {
+            public int SkillId { get; set; }
+            public int Rating { get; set; }
+        }
     }
 }

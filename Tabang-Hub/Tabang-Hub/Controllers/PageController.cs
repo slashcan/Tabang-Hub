@@ -39,7 +39,7 @@ namespace Tabang_Hub.Controllers
 
                         var getOrgInfo = _orgInfo.GetAll().ToList();
 
-                        _volunteerManager.CheckVolunteerEventEndByUserId(UserId);
+                        //_volunteerManager.CheckVolunteerEventEndByUserId(UserId);
                         var getVolunteers = _volunteers.GetAll().ToList();
 
                         var orgEventsSelectId = _orgEvents.GetAll().Where(m => m.dateEnd >= DateTime.Now).Select(m => m.eventId).ToList();

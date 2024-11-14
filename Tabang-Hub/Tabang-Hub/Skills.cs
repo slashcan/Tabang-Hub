@@ -19,8 +19,6 @@ namespace Tabang_Hub
             this.OrgSkillRequirement = new HashSet<OrgSkillRequirement>();
             this.Rating = new HashSet<Rating>();
             this.VolunteerSkill = new HashSet<VolunteerSkill>();
-            this.Volunteers = new HashSet<Volunteers>();
-            this.VolunteerSkillsHistory = new HashSet<VolunteerSkillsHistory>();
         }
     
         public int skillId { get; set; }
@@ -30,7 +28,5 @@ namespace Tabang_Hub
         public virtual ICollection<OrgSkillRequirement> OrgSkillRequirement { get; set; }
         public virtual ICollection<Rating> Rating { get; set; }
         public virtual ICollection<VolunteerSkill> VolunteerSkill { get; set; }
-        public virtual ICollection<Volunteers> Volunteers { get; set; }
-        public virtual ICollection<VolunteerSkillsHistory> VolunteerSkillsHistory { get; set; }
     }
 }

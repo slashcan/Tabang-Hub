@@ -8,25 +8,7 @@
     <Property Name="eventId" Type="int" />
     <Property Name="orgInfoId" Type="int" />
   </EntityType>
-  <EntityType Name="GroupChatHistory">
-    <Key>
-      <PropertyRef Name="groupChatId" />
-    </Key>
-    <Property Name="groupChatId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="eventId" Type="int" />
-    <Property Name="orgInfoId" Type="int" />
-  </EntityType>
   <EntityType Name="GroupMessages">
-    <Key>
-      <PropertyRef Name="messageId" />
-    </Key>
-    <Property Name="messageId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="groupChatId" Type="int" />
-    <Property Name="userId" Type="int" />
-    <Property Name="message" Type="text" />
-    <Property Name="messageAt" Type="datetime" />
-  </EntityType>
-  <EntityType Name="GroupMessagesHistory">
     <Key>
       <PropertyRef Name="messageId" />
     </Key>
@@ -61,31 +43,7 @@
     <Property Name="createdAt" Type="datetime" />
     <Property Name="readAt" Type="datetime" />
   </EntityType>
-  <EntityType Name="OrgEventHistory">
-    <Key>
-      <PropertyRef Name="orgEventsHistoryId" />
-    </Key>
-    <Property Name="orgEventsHistoryId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="eventId" Type="int" />
-    <Property Name="userId" Type="int" />
-    <Property Name="eventTitle" Type="nvarchar" MaxLength="255" />
-    <Property Name="eventDescription" Type="text" />
-    <Property Name="targetAmount" Type="decimal" Precision="10" Scale="2" />
-    <Property Name="maxVolunteer" Type="int" />
-    <Property Name="dateStart" Type="datetime" />
-    <Property Name="dateEnd" Type="datetime" />
-    <Property Name="location" Type="nvarchar" MaxLength="255" />
-    <Property Name="eventImage" Type="nvarchar" MaxLength="255" />
-  </EntityType>
   <EntityType Name="OrgEventImage">
-    <Key>
-      <PropertyRef Name="eventImageId" />
-    </Key>
-    <Property Name="eventImageId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="eventId" Type="int" />
-    <Property Name="eventImage" Type="nvarchar" MaxLength="255" />
-  </EntityType>
-  <EntityType Name="OrgEventImageHistory">
     <Key>
       <PropertyRef Name="eventImageId" />
     </Key>
@@ -128,15 +86,6 @@
     <Property Name="coverPhoto" Type="nvarchar" MaxLength="255" />
   </EntityType>
   <EntityType Name="OrgSkillRequirement">
-    <Key>
-      <PropertyRef Name="skillRequirementId" />
-    </Key>
-    <Property Name="skillRequirementId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="eventId" Type="int" />
-    <Property Name="skillId" Type="int" />
-    <Property Name="totalNeeded" Type="int" />
-  </EntityType>
-  <EntityType Name="OrgSkillRequirementsHistory">
     <Key>
       <PropertyRef Name="skillRequirementId" />
     </Key>
@@ -212,16 +161,6 @@
     <Property Name="Status" Type="int" />
     <Property Name="donatedAt" Type="datetime" />
   </EntityType>
-  <EntityType Name="UserDonatedHistory">
-    <Key>
-      <PropertyRef Name="orgUserDonatedId" />
-    </Key>
-    <Property Name="orgUserDonatedId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="eventId" Type="int" />
-    <Property Name="userId" Type="int" />
-    <Property Name="amount" Type="decimal" Precision="10" Scale="2" />
-    <Property Name="donatedAt" Type="datetime" />
-  </EntityType>
   <EntityType Name="UserRoles">
     <Key>
       <PropertyRef Name="userRoleId" />
@@ -257,8 +196,6 @@
     <Property Name="userId" Type="int" />
     <Property Name="eventId" Type="int" />
     <Property Name="Status" Type="int" />
-    <Property Name="skillId" Type="int" />
-    <Property Name="attended" Type="int" />
     <Property Name="appliedAt" Type="date" />
   </EntityType>
   <EntityType Name="VolunteersHistory">
@@ -268,8 +205,6 @@
     <Property Name="applyVolunteerId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="userId" Type="int" />
     <Property Name="eventId" Type="int" />
-    <Property Name="Status" Type="int" />
-    <Property Name="skillId" Type="int" />
     <Property Name="attended" Type="int" />
     <Property Name="appliedAt" Type="date" />
   </EntityType>
@@ -278,16 +213,6 @@
       <PropertyRef Name="volunteerSkillId" />
     </Key>
     <Property Name="volunteerSkillId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="userId" Type="int" />
-    <Property Name="skillId" Type="int" />
-  </EntityType>
-  <!--Errors Found During Generation:
-warning 6002: The table/view 'TabangHub.dbo.VolunteerSkillsHistory' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
-  <EntityType Name="VolunteerSkillsHistory">
-    <Key>
-      <PropertyRef Name="volunteerSkillId" />
-    </Key>
-    <Property Name="volunteerSkillId" Type="int" Nullable="false" />
     <Property Name="userId" Type="int" />
     <Property Name="skillId" Type="int" />
   </EntityType>
@@ -616,18 +541,6 @@ warning 6002: The table/view 'TabangHub.dbo.vw_VolunteerSkills' does not have a 
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_Volunteers_Skills">
-    <End Role="Skills" Type="Self.Skills" Multiplicity="0..1" />
-    <End Role="Volunteers" Type="Self.Volunteers" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Skills">
-        <PropertyRef Name="skillId" />
-      </Principal>
-      <Dependent Role="Volunteers">
-        <PropertyRef Name="skillId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="FK_Volunteers_UserAccount">
     <End Role="UserAccount" Type="Self.UserAccount" Multiplicity="0..1" />
     <End Role="Volunteers" Type="Self.Volunteers" Multiplicity="*" />
@@ -637,18 +550,6 @@ warning 6002: The table/view 'TabangHub.dbo.vw_VolunteerSkills' does not have a 
       </Principal>
       <Dependent Role="Volunteers">
         <PropertyRef Name="userId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_VolunteerSkillsHistory_Skills">
-    <End Role="Skills" Type="Self.Skills" Multiplicity="0..1" />
-    <End Role="VolunteerSkillsHistory" Type="Self.VolunteerSkillsHistory" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Skills">
-        <PropertyRef Name="skillId" />
-      </Principal>
-      <Dependent Role="VolunteerSkillsHistory">
-        <PropertyRef Name="skillId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -698,18 +599,13 @@ warning 6002: The table/view 'TabangHub.dbo.vw_VolunteerSkills' does not have a 
   </Function>
   <EntityContainer Name="TabangHubModelStoreContainer">
     <EntitySet Name="GroupChat" EntityType="Self.GroupChat" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="GroupChatHistory" EntityType="Self.GroupChatHistory" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="GroupMessages" EntityType="Self.GroupMessages" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="GroupMessagesHistory" EntityType="Self.GroupMessagesHistory" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="LastRead" EntityType="Self.LastRead" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Notification" EntityType="Self.Notification" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="OrgEventHistory" EntityType="Self.OrgEventHistory" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="OrgEventImage" EntityType="Self.OrgEventImage" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="OrgEventImageHistory" EntityType="Self.OrgEventImageHistory" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="OrgEvents" EntityType="Self.OrgEvents" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="OrgInfo" EntityType="Self.OrgInfo" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="OrgSkillRequirement" EntityType="Self.OrgSkillRequirement" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="OrgSkillRequirementsHistory" EntityType="Self.OrgSkillRequirementsHistory" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="OrgValidation" EntityType="Self.OrgValidation" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ProfilePicture" EntityType="Self.ProfilePicture" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Rating" EntityType="Self.Rating" Schema="dbo" store:Type="Tables" />
@@ -717,19 +613,11 @@ warning 6002: The table/view 'TabangHub.dbo.vw_VolunteerSkills' does not have a 
     <EntitySet Name="Skills" EntityType="Self.Skills" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="UserAccount" EntityType="Self.UserAccount" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="UserDonated" EntityType="Self.UserDonated" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="UserDonatedHistory" EntityType="Self.UserDonatedHistory" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="UserRoles" EntityType="Self.UserRoles" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="VolunteerInfo" EntityType="Self.VolunteerInfo" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Volunteers" EntityType="Self.Volunteers" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="VolunteersHistory" EntityType="Self.VolunteersHistory" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="VolunteerSkill" EntityType="Self.VolunteerSkill" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="VolunteerSkillsHistory" EntityType="Self.VolunteerSkillsHistory" store:Type="Tables" store:Schema="dbo">
-      <DefiningQuery>SELECT 
-[VolunteerSkillsHistory].[volunteerSkillId] AS [volunteerSkillId], 
-[VolunteerSkillsHistory].[userId] AS [userId], 
-[VolunteerSkillsHistory].[skillId] AS [skillId]
-FROM [dbo].[VolunteerSkillsHistory] AS [VolunteerSkillsHistory]</DefiningQuery>
-    </EntitySet>
     <EntitySet Name="vw_ListOfEvent" EntityType="Self.vw_ListOfEvent" store:Type="Views" store:Schema="dbo">
       <DefiningQuery>SELECT 
 [vw_ListOfEvent].[Event_Id] AS [Event_Id], 
@@ -876,17 +764,9 @@ FROM [dbo].[vw_VolunteerSkills] AS [vw_VolunteerSkills]</DefiningQuery>
       <End Role="OrgEvents" EntitySet="OrgEvents" />
       <End Role="Volunteers" EntitySet="Volunteers" />
     </AssociationSet>
-    <AssociationSet Name="FK_Volunteers_Skills" Association="Self.FK_Volunteers_Skills">
-      <End Role="Skills" EntitySet="Skills" />
-      <End Role="Volunteers" EntitySet="Volunteers" />
-    </AssociationSet>
     <AssociationSet Name="FK_Volunteers_UserAccount" Association="Self.FK_Volunteers_UserAccount">
       <End Role="UserAccount" EntitySet="UserAccount" />
       <End Role="Volunteers" EntitySet="Volunteers" />
-    </AssociationSet>
-    <AssociationSet Name="FK_VolunteerSkillsHistory_Skills" Association="Self.FK_VolunteerSkillsHistory_Skills">
-      <End Role="Skills" EntitySet="Skills" />
-      <End Role="VolunteerSkillsHistory" EntitySet="VolunteerSkillsHistory" />
     </AssociationSet>
   </EntityContainer>
 </Schema>

@@ -13,6 +13,7 @@ namespace Tabang_Hub
     
     public partial class sp_matchSkill_Result
     {
+        public Nullable<int> eventId { get; set; }
         public Nullable<int> skillId { get; set; }
         public Nullable<int> userId { get; set; }
         public string skillName { get; set; }

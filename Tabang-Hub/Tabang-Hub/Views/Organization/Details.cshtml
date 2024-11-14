@@ -767,68 +767,91 @@ else
                 </div>
             </div>
 
-            <!-- Volunteer List Section -->
+            <!-- Volunteer List Section for Finished Events -->
             <div class="tab-pane fade" id="volunteer-list" role="tabpanel" aria-labelledby="volunteer-list-tab">
                 <div class="row mb-4">
                     <div class="col-md-12">
                         <div class="card">
                             <div class="card-header">
-                                <h5 class="card-title">Volunteer List</h5>
+                                <h5 class="card-title">Volunteer List (Finished Event)</h5>
                             </div>
                             <div class="card-body">
-                                <div class="list-group">
-                                    @foreach (var volunteer in Model.listOfEventVolunteers)
-                                    {
-                                        if (volunteer.Status == 1)
-                                        {
-                                            <div class="list-group-item list-group-item-action d-flex align-items-center" data-volunteer-id="@volunteer.userId">
-                                                <img src="@Url.Content("~/Content/images/organization.png")" class="profile-img me-3" alt="Volunteer Image">
-                                                <div class="flex-grow-1">
-                                                    <p class="mb-0"><strong>Email:</strong> @volunteer.UserAccount.email</p>
-                                                    <p class="mb-0">
-                                                        <strong>Skills:</strong>
-                                                        @foreach (var skill in Model.volunteersSkills)
-                                                        {
-                                                            foreach (var skillReq in Model.skillRequirement1)
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Profile Image</th>
+                                                <th scope="col">Email</th>
+                                                <th scope="col">Skills</th>
+                                                <th scope="col">Ratings per Skill</th>
+                                                <th scope="col">Attendance</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var volunteer in Model.listOfEventVolunteers)
+                                            {
+                                                if (volunteer.Status == 1) // Adjust status condition as needed
+                                                {
+                                                    <tr>
+                                                        <td>
+                                                            <img src="@Url.Content("~/Content/images/organization.png")" class="profile-img" alt="Volunteer Image" style="width: 50px; height: 50px; border-radius: 50%;">
+                                                        </td>
+                                                        <td>@volunteer.UserAccount.email</td>
+                                                        <td>
+                                                            @foreach (var skill in Model.volunteersSkills.Where(s => s.userId == volunteer.userId))
                                                             {
-                                                                if (skill.userId == volunteer.userId && skillReq.skillId == skill.skillId)
+                                                                foreach (var skillreq in Model.skillRequirement1)
                                                                 {
-                                                                    <span class="badge bg-secondary me-1">@skill.Skills.skillName</span>
+                                                                    if (skill.skillId == skillreq.skillId)
+                                                                    {
+                                                                        <div>@skill.Skills.skillName</div>
+                                                                    }
                                                                 }
                                                             }
-
-                                                        }
-                                                    </p>
-                                                </div>
-                                                <div class="ms-auto">
-                                                    <!-- Rating Section for Each Volunteer -->
-                                                    <div class="form-group d-flex align-items-center mb-2">
-                                                        @for (int i = 1; i <= 5; i++)
-                                                        {
-                                                            <div class="form-check me-2">
-                                                                <input class="form-check-input" type="radio" name="rating_@volunteer.userId" value="@i" required>
-                                                                <label class="form-check-label">@i</label>
+                                                        </td>
+                                                        <td>
+                                                            @foreach (var skill in Model.volunteersSkills.Where(s => s.userId == volunteer.userId))
+                                                            {
+                                                                foreach (var skillreq in Model.skillRequirement1)
+                                                                {
+                                                                    if (skill.skillId == skillreq.skillId)
+                                                                    {
+                                                                        <div>
+                                                                            <div class="d-inline-block">
+                                                                                @for (int i = 1; i <= 5; i++)
+                                                                                {
+                                                                                    <div class="form-check form-check-inline">
+                                                                                        <input class="form-check-input" type="radio"
+                                                                                               name="rating_@(volunteer.userId)_@(skill.skillId)"
+                                                                                               id="rating_@(volunteer.userId)_@(skill.skillId)_@i"
+                                                                                               value="@i" required>
+                                                                                        <label class="form-check-label" for="rating_(@volunteer.userId)_(@skill.skillId)_@i">@i</label>
+                                                                                    </div>
+                                                                                }
+                                                                            </div>
+                                                                        </div>
+                                                                    }
+                                                                }
+                                                            }
+                                                        </td>
+                                                        <td>
+                                                            <div class="form-group d-flex align-items-center">
+                                                                <label class="me-2"><strong>Attendance:</strong></label>
+                                                                <div class="form-check me-2">
+                                                                    <input class="form-check-input" type="radio" name="attendance_@volunteer.userId" value="1" required>
+                                                                    <label class="form-check-label">Yes</label>
+                                                                </div>
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input" type="radio" name="attendance_@volunteer.userId" value="0" required>
+                                                                    <label class="form-check-label">No</label>
+                                                                </div>
                                                             </div>
-                                                        }
-                                                    </div>
-
-                                                    <!-- Attendance Section for Each Volunteer -->
-                                                    <div class="form-group d-flex align-items-center">
-                                                        <label class="me-2"><strong>Attendance:</strong></label>
-                                                        <div class="form-check me-2">
-                                                            <input class="form-check-input" type="radio" name="attendance_@volunteer.userId" value="1" required>
-                                                            <label class="form-check-label">Yes</label>
-                                                        </div>
-                                                        <div class="form-check me-2">
-                                                            <input class="form-check-input" type="radio" name="attendance_@volunteer.userId" value="0" required>
-                                                            <label class="form-check-label">No</label>
-                                                        </div>
-                                                    </div>
-
-                                                </div>
-                                            </div>
-                                        }
-                                    }
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            }
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
@@ -932,179 +955,186 @@ document.addEventListener('DOMContentLoaded', function () {
             window.leafletMap = null;
         }
     });
+document.getElementById('submitAllRatings').addEventListener('click', function () {
+    let volunteerRatingsData = [];
+    document.querySelectorAll('tbody tr').forEach(function (row) {
+        let volunteerId = row.querySelector('[name^="rating_"]').name.split('_')[1];
+        let attendance = row.querySelector(`input[name="attendance_${volunteerId}"]:checked`);
+        let skillRatings = [];
 
-    // Event listener for Submit All Ratings button
-    var submitAllRatingsButton = document.getElementById('submitAllRatings');
-    if (submitAllRatingsButton) {
-        submitAllRatingsButton.addEventListener('click', function () {
-            var ratingsData = [];
-            var attendanceData = [];
-            var volunteerIds = [];
-
-            document.querySelectorAll('.list-group-item').forEach(function (item) {
-                var volunteerId = item.getAttribute('data-volunteer-id');
-                var rating = document.querySelector(`input[name="rating_${volunteerId}"]:checked`);
-                var attendance = document.querySelector(`input[name="attendance_${volunteerId}"]:checked`);
-
-                if (rating && attendance) {
-                    volunteerIds.push(volunteerId);
-                    ratingsData.push(rating.value);
-                    attendanceData.push(attendance.value);
-                }
+        row.querySelectorAll('.form-check-input[name^="rating_"]:checked').forEach(function (ratingInput) {
+            let skillId = ratingInput.name.split('_')[2];
+            skillRatings.push({
+                SkillId: parseInt(skillId),
+                Rating: parseInt(ratingInput.value)
             });
+        });
 
-            if (volunteerIds.length > 0) {
-                $.ajax({
-                    url: '@Url.Action("SubmitRatings", "Organization")',
-                    type: 'POST',
-                    contentType: 'application/json',
-                    data: JSON.stringify({
-                        eventId: @Model.eventDetails.eventId,
-                        volunteerIds: volunteerIds,
-                        ratings: ratingsData,
-                        attendance: attendanceData
-                    }),
-                    success: function (response) {
-                        if (response.success) {
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Success',
-                                text: 'All ratings and attendance submitted successfully.',
-                                confirmButtonText: 'OK'
-                            }).then(() => {
-                                window.location.href = '@Url.Action("EventsList", "Organization")';
-                            });
-                        } else {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error',
-                                text: response.message,
-                                confirmButtonText: 'OK'
-                            });
-                        }
-                    },
-                    error: function () {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Oops...',
-                            text: 'An error occurred while submitting the ratings.',
-                            confirmButtonText: 'OK'
-                        });
-                    }
-                });
-            } else {
+        console.log(`Volunteer ID: ${volunteerId}`);
+        console.log(`Attendance selected:`, attendance ? attendance.value : 'None');
+        console.log(`Skill ratings for this volunteer:`, skillRatings);
+
+        if (skillRatings.length > 0 && attendance) {
+            volunteerRatingsData.push({
+                VolunteerId: parseInt(volunteerId),
+                Attendance: parseInt(attendance.value),
+                SkillRatings: skillRatings
+            });
+        }
+    });
+
+    console.log('Collected volunteer ratings data:', volunteerRatingsData);
+
+    if (volunteerRatingsData.length > 0) {
+        $.ajax({
+            url: '@Url.Action("SubmitRatings", "Organization")',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                eventId: @Model.eventDetails.eventId,
+                volunteerRatings: volunteerRatingsData
+            }),
+            success: function (response) {
+                if (response.success) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success',
+                        text: 'All ratings and attendance submitted successfully.',
+                        confirmButtonText: 'OK'
+                    }).then(() => {
+                        window.location.href = '@Url.Action("EventsList", "Organization")';
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: response.message,
+                        confirmButtonText: 'OK'
+                    });
+                }
+            },
+            error: function () {
                 Swal.fire({
-                    icon: 'warning',
-                    title: 'Incomplete Data',
-                    text: 'Please rate and select attendance for all volunteers before submitting.',
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'An error occurred while submitting the ratings.',
                     confirmButtonText: 'OK'
                 });
             }
         });
+    } else {
+        console.log('Incomplete data detected: Missing ratings or attendance for one or more volunteers.');
+        Swal.fire({
+            icon: 'warning',
+            title: 'Incomplete Data',
+            text: 'Please rate and select attendance for all volunteers before submitting.',
+            confirmButtonText: 'OK'
+        });
     }
+});
 
     $(document).ready(function () {
-    // Delegated event binding for dynamically generated buttons
-    $(document).on('click', '.accept-btn', function () {
-        var userId = $(this).data('id');
-        var eventId = $(this).data('event-id');
+        // Delegated event binding for dynamically generated buttons
+        $(document).on('click', '.accept-btn', function () {
+            var userId = $(this).data('id');
+            var eventId = $(this).data('event-id');
 
-        if (userId && eventId) {
-            Swal.fire({
-                title: 'Are you sure?',
-                text: 'Do you want to accept this volunteer?',
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonText: 'Yes, accept',
-                cancelButtonText: 'Cancel'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $.ajax({
-                        url: '@Url.Action("ConfirmApplicants", "Organization")',
-                        type: 'POST',
-                        data: { id: userId, eventId: eventId },
-                        success: function (response) {
-                            if (response.success) {
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: 'Accepted!',
-                                    text: response.message
-                                }).then(() => {
-                                    window.location.href = response.redirectUrl;
-                                });
-                            } else {
+            if (userId && eventId) {
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: 'Do you want to accept this volunteer?',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, accept',
+                    cancelButtonText: 'Cancel'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: '@Url.Action("ConfirmApplicants", "Organization")',
+                            type: 'POST',
+                            data: { id: userId, eventId: eventId },
+                            success: function (response) {
+                                if (response.success) {
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Accepted!',
+                                        text: response.message
+                                    }).then(() => {
+                                        window.location.href = response.redirectUrl;
+                                    });
+                                } else {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Error',
+                                        text: response.message
+                                    });
+                                }
+                            },
+                            error: function () {
                                 Swal.fire({
                                     icon: 'error',
-                                    title: 'Error',
-                                    text: response.message
+                                    title: 'Oops...',
+                                    text: 'An error occurred while processing your request.'
                                 });
                             }
-                        },
-                        error: function () {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Oops...',
-                                text: 'An error occurred while processing your request.'
-                            });
-                        }
-                    });
-                }
-            });
-        } else {
-            console.error('User ID or Event ID not found.');
-        }
-    });
+                        });
+                    }
+                });
+            } else {
+                console.error('User ID or Event ID not found.');
+            }
+        });
 
-    $(document).on('click', '.decline-btn', function () {
-        var userId = $(this).data('id');
-        var eventId = $(this).data('event-id');
+        $(document).on('click', '.decline-btn', function () {
+            var userId = $(this).data('id');
+            var eventId = $(this).data('event-id');
 
-        if (userId && eventId) {
-            Swal.fire({
-                title: 'Are you sure?',
-                text: 'Do you want to decline this volunteer?',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Yes, decline',
-                cancelButtonText: 'Cancel'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $.ajax({
-                        url: '@Url.Action("DeclineApplicants", "Organization")',
-                        type: 'POST',
-                        data: { id: userId, eventId: eventId },
-                        success: function (response) {
-                            if (response.success) {
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: 'Declined',
-                                    text: response.message
-                                }).then(() => {
-                                    window.location.href = response.redirectUrl;
-                                });
-                            } else {
+            if (userId && eventId) {
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: 'Do you want to decline this volunteer?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, decline',
+                    cancelButtonText: 'Cancel'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: '@Url.Action("DeclineApplicants", "Organization")',
+                            type: 'POST',
+                            data: { id: userId, eventId: eventId },
+                            success: function (response) {
+                                if (response.success) {
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Declined',
+                                        text: response.message
+                                    }).then(() => {
+                                        window.location.href = response.redirectUrl;
+                                    });
+                                } else {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Error',
+                                        text: response.message
+                                    });
+                                }
+                            },
+                            error: function () {
                                 Swal.fire({
                                     icon: 'error',
-                                    title: 'Error',
-                                    text: response.message
+                                    title: 'Oops...',
+                                    text: 'An error occurred while processing your request.'
                                 });
                             }
-                        },
-                        error: function () {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Oops...',
-                                text: 'An error occurred while processing your request.'
-                            });
-                        }
-                    });
-                }
-            });
-        } else {
-            console.error('User ID or Event ID not found.');
-        }
+                        });
+                    }
+                });
+            } else {
+                console.error('User ID or Event ID not found.');
+            }
+        });
     });
-});
 
     // Real-time validation for date and time inputs
     var editEventDateStart = document.getElementById('EditEvent_dateStart');
@@ -1180,9 +1210,6 @@ document.addEventListener('DOMContentLoaded', function () {
     if (editEventMaxVolunteer) {
         onlyNumbers(editEventMaxVolunteer, 'EditEvent_maxVolunteer_error');
     }
-
-    // Update total volunteers on page load
-    updateTotalVolunteers();
 });
 
 // Functions that don't depend on the DOM being fully loaded can be outside
@@ -1336,7 +1363,7 @@ function validateEditForm(event) {
         document.getElementById('EditEvent_dateEnd_error').innerText = 'End date and time is required.';
         isValid = false;
     } else if (dateEnd <= dateStart) {
-        document.getElementById('EditEvent  dateEnd_error').innerText = 'End date and time must be after start date and time.';
+        document.getElementById('EditEvent_dateEnd_error').innerText = 'End date and time must be after start date and time.';
         isValid = false;
     } else {
         document.getElementById('EditEvent_dateEnd_error').innerText = '';
@@ -1352,7 +1379,7 @@ function validateEditForm(event) {
     // Validate target amount if enabled
     const targetAmountInput = document.getElementById('EditEvent_targetAmount');
     const targetAmountCheckbox = document.getElementById('editSwitchCheckDefault');
-    if (targetAmountCheckbox.checked) {s
+    if (targetAmountCheckbox.checked) {
         const targetAmountValue = parseFloat(targetAmountInput.value);
         if (isNaN(targetAmountValue) || targetAmountValue <= 0) {
             document.getElementById('EditEvent_targetAmount_error').innerText = 'Enter a valid target amount.';

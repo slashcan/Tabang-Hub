@@ -28,6 +28,7 @@
                             <td class="skill-name">@skill.skillName</td>
                             <td><img src="@Url.Content($"~/Content/SkillImages/{skill.skillImage}")" alt="Skill Image" class="img-thumbnail" style="max-width: 100px; max-height: 100px;" /></td>
                             <td>
+                                <button type="button" class="btn btn-sm btn-primary edit-button" data-skill-id="@skill.skillId" data-skill-name="@skill.skillName" data-skill-image="@skill.skillImage">Edit</button>
                                 <button type="button" class="btn btn-sm btn-danger delete-button" data-skill-id="@skill.skillId">Delete</button>
                             </td>
                         </tr>
@@ -71,12 +72,42 @@
     </div>
 </div>
 
+<!-- Edit Skill Modal -->
+<div class="modal fade" id="editSkillModal" tabindex="-1" aria-labelledby="editSkillModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editSkillModalLabel">Edit Skill</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editSkillForm" action="@Url.Action("EditSkill", "Admin")" method="post" enctype="multipart/form-data">
+                    <input type="hidden" id="editSkillId" name="SkillId" />
+                    <div class="mb-3">
+                        <label for="editSkillName" class="form-label">Skill Name</label>
+                        <input type="text" class="form-control" id="editSkillName" name="SkillName" placeholder="Enter Skill Name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="editSkillImage" class="form-label">Skill Image (optional)</label>
+                        <input type="file" class="form-control" id="editSkillImage" name="SkillImage" accept="image/*" onchange="previewEditImage()">
+                        <div class="mt-2">
+                            <img id="currentSkillImage" class="img-thumbnail" style="max-width: 100px; max-height: 100px;" />
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 <script>
-
-      // Search functionality
     $(document).ready(function () {
+        // Search functionality
         $('#searchSkill').on('keyup', function () {
             var value = $(this).val().toLowerCase();
             $('#skillsTable tbody tr').filter(function () {
@@ -84,11 +115,46 @@
             });
         });
 
-        // Event listener for form submission and delete button logic
-        $('#addSkillModal form').submit(function (event) {
+        // Event listener for the Edit button
+        $('.edit-button').click(function () {
+            var skillId = $(this).data('skill-id');
+            var skillName = $(this).data('skill-name');
+            var skillImage = $(this).data('skill-image');
+
+            // Set the form fields with the selected skill's data
+            $('#editSkillId').val(skillId);
+            $('#editSkillName').val(skillName);
+            $('#currentSkillImage').attr('src', '~/Content/SkillImages/' + skillImage);
+
+            // Show the edit modal
+            $('#editSkillModal').modal('show');
+        });
+
+        // Clear modal inputs when it is closed
+        $('#editSkillModal').on('hidden.bs.modal', function () {
+            $('#editSkillForm')[0].reset(); // Reset the form
+            $('#editSkillId').val(''); // Clear hidden input
+            $('#currentSkillImage').attr('src', ''); // Clear image preview
+        });
+
+        // Preview image function
+        window.previewEditImage = function () {
+            var file = document.getElementById('editSkillImage').files[0];
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#currentSkillImage').attr('src', e.target.result);
+            };
+
+            if (file) {
+                reader.readAsDataURL(file);
+            }
+        };
+
+        // Submit the Edit form
+        $('#editSkillForm').submit(function (event) {
             event.preventDefault(); // Prevent the default form submission
 
-            // Create FormData object to handle file uploads and form data
             var formData = new FormData(this);
 
             $.ajax({

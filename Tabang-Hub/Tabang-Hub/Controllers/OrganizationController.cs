@@ -13,6 +13,7 @@ using System.Text;
 using Microsoft.AspNet.SignalR.Hubs;
 using System.Threading.Tasks;
 using Tabang_Hub.Hubs;
+using static Tabang_Hub.Utils.Lists;
 
 namespace Tabang_Hub.Controllers
 {
@@ -279,12 +280,9 @@ namespace Tabang_Hub.Controllers
                         userId = data.userId,
                         eventId = data.eventId,
                         Status = data.Status,
-                        skillId = data.skillId,
-                        attended = data.attended,
                         appliedAt = data.appliedAt,
 
                         OrgEvents = data.OrgEvents,
-                        Skills = data.Skills,
                         UserAccount = data.UserAccount,
                     };
 
@@ -639,7 +637,7 @@ namespace Tabang_Hub.Controllers
                 skills = _skills.GetAll().ToList(),
                 volunteersHistories = _volunteerManager.GetVolunteersHistoryByUserId(getUserAccount.userId),
                 rating = db.Rating.Where(m => m.userId == getUserAccount.userId).ToList(),
-                orgEventHistory1 = db.OrgEventHistory.Where(m => m.userId == getUserAccount.userId).ToList(),
+                orgEventHistory = db.OrgEvents.Where(m => m.userId == getUserAccount.userId && m.status == 2).ToList(),
                 //listOfEvents = filteredEvent.OrderByDescending(m => m.Event_Id).ToList(),
                 detailsEventImage = _eventImages.GetAll().ToList()
             };
@@ -687,20 +685,7 @@ namespace Tabang_Hub.Controllers
             };
             return View(indexModdel);
         }
-        [HttpPost]
-        public JsonResult TransferToHistory()
-        {
-            var userId = UserId;
-            string errMsg = string.Empty;
-
-            var result = _organizationManager.TransferToHistory(userId, ref errMsg);
-            if (result != ErrorCode.Success)
-            {
-                return Json(new { success = false, message = errMsg });
-            }
-
-            return Json(new { success = true, message = "Events successfully transferred to history." });
-        }
+       
         [HttpPost]
         public ActionResult ExportData()
         {
@@ -748,7 +733,7 @@ namespace Tabang_Hub.Controllers
                 var volunteer = _organizationManager.GetVolunteersByEventId(evt.Event_Id);
                 foreach (var vol in volunteer)
                 {
-                    csv.AppendLine($"{vol.applyVolunteerId},{vol.userId},{vol.eventId},{vol.Status},{vol.skillId},{vol.appliedAt}");
+                    csv.AppendLine($"{vol.applyVolunteerId},{vol.userId},{vol.eventId},{vol.Status},{vol.appliedAt}");
                 }
             }
 
@@ -768,37 +753,42 @@ namespace Tabang_Hub.Controllers
             return Json(unreadNotifications, JsonRequestBehavior.AllowGet);
         }
         [HttpPost]
-        public JsonResult SubmitRatings(int eventId, int[] volunteerIds, int[] ratings, int[] attendance) // Added attendance array
+        public JsonResult SubmitRatings(int eventId, List<VolunteerRatingData> volunteerRatings)
         {
             string errMsg = string.Empty;
 
-            if (volunteerIds == null || ratings == null || volunteerIds.Length != ratings.Length || attendance == null || volunteerIds.Length != attendance.Length)
+            if (volunteerRatings == null || volunteerRatings.Count == 0)
             {
-                return Json(new { success = false, message = "Invalid data received." });
+                return Json(new { success = false, message = "Invalid or incomplete data received." });
             }
 
-            for (int i = 0; i < volunteerIds.Length; i++)
+            foreach (var ratingData in volunteerRatings)
             {
-                int volunteerId = volunteerIds[i];
-                int rating = ratings[i];
-                int attendanceStatus = attendance[i]; // Get the attendance value
+                var volunteerId = ratingData.VolunteerId;
+                var attendanceStatus = ratingData.Attendance; // Attendance is now passed and processed
 
-                // Save the rating and attendance
-                var result = _organizationManager.SaveRating(eventId, attendanceStatus, volunteerId, rating, ref errMsg); // Assume SaveRating can handle attendance too
-                if (result != ErrorCode.Success)
+                foreach (var skillRating in ratingData.SkillRatings)
                 {
-                    // Log the error for debugging purposes (optional)
-                    return Json(new { success = false, message = "Error saving rating: " + errMsg });
+                    int skillId = skillRating.SkillId;
+                    int rating = skillRating.Rating;
+
+                    // Save the rating and attendance
+                    var result = _organizationManager.SaveRating(eventId, attendanceStatus, volunteerId, skillId, rating, ref errMsg);
+                    if (result != ErrorCode.Success)
+                    {
+                        return Json(new { success = false, message = "Error saving rating: " + errMsg });
+                    }
                 }
+
                 var events = _organizationManager.GetEventByEventId(eventId);
 
                 var notification = new Notification
                 {
                     userId = volunteerId,
-                    senderUserId = UserId, 
+                    senderUserId = UserId,
                     relatedId = eventId,
                     type = "Event",
-                    content = $"{events.eventTitle} Has ended",
+                    content = $"{events.eventTitle} has ended",
                     broadcast = 0,
                     status = 0,
                     createdAt = DateTime.Now,
@@ -808,9 +798,8 @@ namespace Tabang_Hub.Controllers
                 db.Notification.Add(notification);
                 db.SaveChanges();
             }
-
-            // After saving all the ratings, transfer the event to history
-            var historyResult = _organizationManager.TrasferToHisotry1(eventId, ref errMsg);
+            
+            var historyResult = _organizationManager.TrasferToHisotry1(eventId, volunteerRatings, ref errMsg);
             if (historyResult != ErrorCode.Success)
             {
                 return Json(new { success = false, message = "Error saving to history: " + errMsg });

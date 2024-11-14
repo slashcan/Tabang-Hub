@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Tabang_Hub.Utils;
+using static Tabang_Hub.Utils.Lists;
 
 namespace Tabang_Hub.Repository
 {
@@ -26,16 +27,9 @@ namespace Tabang_Hub.Repository
         private BaseRepository<VolunteerSkill> _volunteerSkills;
         private BaseRepository<UserAccount> _userAccount;
         private BaseRepository<Skills> _skills;
-        private BaseRepository<OrgEventHistory> _orgEventHistory;
-        private BaseRepository<OrgSkillRequirementsHistory> _skillRequirementsHistory;
-        private BaseRepository<UserDonatedHistory> _userDonatedHistory;
         private BaseRepository<VolunteersHistory> _volunteersHistory;
-        private BaseRepository<OrgEventImageHistory> _orgEventImageHistory;
-        private BaseRepository<VolunteerSkillsHistory> _volunteerSkillHistory;
         private BaseRepository<GroupChat> _groupChat;
-        private BaseRepository<GroupChatHistory> _groupChatHistory;
         private BaseRepository<GroupMessages> _groupMessages;
-        private BaseRepository<GroupMessagesHistory> _groupMessagesHistory;
         private BaseRepository<Rating> _ratings;
         private BaseRepository<vw_VolunteerSkills> _vwVollunterSkills;
         private BaseRepository<VolunteerInfo> _volunteerInfo;
@@ -57,16 +51,9 @@ namespace Tabang_Hub.Repository
             _volunteerSkills = new BaseRepository<VolunteerSkill>();
             _userAccount = new BaseRepository<UserAccount>();
             _skills = new BaseRepository<Skills>();
-            _orgEventHistory = new BaseRepository<OrgEventHistory>();
-            _skillRequirementsHistory = new BaseRepository<OrgSkillRequirementsHistory>();
-            _userDonatedHistory = new BaseRepository<UserDonatedHistory>();
             _volunteersHistory = new BaseRepository<VolunteersHistory>();
-            _orgEventImageHistory = new BaseRepository<OrgEventImageHistory>();
-            _volunteerSkillHistory = new BaseRepository<VolunteerSkillsHistory>();
             _groupChat = new BaseRepository<GroupChat>();
-            _groupChatHistory = new BaseRepository<GroupChatHistory>();
             _groupMessages = new BaseRepository<GroupMessages>();
-            _groupMessagesHistory = new BaseRepository<GroupMessagesHistory>();
             _ratings = new BaseRepository<Rating>();
             _vwVollunterSkills = new BaseRepository<vw_VolunteerSkills>();
             _volunteerInfo = new BaseRepository<VolunteerInfo>();
@@ -313,16 +300,6 @@ namespace Tabang_Hub.Repository
                 }
             }
 
-            var historyEvents = GetEventHistoryByUserId(userId); // Assuming this retrieves the historical events
-            foreach (var historyEvent in historyEvents)
-            {
-                var donationsHistory = GetTotalDonationHistoryByEventId((int)historyEvent.eventId);
-                foreach (var donation in donationsHistory)
-                {
-                    totalDonation += donation.amount;
-                }
-            }
-
             return (decimal)totalDonation;
         }
         public int GetTotalVolunteerByUserId(int userId)
@@ -339,29 +316,13 @@ namespace Tabang_Hub.Repository
 
             }
 
-            var historyEvents = GetEventHistoryByUserId(userId);
-            foreach (var historyEvent in historyEvents)
-            {
-                var volunteersHistory = GetTotalVolunteerHistoryByEventId((int)historyEvent.eventId);
-                totalVolunteer += volunteersHistory.Count();
-            }
-
             return totalVolunteer;
         }
         public Dictionary<int, int> GetEventsByUserId(int userId)
         {
             // Events from the main table
             var eventSummary = _orgEvents._table
-                .Where(m => m.userId == userId && m.dateStart.HasValue && m.dateEnd.HasValue && m.dateEnd.Value <= DateTime.Now)
-                .GroupBy(m => m.dateStart.Value.Month)
-                .ToDictionary(
-                    group => group.Key,
-                    group => group.Count()
-                );
-
-            // Events from the history table
-            var historySummary = _orgEventHistory._table
-                .Where(m => m.userId == userId)
+                .Where(m => m.userId == userId && m.dateStart.HasValue && m.dateEnd.HasValue && m.status == 2)
                 .GroupBy(m => m.dateStart.Value.Month)
                 .ToDictionary(
                     group => group.Key,
@@ -369,15 +330,15 @@ namespace Tabang_Hub.Repository
                 );
 
             // Merge the two dictionaries
-            foreach (var month in historySummary.Keys)
+            foreach (var month in eventSummary.Keys)
             {
                 if (eventSummary.ContainsKey(month))
                 {
-                    eventSummary[month] += historySummary[month];
+                    eventSummary[month] += eventSummary[month];
                 }
                 else
                 {
-                    eventSummary[month] = historySummary[month];
+                    eventSummary[month] = eventSummary[month];
                 }
             }
 
@@ -416,7 +377,6 @@ namespace Tabang_Hub.Repository
         {
             // Step 1: Get the list of events created by the user (Organization or Event Creator)
             var events = ListOfEvents(userId); // Assuming ListOfEvents(userId) returns a list of events
-            var eventsHstory = GetEventHistoryByUserId(userId);
             // Step 2: Initialize a dictionary to count the frequency of each skill by name
             Dictionary<string, int> skillFrequency = new Dictionary<string, int>();
 
@@ -450,32 +410,6 @@ namespace Tabang_Hub.Repository
                                     skillFrequency[skill.Skills.skillName] = 1; // Initialize with count 1 if it doesn't exist
                                 }
                             }
-                        }                       
-                    }
-                }
-            }
-
-            foreach (var eventItem in eventsHstory)
-            {
-                // Assuming you have a method GetVolunteersByEventId that retrieves all volunteers for an event
-                var volunteers = GetTotalVolunteerHistoryByEventId((int)eventItem.eventId);
-
-                // For each volunteer, get their skills
-                foreach (var volunteer in volunteers)
-                {
-                    // Assuming you have a method GetVolunteerSkillsByUserId to get the skills of a volunteer
-                    var skills = GetVolunteerSkillHistoryByUserId((int)volunteer.userId);
-
-                    // Count the occurrence of each skill by its name
-                    foreach (var skill in skills)
-                    {
-                        if (skillFrequency.ContainsKey(skill.Skills.skillName)) // Assuming SkillName is a string representing the skill's name
-                        {
-                            skillFrequency[skill.Skills.skillName]++; // Increment count if skill already exists
-                        }
-                        else
-                        {
-                            skillFrequency[skill.Skills.skillName] = 1; // Initialize with count 1 if it doesn't exist
                         }
                     }
                 }
@@ -510,9 +444,9 @@ namespace Tabang_Hub.Repository
             try
             {
                 if (_notification.Create(notif, out errMsg) != ErrorCode.Success)
-                { 
+                {
                     return ErrorCode.Error;
-                } 
+                }
             }
             catch (Exception ex)
             {
@@ -522,16 +456,12 @@ namespace Tabang_Hub.Repository
             return ErrorCode.Success;
         }
         public List<VolunteerSkill> GetVolunteerSkillByUserId(int userId)
-        { 
+        {
             return _volunteerSkills._table.Where(m => m.userId == userId).ToList();
         }
         public List<VolunteerSkill> GetVolunteerSkillsByUserId(int? userId)
         {
             return _volunteerSkills._table.Where(m => m.userId == userId).ToList();
-        }
-        public List<VolunteerSkillsHistory> GetVolunteerSkillHistoryByUserId(int userId)
-        {
-            return _volunteerSkillHistory._table.Where(m => m.userId == userId).ToList();
         }
         public List<UserDonated> GetTotalDonationByEventId(int eventId)
         {
@@ -541,16 +471,12 @@ namespace Tabang_Hub.Repository
         {
             return _skills._table.Where(m => m.skillName == skillName).FirstOrDefault();
         }
-        public List<UserDonatedHistory> GetTotalDonationHistoryByEventId(int eventId)
-        {
-            return _userDonatedHistory._table.Where(d => d.eventId == eventId).ToList();
-        }
         public List<Volunteers> GetTotalVolunteerByEventId(int eventId)
         {
             return _eventVolunteers._table.Where(m => m.eventId == eventId).ToList();
         }
         public List<Volunteers> GetPendingVolunteersByEventId(int eventId)
-        { 
+        {
             return _eventVolunteers._table.Where(m => m.eventId == eventId && m.Status == 0).ToList();
         }
         public List<UserAccount> GetListOfVolunteer()
@@ -594,7 +520,7 @@ namespace Tabang_Hub.Repository
             return _orgEventsImage._table.Where(m => m.eventId == eventId).FirstOrDefault();
         }
         public List<OrgEvents> GetOrgEventsByUserId(int userId)
-        { 
+        {
             return _orgEvents._table.Where(m => m.userId == userId).ToList();
         }
         public List<OrgEventImage> listOfEventImage(int id)
@@ -762,135 +688,7 @@ namespace Tabang_Hub.Repository
 
             return ErrorCode.Success;
         }
-        public ErrorCode TransferToHistory(int userId, ref string errMsg)
-        {
-            var toTransfer = ListOfEvents(userId);
-
-            foreach (var transfer in toTransfer)
-            {
-                var userDonate = ListOfUserDonated(transfer.Event_Id);
-                var volunteers = ListOfEventVolunteers(transfer.Event_Id);
-                var skillRequirements = listOfSkillRequirement(transfer.Event_Id);
-                var orgImage = listOfEventImage(transfer.Event_Id);
-
-                if (transfer.End_Date <= DateTime.Now)
-                {
-                    foreach (var donated in userDonate)
-                    {
-                        var donateHistory = new UserDonatedHistory()
-                        {
-                            eventId = (int)donated.eventId,
-                            userId = (int)donated.userId,
-                            amount = donated.amount,
-                        };
-                        if (_userDonatedHistory.Create(donateHistory, out errMsg) != ErrorCode.Success)
-                        {
-                            return ErrorCode.Error;
-                        }
-
-                        if (_userDonated.Delete(donated.orgUserDonatedId) != ErrorCode.Success)
-                        {
-                            return ErrorCode.Error;
-                        }
-                    }
-                    foreach (var volunteer in volunteers)
-                    {
-                        var volunteerSkills = GetListOfVolunteerSkillByUserId((int)volunteer.skillId);
-
-                        foreach (var skills in volunteerSkills)
-                        {
-                            var volunteerSkillHistory = new VolunteerSkillsHistory()
-                            {
-                                userId = skills.userId,
-                                skillId = skills.skillId,
-                            };
-
-                            if (_volunteerSkillHistory.Create(volunteerSkillHistory, out errMsg) != ErrorCode.Success)
-                            {
-                                return ErrorCode.Error;
-                            }
-                            if (_volunteerSkills.Delete(skills.volunteerSkillId) != ErrorCode.Success)
-                            {
-                                return ErrorCode.Error;
-                            }
-                        }
-
-                        var volunteersHistory = new VolunteersHistory()
-                        {
-                            eventId = volunteer.eventId,
-                            userId = volunteer?.userId,
-                            appliedAt = volunteer?.appliedAt,
-                            skillId = volunteer.skillId,
-                            Status = volunteer?.Status,
-                        };
-
-                        if (_volunteersHistory.Create(volunteersHistory, out errMsg) != ErrorCode.Success)
-                        {
-                            return ErrorCode.Error;
-                        }
-                        if (_eventVolunteers.Delete(volunteer.applyVolunteerId) != ErrorCode.Success)
-                        {
-                            return ErrorCode.Error;
-                        }
-                    }
-                    foreach (var skillRequire in skillRequirements)
-                    {
-                        var skillRequirementsHistory = new OrgSkillRequirementsHistory()
-                        {
-                            eventId = (int)skillRequire.eventId,
-                            skillId = skillRequire.skillId,
-                            totalNeeded = skillRequire.totalNeeded,
-                        };
-                        if (_skillRequirementsHistory.Create(skillRequirementsHistory, out errMsg) != ErrorCode.Success)
-                        {
-                            return ErrorCode.Error;
-                        }
-                        if (_orgSkillRequirements.Delete(skillRequire.skillRequirementId) != ErrorCode.Success)
-                        {
-                            return ErrorCode.Error;
-                        }
-                    }
-                    foreach (var image in orgImage)
-                    {
-                        var imageHistory = new OrgEventImageHistory()
-                        {
-                            eventId = (int)image.eventId,
-                            eventImage = image.eventImage,
-                        };
-                        if (_orgEventImageHistory.Create(imageHistory, out errMsg) != ErrorCode.Success)
-                        {
-                            return ErrorCode.Error;
-                        }
-                        if (_orgEventsImage.Delete(image.eventImageId) != ErrorCode.Success)
-                        {
-                            return ErrorCode.Error;
-                        }
-                    }
-
-                    var eventHistory = new OrgEventHistory()
-                    {
-                        eventId = transfer.Event_Id,
-                        userId = (int)transfer.User_Id,
-                        eventTitle = transfer.Event_Name,
-                        eventDescription = transfer.Description,
-                        targetAmount = transfer.Target_Amount,
-                        maxVolunteer = transfer.Maximum_Volunteer,
-                        dateStart = transfer.Start_Date,
-                        dateEnd = transfer.End_Date,
-                        location = transfer.Location,
-                    };
-                    if (_orgEventHistory.Create(eventHistory, out errMsg) != ErrorCode.Success)
-                    {
-                        return ErrorCode.Error;
-                    }
-                    if (_orgEvents.Delete(transfer.Event_Id) != ErrorCode.Success)
-                    {
-                        return ErrorCode.Error;
-                    }
-                }
-            }
-            return ErrorCode.Success;
-        }
+       
         public async Task<List<FilteredVolunteer>> GetMatchedVolunteers(int eventId)
         {
             string flaskApiUrl = "http://127.0.0.1:5000/recruit"; // Flask API URL
@@ -962,207 +760,56 @@ namespace Tabang_Hub.Repository
             return recruit; // Return the list of recommended volunteers and any error message
         }
 
-        //public List<UserAccount> GetMatchedVolunteers(int eventId)
-        //{
-
-        //    var matchedVolunteers = new List<UserAccount>();
-
-        //    var userAcc = GetListOfVolunteer();
-
-        //    var orgEvent = GetEventsByEventId(eventId);
-
-        //    foreach (var users in userAcc)
-        //    {
-        //        var userSkills = GetVolunteerSkillsByUserId(users.userId);
-
-        //        foreach (var skills in userSkills)
-        //        {
-        //            foreach (var skillRequ in orgEvent.OrgSkillRequirement)
-        //            {
-        //                if (skills.Skills.skillName == skillRequ.Skills.skillName)
-        //                {
-        //                    matchedVolunteers.Add(users);
-
-        //                    break;
-        //                }
-        //            }
-
-        //            if (matchedVolunteers.Contains(users))
-        //            {
-        //                break;
-        //            }
-        //        }
-        //    }
-
-        //    return matchedVolunteers;
-        //}
-        public ErrorCode TrasferToHisotry1(int eventId, ref string errMsg)
+        public ErrorCode TrasferToHisotry1(int eventId, List<VolunteerRatingData> volunteerRatings, ref string errMsg)
         {
             var orgEvent = GetEventByEventId(eventId);
-            var userDonate = ListOfUserDonated(eventId);
             var volunteers = ListOfEventVolunteers(eventId);
-            var skillRequirements = listOfSkillRequirement(eventId);
-            var orgImage = listOfEventImage(eventId);
-            var groupChat = GetGroupChatByEventId(eventId);
-            var groupMessages = GetGroupMessagesByGroupChatId(groupChat.groupChatId);
 
-            //foreach (var donated in userDonate)
-            //{
-            //    var donateHistory = new UserDonatedHistory()
-            //    {
-            //        eventId = (int)donated.eventId,
-            //        userId = (int)donated.userId,
-            //        amount = donated.amount,
-            //    };
-            //    if (_userDonatedHistory.Create(donateHistory, out errMsg) != ErrorCode.Success)
-            //    {
-            //        return ErrorCode.Error;
-            //    }
-
-            //    if (_userDonated.Delete(donated.orgUserDonatedId) != ErrorCode.Success)
-            //    {
-            //        return ErrorCode.Error;
-            //    }
-            //}
-            //foreach (var volunteer in volunteers)
-            //{
-            //    var volunteerSkills = GetListOfVolunteerSkillByUserId((int)volunteer.skillId);
-
-            //    foreach (var skills in volunteerSkills)
-            //    {
-            //        var volunteerSkillHistory = new VolunteerSkillsHistory()
-            //        {
-            //            userId = skills.userId,
-            //            skillId = skills.skillId,
-            //        };
-
-            //        if (_volunteerSkillHistory.Create(volunteerSkillHistory, out errMsg) != ErrorCode.Success)
-            //        {
-            //            return ErrorCode.Error;
-            //        }
-            //        if (_volunteerSkills.Delete(skills.volunteerSkillId) != ErrorCode.Success)
-            //        {
-            //            return ErrorCode.Error;
-            //        }
-            //    }
-
-            //    var volunteersHistory = new VolunteersHistory()
-            //    {
-            //        eventId = volunteer.eventId,
-            //        userId = volunteer?.userId,
-            //        appliedAt = volunteer?.appliedAt,
-            //        skillId = volunteer.skillId,
-            //        attended = volunteer.attended,
-            //        Status = volunteer?.Status,
-            //    };
-
-            //    if (_volunteersHistory.Create(volunteersHistory, out errMsg) != ErrorCode.Success)
-            //    {
-            //        return ErrorCode.Error;
-            //    }
-            //    if (_eventVolunteers.Delete(volunteer.applyVolunteerId) != ErrorCode.Success)
-            //    {
-            //        return ErrorCode.Error;
-            //    }
-            //}
-            //foreach (var skillRequire in skillRequirements)
-            //{
-            //    var skillRequirementsHistory = new OrgSkillRequirementsHistory()
-            //    {
-            //        eventId = (int)skillRequire.eventId,
-            //        skillId = skillRequire.skillId,
-            //        totalNeeded = skillRequire.totalNeeded,
-            //    };
-            //    if (_skillRequirementsHistory.Create(skillRequirementsHistory, out errMsg) != ErrorCode.Success)
-            //    {
-            //        return ErrorCode.Error;
-            //    }
-            //    if (_orgSkillRequirements.Delete(skillRequire.skillRequirementId) != ErrorCode.Success)
-            //    {
-            //        return ErrorCode.Error;
-            //    }
-            //}
-            //foreach (var image in orgImage)
-            //{
-            //    var imageHistory = new OrgEventImageHistory()
-            //    {
-            //        eventId = (int)image.eventId,
-            //        eventImage = image.eventImage,
-            //    };
-            //    if (_orgEventImageHistory.Create(imageHistory, out errMsg) != ErrorCode.Success)
-            //    {
-            //        return ErrorCode.Error;
-            //    }
-            //    if (_orgEventsImage.Delete(image.eventImageId) != ErrorCode.Success)
-            //    {
-            //        return ErrorCode.Error;
-            //    }
-            //}
-            //foreach (var messages in groupMessages)
-            //{
-            //    var messageHistory = new GroupMessagesHistory()
-            //    {
-            //        userId = messages.userId,
-            //        message = messages.message,
-            //        messageAt = messages.messageAt,
-            //    };
-            //    if (_groupMessagesHistory.Create(messageHistory, out errMsg) != ErrorCode.Success)
-            //    {
-            //        return ErrorCode.Error;
-            //    }
-            //    if (_groupMessages.Delete(messages.messageId) != ErrorCode.Success)
-            //    {
-            //        return ErrorCode.Error;
-            //    }
-            //}
-
-            //var groupAChatHistory = new GroupChatHistory()
-            //{
-            //    eventId = groupChat.eventId,
-            //    orgInfoId = groupChat.orgInfoId,
-            //};
-            //if (_groupChatHistory.Create(groupAChatHistory, out errMsg) != ErrorCode.Success)
-            //{
-            //    return ErrorCode.Error;
-            //}
-            //if (_groupChat.Delete(groupChat.groupChatId) != ErrorCode.Success)
-            //{
-            //    return ErrorCode.Error;
-            //}
-
-            var events = new OrgEvents()
+            foreach (var volunteer in volunteers)
             {
-                userId = (int)orgEvent.userId,
-                eventTitle = orgEvent.eventTitle,
-                eventDescription = orgEvent.eventDescription,
-                targetAmount = orgEvent.targetAmount,
-                maxVolunteer = orgEvent.maxVolunteer,
-                dateStart = orgEvent.dateStart,
-                dateEnd = orgEvent.dateEnd,
-                location = orgEvent.location,
-                status = 2
-            };
-            if (_orgEvents.Update(orgEvent.eventId, events, out errMsg) != ErrorCode.Success)
+                foreach (var rate in volunteerRatings)
+                {
+                    if (volunteer.userId == rate.VolunteerId)
+                    {
+                        var volunteersHistory = new VolunteersHistory()
+                        {
+
+                            userId = volunteer?.userId,
+                            eventId = volunteer.eventId,
+                            appliedAt = volunteer?.appliedAt,
+                            attended = rate.Attendance,
+                        };
+
+                        if (_volunteersHistory.Create(volunteersHistory, out errMsg) != ErrorCode.Success)
+                        {
+                            return ErrorCode.Error;
+                        }
+                    }
+                }
+               
+            }       
+
+            orgEvent.status = 2;
+
+            if (_orgEvents.Update(orgEvent.eventId, orgEvent, out errMsg) != ErrorCode.Success)
             {
                 return ErrorCode.Error;
             }
             return ErrorCode.Success;
         }
-        public ErrorCode SaveRating(int eventId, int attended, int userId, int rating, ref string errMsg)
+        public ErrorCode SaveRating(int eventId, int attended, int userId, int skillId, int rating, ref string errMsg)
         {
-            var skillId = GetSkillIdByEventIdAndUserId(eventId, userId);
+            var skillId1 = GetSkillIdByEventIdAndUserId(eventId, userId);
             var ratings = new Rating()
             {
                 eventId = eventId,
                 userId = userId,
                 rate = rating,
-                skillId = skillId.skillId,
+                skillId = skillId,
                 ratedAt = DateTime.Now,
             };
 
-            skillId.attended = attended;
-
-            if (_eventVolunteers.Update(skillId.applyVolunteerId, skillId, out errMsg) != ErrorCode.Success)
+            if (_eventVolunteers.Update(skillId1.applyVolunteerId, skillId1, out errMsg) != ErrorCode.Success)
             {
                 return ErrorCode.Error;
             }

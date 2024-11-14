@@ -24,8 +24,6 @@ namespace Tabang_Hub.Repository
         private BaseRepository<OrgValidation> _orgValidation;
         private BaseRepository<OrgInfo> _orgInfo;
         private BaseRepository<Skills> _skills;
-        private BaseRepository<OrgEventHistory> _orgEventHistory;
-        private BaseRepository<VolunteerSkillsHistory> _volunteerSkillsHistory;
 
 
         public AdminManager()
@@ -46,8 +44,6 @@ namespace Tabang_Hub.Repository
             _orgValidation = new BaseRepository<OrgValidation>();
             _orgInfo = new BaseRepository<OrgInfo>();
             _skills = new BaseRepository<Skills>();
-            _orgEventHistory = new BaseRepository<OrgEventHistory>();
-            _volunteerSkillsHistory = new BaseRepository<VolunteerSkillsHistory>();
         }
 
         public List<vw_VolunteerAccounts> GetVolunteerAccounts()
@@ -77,10 +73,6 @@ namespace Tabang_Hub.Repository
         public List<VolunteerSkill> GetVolunteerSkillsByUserId(int userId)
         {
             return _volunteerSkill.GetAll().Where(m => m.userId == userId).ToList();
-        }
-        public List<VolunteerSkillsHistory> GetVolunteerSkillHistoryByUserId(int userId)
-        {
-            return _volunteerSkillsHistory.GetAll().Where(m => m.userId == userId).ToList();
         }
         
         public List<UserRoles> GetRolesByUserId(int userId)
@@ -144,15 +136,14 @@ namespace Tabang_Hub.Repository
         { 
             return _orgSkillRequirement._table.Where(m => m.eventId == eventId).ToList();
         }
-        public List<VolunteerSkillsHistory> GetAllHistorySkills()
+        public List<VolunteerSkill> GetVolunteerSkillBySkillId(int skillId)
         {
-            return _volunteerSkillsHistory.GetAll();
+            return _volunteerSkill._table.Where(m => m.skillId == skillId).ToList();
         }
         public Dictionary<string, int> GetAllVolunteerSkills()
         {
             // Step 1: Get the list of events created by the user (Organization or Event Creator)
             var allSkills = GetAllSkills(); // Assuming ListOfEvents(userId) returns a list of events
-            var allSkillsHistory = GetAllHistorySkills();
             // Step 2: Initialize a dictionary to count the frequency of each skill by name
             Dictionary<string, int> skillFrequency = new Dictionary<string, int>();
 
@@ -176,28 +167,38 @@ namespace Tabang_Hub.Repository
                     }
                 }
 
-            // For each volunteer, get their skills
-            foreach (var volunteer in allSkillsHistory)
-            {
-                // Assuming you have a method GetVolunteerSkillsByUserId to get the skills of a volunteer
-                var skills = GetVolunteerSkillHistoryByUserId((int)volunteer.userId);
-
-                // Count the occurrence of each skill by its name
-                foreach (var skill in skills)
-                {
-                    if (skillFrequency.ContainsKey(skill.Skills.skillName)) // Assuming SkillName is a string representing the skill's name
-                    {
-                        skillFrequency[skill.Skills.skillName]++; // Increment count if skill already exists
-                    }
-                    else
-                    {
-                        skillFrequency[skill.Skills.skillName] = 1; // Initialize with count 1 if it doesn't exist
-                    }
-                }
-            }  
-
             // Step 4: Return the dictionary containing the skills and their counts
             return skillFrequency;
+        }
+        public ErrorCode EditSkill(int skillId, string skillName, string imagePath, ref string errMsg)
+        {
+            var toUpdate = GetSkillById(skillId);
+            var toDelete = GetVolunteerSkillBySkillId((int)skillId);
+
+            if (toUpdate == null)
+            {
+                errMsg = "Skill not found.";
+                return ErrorCode.Error;
+            }
+
+            // Update properties
+            toUpdate.skillName = skillName;
+            toUpdate.skillImage = imagePath;
+
+            // Attempt to update the database
+            if (_skills.Update(toUpdate.skillId, toUpdate, out errMsg) != ErrorCode.Success)
+            {
+                return ErrorCode.Error;
+            }
+
+            foreach (var del in toDelete)
+            {
+                if (_volunteerSkill.Delete(del.skillId) != ErrorCode.Success)
+                {
+                    return ErrorCode.Error;
+                }
+            }
+            return ErrorCode.Success;
         }
         public List<OrgInfo> GetRecentOrgAccount()
         {
@@ -258,7 +259,7 @@ namespace Tabang_Hub.Repository
                 );
 
             // Events from the history table
-            var historySummary = _orgEventHistory._table
+            var historySummary = _orgEvents._table.Where(m => m.status == 2)
                 .GroupBy(m => m.dateStart.Value.Month)
                 .ToDictionary(
                     group => group.Key,

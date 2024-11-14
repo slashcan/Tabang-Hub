@@ -113,7 +113,7 @@ namespace Tabang_Hub.Controllers
                 skills = _skills.GetAll().ToList(),
                 volunteersHistories = _volunteerManager.GetVolunteersHistoryByUserId(getUserAccount.userId),
                 rating = db.Rating.Where(m => m.userId == getUserAccount.userId).ToList(),
-                orgEventHistory1 = db.OrgEventHistory.Where(m => m.userId == getUserAccount.userId).ToList(),
+                orgEventHistory = db.OrgEvents.Where(m => m.userId == getUserAccount.userId &&  m.status == 2).ToList(),
                 //listOfEvents = filteredEvent.OrderByDescending(m => m.Event_Id).ToList(),
                 detailsEventImage = _eventImages.GetAll().ToList()
             };
@@ -376,6 +376,64 @@ namespace Tabang_Hub.Controllers
             }
 
             return Json(new { success = false, message = "An error occurred while adding the skill." });
+        }
+        [HttpPost]
+        public JsonResult EditSkill(int skillId, string skillName, HttpPostedFileBase skillImage)
+        {
+            try
+            {
+                // Validate inputs
+                if (string.IsNullOrWhiteSpace(skillName))
+                {
+                    return Json(new { success = false, message = "Skill name cannot be empty." });
+                }
+
+                // Fetch the current skill details from the database
+                var existingSkill = _adminManager.GetSkillById(skillId);
+                if (existingSkill == null)
+                {
+                    return Json(new { success = false, message = "Skill not found." });
+                }
+
+                // Handle image update if a new image is uploaded
+                string imagePath = existingSkill.skillImage; // Keep the current image by default
+                if (skillImage != null && skillImage.ContentLength > 0)
+                {
+                    var directoryPath = Server.MapPath("~/Content/SkillImages/");
+                    if (!Directory.Exists(directoryPath))
+                    {
+                        Directory.CreateDirectory(directoryPath);
+                    }
+
+                    var fileName = Path.GetFileName(skillImage.FileName);
+                    var path = Path.Combine(directoryPath, fileName);
+                    skillImage.SaveAs(path);
+                    imagePath = fileName; // Update imagePath to the new file name
+                }
+
+                // Update skill in the database
+                string errMsg = string.Empty;
+                if (_adminManager.EditSkill(skillId, skillName, imagePath, ref errMsg) == ErrorCode.Success)
+                {
+                    var volunteerSkill = _adminManager.GetVolunteerSkillBySkillId(skillId);
+
+                    foreach (var vol in volunteerSkill)
+                    {
+                        var sendNotif = _organizationManager.SentNotif((int)vol.userId, UserId, (int)vol.skillId, "Edit Skill", $"The {vol.Skills.skillName} skill has been updated and removed from your skill set.", 0, ref errMsg);
+                    }
+                    return Json(new { success = true, message = "Skill updated successfully." });
+                }
+                else
+                {
+                    return Json(new { success = false, message = errMsg });
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log the exception for debugging purposes
+                System.Diagnostics.Debug.WriteLine($"Error: {ex.Message}");
+                return Json(new { success = false, message = "An error occurred while updating the skill. Please try again later." });
+            }
         }
         // Action to handle the deletion of a skill
         [HttpPost]

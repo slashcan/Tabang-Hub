@@ -1889,13 +1889,6 @@
     <Content Include="Content\vendors\toastify\toastify.css" />
     <Content Include="Content\vendors\toastify\toastify.js" />
     <Content Include="Global.asax" />
-    <EntityDeploy Include="ModelTabangHub.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>ModelTabangHub.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <Content Include="ModelTabangHub.edmx.diagram">
-      <DependentUpon>ModelTabangHub.edmx</DependentUpon>
-    </Content>
     <Content Include="Content\vendors\apexcharts\locales\ca.json" />
     <Content Include="Content\vendors\apexcharts\locales\cs.json" />
     <Content Include="Content\vendors\apexcharts\locales\de.json" />
@@ -1961,8 +1954,16 @@
     <Content Include="Content\vendors\tinymce\skins\ui\oxide-dark\fonts\tinymce-mobile.woff" />
     <Content Include="Content\vendors\tinymce\skins\ui\oxide\fonts\tinymce-mobile.woff" />
     <Content Include="Content\js1\bootstrap.min.js.map" />
+    <EntityDeploy Include="ModelTabangHub.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>ModelTabangHub.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="ModelTabangHub.edmx.diagram">
+      <DependentUpon>ModelTabangHub.edmx</DependentUpon>
+    </Content>
     <None Include="scripts\_vs2012.intellisense.js" />
     <None Include="scripts\_references.js" />
+    <None Include="scripts\jquery-1.6.4-vsdoc.js" />
     <Content Include="ModelTabangHub.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>ModelTabangHub.edmx</DependentUpon>
@@ -1973,7 +1974,6 @@
       <DependentUpon>ModelTabangHub.edmx</DependentUpon>
       <LastGenOutput>ModelTabangHub.cs</LastGenOutput>
     </Content>
-    <None Include="scripts\jquery-1.6.4-vsdoc.js" />
     <Content Include="scripts\jquery-1.6.4.js" />
     <Content Include="scripts\jquery-1.6.4.min.js" />
     <Content Include="scripts\jquery.signalR-2.4.3.js" />
@@ -1997,13 +1997,7 @@
     <Compile Include="GroupChat.cs">
       <DependentUpon>ModelTabangHub.tt</DependentUpon>
     </Compile>
-    <Compile Include="GroupChatHistory.cs">
-      <DependentUpon>ModelTabangHub.tt</DependentUpon>
-    </Compile>
     <Compile Include="GroupMessages.cs">
-      <DependentUpon>ModelTabangHub.tt</DependentUpon>
-    </Compile>
-    <Compile Include="GroupMessagesHistory.cs">
       <DependentUpon>ModelTabangHub.tt</DependentUpon>
     </Compile>
     <Compile Include="Hubs\ChatHub.cs" />
@@ -2030,13 +2024,7 @@
     <Compile Include="Notification.cs">
       <DependentUpon>ModelTabangHub.tt</DependentUpon>
     </Compile>
-    <Compile Include="OrgEventHistory.cs">
-      <DependentUpon>ModelTabangHub.tt</DependentUpon>
-    </Compile>
     <Compile Include="OrgEventImage.cs">
-      <DependentUpon>ModelTabangHub.tt</DependentUpon>
-    </Compile>
-    <Compile Include="OrgEventImageHistory.cs">
       <DependentUpon>ModelTabangHub.tt</DependentUpon>
     </Compile>
     <Compile Include="OrgEvents.cs">
@@ -2046,9 +2034,6 @@
       <DependentUpon>ModelTabangHub.tt</DependentUpon>
     </Compile>
     <Compile Include="OrgSkillRequirement.cs">
-      <DependentUpon>ModelTabangHub.tt</DependentUpon>
-    </Compile>
-    <Compile Include="OrgSkillRequirementsHistory.cs">
       <DependentUpon>ModelTabangHub.tt</DependentUpon>
     </Compile>
     <Compile Include="OrgValidation.cs">
@@ -2108,9 +2093,6 @@
     <Compile Include="UserDonated.cs">
       <DependentUpon>ModelTabangHub.tt</DependentUpon>
     </Compile>
-    <Compile Include="UserDonatedHistory.cs">
-      <DependentUpon>ModelTabangHub.tt</DependentUpon>
-    </Compile>
     <Compile Include="UserRoles.cs">
       <DependentUpon>ModelTabangHub.tt</DependentUpon>
     </Compile>
@@ -2128,9 +2110,6 @@
       <DependentUpon>ModelTabangHub.tt</DependentUpon>
     </Compile>
     <Compile Include="VolunteerSkill.cs">
-      <DependentUpon>ModelTabangHub.tt</DependentUpon>
-    </Compile>
-    <Compile Include="VolunteerSkillsHistory.cs">
       <DependentUpon>ModelTabangHub.tt</DependentUpon>
     </Compile>
     <Compile Include="vw_ListOfEvent.cs">
