@@ -1008,7 +1008,7 @@ namespace Tabang_Hub.Controllers
                 return Json(new { success = false, message = "error message" });
             }
         }
-        public ActionResult OrganizationProfile(int userId)
+        public async Task<ActionResult> OrganizationProfile(int userId)
         {
             var userProfile = db.ProfilePicture.Where(m => m.userId == UserId).ToList();
             var getVolunteerInfo = db.VolunteerInfo.Where(m => m.userId == UserId).ToList();
@@ -1025,6 +1025,15 @@ namespace Tabang_Hub.Controllers
                 orgImage.Add(orgEvenImage);
             }
 
+            var recommendedEvents = await _volunteerManager.RunRecommendation(UserId);
+
+            var filteredEvent = new List<vw_ListOfEvent>();
+            foreach (var recommendedEvent in recommendedEvents)
+            {
+                var matchedEvents = _listsOfEvent.GetAll().Where(m => m.Event_Id == recommendedEvent.EventID).ToList();
+                filteredEvent.AddRange(matchedEvents);
+            }
+
             var indexModel = new Lists()
             {
                 picture = userProfile,
@@ -1032,6 +1041,7 @@ namespace Tabang_Hub.Controllers
                 OrgInfo = getOrgInfo,
                 detailsEventImage = orgImage,
                 getAllOrgEvent = orgEvents,
+                listOfEvents = filteredEvent.OrderByDescending(m => m.Event_Id).ToList(),
             };
 
             return View(indexModel);

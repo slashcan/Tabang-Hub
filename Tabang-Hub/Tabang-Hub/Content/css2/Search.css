@@ -16,7 +16,7 @@
     padding: 10px;
     font-size: 16px;
     border: 1px solid #bac2c2;
-    border-radius: 4px 0 0 4px;
+    border-radius: 10px;
     outline: none;
     color: black;
     background-color: #F8F9FA;
@@ -216,6 +216,9 @@
     .uName{
         display: none;
     }
+    #userDropdown {
+        display: none;
+    }
     .uMessage{
         display: none;
     }
@@ -236,6 +239,9 @@
 
     .search-button {
         padding: 0 10px;
+    }
+    .suggestions .suggestion-item{
+        font-size: 12px;
     }
 }
 
