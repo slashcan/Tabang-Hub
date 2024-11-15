@@ -164,7 +164,7 @@ namespace Tabang_Hub.Controllers
             return View(indexModel);
         }
         [HttpPost]
-        public ActionResult CreateEvents(Lists events, List<string> skills, HttpPostedFileBase[] images)
+        public async Task<ActionResult> CreateEvents(Lists events, List<string> skills, HttpPostedFileBase[] images)
         {
             // Sanitize skill names
             var sanitizedSkills = new List<string>();
@@ -242,6 +242,18 @@ namespace Tabang_Hub.Controllers
             {
                 ModelState.AddModelError(string.Empty, errMsg);
                 return RedirectToAction("EventsList");
+            }
+
+            var filtered = await _organizationManager.GetMatchedVolunteers(events.CreateEvents.eventId);
+            var user = _organizationManager.GetOrgInfoByUserId(UserId);
+
+            foreach(var fltr in filtered)
+            {
+                if (_organizationManager.SentNotif(fltr.userId, UserId, events.CreateEvents.eventId, "Create Event", $"{user.orgName} create a new event that matched your skills!", 0, ref ErrorMessage) != ErrorCode.Success)
+                {
+                    TempData["Error Sending Notification"] = true;
+                    return RedirectToAction("EventsList");
+                }
             }
 
             TempData["Success"] = true;
@@ -330,6 +342,72 @@ namespace Tabang_Hub.Controllers
                 return View(indexModel);
             }
             return RedirectToAction("EventsManagement");
+        }
+
+        [HttpPost]
+        public JsonResult InviteVolunteer(List<int> selectedVolunteers, int eventId)
+        {
+            string errMsg = string.Empty;
+            var events = _organizationManager.GetEventByEventId(eventId);
+            List<int> alreadyJoinedUsers = new List<int>();
+            List<int> alreadyInvitedUsers = new List<int>();
+            List<int> newlyInvitedUsers = new List<int>();
+
+            foreach (var userId in selectedVolunteers)
+            {
+                // Check if the user is already joined
+                var volunteer = _organizationManager.GetVolunteerById(userId, eventId);
+                if (volunteer != null)
+                {
+                    if (volunteer.Status != 3)
+                    {
+                        alreadyJoinedUsers.Add(userId);
+                        continue; // Skip to next user if they are already joined
+                    }
+                    else if (volunteer.Status == 3)
+                    {
+                        alreadyInvitedUsers.Add(userId);
+                        // Optionally, you can choose to skip inviting again
+                        // continue;
+                    }
+                }
+                else
+                {
+                    // Process the invitation for users who are not yet joined
+                    if (_organizationManager.InviteVolunteer(userId, eventId, ref errMsg) != ErrorCode.Success)
+                    {
+                        return Json(new { success = false, message = errMsg });
+                    }
+                    newlyInvitedUsers.Add(userId);
+                }
+
+                // Send notification
+                var notification = new Notification
+                {
+                    userId = userId,
+                    senderUserId = UserId, // Ensure UserId is properly set
+                    relatedId = events.eventId,
+                    type = "Invitation",
+                    content = $"You have been invited to join the {events.eventTitle} event.",
+                    broadcast = 0,
+                    status = 0,
+                    createdAt = DateTime.Now,
+                    readAt = null
+                };
+
+                db.Notification.Add(notification);
+                db.SaveChanges();
+            }
+
+            // Return JSON indicating success, listing already joined, already invited, and newly invited users
+            return Json(new
+            {
+                success = true,
+                redirectUrl = Url.Action("Details", "Organization", new { id = eventId }),
+                alreadyJoinedUsers = alreadyJoinedUsers,
+                alreadyInvitedUsers = alreadyInvitedUsers,
+                newlyInvitedUsers = newlyInvitedUsers
+            });
         }
 
         [HttpPost]

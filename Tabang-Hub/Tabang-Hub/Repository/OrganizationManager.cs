@@ -329,19 +329,6 @@ namespace Tabang_Hub.Repository
                     group => group.Count()
                 );
 
-            // Merge the two dictionaries
-            foreach (var month in eventSummary.Keys)
-            {
-                if (eventSummary.ContainsKey(month))
-                {
-                    eventSummary[month] += eventSummary[month];
-                }
-                else
-                {
-                    eventSummary[month] = eventSummary[month];
-                }
-            }
-
             return eventSummary;
         }
 
