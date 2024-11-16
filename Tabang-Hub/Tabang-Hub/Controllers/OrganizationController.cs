@@ -771,10 +771,10 @@ namespace Tabang_Hub.Controllers
 
             var events = _organizationManager.ListOfEvents(UserId);
             csv.AppendLine("Events Data");
-            csv.AppendLine("Event ID,User ID,Event Title,Event Description,Target Amount,Max Volunteers,Start Date,End Date,Location");
+            csv.AppendLine("Event ID,User ID,Event Title,Event Description,Target Amount,Max Volunteers,Start Date,End Date,location");
             foreach (var evt in events)
             {
-                csv.AppendLine($"{evt.Event_Id},{evt.User_Id},{evt.Event_Name},{evt.Description},{evt.Target_Amount},{evt.Maximum_Volunteer},{evt.Start_Date},{evt.End_Date},{evt.Location}");
+                csv.AppendLine($"{evt.Event_Id},{evt.User_Id},{evt.Event_Name},{evt.Description},{evt.Target_Amount},{evt.Maximum_Volunteer},{evt.Start_Date},{evt.End_Date},{evt.location}");
             }
             csv.AppendLine();
 

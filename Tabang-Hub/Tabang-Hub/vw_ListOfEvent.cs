@@ -24,7 +24,7 @@ namespace Tabang_Hub
         public Nullable<int> Maximum_Volunteer { get; set; }
         public Nullable<System.DateTime> Start_Date { get; set; }
         public Nullable<System.DateTime> End_Date { get; set; }
-        public string Location { get; set; }
-        public Nullable<int> Status { get; set; }
+        public string location { get; set; }
+        public Nullable<int> status { get; set; }
     }
 }

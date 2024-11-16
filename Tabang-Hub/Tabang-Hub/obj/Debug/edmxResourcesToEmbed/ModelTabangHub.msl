@@ -237,24 +237,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="vw_ListOfEvent">
-      <EntityTypeMapping TypeName="TabangHubModel.vw_ListOfEvent">
-        <MappingFragment StoreEntitySet="vw_ListOfEvent">
-          <ScalarProperty Name="Event_Id" ColumnName="Event_Id" />
-          <ScalarProperty Name="User_Id" ColumnName="User_Id" />
-          <ScalarProperty Name="Event_Name" ColumnName="Event_Name" />
-          <ScalarProperty Name="Description" ColumnName="Description" />
-          <ScalarProperty Name="Total_Donation" ColumnName="Total Donation" />
-          <ScalarProperty Name="Target_Amount" ColumnName="Target_Amount" />
-          <ScalarProperty Name="Total_Volunteer" ColumnName="Total_Volunteer" />
-          <ScalarProperty Name="Maximum_Volunteer" ColumnName="Maximum_Volunteer" />
-          <ScalarProperty Name="Start_Date" ColumnName="Start_Date" />
-          <ScalarProperty Name="End_Date" ColumnName="End_Date" />
-          <ScalarProperty Name="Location" ColumnName="Location" />
-          <ScalarProperty Name="Status" ColumnName="Status" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="vw_OrganizationAccounts">
       <EntityTypeMapping TypeName="TabangHubModel.vw_OrganizationAccounts">
         <MappingFragment StoreEntitySet="vw_OrganizationAccounts">
@@ -370,16 +352,6 @@
       </ResultMapping>
     </FunctionImportMapping>
     <FunctionImportMapping FunctionImportName="sp_LeaveEvent" FunctionName="TabangHubModel.Store.sp_LeaveEvent" />
-    <FunctionImportMapping FunctionImportName="sp_ListOfGc" FunctionName="TabangHubModel.Store.sp_ListOfGc">
-      <ResultMapping>
-        <ComplexTypeMapping TypeName="TabangHubModel.sp_ListOfGc_Result">
-          <ScalarProperty Name="groupChatId" ColumnName="groupChatId" />
-          <ScalarProperty Name="userId" ColumnName="userId" />
-          <ScalarProperty Name="eventId" ColumnName="eventId" />
-          <ScalarProperty Name="eventTitle" ColumnName="eventTitle" />
-        </ComplexTypeMapping>
-      </ResultMapping>
-    </FunctionImportMapping>
     <FunctionImportMapping FunctionImportName="sp_matchSkill" FunctionName="TabangHubModel.Store.sp_matchSkill">
       <ResultMapping>
         <ComplexTypeMapping TypeName="TabangHubModel.sp_matchSkill_Result">
@@ -408,19 +380,6 @@
       </ResultMapping>
     </FunctionImportMapping>
     <FunctionImportMapping FunctionImportName="sp_RemoveEvent" FunctionName="TabangHubModel.Store.sp_RemoveEvent" />
-    <FunctionImportMapping FunctionImportName="sp_UserListEvent" FunctionName="TabangHubModel.Store.sp_UserListEvent">
-      <ResultMapping>
-        <ComplexTypeMapping TypeName="TabangHubModel.sp_UserListEvent_Result">
-          <ScalarProperty Name="applyVolunteerId" ColumnName="applyVolunteerId" />
-          <ScalarProperty Name="userId" ColumnName="userId" />
-          <ScalarProperty Name="eventId" ColumnName="eventId" />
-          <ScalarProperty Name="Status" ColumnName="Status" />
-          <ScalarProperty Name="appliedAt" ColumnName="appliedAt" />
-          <ScalarProperty Name="dateStart" ColumnName="dateStart" />
-          <ScalarProperty Name="dateEnd" ColumnName="dateEnd" />
-        </ComplexTypeMapping>
-      </ResultMapping>
-    </FunctionImportMapping>
     <FunctionImportMapping FunctionImportName="sp_VolunteerHistory" FunctionName="TabangHubModel.Store.sp_VolunteerHistory">
       <ResultMapping>
         <ComplexTypeMapping TypeName="TabangHubModel.sp_VolunteerHistory_Result">
@@ -440,5 +399,47 @@
       </ResultMapping>
     </FunctionImportMapping>
     <FunctionImportMapping FunctionImportName="sp_AcceptAndUpdateVolunteerStatus" FunctionName="TabangHubModel.Store.sp_AcceptAndUpdateVolunteerStatus" />
+    <FunctionImportMapping FunctionImportName="sp_UserListEvent" FunctionName="TabangHubModel.Store.sp_UserListEvent">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="TabangHubModel.sp_UserListEvent_Result">
+          <ScalarProperty Name="applyVolunteerId" ColumnName="applyVolunteerId" />
+          <ScalarProperty Name="userId" ColumnName="userId" />
+          <ScalarProperty Name="eventId" ColumnName="eventId" />
+          <ScalarProperty Name="Volunteer_Status" ColumnName="Volunteer_Status" />
+          <ScalarProperty Name="appliedAt" ColumnName="appliedAt" />
+          <ScalarProperty Name="dateStart" ColumnName="dateStart" />
+          <ScalarProperty Name="dateEnd" ColumnName="dateEnd" />
+          <ScalarProperty Name="Event_Status" ColumnName="Event_Status" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <EntitySetMapping Name="vw_ListOfEvent">
+      <EntityTypeMapping TypeName="TabangHubModel.vw_ListOfEvent">
+        <MappingFragment StoreEntitySet="vw_ListOfEvent">
+          <ScalarProperty Name="status" ColumnName="status" />
+          <ScalarProperty Name="location" ColumnName="location" />
+          <ScalarProperty Name="End_Date" ColumnName="End_Date" />
+          <ScalarProperty Name="Start_Date" ColumnName="Start_Date" />
+          <ScalarProperty Name="Maximum_Volunteer" ColumnName="Maximum_Volunteer" />
+          <ScalarProperty Name="Total_Volunteer" ColumnName="Total_Volunteer" />
+          <ScalarProperty Name="Target_Amount" ColumnName="Target_Amount" />
+          <ScalarProperty Name="Total_Donation" ColumnName="Total Donation" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="Event_Name" ColumnName="Event_Name" />
+          <ScalarProperty Name="User_Id" ColumnName="User_Id" />
+          <ScalarProperty Name="Event_Id" ColumnName="Event_Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="sp_ListOfGc" FunctionName="TabangHubModel.Store.sp_ListOfGc">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="TabangHubModel.sp_ListOfGc_Result">
+          <ScalarProperty Name="groupChatId" ColumnName="groupChatId" />
+          <ScalarProperty Name="userId" ColumnName="userId" />
+          <ScalarProperty Name="eventId" ColumnName="eventId" />
+          <ScalarProperty Name="eventTitle" ColumnName="eventTitle" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
   </EntityContainerMapping>
 </Mapping>

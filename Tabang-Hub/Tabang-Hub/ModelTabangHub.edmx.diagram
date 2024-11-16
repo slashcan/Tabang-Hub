@@ -25,7 +25,6 @@
         <EntityTypeShape EntityType="TabangHubModel.Volunteers" Width="1.5" PointX="5.25" PointY="23.125" IsExpanded="true" />
         <EntityTypeShape EntityType="TabangHubModel.VolunteersHistory" Width="1.5" PointX="0.75" PointY="4.75" IsExpanded="true" />
         <EntityTypeShape EntityType="TabangHubModel.VolunteerSkill" Width="1.5" PointX="5.25" PointY="8.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="TabangHubModel.vw_ListOfEvent" Width="1.5" PointX="4.75" PointY="3.75" IsExpanded="true" />
         <EntityTypeShape EntityType="TabangHubModel.vw_OrganizationAccounts" Width="1.5" PointX="6.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="TabangHubModel.vw_UserRoles" Width="1.5" PointX="6.75" PointY="5.75" IsExpanded="true" />
         <EntityTypeShape EntityType="TabangHubModel.vw_VolunteerAccounts" Width="1.5" PointX="8.75" PointY="0.75" IsExpanded="true" />
@@ -50,6 +49,7 @@
         <AssociationConnector Association="TabangHubModel.FK_UserRoles_UserAccount" ManuallyRouted="false" />
         <AssociationConnector Association="TabangHubModel.FK_VolunteerInfo_UserAccount" ManuallyRouted="false" />
         <AssociationConnector Association="TabangHubModel.FK_Volunteers_UserAccount" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="TabangHubModel.vw_ListOfEvent" Width="1.5" PointX="7.375" PointY="8.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

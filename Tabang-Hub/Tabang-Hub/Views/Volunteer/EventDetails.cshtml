@@ -64,7 +64,7 @@
                         DateTime? originalDateEnd = location.End_Date;
                         string formattedDateEnd = originalDateEnd.HasValue ? originalDateEnd.Value.ToString("MMMM dd, yyyy") : "N/A";
 
-                        <i class="bi bi-geo-alt" style="font-size:24px;"></i> @location.Location
+                        <i class="bi bi-geo-alt" style="font-size:24px;"></i> @location.location
 
                         <div class="skills-required">
                             <h5>Skills Required</h5>
@@ -293,7 +293,7 @@ else
                         DateTime? originalDateEnd = location.End_Date;
                         string formattedDateEnd = originalDateEnd.HasValue ? originalDateEnd.Value.ToString("MMMM dd, yyyy") : "N/A";
 
-                        <i class="bi bi-geo-alt" style="font-size:24px;"></i> @location.Location
+                        <i class="bi bi-geo-alt" style="font-size:24px;"></i> @location.location
 
                         <div class="skills-required">
                             <h5>Skill/s Required</h5>
@@ -368,7 +368,7 @@ else
 
                                 <!-- Join Modal -->
                                 <div class="modal fade" id="joinModal" tabindex="-1" role="dialog" aria-labelledby="joinModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog" role="document">
+                                    @*<div class="modal-dialog" role="document">
                                         <div class="modal-content">
                                             <div class="modal-header">
                                                 <h5 class="modal-title" id="joinModalLabel">Join Event</h5>
@@ -401,7 +401,7 @@ else
                                                 <button type="button" class="btn btn-primary" onclick="applyEvent('@orgDetails.eventId')">Submit</button>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div>*@
                                 </div>
                             }
 

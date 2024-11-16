@@ -232,8 +232,8 @@ warning 6002: The table/view 'TabangHub.dbo.vw_ListOfEvent' does not have a prim
     <Property Name="Maximum_Volunteer" Type="int" />
     <Property Name="Start_Date" Type="datetime" />
     <Property Name="End_Date" Type="datetime" />
-    <Property Name="Location" Type="nvarchar" MaxLength="255" />
-    <Property Name="Status" Type="int" />
+    <Property Name="location" Type="nvarchar" MaxLength="255" />
+    <Property Name="status" Type="int" />
   </EntityType>
   <!--Errors Found During Generation:
 warning 6002: The table/view 'TabangHub.dbo.vw_OrganizationAccounts' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -629,8 +629,8 @@ warning 6002: The table/view 'TabangHub.dbo.vw_VolunteerSkills' does not have a 
 [vw_ListOfEvent].[Maximum_Volunteer] AS [Maximum_Volunteer], 
 [vw_ListOfEvent].[Start_Date] AS [Start_Date], 
 [vw_ListOfEvent].[End_Date] AS [End_Date], 
-[vw_ListOfEvent].[Location] AS [Location], 
-[vw_ListOfEvent].[Status] AS [Status]
+[vw_ListOfEvent].[location] AS [location], 
+[vw_ListOfEvent].[status] AS [status]
 FROM [dbo].[vw_ListOfEvent] AS [vw_ListOfEvent]</DefiningQuery>
     </EntitySet>
     <EntitySet Name="vw_OrganizationAccounts" EntityType="Self.vw_OrganizationAccounts" store:Type="Views" store:Schema="dbo">

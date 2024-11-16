@@ -16,9 +16,10 @@ namespace Tabang_Hub
         public int applyVolunteerId { get; set; }
         public Nullable<int> userId { get; set; }
         public Nullable<int> eventId { get; set; }
-        public Nullable<int> Status { get; set; }
+        public Nullable<int> Volunteer_Status { get; set; }
         public Nullable<System.DateTime> appliedAt { get; set; }
         public Nullable<System.DateTime> dateStart { get; set; }
         public Nullable<System.DateTime> dateEnd { get; set; }
+        public Nullable<int> Event_Status { get; set; }
     }
 }

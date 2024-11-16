@@ -54,7 +54,7 @@
                     </div>
                 </div>
             </div>
-            foreach (var org in Model.orgEvents)
+            foreach (var org in Model.orgEvents.Where(m => m.status != 2 && m.dateEnd >= DateTime.Now))
             {
                 DateTime? originalDateStart = org.dateStart;
                 string formattedDateStart = originalDateStart.HasValue ? originalDateStart.Value.ToString("MMMM dd, yyyy") : "N/A";

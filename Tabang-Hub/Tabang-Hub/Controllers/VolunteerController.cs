@@ -147,23 +147,34 @@ namespace Tabang_Hub.Controllers
 
                     if (skills.Count < getVolSkillCount)
                     {
-                        //Ang user ganahan tang tangon ang skill sa database
-                        var skillToRemove = db.VolunteerSkill.Where(m => !skills.Contains(m.skillId) && m.userId == UserId).ToList();
+                        // Get the list of event IDs the user has joined
+                        var joinedEvents = db.Volunteers
+                            .Where(m => m.userId == UserId)
+                            .Select(m => m.eventId)
+                            .ToList();
 
-                        //var skillsInVolunteersTable = db.Volunteers
-                        //.Where(m => !skills.Contains(m.skillId) && m.userId == UserId)
-                        //.Select(m => m.skillId)
-                        //.ToList();
+                        // Get the list of required skills for these events
+                        var requiredSkills = db.OrgSkillRequirement
+                            .Where(m => joinedEvents.Contains(m.eventId))
+                            .Select(m => m.skillId)
+                            .ToList();
 
-                        //foreach (var removeSkill in skillToRemove)
-                        //{
-                        //    if (skillsInVolunteersTable.Contains(removeSkill.skillId))
-                        //    {
-                        //        return Json(new { success = false, message = "Error: " });
-                        //    }
-                        //    db.VolunteerSkill.Remove(removeSkill);
-                        //}
+                        // Find skills the user wants to remove
+                        var skillToRemove = db.VolunteerSkill
+                            .Where(m => !skills.Contains(m.skillId) && m.userId == UserId)
+                            .ToList();
+
+                        foreach (var removeSkill in skillToRemove)
+                        {
+                            if (requiredSkills.Contains(removeSkill.skillId))
+                            {
+                                // Prevent removal if it's a required skill
+                                return Json(new { success = false, message = $"Skill {removeSkill.skillId} is required for a joined event and cannot be removed." });
+                            }
+                            db.VolunteerSkill.Remove(removeSkill);
+                        }
                     }
+
                     if (skills != null)
                     {
 
@@ -290,6 +301,11 @@ namespace Tabang_Hub.Controllers
         {
             try
             {
+                var checkEventStatus = db.OrgEvents.Where(m => m.eventId == eventId).FirstOrDefault();
+                if (checkEventStatus.status.Equals(2) || checkEventStatus.dateEnd <= DateTime.Now)
+                {
+                    return RedirectToAction("Index", "Page");
+                }
                 var recommendedEvents = await _volunteerManager.RunRecommendation(UserId);
 
                 var filteredEvent = new List<vw_ListOfEvent>();
@@ -382,11 +398,11 @@ namespace Tabang_Hub.Controllers
 
                     if (!(checkEventEndDate < userEventStartDate || checkEventStartDate > userEventEndDate))
                     {
-                        if (userEvent.Status == 0)
+                        if (userEvent.Volunteer_Status == 0)
                         {
                             return Json(new { success = false, message = "Conflict with another registered event" });
                         }
-                        else if (userEvent.Status == 1)
+                        else if (userEvent.Volunteer_Status == 1)
                         {
                             return Json(new { success = false, message = "Conflict with another applied event" });
                         }
@@ -440,7 +456,7 @@ namespace Tabang_Hub.Controllers
                 }
 
                 // Get list of events the user has already applied for
-                var listUserEvents = db.sp_UserListEvent(UserId).ToList();
+                var listUserEvents = db.sp_UserListEvent(UserId).Where(m => m.Event_Status != 2).ToList();
 
                 // Convert to DateTime with only the date part
                 var checkEventStartDate = checkDateOrgEvents.dateStart?.Date;
@@ -459,7 +475,7 @@ namespace Tabang_Hub.Controllers
 
                     if (!(checkEventEndDate < userEventStartDate || checkEventStartDate > userEventEndDate))
                     {
-                        if (userEvent.Status == 0)
+                        if (userEvent.Volunteer_Status == 0)
                         {
                             return Json(new { success = false, message = "Conflict with another applied event" });
                         }

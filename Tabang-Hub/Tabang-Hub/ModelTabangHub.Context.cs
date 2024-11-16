@@ -48,11 +48,11 @@ namespace Tabang_Hub
         public DbSet<Volunteers> Volunteers { get; set; }
         public DbSet<VolunteersHistory> VolunteersHistory { get; set; }
         public DbSet<VolunteerSkill> VolunteerSkill { get; set; }
-        public DbSet<vw_ListOfEvent> vw_ListOfEvent { get; set; }
         public DbSet<vw_OrganizationAccounts> vw_OrganizationAccounts { get; set; }
         public DbSet<vw_UserRoles> vw_UserRoles { get; set; }
         public DbSet<vw_VolunteerAccounts> vw_VolunteerAccounts { get; set; }
         public DbSet<vw_VolunteerSkills> vw_VolunteerSkills { get; set; }
+        public DbSet<vw_ListOfEvent> vw_ListOfEvent { get; set; }
     
         public virtual int sp_CancelRequest(Nullable<int> eventId, Nullable<int> userId)
         {
@@ -116,15 +116,6 @@ namespace Tabang_Hub
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_LeaveEvent", eventIdParameter, userIdParameter);
         }
     
-        public virtual ObjectResult<sp_ListOfGc_Result> sp_ListOfGc(Nullable<int> userId)
-        {
-            var userIdParameter = userId.HasValue ?
-                new ObjectParameter("userId", userId) :
-                new ObjectParameter("userId", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_ListOfGc_Result>("sp_ListOfGc", userIdParameter);
-        }
-    
         public virtual ObjectResult<sp_matchSkill_Result> sp_matchSkill(Nullable<int> userId, Nullable<int> eventId)
         {
             var userIdParameter = userId.HasValue ?
@@ -156,15 +147,6 @@ namespace Tabang_Hub
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_RemoveEvent", eventIdParameter);
         }
     
-        public virtual ObjectResult<sp_UserListEvent_Result> sp_UserListEvent(Nullable<int> userId)
-        {
-            var userIdParameter = userId.HasValue ?
-                new ObjectParameter("userId", userId) :
-                new ObjectParameter("userId", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_UserListEvent_Result>("sp_UserListEvent", userIdParameter);
-        }
-    
         public virtual ObjectResult<sp_VolunteerHistory_Result> sp_VolunteerHistory(Nullable<int> userId)
         {
             var userIdParameter = userId.HasValue ?
@@ -185,6 +167,24 @@ namespace Tabang_Hub
                 new ObjectParameter("eventId", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_AcceptAndUpdateVolunteerStatus", userIdParameter, eventIdParameter);
+        }
+    
+        public virtual ObjectResult<sp_UserListEvent_Result> sp_UserListEvent(Nullable<int> userId)
+        {
+            var userIdParameter = userId.HasValue ?
+                new ObjectParameter("userId", userId) :
+                new ObjectParameter("userId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_UserListEvent_Result>("sp_UserListEvent", userIdParameter);
+        }
+    
+        public virtual ObjectResult<sp_ListOfGc_Result> sp_ListOfGc(Nullable<int> userId)
+        {
+            var userIdParameter = userId.HasValue ?
+                new ObjectParameter("userId", userId) :
+                new ObjectParameter("userId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_ListOfGc_Result>("sp_ListOfGc", userIdParameter);
         }
     }
 }
