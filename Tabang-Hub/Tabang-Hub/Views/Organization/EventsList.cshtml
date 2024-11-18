@@ -151,8 +151,8 @@
                                             <td></td>
                                         }
                                         <td>@list.Total_Volunteer</td>
-                                        <td>@list.Start_Date</td>
-                                        <td>@list.End_Date</td>
+                                        <td>@(list.Start_Date.HasValue ? list.Start_Date.Value.ToString("MMMM dd, yyyy") : "N/A")</td>
+                                        <td>@(list.End_Date.HasValue ? list.End_Date.Value.ToString("MMMM dd, yyyy") : "N/A")</td>
                                         <td>@list.location</td>
                                         <td>
                                             <form class="delete-form" data-event-id="@list.Event_Id">
