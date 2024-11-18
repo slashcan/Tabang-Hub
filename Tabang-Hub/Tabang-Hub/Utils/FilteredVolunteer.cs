@@ -7,10 +7,11 @@ namespace Tabang_Hub.Utils
 {
     public class FilteredVolunteer
     {
-        public int Rank { get; set; }
+        public double Rating { get; set; }
         public int userId { get; set; }
         public List<int> matchedSkills { get; set; }
         public double rating { get; set; }
         public double similarityScore { get; set; }
+        public string Availability { get; set; }
     }
 }

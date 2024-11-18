@@ -676,10 +676,10 @@ namespace Tabang_Hub.Repository
             return ErrorCode.Success;
         }
        
-        public async Task<List<FilteredVolunteer>> GetMatchedVolunteers(int eventId)
+        public async Task<RecruitmentResult> GetMatchedVolunteers(int eventId)
         {
             string flaskApiUrl = "http://127.0.0.1:5000/recruit"; // Flask API URL
-            List<FilteredVolunteer> recruit = new List<FilteredVolunteer>();
+            RecruitmentResult recruitmentResult = new RecruitmentResult();
             string errorMessage = null;
 
 
@@ -707,6 +707,7 @@ namespace Tabang_Hub.Repository
             // Prepare the data to pass to Flask
             var datas = new
             {
+                user_info = _volunteerInfo.GetAll().Select(m => new { userId = m.userId, availability = m.availability}).ToList(),
                 // Retrieve only relevant user skills for volunteers
                 user_skills = availableVolunteers.Select(m => new { userId = m.userId, skillId = m.skillId, rating = m.rate }).ToList(),
 
@@ -731,7 +732,7 @@ namespace Tabang_Hub.Repository
                     {
                         // Step 2: Deserialize Flask API response to a list of recommended events
                         var jsonResponse = await response.Content.ReadAsStringAsync();
-                        recruit = JsonConvert.DeserializeObject<List<FilteredVolunteer>>(jsonResponse);
+                        recruitmentResult = JsonConvert.DeserializeObject<RecruitmentResult>(jsonResponse);
                     }
                     else
                     {
@@ -744,7 +745,7 @@ namespace Tabang_Hub.Repository
                 }
             }
 
-            return recruit; // Return the list of recommended volunteers and any error message
+            return recruitmentResult; // Return the list of recommended volunteers and any error message
         }
 
         public ErrorCode TrasferToHisotry1(int eventId, List<VolunteerRatingData> volunteerRatings, ref string errMsg)

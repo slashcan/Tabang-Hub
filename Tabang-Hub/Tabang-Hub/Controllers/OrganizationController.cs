@@ -247,7 +247,7 @@ namespace Tabang_Hub.Controllers
             var filtered = await _organizationManager.GetMatchedVolunteers(events.CreateEvents.eventId);
             var user = _organizationManager.GetOrgInfoByUserId(UserId);
 
-            foreach(var fltr in filtered)
+            foreach(var fltr in filtered.SortedByRating)
             {
                 if (_organizationManager.SentNotif(fltr.userId, UserId, events.CreateEvents.eventId, "Create Event", $"{user.orgName} create a new event that matched your skills!", 0, ref ErrorMessage) != ErrorCode.Success)
                 {
@@ -275,13 +275,31 @@ namespace Tabang_Hub.Controllers
             //var profile = _organizationManager.GetProfileByProfileId(orgInfo.profileId);
             var listOfSkill = _organizationManager.ListOfSkills();
             var pendingVol = new List<Volunteers>();
-            var rating = new List<Rating>();    
+            var rating = new List<Rating>(); 
+            
+            //na a anhi ang users nga nag based sa Rating
+            var getRate = new List<FilteredVolunteer>();
             var usrRank = new List<UserAccount>();
-            foreach (var data in matchedSkill)
+            foreach (var dataByRating in matchedSkill.SortedByRating)
             {
-                var usrs = _userAcc.GetAll().Where(m => m.userId == data.userId).ToList();
+                var usrs = _userAcc.GetAll().Where(m => m.userId == dataByRating.userId).ToList();
                 usrRank.AddRange(usrs);
+
+                getRate.AddRange(matchedSkill.SortedByRating.Where(m => m.userId == dataByRating.userId).ToList());
             }
+            //na a daari ang mga users nga based sa availability
+            var userAvail = new List<UserAccount>();
+            foreach (var dataAvailability in matchedSkill.SortedByAvailability)
+            {
+                var usrs = _userAcc.GetAll().Where(m => m.userId == dataAvailability.userId).ToList();
+                userAvail.AddRange(usrs);
+
+                if(!matchedSkill.SortedByAvailability.Any(m => getRate.Select(n => n.userId).Contains(m.userId)))
+                {
+                    getRate.AddRange(matchedSkill.SortedByAvailability.Where(m => m.userId == dataAvailability.userId).ToList());
+                }
+            }
+
             foreach (var data in listOfEventVolunteers)
             {
                 if (!pendingVol.Any(v => v.userId == data.userId))
@@ -331,8 +349,10 @@ namespace Tabang_Hub.Controllers
                 listofUserDonated = listofUserDonated,
                 listOfRatings = rating,
                 matchedSkills = usrRank,
+                volunteerAvail = userAvail,
+                volunteersInfo = _volunteerInfo.GetAll().ToList(),
                 skillRequirement1 = skillReq,
-                //filteredVolunteers = matchedSkill,
+                filteredVolunteers = getRate,
                 //matchedSkills = matchedSkill,
                 //profilePic = profile,
             };

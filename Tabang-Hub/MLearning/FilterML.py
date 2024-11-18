@@ -52,6 +52,7 @@ def predict_for_user():
             event_data['predictedAttendance'] = logistic_model.predict(event_data[['eventId']])
             predicted_events = event_data[event_data['predictedAttendance'] == 1]
         else:
+            event_data['predictedAttendance'] = 1  # Assume all events will be attended
             predicted_events = event_data
     else:
         predicted_events = event_data
@@ -77,7 +78,7 @@ def predict_for_user():
 
     return jsonify(filtered_events)
 
-# Route 2: Recruitment Filtering with Full Skill Match and Rating Sorting
+# Route 2: Recruitment Filtering with Full Skill Match, Rating, and Availability Sorting
 @app.route('/recruit', methods=['POST'])
 def recruit_for_event():
     data = request.get_json()
@@ -86,7 +87,11 @@ def recruit_for_event():
     user_skills_data = pd.DataFrame(data['user_skills'], columns=['userId', 'skillId', 'rating'])
     event_data = pd.DataFrame(data['event_data'], columns=['eventId', 'eventDescription'])
     event_skills_data = pd.DataFrame(data['event_skills'], columns=['eventId', 'skillId'])
+    volunteer_info_data = pd.DataFrame(data['user_info'], columns=['userId', 'availability'])  # Availability data
     volunteer_history_data = pd.DataFrame(data['volunteer_history'], columns=['eventId', 'attended']) if data.get('volunteer_history') else pd.DataFrame()
+
+    # Replace null ratings with 0
+    user_skills_data['rating'] = user_skills_data['rating'].fillna(0)
 
     # Step 1: Apply Logistic Regression for attendance prediction
     if not volunteer_history_data.empty:
@@ -96,10 +101,10 @@ def recruit_for_event():
         if len(y.unique()) > 1:
             logistic_model.fit(X, y)
             event_data['predictedAttendance'] = logistic_model.predict(event_data[['eventId']])
+            predicted_events = event_data[event_data['predictedAttendance'] == 1]
         else:
             event_data['predictedAttendance'] = 1  # Assume all events will be attended
-
-        predicted_events = event_data[event_data['predictedAttendance'] == 1]
+            predicted_events = event_data
     else:
         predicted_events = event_data
 
@@ -110,22 +115,32 @@ def recruit_for_event():
     filtered_volunteers = []
     for user_id, group in user_skills_data.groupby('userId'):
         volunteer_skills = set(group['skillId'].tolist())
-        volunteer_ratings = group['rating'].mean()
+        matched_ratings = group[group['skillId'].isin(required_skills)]['rating'].tolist()
 
         # Ensure all required skills are in the volunteer's skills
         if required_skills.issubset(volunteer_skills):
             similarity_score = calculate_similarity(volunteer_skills, required_skills)
+            availability = volunteer_info_data[volunteer_info_data['userId'] == user_id]['availability'].values[0]
+            avg_rating = np.mean(matched_ratings) if matched_ratings else 0
             filtered_volunteers.append({
                 'userId': user_id,
                 'matchedSkills': list(volunteer_skills),
-                'rating': volunteer_ratings,
-                'similarityScore': similarity_score
+                'rating': avg_rating,
+                'similarityScore': similarity_score,
+                'availability': availability
             })
 
     # Step 3: Sort volunteers by rating and similarity score
-    ranked_volunteers = sorted(filtered_volunteers, key=lambda x: (-x['rating'], -x['similarityScore']))
+    ranked_volunteers_by_rating = sorted(filtered_volunteers, key=lambda x: (-x['rating'], -x['similarityScore']))
 
-    return jsonify(ranked_volunteers)
+    # Step 4: Sort volunteers by availability (prioritizing Full Time) and then by rating
+    availability_order = {'Full Time': 0, 'Part Time': 1}  # Order for sorting availability
+    ranked_volunteers_by_availability = sorted(filtered_volunteers, key=lambda x: (availability_order.get(x['availability'], 2), -x['rating'], -x['similarityScore']))
+
+    return jsonify({
+        'sortedByRating': ranked_volunteers_by_rating,
+        'sortedByAvailability': ranked_volunteers_by_availability
+    })
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)

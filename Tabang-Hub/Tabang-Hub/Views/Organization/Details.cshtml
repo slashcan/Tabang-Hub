@@ -630,17 +630,51 @@
                             <!-- Hidden input to pass eventId -->
                             <input type="hidden" name="eventId" value="@Model.eventDetails.eventId" />
 
-                            <!-- Matched Volunteers -->
+                            <!-- Filter Dropdown -->
                             <div class="mb-3">
-                                <label class="form-label">Select Volunteers to Invite</label>
+                                <label for="filterBy" class="form-label">Filter Volunteers By</label>
+                                <select class="form-select" id="filterBy" name="filterBy">
+                                    <option value="Rating">Rating</option>
+                                    <option value="Availability">Availability</option>
+                                </select>
+                            </div>
+
+                            <!-- Matched Volunteers by Rating -->
+                            <div class="mb-3 volunteer-list" id="volunteersByRating">
+                                <label class="form-label">Select Volunteers to Invite (By Rating)</label>
                                 <div class="form-check">
-                                    @foreach (var volunteer in Model.matchedSkills)
+                                    @foreach (var volunteerRateRank in Model.matchedSkills)
                                     {
+                                        var userFName = Model.volunteersInfo.Where(m => m.userId == volunteerRateRank.userId).Select(m => m.fName).FirstOrDefault();
+                                        var userLName = Model.volunteersInfo.Where(m => m.userId == volunteerRateRank.userId).Select(m => m.lName).FirstOrDefault();
+                                        var getRate = Model.filteredVolunteers.Where(m => m.userId == volunteerRateRank.userId).Select(m => m.rating).FirstOrDefault();
+                                        var formattedRate = getRate > 0 ? Math.Floor(getRate * 10) / 10 : 0;
+
                                         <div class="form-check d-flex justify-content-between align-items-center">
-                                            <label class="form-check-label" for="volunteer_@volunteer.userId">
-                                                @volunteer.email
+                                            <label class="form-check-label" for="volunteer_@volunteerRateRank.userId">
+                                                @userLName, @userFName &nbsp; @formattedRate
                                             </label>
-                                            <input class="form-check-input ms-3" type="checkbox" name="selectedVolunteers" value="@volunteer.userId" id="volunteer_@volunteer.userId">
+                                            <input class="form-check-input ms-3" type="checkbox" name="selectedVolunteers" value="@volunteerRateRank.userId" id="volunteer_@volunteerRateRank.userId">
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+
+                            <!-- Matched Volunteers by Availability -->
+                            <div class="mb-3 volunteer-list" id="volunteersByAvailability" style="display: none;">
+                                <label class="form-label">Select Volunteers to Invite (By Availability)</label>
+                                <div class="form-check">
+                                    @foreach (var volunteerAvailRank in Model.volunteerAvail)
+                                    {
+                                        var userFName = Model.volunteersInfo.Where(m => m.userId == volunteerAvailRank.userId).Select(m => m.fName).FirstOrDefault();
+                                        var userLName = Model.volunteersInfo.Where(m => m.userId == volunteerAvailRank.userId).Select(m => m.lName).FirstOrDefault();
+                                        var getAvail = Model.filteredVolunteers.Where(m => m.userId == volunteerAvailRank.userId).Select(m => m.Availability).FirstOrDefault();
+
+                                        <div class="form-check d-flex justify-content-between align-items-center">
+                                            <label class="form-check-label" for="volunteer_@volunteerAvailRank.userId">
+                                                @userLName, @userFName &nbsp; @getAvail
+                                            </label>
+                                            <input class="form-check-input ms-3" type="checkbox" name="selectedVolunteers" value="@volunteerAvailRank.userId" id="volunteer_@volunteerAvailRank.userId">
                                         </div>
                                     }
                                 </div>
@@ -869,6 +903,25 @@ else
 }
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const filterBy = document.getElementById('filterBy');
+        const volunteersByRating = document.getElementById('volunteersByRating');
+        const volunteersByAvailability = document.getElementById('volunteersByAvailability');
+
+        filterBy.addEventListener('change', function () {
+            if (filterBy.value === 'Rating') {
+                volunteersByRating.style.display = 'block';
+                volunteersByAvailability.style.display = 'none';
+            } else if (filterBy.value === 'Availability') {
+                volunteersByRating.style.display = 'none';
+                volunteersByAvailability.style.display = 'block';
+            }
+        });
+    });
+</script>
+
 <script>
     document.addEventListener('DOMContentLoaded', function () {
 

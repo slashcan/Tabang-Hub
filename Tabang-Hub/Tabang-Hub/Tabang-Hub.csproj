@@ -2099,6 +2099,7 @@
     <Compile Include="Utils\FilteredEvent.cs" />
     <Compile Include="Utils\FilteredVolunteer.cs" />
     <Compile Include="Utils\Lists.cs" />
+    <Compile Include="Utils\RecruitmentResult.cs" />
     <Compile Include="Utils\Utilities.cs" />
     <Compile Include="VolunteerInfo.cs">
       <DependentUpon>ModelTabangHub.tt</DependentUpon>

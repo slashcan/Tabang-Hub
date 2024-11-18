@@ -86,7 +86,7 @@ namespace Tabang_Hub.Controllers
                 VolunteerUpdate.phoneNum = phone;
                 VolunteerUpdate.city = city;
                 VolunteerUpdate.province = province;
-
+                VolunteerUpdate.availability = availability;
                 //UserUpdate.email = email;
 
                 if (profilePic != null)

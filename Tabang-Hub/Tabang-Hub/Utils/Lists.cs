@@ -59,6 +59,8 @@ namespace Tabang_Hub.Utils
         public List<VolunteerInfo> getAllVolunteerAccounts { get; set; }
         public List<OrgEvents> getAllOrgEvent { get; set; } 
         public List<UserAccount> matchedSkills { get; set; }
+        public List<UserAccount> volunteerAvail { get; set; }
+
         public List<Rating> rating { get; set; }
 
         //Stored Procedure
@@ -79,6 +81,7 @@ namespace Tabang_Hub.Utils
         public Dictionary<int, int> eventSummary { get; set; }
         public Dictionary<int, int> allEventSummary { get; set; }
         public List<FilteredVolunteer> filteredVolunteers { get; set; }
+        public List<RecruitmentResult> recruitmentResults { get; set; }
 
 
         public class VolunteerRatingData
