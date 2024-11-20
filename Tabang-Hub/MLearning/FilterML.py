@@ -8,10 +8,11 @@ app = Flask(__name__)
 
 # Load the pre-trained Random Forest model
 try:
-    model = joblib.load('volunteer_skill_matching_model.pkl')
+    rf_model = joblib.load('volunteer_skill_matching_model.pkl')
     print("Pretrained model loaded.")
-except:
+except FileNotFoundError:
     print("No pretrained model found. Please train the model first.")
+    exit()
 
 # Helper function to calculate Content-Based Filtering (CBF) similarity using cosine similarity
 def calculate_cbf_similarity(user_skills, event_skills):
@@ -30,7 +31,7 @@ def calculate_cbf_similarity(user_skills, event_skills):
     
     return similarity
 
-# Route 1: Skill Filtering and Event Matching
+# Route: Unified Prediction with Random Forest and CBF
 @app.route('/predict', methods=['POST'])
 def predict_for_user():
     data = request.get_json()
@@ -42,6 +43,7 @@ def predict_for_user():
 
     filtered_events = []
     volunteer_skills = set(user_skills_data['skillId'].tolist())
+    user_id = user_skills_data['userId'].iloc[0]  # Use the actual userId passed in the input
 
     for _, event_row in event_data.iterrows():
         event_id = event_row['eventId']
@@ -49,19 +51,30 @@ def predict_for_user():
 
         # Ensure all required event skills are present in the volunteer's skills
         if required_skills.issubset(volunteer_skills):
-            # Calculate CBF similarity
-            similarity_score = calculate_cbf_similarity(volunteer_skills, required_skills)
-            if similarity_score >= 0.5:  # Threshold can be adjusted
-                filtered_events.append({
-                    'eventId': event_id,
-                    'eventDescription': event_row['eventDescription'],
-                    'requiredSkills': list(required_skills),
-                    'similarityScore': similarity_score
-                })
+            # Step 1: Random Forest Prediction
+            rf_input = [[1, event_id, skill] for skill in required_skills]  # Use actual userId from input
+            rf_input_df = pd.DataFrame(rf_input, columns=['userId', 'eventId', 'skillId'])  # Match training format
+            rf_predictions = rf_model.predict(rf_input_df)  # Predict for all required skills
+
+            if all(rf_predictions):  # Include only if RF predicts positively for all required skills
+                # Step 2: Calculate CBF similarity
+                similarity_score = calculate_cbf_similarity(volunteer_skills, required_skills)
+                
+                # Step 3: Combine Results
+                if similarity_score >= 0.5:  # Ensure similarity threshold is met
+                    filtered_events.append({
+                        'eventId': event_id,
+                        'eventDescription': event_row['eventDescription'],
+                        'requiredSkills': list(required_skills),
+                        'similarityScore': similarity_score
+                    })
+
+    # Sort the events by similarity score in descending order
+    filtered_events = sorted(filtered_events, key=lambda x: x['similarityScore'], reverse=True)
 
     return jsonify(filtered_events)
 
-# Route 2: Recruitment Filtering based on Skill Match and Volunteer Availability
+# Route: Recruitment Filtering based on Skill Match and Volunteer Availability (CBF only)
 @app.route('/recruit', methods=['POST'])
 def recruit_for_event():
     data = request.get_json()
@@ -74,10 +87,11 @@ def recruit_for_event():
 
     filtered_volunteers = []
 
-    # Step 1: Filter volunteers based on skill match for each event
+    # Step 1: Get required skills for the event
     event_id = event_data['eventId'].values[0]
     required_skills = set(event_skills_data[event_skills_data['eventId'] == event_id]['skillId'].tolist())
 
+    # Step 2: Filter volunteers based on skill match
     for user_id, group in user_skills_data.groupby('userId'):
         volunteer_skills = set(group['skillId'].tolist())
         matched_ratings = group[group['skillId'].isin(required_skills)]['rating'].tolist()
@@ -97,13 +111,18 @@ def recruit_for_event():
                 'availability': availability
             })
 
-    # Step 2: Sort volunteers by rating and similarity score
-    ranked_volunteers_by_rating = sorted(filtered_volunteers, key=lambda x: (-x['rating'], -x['similarityScore']))
+    # Step 3: Sort volunteers by rating and similarity score
+    ranked_volunteers_by_rating = sorted(
+        filtered_volunteers, key=lambda x: (-x['rating'], -x['similarityScore'])
+    )
 
-    # Step 3: Sort volunteers by availability (prioritizing Full Time) and then by rating
+    # Step 4: Sort volunteers by availability (prioritizing Full Time) and then by rating
     availability_order = {'Full Time': 0, 'Part Time': 1}  # Order for sorting availability
-    ranked_volunteers_by_availability = sorted(filtered_volunteers, key=lambda x: (availability_order.get(x['availability'], 2), -x['rating'], -x['similarityScore']))
+    ranked_volunteers_by_availability = sorted(
+        filtered_volunteers, key=lambda x: (availability_order.get(x['availability'], 2), -x['rating'], -x['similarityScore'])
+    )
 
+    # Return the two sorted datasets
     return jsonify({
         'sortedByRating': ranked_volunteers_by_rating,
         'sortedByAvailability': ranked_volunteers_by_availability

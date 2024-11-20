@@ -98,55 +98,55 @@
                         </div>
                     }
 
-                    <div class="apply-button mt-2">
-                        @foreach (var orgDetails in Model.orgEvents)
-                                {
-                                    bool hasAllRequiredSkills = Model.detailsSkillRequirement
-                                        .All(reqSkill => Model.volunteersSkills.Any(volSkill => volSkill.skillId == reqSkill.skillId));
+                <div class="apply-button mt-2">
+                    @foreach (var orgDetails in Model.orgEvents)
+                    {
+                        bool hasAllRequiredSkills = Model.detailsSkillRequirement
+                            .All(reqSkill => Model.volunteersSkills.Any(volSkill => volSkill.skillId == reqSkill.skillId));
 
-                                    if (hasAllRequiredSkills)
+                        if (hasAllRequiredSkills)
+                        {
+                            if (orgDetails.dateStart <= DateTime.Now)
+                            {
+                                <div class="join-button mt-2 mb-2" style="width: 100%; padding: 10px; background-color: mediumseagreen; color: white; text-align: center">
+                                    <span>
+                                        Ongoing Event
+                                    </span>
+                                </div>
+                            }
+                            // Display join buttons if all required skills are met
+                            if (!Model.volunteersStatusEvent.Count().Equals(0))
+                            {
+                                foreach (var status in Model.volunteersStatusEvent)
+                                {
+                                    var getDateOfEvent = Model.listOfEventsOne.FirstOrDefault();
+                                    if (status.Status.Equals(1) && Model.volunteersStatusEvent.Count() != 0 && getDateOfEvent.Start_Date > DateTime.Now)
                                     {
-                                        // Display join buttons if all required skills are met
-                                        if (!Model.volunteersStatusEvent.Count().Equals(0))
-                                        {
-                                            foreach (var status in Model.volunteersStatusEvent)
-                                            {
-                                                var getDateOfEvent = Model.listOfEventsOne.FirstOrDefault();
-                                                if (status.Status.Equals(1) && Model.volunteersStatusEvent.Count() != 0 && getDateOfEvent.Start_Date > DateTime.Now)
-                                                {
-                                                    <button style="width: 100%" onclick="leaveEvent('@orgDetails.eventId')" class="btn btnRequest">
-                                                        Leave event
-                                                    </button>
-                                                }
-                                                else if (status.Status.Equals(1) && @orgDetails.dateStart <= DateTime.Now)
-                                                {
-                                                    <div class="join-button mt-2 mb-2" style="width: 100%; padding: 10px; background-color: mediumseagreen; color: white; text-align: center">
-                                                        <span>
-                                                            Ongoing Event
-                                                        </span>
-                                                    </div>
-                                                }
-                                                else if (status.Status.Equals(0) && Model.volunteersStatusEvent.Count() != 0)
-                                                {
-                                                    <button style="width: 100%" onclick="cancelEvent('@orgDetails.eventId')" class="btn btnRequest">
-                                                        Cancel application
-                                                    </button>
-                                                }
-                                        else
-                                        {
-                                            <div class="action-buttons mt-2">
-                                                <div class="d-flex justify-content-between">
-                                                    <!-- Accept Button -->
-                                                    <button type="button" class="btn btn-success flex-fill me-1" onclick="acceptEvent('@orgDetails.eventId')" @*data-toggle="modal" data-target="#acceptEventModal"*@ data-event-id="@orgDetails.eventId" id="acceptButton">
-                                                        Accept Invitation
-                                                    </button>
-                                                    <!-- Decline Button -->
-                                                    <button type="button" class="btn btn-danger flex-fill ms-1" onclick="declineInvite('@orgDetails.eventId')" data-event-id="@orgDetails.eventId" id="declineButton">
-                                                        Decline Invitation
-                                                    </button>
-                                                </div>
+                                        <button style="width: 100%" onclick="leaveEvent('@orgDetails.eventId')" class="btn btnRequest">
+                                            Leave event
+                                        </button>
+                                    }
+                                    else if (status.Status.Equals(0) && Model.volunteersStatusEvent.Count() != 0)
+                                    {
+                                        <button style="width: 100%" onclick="cancelEvent('@orgDetails.eventId')" class="btn btnRequest">
+                                            Cancel application
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <div class="action-buttons mt-2">
+                                            <div class="d-flex justify-content-between">
+                                                <!-- Accept Button -->
+                                                <button type="button" class="btn btn-success flex-fill me-1" onclick="acceptEvent('@orgDetails.eventId')" @*data-toggle="modal" data-target="#acceptEventModal"*@ data-event-id="@orgDetails.eventId" id="acceptButton">
+                                                    Accept Invitation
+                                                </button>
+                                                <!-- Decline Button -->
+                                                <button type="button" class="btn btn-danger flex-fill ms-1" onclick="declineInvite('@orgDetails.eventId')" data-event-id="@orgDetails.eventId" id="declineButton">
+                                                    Decline Invitation
+                                                </button>
                                             </div>
-                                        }
+                                        </div>
+
                                     }
                                 }
                             }
@@ -206,7 +206,8 @@
                                 }
                             }
                         }
-                    </div>
+                    }
+                </div>
                     <br />
                 </div>
             </div>
@@ -306,6 +307,16 @@ else
                             var getVolStatus = Model.volunteersStatusEvent.Select(m => m.Status).FirstOrDefault();
                             //foreach (var status in Model.volunteersStatusEvent)
                             //{
+
+                            if (orgDetails.dateStart <= DateTime.Now)
+                            {
+                                <div class="join-button mt-2 mb-2" style="width: 100%; padding: 10px; background-color: mediumseagreen; color: white; text-align: center">
+                                    <span>
+                                        Ongoing Event
+                                    </span>
+                                </div>
+                            }
+
                             if (getVolStatus.Equals(1) && Model.volunteersStatusEvent.Count() != 0)
                             {
                                 <button style="width: 100%" onclick="leaveEvent('@orgDetails.eventId')" class="btn btnRequest">
@@ -328,19 +339,19 @@ else
                             {
                                 if (@orgDetails.dateStart <= DateTime.Now)
                                 {
-                                <div class="join-button mt-2 mb-2" style="width: 100%; padding: 10px; background-color: mediumseagreen; color: white; text-align: center">
-                                    <span>
-                                        Ongoing Event
-                                    </span>
-                                </div>
+                                    <div class="join-button mt-2 mb-2" style="width: 100%; padding: 10px; background-color: mediumseagreen; color: white; text-align: center">
+                                        <span>
+                                            Ongoing Event
+                                        </span>
+                                    </div>
                                 }
                                 else
                                 {
-                                <div class="join-button mt-2">
-                                    <button style="width: 100%" type="button" class="btn btn-primary btn-block" onclick="applyEvent('@orgDetails.eventId')">
-                                        Join now
-                                    </button>
-                                </div>
+                                    <div class="join-button mt-2">
+                                        <button style="width: 100%" type="button" class="btn btn-primary btn-block" onclick="applyEvent('@orgDetails.eventId')">
+                                            Join now
+                                        </button>
+                                    </div>
                                 }
                             }
                         }

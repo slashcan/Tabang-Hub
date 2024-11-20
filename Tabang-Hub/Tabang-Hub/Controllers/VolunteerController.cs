@@ -329,7 +329,14 @@ namespace Tabang_Hub.Controllers
                     var getEvents = _listsOfEvent.GetAll().Where(m => m.Event_Id == getOrgInfo.eventId).ToList();
                     var getVolunteers = _volunteers.GetAll().Where(m => m.eventId == eventId).ToList();
                     var listofUserDonated = db.UserDonated.Where(m => m.eventId == eventId).ToList();
-                    //var volunteerStatusEvent = _volunteersStatusEvent.GetAll().Where(m => m.userId == UserId && m.eventId == eventId).ToList();
+                    var volunteerStatusEvent = _volunteersStatusEvent.GetAll().Where(m => m.userId == UserId && m.eventId == eventId).ToList();
+
+                    var eventStart = getEvent.Where(m => m.eventId == eventId).Select(m => m.dateStart).FirstOrDefault();
+                    //if (eventStart < DateTime.Now)
+                    //{
+                    //    _volunteerManager.RemoveVolunteerFromVolunteerByUserIdAndEventId(UserId, eventId);
+                    //}
+
                     var volunteer = _volunteerManager.GetVolunteerByUserId(UserId, (int)eventId);
                     var c = db.sp_matchSkill(UserId, eventId).ToList().Count();
                     var indexModel = new Lists()
@@ -347,7 +354,7 @@ namespace Tabang_Hub.Controllers
                         listOfEvents = filteredEvent.OrderByDescending(m => m.Event_Id).ToList(),
                         volunteers = getVolunteers,
                         listofUserDonated = listofUserDonated,
-                        volunteersStatusEvent = _volunteersStatusEvent.GetAll().Where(m => m.userId == UserId && m.eventId == eventId).ToList(),
+                        volunteersStatusEvent = _volunteers.GetAll().Where(m => m.eventId == eventId).ToList(),
                         matchSkill = db.sp_matchSkill(UserId, eventId).ToList(),
                         volunteer = volunteer,
                         volunteersSkills = db.VolunteerSkill.Where(m => m.userId == UserId).ToList(),

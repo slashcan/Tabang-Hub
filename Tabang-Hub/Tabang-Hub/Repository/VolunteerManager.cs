@@ -115,6 +115,10 @@ namespace Tabang_Hub.Repository
                 }
             }
         }
+        public void RemoveVolunteerFromVolunteerByUserIdAndEventId(int userId, int? eventId)
+        {
+            db.sp_RemoveVolunteer(userId, eventId);
+        }
         public List<sp_VolunteerHistory_Result> GetVolunteersHistoryByUserId(int userId)
         {
             List<sp_VolunteerHistory_Result> userEventHistory = new List<sp_VolunteerHistory_Result>();
