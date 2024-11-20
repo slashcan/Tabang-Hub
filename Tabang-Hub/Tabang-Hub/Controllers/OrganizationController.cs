@@ -267,6 +267,7 @@ namespace Tabang_Hub.Controllers
             var listofUserDonated = _organizationManager.ListOfUserDonated(id);
             var orgInfo = _organizationManager.GetOrgInfoByUserId(UserId);
             var listOfEventVolunteers = _organizationManager.ListOfEventVolunteers(id);
+            var listofEventVolunteerHistory = _organizationManager.ListOfEventVolunteersHistory(id);
             var skillReq = _organizationManager.listOfSkillRequirement(events.eventId);
             var volunteerSkills = _organizationManager.ListOfEventVolunteerSkills();
 
@@ -346,6 +347,7 @@ namespace Tabang_Hub.Controllers
                 detailsSkillRequirement = listOfSkills,
                 listOfEventVolunteers = pendingVol,
                 volunteersSkills = volunteerSkills,
+                listofvolunteerHistory = listofEventVolunteerHistory,
                 listofUserDonated = listofUserDonated,
                 listOfRatings = rating,
                 matchedSkills = usrRank,
@@ -582,7 +584,7 @@ namespace Tabang_Hub.Controllers
                 {
                     userId = vol.userId,
                     senderUserId = UserId,
-                    relatedId = events.eventDetails.eventId,
+                    relatedId = currentEvent.eventId,
                     type = "Event Update",
                     content = $"{events.CreateEvents.eventTitle} Event has been edited.",
                     broadcast = 0,
@@ -946,6 +948,18 @@ namespace Tabang_Hub.Controllers
                 return Url.Action("Details", "Organization", new { id = notification.relatedId });
             }
             else if (notification.type == "Donation")
+            {
+                return Url.Action("Details", "Organization", new { id = notification.relatedId });
+            }
+            else if (notification.type == "Cancel Application")
+            {
+                return Url.Action("Details", "Organization", new { id = notification.relatedId });
+            }
+            else if (notification.type == "Accept Invitation")
+            {
+                return Url.Action("Details", "Organization", new { id = notification.relatedId });
+            }
+            else if (notification.type == "Leave Event")
             {
                 return Url.Action("Details", "Organization", new { id = notification.relatedId });
             }

@@ -302,6 +302,10 @@ namespace Tabang_Hub.Controllers
             try
             {
                 var checkEventStatus = db.OrgEvents.Where(m => m.eventId == eventId).FirstOrDefault();
+                if (checkEventStatus == null)
+                {
+                    return RedirectToAction("Index", "Page");
+                }
                 if (checkEventStatus.status.Equals(2) || checkEventStatus.dateEnd <= DateTime.Now)
                 {
                     return RedirectToAction("Index", "Page");
@@ -428,6 +432,13 @@ namespace Tabang_Hub.Controllers
                 //var selectedSkillID = db.Skills.Where(m => m.skillName == skill).Select(m => m.skillId).FirstOrDefault();
                 db.sp_AcceptAndUpdateVolunteerStatus(UserId, eventId);
 
+                var user = _organizationManager.GetVolunteerInfoByUserId(UserId);
+
+                if (_organizationManager.SentNotif((int)checkDateOrgEvents.userId, UserId, checkDateOrgEvents.eventId, "Accept Invitation", $"Volunteer {user.fName} has accepted your invitation.", 0, ref ErrorMessage) != ErrorCode.Success)
+                {
+                    return Json(new { success = false, message = "Cant send notification" });
+                }
+
                 return Json(new { success = true, message = "Invitation accepted" });
             }
             catch (Exception)
@@ -441,6 +452,15 @@ namespace Tabang_Hub.Controllers
             try
             {
                 db.sp_CancelRequest(eventId, UserId);
+
+                var user = _organizationManager.GetVolunteerInfoByUserId(UserId);
+                var checkDateOrgEvents = _organizationManager.GetEventByEventId(eventId);
+
+                if (_organizationManager.SentNotif((int)checkDateOrgEvents.userId, UserId, checkDateOrgEvents.eventId, "Decline Invitation", $"Volunteer {user.fName} has declined your invitation.", 0, ref ErrorMessage) != ErrorCode.Success)
+                {
+                    return Json(new { success = false, message = "Cant send notification" });
+                }
+
                 return Json(new { success = true, message = "Invitation declined" });
             }
             catch (Exception)
@@ -978,7 +998,7 @@ namespace Tabang_Hub.Controllers
                         userId = events.userId, // Notify the organization
                         senderUserId = UserId, // The user who donated
                         relatedId = eventId,
-                        type = "Leave",
+                        type = "Leave Event",
                         content = $"{updateVol.UserAccount.email} Left {events.eventTitle} Event.",
                         broadcast = 0, // Not a broadcast
                         status = 0, // Assuming 1 is the status for a new notification
@@ -1110,7 +1130,19 @@ namespace Tabang_Hub.Controllers
             }
             else if (notification.type == "Donation")
             {
-                return Url.Action("Details", "Organization", new { eventId = notification.relatedId });
+                return Url.Action("EventDetails", "Volunteer", new { eventId = notification.relatedId });
+            }
+            else if (notification.type == "Event Update")
+            {
+                return Url.Action("EventDetails", "Volunteer", new { eventId = notification.relatedId });
+            }
+            else if (notification.type == "Create Event")
+            {
+                return Url.Action("EventDetails", "Volunteer", new { eventId = notification.relatedId });
+            }
+            else if (notification.type == "Acceptance")
+            {
+                return Url.Action("EventDetails", "Volunteer", new { eventId = notification.relatedId });
             }
             // Default to null if no redirection is needed
             return null;

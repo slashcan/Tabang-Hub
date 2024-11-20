@@ -527,6 +527,10 @@ namespace Tabang_Hub.Repository
         {
             return _eventVolunteers.GetAll().Where(m => m.eventId == eventId).ToList();
         }
+        public List<VolunteersHistory> ListOfEventVolunteersHistory(int eventId)
+        {
+            return _volunteersHistory.GetAll().Where(m => m.eventId == eventId).ToList();
+        }
         public List<VolunteerSkill> ListOfEventVolunteerSkills()
         {
             return _volunteerSkills.GetAll();
@@ -560,9 +564,9 @@ namespace Tabang_Hub.Repository
         {
             return _groupMessages._table.Where(m => m.groupChatId == groupChatId).ToList();
         }
-        public Volunteers GetSkillIdByEventIdAndUserId(int eventId, int userId)
+        public VolunteersHistory GetSkillIdByEventIdAndUserId(int eventId, int userId)
         {
-            return _eventVolunteers._table.Where(m => m.userId == userId && m.eventId == eventId).FirstOrDefault();
+            return _volunteersHistory._table.Where(m => m.userId == userId && m.eventId == eventId).FirstOrDefault();
         }
         public OrgEvents GetEventByEventId(int eventId)
         {
@@ -612,17 +616,6 @@ namespace Tabang_Hub.Repository
                 foreach (var eventImages in eventImage)
                 {
                     var result = _orgEventsImage.Delete(eventImages.eventImageId);
-                    if (result != ErrorCode.Success)
-                    {
-                        return ErrorCode.Error;
-                    }
-                }
-            }
-            if (userDonated != null)
-            {
-                foreach (var userDonate in userDonated)
-                {
-                    var result = _userDonated.Delete(userDonate.orgUserDonatedId);
                     if (result != ErrorCode.Success)
                     {
                         return ErrorCode.Error;
@@ -794,7 +787,7 @@ namespace Tabang_Hub.Repository
                 ratedAt = DateTime.Now,
             };
 
-            if (_eventVolunteers.Update(skillId1.applyVolunteerId, skillId1, out errMsg) != ErrorCode.Success)
+            if (_volunteersHistory.Update(skillId1.applyVolunteerId, skillId1, out errMsg) != ErrorCode.Success)
             {
                 return ErrorCode.Error;
             }

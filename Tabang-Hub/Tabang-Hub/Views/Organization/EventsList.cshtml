@@ -104,12 +104,22 @@
     <div class="row" id="table-head">
         <div class="col-12">
             <div class="card">
-                <div class="card-header">
-                    <h4 class="card-title">Events List</h4>
+                <div class="card-header d-flex justify-content-between align-items-center">
                     <!-- Button to open the Create Event Modal -->
                     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createEventModal">
                         Create Event
                     </button>
+                    <!-- Search and sort controls -->
+                    <div class="d-flex gap-3 align-items-center">
+                        <input type="text" id="search-event" class="form-control" onkeyup="searchEvents()" placeholder="Search by event name..." style="max-width: 300px;">
+                        <select id="sort-events" class="form-select" onchange="sortEvents()" style="max-width: 200px;">
+                            <option value="all">All Events</option>
+                            <option value="newest">Newest to Oldest</option>
+                            <option value="oldest">Oldest to Newest</option>
+                            <option value="donation">Event with Donations</option>
+                            <option value="ended">To rate</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="card-content">
                     <!-- table head dark -->
@@ -151,8 +161,8 @@
                                             <td></td>
                                         }
                                         <td>@list.Total_Volunteer</td>
-                                        <td>@(list.Start_Date.HasValue ? list.Start_Date.Value.ToString("MMMM dd, yyyy") : "N/A")</td>
-                                        <td>@(list.End_Date.HasValue ? list.End_Date.Value.ToString("MMMM dd, yyyy") : "N/A")</td>
+                                        <td>@(list.Start_Date.HasValue ? list.Start_Date.Value.ToString("MMMM dd, yyyy - h:mm tt") : "N/A")</td>
+                                        <td>@(list.End_Date.HasValue ? list.End_Date.Value.ToString("MMMM dd, yyyy - h:mm tt") : "N/A")</td>
                                         <td>@list.location</td>
                                         <td>
                                             <form class="delete-form" data-event-id="@list.Event_Id">
@@ -605,4 +615,96 @@
             </text>
         }
     });
+
+    function parseDateString(dateString) {
+        // Ensure the date string is valid and formatted correctly
+        if (!dateString || dateString === 'N/A') {
+            return null;
+        }
+
+        // Extract components from the date string formatted as "MMMM dd, yyyy - h:mm tt"
+        const dateTimeParts = dateString.split(' - ');
+        const datePart = dateTimeParts[0].trim();
+        const timePart = dateTimeParts[1].trim();
+
+        // Parse date and time separately and combine them into a Date object
+        const date = new Date(Date.parse(datePart + ' ' + timePart));
+        return isNaN(date) ? null : date;
+    }
+
+    function sortEvents() {
+        const sortOrder = document.getElementById('sort-events').value;
+        const table = document.querySelector('tbody');
+        const rows = Array.from(table.querySelectorAll('tr'));
+
+        if (sortOrder === 'donation') {
+            // Filter rows to show only events with a target amount greater than 0
+            rows.forEach(row => {
+                const targetAmountCell = row.querySelector('td:nth-child(3)');
+                const targetAmountValue = parseFloat(targetAmountCell.textContent.replace(/[₱,]/g, '')) || 0;
+
+                // Show only rows where the target amount is greater than 0
+                if (targetAmountValue > 0) {
+                    row.style.display = ''; // Show row
+                } else {
+                    row.style.display = 'none'; // Hide row
+                }
+            });
+        } else if (sortOrder === 'ended') {
+            // Filter rows to show only ended events
+            rows.forEach(row => {
+                const endDateCell = row.querySelector('td:nth-child(6)');
+                const endDate = parseDateString(endDateCell.textContent.trim());
+
+                // Show only rows where the event has ended (i.e., the end date is in the past)
+                if (endDate && endDate < new Date()) {
+                    row.style.display = ''; // Show row
+                } else {
+                    row.style.display = 'none'; // Hide row
+                }
+            });
+        } else {
+            // Reset all rows to be visible for date sorting
+            rows.forEach(row => row.style.display = '');
+
+            // Sort rows by date with custom parsing
+            rows.sort((a, b) => {
+                const dateA = parseDateString(a.querySelector('td:nth-child(5)').textContent.trim());
+                const dateB = parseDateString(b.querySelector('td:nth-child(5)').textContent.trim());
+
+                // Handle invalid dates by moving them to the end
+                if (!dateA && !dateB) return 0; // Both are invalid
+                if (!dateA) return 1; // Move invalid dateA to the end
+                if (!dateB) return -1; // Move invalid dateB to the end
+
+                if (sortOrder === 'oldest') {
+                    return dateA - dateB; // Ascending order (oldest to newest)
+                } else {
+                    return dateB - dateA; // Descending order (newest to oldest)
+                }
+            });
+
+            // Append sorted rows back to the table
+            rows.forEach(row => table.appendChild(row));
+        }
+    }
+
+    function searchEvents() {
+        const searchInput = document.getElementById('search-event').value.toLowerCase();
+        const table = document.querySelector('tbody');
+        const rows = Array.from(table.querySelectorAll('tr'));
+
+        rows.forEach(row => {
+            const eventNameCell = row.querySelector('td:nth-child(1)');
+            const eventName = eventNameCell.textContent.toLowerCase();
+
+            // Show or hide the row based on whether the event name matches the search input
+            if (eventName.includes(searchInput)) {
+                row.style.display = ''; // Show row
+            } else {
+                row.style.display = 'none'; // Hide row
+            }
+        });
+    }
+
 </script>

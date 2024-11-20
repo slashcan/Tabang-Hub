@@ -553,6 +553,18 @@ warning 6002: The table/view 'TabangHub.dbo.vw_VolunteerSkills' does not have a 
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_VolunteersHistory_UserAccount">
+    <End Role="UserAccount" Type="Self.UserAccount" Multiplicity="0..1" />
+    <End Role="VolunteersHistory" Type="Self.VolunteersHistory" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserAccount">
+        <PropertyRef Name="userId" />
+      </Principal>
+      <Dependent Role="VolunteersHistory">
+        <PropertyRef Name="userId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Function Name="sp_AcceptAndUpdateVolunteerStatus" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="userId" Type="int" Mode="In" />
     <Parameter Name="eventId" Type="int" Mode="In" />
@@ -770,6 +782,10 @@ FROM [dbo].[vw_VolunteerSkills] AS [vw_VolunteerSkills]</DefiningQuery>
     <AssociationSet Name="FK_Volunteers_UserAccount" Association="Self.FK_Volunteers_UserAccount">
       <End Role="UserAccount" EntitySet="UserAccount" />
       <End Role="Volunteers" EntitySet="Volunteers" />
+    </AssociationSet>
+    <AssociationSet Name="FK_VolunteersHistory_UserAccount" Association="Self.FK_VolunteersHistory_UserAccount">
+      <End Role="UserAccount" EntitySet="UserAccount" />
+      <End Role="VolunteersHistory" EntitySet="VolunteersHistory" />
     </AssociationSet>
   </EntityContainer>
 </Schema>

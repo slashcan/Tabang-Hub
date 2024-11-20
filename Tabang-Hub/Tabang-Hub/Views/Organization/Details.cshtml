@@ -234,45 +234,90 @@
                         <div class="card h-100">
                             <div class="card-header d-flex justify-content-between align-items-center">
                                 <h5 class="card-title mb-0">Event Details</h5>
-                                <button class="btn btn-outline-primary edit-button" data-bs-toggle="modal" data-bs-target="#editEventModal">Edit</button>
+                                @if (Model.eventDetails.dateStart >= DateTime.Now)
+                                {
+                                    <button class="btn btn-outline-primary edit-button" data-bs-toggle="modal" data-bs-target="#editEventModal">Edit</button>
+                                }
                             </div>
                             <div class="card-body d-flex flex-column">
                                 <ul class="list-group list-group-flush flex-grow-1">
                                     <h5 class="card-title">@Model.eventDetails.eventTitle</h5>
                                     <p class="card-text">@Model.eventDetails.eventDescription</p>
-                                    <li class="list-group-item"><i class="bi bi-people me-2"></i><strong>Max Volunteer:</strong> @Model.eventDetails.maxVolunteer</li>
-                                    <li class="list-group-item"><i class="bi bi-calendar me-2"></i><strong>Date Started:</strong> @Model.eventDetails.dateStart</li>
-                                    <li class="list-group-item"><i class="bi bi-calendar me-2"></i><strong>Date Ended:</strong> @Model.eventDetails.dateEnd</li>
+                                    <li class="list-group-item d-flex align-items-center">
+                                        <i class="bi bi-calendar-event text-primary me-2"></i>
+                                        <strong class="me-2">Start Date:</strong>
+                                        <span>
+                                            @(Model.eventDetails.dateStart.HasValue ? Model.eventDetails.dateStart.Value.ToString("MMMM dd, yyyy - h:mm tt") : "N/A")
+                                        </span>
+                                    </li>
+                                    <li class="list-group-item d-flex align-items-center">
+                                        <i class="bi bi-calendar-x text-danger me-2"></i>
+                                        <strong class="me-2">End Date:</strong>
+                                        <span>
+                                            @(Model.eventDetails.dateEnd.HasValue ? Model.eventDetails.dateEnd.Value.ToString("MMMM dd, yyyy - h:mm tt") : "N/A")
+                                        </span>
+                                    </li>
+
                                     <li class="list-group-item"><i class="bi bi-geo-alt me-2"></i><strong>Location:</strong> @Model.eventDetails.location</li>
                                 </ul>
                             </div>
-                            @if (Model.eventDetails.targetAmount != null)
-                            {
-                                <div class="card-body">
-                                    <h5 class="card-title">Target Amount</h5>
-                                    @{
-                                        decimal? raisedAmount = 0;
 
-                                        foreach (var donated in Model.listofUserDonated)
-                                        {
-                                            if (donated.Status == 1)
-                                            {
-                                                raisedAmount += donated.amount;
+                            <div class="row d-flex align-items-stretch">
+                                <!-- Volunteers Section -->
+                                <div class="col-md-6">
+                                    <div class="card h-100">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Volunteers</h5>
+                                            @* Calculate the current volunteer count *@
+                                            @{
+                                                int currentVolunteers = Model.listOfEventVolunteers.Count(v => v.Status == 1);
+                                                int maxVolunteers = (int)Model.eventDetails.maxVolunteer;
+                                                var volunteerPercentage = (maxVolunteers > 0) ? ((double)currentVolunteers / maxVolunteers) * 100 : 0;
                                             }
-                                        }
-
-                                        var percentage = (raisedAmount / Model.eventDetails.targetAmount) * 100;
-                                    }
-                                    <div class="progress-bar-container">
-                                        <div class="progress">
-                                            <div class="progress-bar" role="progressbar" style="width: @percentage%" aria-valuenow="@raisedAmount" aria-valuemin="0" aria-valuemax="@Model.eventDetails.targetAmount"></div>
-                                            <div class="progress-text">
-                                                @($"{raisedAmount:₱#,##0.00}") / @($"{Model.eventDetails.targetAmount:₱#,##0.00}")
+                                            <div class="progress-bar-container mb-2">
+                                                <div class="progress">
+                                                    <div class="progress-bar" role="progressbar" style="width: @volunteerPercentage%"></div>
+                                                    <div class="progress-text">@($"{currentVolunteers}/{maxVolunteers}")</div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            }
+
+                                <!-- Target Amount Section -->
+                                @if (Model.eventDetails.targetAmount != null)
+                                {
+                                    <div class="col-md-6">
+                                        <div class="card h-100">
+                                            <div class="card-body">
+                                                <h5 class="card-title">Target Amount</h5>
+                                                @* Calculate the raised amount *@
+                                                @{
+                                                    decimal? raisedAmount = 0;
+
+                                                    foreach (var donated in Model.listofUserDonated)
+                                                    {
+                                                        if (donated.Status == 1)
+                                                        {
+                                                            raisedAmount += donated.amount;
+                                                        }
+                                                    }
+
+                                                    var percentage = (raisedAmount / Model.eventDetails.targetAmount) * 100;
+                                                }
+                                                <div class="progress-bar-container">
+                                                    <div class="progress">
+                                                        <div class="progress-bar" role="progressbar" style="width: @percentage%" aria-valuenow="@raisedAmount" aria-valuemin="0" aria-valuemax="@Model.eventDetails.targetAmount"></div>
+                                                        <div class="progress-text">
+                                                            @($"{raisedAmount:₱#,##0.00}") / @($"{Model.eventDetails.targetAmount:₱#,##0.00}")
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
                             <div class="card-body">
                                 <h5 class="card-title">Skills Needed</h5>
                                 <div class="skills-container" id="skills-container">
@@ -509,14 +554,14 @@
                                 <div class="mb-3">
                                     <label for="EditEvent_eventTitle" class="form-label">Event Title</label>
                                     <input type="text" class="form-control" id="EditEvent_eventTitle" name="events.CreateEvents.eventTitle" value="@Model.eventDetails.eventTitle" placeholder="Enter event title">
-                                    <span class="error" id="EditEvent_eventTitle_error"></span>
+                                    <span class="error text-danger" id="EditEvent_eventTitle_error"></span>
                                 </div>
 
                                 <!-- Event Description -->
                                 <div class="mb-3">
                                     <label for="EditEvent_eventDescription" class="form-label">Event Description</label>
                                     <textarea class="form-control" id="EditEvent_eventDescription" name="events.CreateEvents.eventDescription" rows="4" placeholder="Enter event description">@Model.eventDetails.eventDescription</textarea>
-                                    <span class="error" id="EditEvent_eventDescription_error"></span>
+                                    <span class="error text-danger" id="EditEvent_eventDescription_error"></span>
                                 </div>
 
                                 <!-- Target Amount -->
@@ -526,7 +571,7 @@
                                         <label class="form-check-label" for="editSwitchCheckDefault">Enable Target Amount</label>
                                     </div>
                                     <input type="text" class="form-control mt-2" id="EditEvent_targetAmount" name="events.CreateEvents.targetAmount" value="@(Model.eventDetails.targetAmount?.ToString() ?? "")" placeholder="Enter target amount in Peso" @(Model.eventDetails.targetAmount == null ? "disabled" : "")>
-                                    <span class="error" id="EditEvent_targetAmount_error"></span>
+                                    <span class="error text-danger" id="EditEvent_targetAmount_error"></span>
                                 </div>
 
                                 <!-- Dates -->
@@ -534,12 +579,12 @@
                                     <div class="col">
                                         <label for="EditEvent_dateStart" class="form-label">Start Date and Time</label>
                                         <input type="datetime-local" class="form-control" id="EditEvent_dateStart" name="events.CreateEvents.dateStart" value="@(Model.eventDetails.dateStart.HasValue ? Model.eventDetails.dateStart.Value.ToString("yyyy-MM-ddTHH:mm") : "")">
-                                        <span class="error" id="EditEvent_dateStart_error"></span>
+                                        <span class="error text-danger" id="EditEvent_dateStart_error"></span>
                                     </div>
                                     <div class="col">
                                         <label for="EditEvent_dateEnd" class="form-label">End Date and Time</label>
                                         <input type="datetime-local" class="form-control" id="EditEvent_dateEnd" name="events.CreateEvents.dateEnd" value="@(Model.eventDetails.dateEnd.HasValue ? Model.eventDetails.dateEnd.Value.ToString("yyyy-MM-ddTHH:mm") : "")">
-                                        <span class="error" id="EditEvent_dateEnd_error"></span>
+                                        <span class="error text-danger" id="EditEvent_dateEnd_error"></span>
                                     </div>
                                 </div>
 
@@ -552,14 +597,14 @@
                                 <div class="mb-3">
                                     <label for="EditEvent_location" class="form-label">Location</label>
                                     <input type="text" class="form-control" id="EditEvent_location" name="events.CreateEvents.location" value="@Model.eventDetails.location" placeholder="Enter location">
-                                    <span class="error" id="EditEvent_location_error"></span>
+                                    <span class="error text-danger" id="EditEvent_location_error"></span>
                                 </div>
 
                                 <!-- Maximum Volunteers -->
                                 <div class="mb-3">
                                     <label for="EditEvent_maxVolunteer" class="form-label">Maximum Volunteers</label>
                                     <input type="number" class="form-control" id="EditEvent_maxVolunteer" name="events.CreateEvents.maxVolunteer" min="1" value="@Model.eventDetails.maxVolunteer" placeholder="Enter maximum number of volunteers">
-                                    <span class="error" id="EditEvent_maxVolunteer_error"></span>
+                                    <span class="error text-danger" id="EditEvent_maxVolunteer_error"></span>
                                 </div>
                                 <div id="skillsToRemoveContainer"></div>
                                 <!-- Volunteer Skills Requirements -->
@@ -587,7 +632,7 @@
                                             </tbody>
                                         </table>
                                     </div>
-                                    <span class="error" id="EditEvent_skills_error"></span>
+                                    <span class="error text-danger" id="EditEvent_skills_error"></span>
                                 </div>
 
                                 <!-- Skill Buttons to Add Skills -->
@@ -603,7 +648,7 @@
                                 <div class="mb-3">
                                     <label for="EditEvent_uploadImage" class="form-label">Upload Images</label>
                                     <input type="file" class="form-control" id="EditEvent_uploadImage" name="images" multiple onchange="previewEditImages()">
-                                    <span class="error" id="EditEvent_uploadImage_error"></span>
+                                    <span class="error text-danger" id="EditEvent_uploadImage_error"></span>
                                     <div class="preview-container" id="edit-image-preview"></div>
                                 </div>
 
@@ -781,36 +826,81 @@ else
                                 <ul class="list-group list-group-flush flex-grow-1">
                                     <h5 class="card-title">@Model.eventDetails.eventTitle</h5>
                                     <p class="card-text">@Model.eventDetails.eventDescription</p>
-                                    <li class="list-group-item"><i class="bi bi-people me-2"></i><strong>Max Volunteer:</strong> @Model.eventDetails.maxVolunteer</li>
-                                    <li class="list-group-item"><i class="bi bi-calendar me-2"></i><strong>Date Started:</strong> @Model.eventDetails.dateStart</li>
-                                    <li class="list-group-item"><i class="bi bi-calendar me-2"></i><strong>Date Ended:</strong> @Model.eventDetails.dateEnd</li>
+                                    <li class="list-group-item d-flex align-items-center">
+                                        <i class="bi bi-calendar-event text-primary me-2"></i>
+                                        <strong class="me-2">Start Date:</strong>
+                                        <span>
+                                            @(Model.eventDetails.dateStart.HasValue ? Model.eventDetails.dateStart.Value.ToString("MMMM dd, yyyy - h:mm tt") : "N/A")
+                                        </span>
+                                    </li>
+                                    <li class="list-group-item d-flex align-items-center">
+                                        <i class="bi bi-calendar-x text-danger me-2"></i>
+                                        <strong class="me-2">End Date:</strong>
+                                        <span>
+                                            @(Model.eventDetails.dateEnd.HasValue ? Model.eventDetails.dateEnd.Value.ToString("MMMM dd, yyyy - h:mm tt") : "N/A")
+                                        </span>
+                                    </li>
+
                                     <li class="list-group-item"><i class="bi bi-geo-alt me-2"></i><strong>Location:</strong> @Model.eventDetails.location</li>
                                 </ul>
                             </div>
-                            @if (Model.eventDetails.targetAmount != null)
-                            {
-                                <div class="card-body">
-                                    <h5 class="card-title">Target Amount</h5>
-                                    @{
-                                        decimal? raisedAmount = 0;
 
-                                        foreach (var donated in Model.listofUserDonated)
-                                        {
-                                            raisedAmount += donated.amount;
-                                        }
-
-                                        var percentage = (raisedAmount / Model.eventDetails.targetAmount) * 100;
-                                    }
-                                    <div class="progress-bar-container">
-                                        <div class="progress">
-                                            <div class="progress-bar" role="progressbar" style="width: @percentage%" aria-valuenow="@raisedAmount" aria-valuemin="0" aria-valuemax="@Model.eventDetails.targetAmount"></div>
-                                            <div class="progress-text">
-                                                @($"{raisedAmount:₱#,##0.00}") / @($"{Model.eventDetails.targetAmount:₱#,##0.00}")
+                            <div class="row d-flex align-items-stretch">
+                                <!-- Volunteers Section -->
+                                <div class="col-md-6">
+                                    <div class="card h-100">
+                                        <div class="card-body">
+                                            <h5 class="card-title">Volunteers</h5>
+                                            @* Calculate the current volunteer count *@
+                                            @{
+                                                int currentVolunteers = Model.listOfEventVolunteers.Count(v => v.Status == 1);
+                                                int maxVolunteers = (int)Model.eventDetails.maxVolunteer;
+                                                var volunteerPercentage = (maxVolunteers > 0) ? ((double)currentVolunteers / maxVolunteers) * 100 : 0;
+                                            }
+                                            <div class="progress-bar-container mb-2">
+                                                <div class="progress">
+                                                    <div class="progress-bar" role="progressbar" style="width: @volunteerPercentage%"></div>
+                                                    <div class="progress-text">@($"{currentVolunteers}/{maxVolunteers}")</div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            }
+
+                                <!-- Target Amount Section -->
+                                @if (Model.eventDetails.targetAmount != null)
+                                {
+                                    <div class="col-md-6">
+                                        <div class="card h-100">
+                                            <div class="card-body">
+                                                <h5 class="card-title">Target Amount</h5>
+                                                @* Calculate the raised amount *@
+                                                @{
+                                                    decimal? raisedAmount = 0;
+
+                                                    foreach (var donated in Model.listofUserDonated)
+                                                    {
+                                                        if (donated.Status == 1)
+                                                        {
+                                                            raisedAmount += donated.amount;
+                                                        }
+                                                    }
+
+                                                    var percentage = (raisedAmount / Model.eventDetails.targetAmount) * 100;
+                                                }
+                                                <div class="progress-bar-container">
+                                                    <div class="progress">
+                                                        <div class="progress-bar" role="progressbar" style="width: @percentage%" aria-valuenow="@raisedAmount" aria-valuemin="0" aria-valuemax="@Model.eventDetails.targetAmount"></div>
+                                                        <div class="progress-text">
+                                                            @($"{raisedAmount:₱#,##0.00}") / @($"{Model.eventDetails.targetAmount:₱#,##0.00}")
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
                             <div class="card-body">
                                 <h5 class="card-title">Skills Needed</h5>
                                 <div class="skills-container" id="skills-container">
@@ -830,8 +920,11 @@ else
                 <div class="row mb-4">
                     <div class="col-md-12">
                         <div class="card">
-                            <div class="card-header">
+                            <div class="card-header d-flex justify-content-between align-items-center">
                                 <h5 class="card-title">Volunteer List (Finished Event)</h5>
+                                <div class="ratings-legend">
+                                    <p class="text-muted mb-0"><strong>Rating Legend:</strong> 5 - Highest, 1 - Lowest</p>
+                                </div>
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
@@ -846,10 +939,8 @@ else
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach (var volunteer in Model.listOfEventVolunteers)
+                                            @foreach (var volunteer in Model.listofvolunteerHistory)
                                             {
-                                                if (volunteer.Status == 1) // Adjust status condition as needed
-                                                {
                                                     <tr>
                                                         <td>
                                                             <img src="@Url.Content("~/Content/images/organization.png")" class="profile-img" alt="Volunteer Image" style="width: 50px; height: 50px; border-radius: 50%;">
@@ -906,7 +997,6 @@ else
                                                             </div>
                                                         </td>
                                                     </tr>
-                                                }
                                             }
                                         </tbody>
                                     </table>
@@ -1101,50 +1191,93 @@ else
         });
     });
 
-    $('#editEventModal').on('shown.bs.modal', function () {
-        console.log('Modal shown. Initializing map.');
+        $('#editEventModal').on('shown.bs.modal', function () {
+            console.log('Modal shown. Initializing map.');
 
-        // Coordinates for Lapu-Lapu City
-        const lapuLapuCoords = [10.3140, 123.9495];
+            // Coordinates for Lapu-Lapu City
+            const lapuLapuCoords = [10.3140, 123.9495];
 
-        // Initialize the map centered on Lapu-Lapu City
-        window.leafletMap = L.map('map').setView(lapuLapuCoords, 13);
+            // Initialize the map centered on Lapu-Lapu City
+            window.leafletMap = L.map('map').setView(lapuLapuCoords, 13);
 
-        // Add OpenStreetMap tile layer
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: 'Map data © OpenStreetMap contributors'
-        }).addTo(window.leafletMap);
+            // Add OpenStreetMap tile layer
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: 'Map data © OpenStreetMap contributors'
+            }).addTo(window.leafletMap);
 
-        // Add click event to the map
-        window.leafletMap.on('click', function (e) {
-            const latlng = e.latlng;
-            const lat = latlng.lat;
-            const lon = latlng.lng;
+            // Define the polygon boundary for Lapu-Lapu City and Cordova
+            const allowedArea = L.polygon(
+                [
+                    [10.2886, 123.9053], // Point 1
+                    [10.2346, 123.9479], // Point 2
+                    [10.3619, 124.0107], // Point 3
+                    [10.3291, 124.0518], // Point 4
+                    [10.2886, 123.9053]  // Close the polygon
+                ],
+                {
+                    color: '#3388ff', // Border color (optional)
+                    opacity: 0,       // Hide the border
+                    fillOpacity: 0    // Hide the fill
+                }
+            ).addTo(window.leafletMap);
 
-            // Use reverse geocoding to get the address
-            const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lon}`;
+            // Add click event to the map
+            window.leafletMap.on('click', function (e) {
+                const latlng = e.latlng;
+                const lat = latlng.lat;
+                const lon = latlng.lng;
 
-            fetch(url)
-                .then(response => response.json())
-                .then(data => {
-                    const address = data.display_name;
-                    document.getElementById('EditEvent_location').value = address;
-                })
-                .catch(error => {
-                    console.error('Error in reverse geocoding:', error);
-                    document.getElementById('EditEvent_location').value = `${lat}, ${lon}`;
-                });
+                console.log('Clicked coordinates:', lat, lon);
+
+                // Check if the clicked location is within the allowed polygon
+                if (allowedArea.getBounds().contains(latlng)) {
+                    const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lon}`;
+
+                    fetch(url)
+                        .then(response => response.json())
+                        .then(data => {
+                            const address = data.display_name;
+                            document.getElementById('EditEvent_location').value = address;
+
+                            if (window.marker) {
+                                window.leafletMap.removeLayer(window.marker);
+                            }
+
+                            window.marker = L.marker([lat, lon]).addTo(window.leafletMap)
+                                .bindPopup(`<b>Selected Location:</b><br>${address}`)
+                                .openPopup();
+                        })
+                        .catch(error => {
+                            console.error('Error in reverse geocoding:', error);
+                            document.getElementById('EditEvent_location').value = `${lat}, ${lon}`;
+
+                            if (window.marker) {
+                                window.leafletMap.removeLayer(window.marker);
+                            }
+
+                            window.marker = L.marker([lat, lon]).addTo(window.leafletMap)
+                                .bindPopup(`<b>Coordinates:</b><br>Lat: ${lat}, Lon: ${lon}`)
+                                .openPopup();
+                        });
+                } else {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Invalid Location',
+                        text: 'Please select a location within Lapu-Lapu City or Cordova.'
+                    });
+                }
+            });
         });
-    });
 
-    // Destroy the map when the modal is hidden
-    $('#editEventModal').on('hidden.bs.modal', function () {
-        if (window.leafletMap) {
-            console.log('Modal hidden. Removing map.');
-            window.leafletMap.remove();
-            window.leafletMap = null;
-        }
-    });
+        // Destroy the map when the modal is hidden
+        $('#editEventModal').on('hidden.bs.modal', function () {
+            if (window.leafletMap) {
+                console.log('Modal hidden. Removing map.');
+                window.leafletMap.remove();
+                window.leafletMap = null;
+            }
+        });
+
 document.getElementById('submitAllRatings').addEventListener('click', function () {
     let volunteerRatingsData = [];
     document.querySelectorAll('tbody tr').forEach(function (row) {
@@ -1523,5 +1656,59 @@ function previewEditImages() {
         });
 
         return false;
-}
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const dateStartInput = document.getElementById('EditEvent_dateStart');
+        const dateEndInput = document.getElementById('EditEvent_dateEnd');
+        const now = new Date();
+
+        // Validate Start Date in real-time
+        dateStartInput.addEventListener('input', function () {
+            const dateStart = new Date(this.value);
+            const errorSpan = document.getElementById('EditEvent_dateStart_error');
+
+            if (isNaN(dateStart.getTime()) || dateStart <= now) {
+                errorSpan.innerText = 'Start date and time must be in the future.';
+                this.value = ''; // Clear invalid input
+            } else {
+                errorSpan.innerText = '';
+            }
+
+            validateEventDuration(); // Validate duration whenever start date changes
+        });
+
+        // Validate End Date in real-time
+        dateEndInput.addEventListener('input', function () {
+            validateEventDuration(); // Validate duration whenever end date changes
+        });
+
+        // Function to validate the duration between Start Date and End Date
+        function validateEventDuration() {
+            const dateStart = new Date(dateStartInput.value);
+            const dateEnd = new Date(dateEndInput.value);
+            const errorSpanEnd = document.getElementById('EditEvent_dateEnd_error');
+
+            // Reset previous errors
+            errorSpanEnd.innerText = '';
+
+            if (isNaN(dateEnd.getTime())) {
+                errorSpanEnd.innerText = 'End date and time is required.';
+                dateEndInput.value = '';
+                return;
+            }
+
+            if (dateEnd <= now) {
+                errorSpanEnd.innerText = 'End date and time must be in the future.';
+                dateEndInput.value = '';
+                return;
+            }
+
+            if (dateEnd <= dateStart) {
+                errorSpanEnd.innerText = 'End date and time must be after the start date.';
+                dateEndInput.value = '';
+                return;
+            }
+        }
+    });
 </script>

@@ -29,6 +29,7 @@ namespace Tabang_Hub.Utils
         public List<UserAccount> pendingOrg {  get; set; }
         public List<Skills> listOfSkills { get; set; }
         public List<vw_OrganizationAccounts> organizationAccounts { get; set; }
+        public List<VolunteersHistory> listofvolunteerHistory { get; set; }
         public List<OrgEventImage> detailsEventImageOne { get; set; }
         public List<OrgEventImage> detailsEventImage { get; set; }
         public List<OrgSkillRequirement> detailsSkillRequirement { get; set; }

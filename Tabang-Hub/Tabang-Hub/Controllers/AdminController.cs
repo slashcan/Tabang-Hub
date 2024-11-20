@@ -338,6 +338,13 @@ namespace Tabang_Hub.Controllers
         [HttpPost]
         public JsonResult AddSkills(Skills skill, HttpPostedFileBase skillImage)
         {
+            // Check if the skill already exists in the database
+            var existingSkill = _adminManager.GetSkillByName(skill.skillName);
+            if (existingSkill != null)
+            {
+                return Json(new { success = false, message = "Skill already exists." });
+            }
+
             if (skillImage != null && skillImage.ContentLength > 0)
             {
                 var directoryPath = Server.MapPath("~/Content/SkillImages/");
@@ -544,21 +551,19 @@ namespace Tabang_Hub.Controllers
             return View(indexModel);
         }
         [HttpPost]
-        public ActionResult Approve(int userId)
+        public JsonResult Approve(int userId)
         {
             var organization = db.UserAccount.FirstOrDefault(o => o.userId == userId);
 
             if (organization == null)
             {
-                return HttpNotFound();
+                return Json(new { success = false, message = "Organization not found." });
             }
 
-            organization.status = 1; // Set status to approved
+            organization.status = 1; // Approved status
             db.SaveChanges();
 
-            TempData["SuccessMessage"] = "The account has been approved.";
-
-            // Email notification logic
+            // Email notification
             string subject = "Organization Approval Notification";
             string body = $@"
 <html>
@@ -617,7 +622,7 @@ namespace Tabang_Hub.Controllers
         <div class='content'>
             <p>Dear {organization.email},</p>
             <p>We are pleased to inform you that your organization account has been approved. You can now access the system using the link below:</p>
-            <a class='button' href='https://localhost:44330/'>Go to System</a>
+            <a class='button' href='https://localhost:44330/'>Login</a>
             <p>Thank you for being a part of our community.</p>
             <p>Sincerely,<br>The Tabang Hub Team</p>
         </div>
@@ -625,33 +630,78 @@ namespace Tabang_Hub.Controllers
 </body>
 </html>";
 
-            // Send the email
+            // Send email
             MailManager sendEmail = new MailManager();
             string errorResponse = "";
             bool isEmailSent = sendEmail.SendEmail(organization.email, subject, body, ref errorResponse);
 
             if (!isEmailSent)
             {
-                TempData["ErrorMessage"] = "The organization has been approved, but an error occurred while sending the email notification.";
+                return Json(new { success = false, message = "Approval successful, but email notification failed." });
             }
 
-            return RedirectToAction("OrganizationAccounts");
+            return Json(new { success = true, message = "The organization account has been approved." });
         }
         [HttpPost]
-        public ActionResult Reject(int userId)
+        public JsonResult Reject(int userId)
         {
             var organization = db.UserAccount.FirstOrDefault(o => o.userId == userId);
+            var orgInfo = db.OrgInfo.FirstOrDefault(m => m.userId == userId);
 
             if (organization == null)
             {
-                return HttpNotFound();
+                return Json(new { success = false, message = "Organization not found." });
             }
 
-            organization.status = 0; // Set status to not active or rejected
+            if (orgInfo != null)
+            {
+                db.OrgInfo.Remove(orgInfo);
+            }
+
+            db.UserAccount.Remove(organization);
             db.SaveChanges();
 
-            TempData["SuccessMessage"] = "The account has been rejected.";
-            return RedirectToAction("OrganizationAccounts");
+            // Email notification
+            string subject = "Organization Rejection Notification";
+            string body = $@"
+<html>
+<head>
+    <style>
+        body {{
+            font-family: Arial, sans-serif;
+            background-color: #ffefef;
+            color: #333;
+        }}
+        .container {{
+            ...
+        }}
+    </style>
+</head>
+<body>
+    <div class='container'>
+        <div class='header'>
+            <h1>Rejection Notice</h1>
+        </div>
+        <div class='content'>
+            <p>Dear {organization.email},</p>
+            <p>We regret to inform you that your organization account has not been approved.</p>
+            <p>Sincerely,<br>The Tabang Hub Team</p>
+        </div>
+    </div>
+</body>
+</html>";
+
+            // Send email
+            MailManager sendEmail = new MailManager();
+            string errorResponse = "";
+            bool isEmailSent = sendEmail.SendEmail(organization.email, subject, body, ref errorResponse);
+
+            if (!isEmailSent)
+            {
+                return Json(new { success = false, message = "Rejection successful, but email notification failed." });
+            }
+
+            return Json(new { success = true, message = "The organization account has been rejected." });
         }
 
         private string GetRedirectUrlForNotification(Notification notification)

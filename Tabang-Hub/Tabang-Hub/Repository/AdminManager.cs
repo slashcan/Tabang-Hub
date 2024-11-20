@@ -54,6 +54,10 @@ namespace Tabang_Hub.Repository
         {
             return _organizationAccounts.GetAll();
         }
+        public Skills GetSkillByName(string name)
+        {
+            return _skills._table.Where(m => m.skillName == name).FirstOrDefault();
+        }
         public UserAccount GetUserById(int userId)
         {
             return _userAccount._table.Where(m => m.userId == userId).FirstOrDefault();
@@ -216,8 +220,8 @@ namespace Tabang_Hub.Repository
                         .ToList();
         }
         public List<OrgEvents> GetAllEvents()
-        { 
-            return _orgEvents.GetAll();
+        {
+            return _orgEvents.GetAll().Where(m => m.status != 2).ToList();
         }
         public List<UserDonated> GetAllDonators()
         {

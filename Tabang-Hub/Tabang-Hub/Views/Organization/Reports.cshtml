@@ -149,11 +149,11 @@
         <div class="col-12 col-lg-3">
             <!-- Recent Events -->
             <div class="dashboard-section">
-                <div class="card mb-3" style="min-height: 475px;">
+                <div class="card mb-3" style="min-height: 470px;">
                     <div class="card-header">
                         <h4>Recent Events</h4>
                     </div>
-                    <div class="card-body overflow-auto mt-4">
+                    <div class="card-body mt-4" style="max-height: 350px; overflow-y: auto;">
                         @if (Model.recentEvents.Any())
                         {
                             foreach (var recent in Model.recentEvents)
@@ -183,7 +183,7 @@
                     <div class="card-header">
                         <h4>Recent Donators</h4>
                     </div>
-                    <div class="card-body overflow-auto mt-4">
+                    <div class="card-body mt-4" style="max-height: 400px; overflow-y: auto;">
                         @if (Model.recentDonators.Any())
                         {
                             foreach (var recent in Model.recentDonators)
