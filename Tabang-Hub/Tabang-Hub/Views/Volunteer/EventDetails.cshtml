@@ -59,10 +59,10 @@
                     @foreach (var location in Model.listOfEventsOne)
                     {
                         DateTime? originalDateStart = location.Start_Date;
-                        string formattedDateStart = originalDateStart.HasValue ? originalDateStart.Value.ToString("MMMM dd, yyyy") : "N/A";
+                        string formattedDateStart = originalDateStart.HasValue ? originalDateStart.Value.ToString("MMMM dd, yyyy hh:mm tt") : "N/A";
 
                         DateTime? originalDateEnd = location.End_Date;
-                        string formattedDateEnd = originalDateEnd.HasValue ? originalDateEnd.Value.ToString("MMMM dd, yyyy") : "N/A";
+                        string formattedDateEnd = originalDateEnd.HasValue ? originalDateEnd.Value.ToString("MMMM dd, yyyy hh:mm tt") : "N/A";
 
                         <i class="bi bi-geo-alt" style="font-size:24px;"></i> @location.location
 
@@ -81,7 +81,7 @@
                         <div style="margin-top: 50px; color: dimgray" class="org-info">
                             <div class="d-flex align-items-center mb-2">
                                 <i class="bi bi-calendar me-2" style="font-size:16px;"></i>
-                                <span>@formattedDateStart <strong>-</strong> @formattedDateEnd</span>
+                                <span>@formattedDateStart<strong>-</strong> @formattedDateEnd</span>
                             </div>
                         </div>
 
@@ -100,29 +100,38 @@
 
                     <div class="apply-button mt-2">
                         @foreach (var orgDetails in Model.orgEvents)
-                        {
-                            bool hasAllRequiredSkills = Model.detailsSkillRequirement
-                                .All(reqSkill => Model.volunteersSkills.Any(volSkill => volSkill.skillId == reqSkill.skillId));
-
-                            if (hasAllRequiredSkills)
-                            {
-                                // Display join buttons if all required skills are met
-                                if (!Model.volunteersStatusEvent.Count().Equals(0))
                                 {
-                                    foreach (var status in Model.volunteersStatusEvent)
+                                    bool hasAllRequiredSkills = Model.detailsSkillRequirement
+                                        .All(reqSkill => Model.volunteersSkills.Any(volSkill => volSkill.skillId == reqSkill.skillId));
+
+                                    if (hasAllRequiredSkills)
                                     {
-                                        if (status.Status.Equals(1) && Model.volunteersStatusEvent.Count() != 0)
+                                        // Display join buttons if all required skills are met
+                                        if (!Model.volunteersStatusEvent.Count().Equals(0))
                                         {
-                                            <button style="width: 100%" onclick="leaveEvent('@orgDetails.eventId')" class="btn btnRequest">
-                                                Leave event
-                                            </button>
-                                        }
-                                        else if (status.Status.Equals(0) && Model.volunteersStatusEvent.Count() != 0)
-                                        {
-                                            <button style="width: 100%" onclick="cancelEvent('@orgDetails.eventId')" class="btn btnRequest">
-                                                Cancel application
-                                            </button>
-                                        }
+                                            foreach (var status in Model.volunteersStatusEvent)
+                                            {
+                                                var getDateOfEvent = Model.listOfEventsOne.FirstOrDefault();
+                                                if (status.Status.Equals(1) && Model.volunteersStatusEvent.Count() != 0 && getDateOfEvent.Start_Date > DateTime.Now)
+                                                {
+                                                    <button style="width: 100%" onclick="leaveEvent('@orgDetails.eventId')" class="btn btnRequest">
+                                                        Leave event
+                                                    </button>
+                                                }
+                                                else if (status.Status.Equals(1) && @orgDetails.dateStart <= DateTime.Now)
+                                                {
+                                                    <div class="join-button mt-2 mb-2" style="width: 100%; padding: 10px; background-color: mediumseagreen; color: white; text-align: center">
+                                                        <span>
+                                                            Ongoing Event
+                                                        </span>
+                                                    </div>
+                                                }
+                                                else if (status.Status.Equals(0) && Model.volunteersStatusEvent.Count() != 0)
+                                                {
+                                                    <button style="width: 100%" onclick="cancelEvent('@orgDetails.eventId')" class="btn btnRequest">
+                                                        Cancel application
+                                                    </button>
+                                                }
                                         else
                                         {
                                             <div class="action-buttons mt-2">
@@ -141,44 +150,6 @@
                                     }
                                 }
                             }
-                            <!-- Accept Invitation Modal -->
-                            @*<div class="modal fade" id="acceptEventModal" tabindex="-1" role="dialog" aria-labelledby="acceptEventModalLabel" aria-hidden="true">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="acceptEventModalLabel">Accept Invitation</h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <form id="acceptEventForm">
-                                                <div class="form-group" id="skillSelectSection">
-                                                    <label for="skillSelect">Select Required Skill</label>
-                                                    <div id="skillSelect">
-                                                        @foreach (var mskill in Model.matchSkill)
-                                                        {
-                                                            var skillName = Model.skills.Where(m => m.skillId == mskill.skillId).Select(m => m.skillName).FirstOrDefault();
-                                                            <div class="form-check">
-                                                                <input class="form-check-input" type="radio" name="skill" id="skill1" value="@Html.Raw(skillName)" required>
-                                                                <label class="form-check-label" for="@Html.Raw(skillName)">
-                                                                    @Html.Raw(skillName)
-                                                                </label>
-                                                            </div>
-                                                        }
-                                                    </div>
-                                                </div>
-                                            </form>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                            <button type="button" class="btn btn-primary" onclick="acceptEvent('@orgDetails.eventId')">Accept Invitation</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>*@
-
-
 
                             if (orgDetails.targetAmount != null)
                             {
@@ -288,10 +259,10 @@ else
                     @foreach (var location in Model.listOfEventsOne)
                     {
                         DateTime? originalDateStart = location.Start_Date;
-                        string formattedDateStart = originalDateStart.HasValue ? originalDateStart.Value.ToString("MMMM dd, yyyy") : "N/A";
+                        string formattedDateStart = originalDateStart.HasValue ? originalDateStart.Value.ToString("MMMM dd, yyyy hh:mm tt") : "N/A";
 
                         DateTime? originalDateEnd = location.End_Date;
-                        string formattedDateEnd = originalDateEnd.HasValue ? originalDateEnd.Value.ToString("MMMM dd, yyyy") : "N/A";
+                        string formattedDateEnd = originalDateEnd.HasValue ? originalDateEnd.Value.ToString("MMMM dd, yyyy hh:mm tt") : "N/A";
 
                         <i class="bi bi-geo-alt" style="font-size:24px;"></i> @location.location
 
@@ -310,7 +281,7 @@ else
                         <div style="margin-top: 50px; color: dimgray" class="org-info">
                             <div class="d-flex align-items-center mb-2">
                                 <i class="bi bi-calendar me-2" style="font-size:16px;"></i>
-                                <span>@formattedDateStart <strong>-</strong> @formattedDateEnd</span>
+                                <span><strong>Start: </strong>@formattedDateStart <strong>-</strong> <br /><strong>End: </strong>@formattedDateEnd</span>
                             </div>
                         </div>
 
@@ -327,140 +298,109 @@ else
                         </div>
                     }
 
-                    <div class="apply-button mt-2">
-                        @foreach (var orgDetails in Model.orgEvents)
+                <div class="apply-button mt-2">
+                    @foreach (var orgDetails in Model.orgEvents)
+                    {
+                        if (!Model.volunteersStatusEvent.Count().Equals(0))
                         {
-                            if (!Model.volunteersStatusEvent.Count().Equals(0))
+                            var getVolStatus = Model.volunteersStatusEvent.Select(m => m.Status).FirstOrDefault();
+                            //foreach (var status in Model.volunteersStatusEvent)
+                            //{
+                            if (getVolStatus.Equals(1) && Model.volunteersStatusEvent.Count() != 0)
                             {
-                                var getVolStatus = Model.volunteersStatusEvent.Select(m => m.Status).FirstOrDefault();
-                                //foreach (var status in Model.volunteersStatusEvent)
-                                //{
-                                if (getVolStatus.Equals(1) && Model.volunteersStatusEvent.Count() != 0)
-                                {
-                                    <button style="width: 100%" onclick="leaveEvent('@orgDetails.eventId')" class="btn btnRequest">
-                                        Leave event
-                                    </button>
-                                }
-                                else if (getVolStatus.Equals(0) && Model.volunteersStatusEvent.Count() != 0)
-                                {
-                                    <button style="width: 100%" onclick="cancelEvent('@orgDetails.eventId')" class="btn btnRequest">
-                                        Cancel application
-                                    </button>
-                                }
-                                //}
+                                <button style="width: 100%" onclick="leaveEvent('@orgDetails.eventId')" class="btn btnRequest">
+                                    Leave event
+                                </button>
                             }
-                            if (Model.volunteersStatusEvent.Count().Equals(0))
+                            else if (getVolStatus.Equals(0) && Model.volunteersStatusEvent.Count() != 0)
                             {
-                                @*<button style="width: 100%" onclick="applyEvent('@orgDetails.eventId')" class="btn btn-primary btn-block">
-                                        Join now
-                                    </button>*@
-                                bool hasAllRequiredSkills = Model.detailsSkillRequirement
-                                    .All(reqSkill => Model.volunteersSkills.Any(volSkill => volSkill.skillId == reqSkill.skillId));
-                                if (hasAllRequiredSkills)
+                                <button style="width: 100%" onclick="cancelEvent('@orgDetails.eventId')" class="btn btnRequest">
+                                    Cancel application
+                                </button>
+                            }
+                            //}
+                        }
+                        if (Model.volunteersStatusEvent.Count().Equals(0))
+                        {
+                            bool hasAllRequiredSkills = Model.detailsSkillRequirement
+                                .All(reqSkill => Model.volunteersSkills.Any(volSkill => volSkill.skillId == reqSkill.skillId));
+                            if (hasAllRequiredSkills)
+                            {
+                                if (@orgDetails.dateStart <= DateTime.Now)
                                 {
-                                    <div class="join-button mt-2">
-                                        <!-- Button to open the join modal -->
-                                        <button style="width: 100%" type="button" class="btn btn-primary btn-block" onclick="applyEvent('@orgDetails.eventId')" @*data-toggle="modal" data-target="#joinModal"*@>
-                                            Join now
-                                        </button>
-                                    </div>
+                                <div class="join-button mt-2 mb-2" style="width: 100%; padding: 10px; background-color: mediumseagreen; color: white; text-align: center">
+                                    <span>
+                                        Ongoing Event
+                                    </span>
+                                </div>
                                 }
+                                else
+                                {
+                                <div class="join-button mt-2">
+                                    <button style="width: 100%" type="button" class="btn btn-primary btn-block" onclick="applyEvent('@orgDetails.eventId')">
+                                        Join now
+                                    </button>
+                                </div>
+                                }
+                            }
+                        }
 
-                                <!-- Join Modal -->
-                                <div class="modal fade" id="joinModal" tabindex="-1" role="dialog" aria-labelledby="joinModalLabel" aria-hidden="true">
-                                    @*<div class="modal-dialog" role="document">
+                        if (orgDetails.targetAmount != null)
+                        {
+                            foreach (var evnt in Model.listOfEventsOne)
+                            {
+                                <div class="donation-progress">
+                                    <label>Fund Raised</label>
+                                    <div class="progress">
+                                        @{
+                                            decimal? raisedAmount = 0;
+
+                                            foreach (var donated in Model.listofUserDonated)
+                                            {
+                                                raisedAmount += donated.amount;
+                                            }
+
+                                            var percentage = (raisedAmount / evnt.Target_Amount) * 100;
+                                        }
+                                        <div class="progress-bar" role="progressbar" style="width: @percentage%; background-color: mediumseagreen;" aria-valuenow="@raisedAmount" aria-valuemin="0" aria-valuemax="@evnt.Target_Amount"></div>
+                                        <div class="progress-label">@($"{raisedAmount:₱#,##0.00}") / @($"{evnt.Target_Amount:₱#,##0.00}")</div>
+                                    </div>
+                                </div>
+                                <div class="donate-button mt-2">
+                                    <!-- Button to open the donation modal -->
+                                    <button style="width: 100%" type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#donationModal">
+                                        Donate
+                                    </button>
+                                </div>
+
+                                <!-- Donation Modal -->
+                                <div class="modal fade" id="donationModal" tabindex="-1" role="dialog" aria-labelledby="donationModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered" role="document">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                                <h5 class="modal-title" id="joinModalLabel">Join Event</h5>
+                                                <h5 class="modal-title" id="donationModalLabel">Donate</h5>
                                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                     <span aria-hidden="true">&times;</span>
                                                 </button>
                                             </div>
                                             <div class="modal-body">
-                                                <form id="joinForm">
+                                                <form id="donationForm">
                                                     <div class="form-group">
-                                                        <label for="skillSelect">Select Required Skill</label>
-                                                        <div id="skillSelect">
-                                                            @foreach (var mskill in Model.matchSkill)
-                                                            {
-                                                                var skillName = Model.skills.Where(m => m.skillId == mskill.skillId).Select(m => m.skillName).FirstOrDefault();
-
-                                                                <div class="form-check">
-                                                                    <input class="form-check-input" type="radio" name="skill" id="skill1" value="@Html.Raw(skillName)" required>
-                                                                    <label class="form-check-label" for="@Html.Raw(skillName)">
-                                                                        @Html.Raw(skillName)
-                                                                    </label>
-                                                                </div>
-                                                            }
-                                                        </div>
+                                                        <label for="donationAmount">Amount</label>
+                                                        <input type="number" class="form-control" id="donationAmount" min="1" required>
                                                     </div>
                                                 </form>
                                             </div>
                                             <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                <button type="button" class="btn btn-primary" onclick="applyEvent('@orgDetails.eventId')">Submit</button>
+                                                <button type="button" class="btn btn-primary" onclick="submitDonation('@orgDetails.eventId')">Donate</button>
                                             </div>
                                         </div>
-                                    </div>*@
+                                    </div>
                                 </div>
                             }
-
-                            if (orgDetails.targetAmount != null)
-                            {
-                                foreach (var evnt in Model.listOfEventsOne)
-                                {
-                                    <div class="donation-progress">
-                                        <label>Fund Raised</label>
-                                        <div class="progress">
-                                            @{
-                                                decimal? raisedAmount = 0;
-
-                                                foreach (var donated in Model.listofUserDonated)
-                                                {
-                                                    raisedAmount += donated.amount;
-                                                }
-
-                                                var percentage = (raisedAmount / evnt.Target_Amount) * 100;
-                                            }
-                                            <div class="progress-bar" role="progressbar" style="width: @percentage%; background-color: mediumseagreen;" aria-valuenow="@raisedAmount" aria-valuemin="0" aria-valuemax="@evnt.Target_Amount"></div>
-                                            <div class="progress-label">@($"{raisedAmount:₱#,##0.00}") / @($"{evnt.Target_Amount:₱#,##0.00}")</div>
-                                        </div>
-                                    </div>
-                                    <div class="donate-button mt-2">
-                                        <!-- Button to open the donation modal -->
-                                        <button style="width: 100%" type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#donationModal">
-                                            Donate
-                                        </button>
-                                    </div>
-
-                                    <!-- Donation Modal -->
-                                    <div class="modal fade" id="donationModal" tabindex="-1" role="dialog" aria-labelledby="donationModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog modal-dialog-centered" role="document">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="donationModalLabel">Donate</h5>
-                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                        <span aria-hidden="true">&times;</span>
-                                                    </button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <form id="donationForm">
-                                                        <div class="form-group">
-                                                            <label for="donationAmount">Amount</label>
-                                                            <input type="number" class="form-control" id="donationAmount" min="1" required>
-                                                        </div>
-                                                    </form>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-primary" onclick="submitDonation('@orgDetails.eventId')">Donate</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                }
-                            }
                         }
-                    </div>
+                    }
+                </div>
                     <br />
                 </div>
             </div>

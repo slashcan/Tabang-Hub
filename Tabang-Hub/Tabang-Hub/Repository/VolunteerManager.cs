@@ -87,34 +87,34 @@ namespace Tabang_Hub.Repository
             }
             return participate;
         }
-        //public void CheckVolunteerEventEndByUserId(int userId)
-        //{
-        //    var getEvents = _orgEvents.GetAll().ToList();
-        //    var endedEvent = getEvents.Where(m => m.dateEnd < DateTime.Now && m.status == 1).ToList();
+        public void CheckVolunteerEventEndByUserId(int userId)
+        {
+            var getEvents = _orgEvents.GetAll().ToList();
+            var endedEvent = getEvents.Where(m => m.dateEnd < DateTime.Now && m.status == 1).ToList();
 
-        //    foreach (var evt in endedEvent)
-        //    {
-        //        var getVolEvent = _volunteers.GetAll().Where(m => m.eventId == evt.eventId && m.userId == userId).ToList();
-        //        // Move each volunteer record to VolunteersHistory
-        //        foreach (var volunteer in getVolEvent.Where(m => m.userId == userId))
-        //        {
-        //            var volunteerHistory = new VolunteersHistory
-        //            {
-        //                eventId = volunteer.eventId,
-        //                userId = volunteer.userId,
-        //                appliedAt = volunteer.appliedAt,
-        //                attended = volunteer.attended ?? 0
-        //            };
+            foreach (var evt in endedEvent)
+            {
+                var getVolEvent = _volunteers.GetAll().Where(m => m.eventId == evt.eventId && m.userId == userId).ToList();
+                // Move each volunteer record to VolunteersHistory
+                foreach (var volunteer in getVolEvent.Where(m => m.userId == userId))
+                {
+                    var volunteerHistory = new VolunteersHistory
+                    {
+                        eventId = volunteer.eventId,
+                        userId = volunteer.userId,
+                        appliedAt = volunteer.appliedAt,
+                        attended = 0
+                    };
 
-        //            db.VolunteersHistory.Add(volunteerHistory);
-        //            db.SaveChanges();
-        //        }
-        //        foreach (var volunteer in getVolEvent)
-        //        {
-        //            db.sp_RemoveEvent(volunteer.eventId);
-        //        }
-        //    }
-        //}
+                    db.VolunteersHistory.Add(volunteerHistory);
+                    db.SaveChanges();
+                }
+                foreach (var volunteer in getVolEvent)
+                {
+                    db.sp_RemoveEvent(volunteer.eventId);
+                }
+            }
+        }
         public List<sp_VolunteerHistory_Result> GetVolunteersHistoryByUserId(int userId)
         {
             List<sp_VolunteerHistory_Result> userEventHistory = new List<sp_VolunteerHistory_Result>();
@@ -137,8 +137,8 @@ namespace Tabang_Hub.Repository
             {
                 user_skills = db.VolunteerSkill.Where(m => m.userId == UserId).Select(m => new { userId = m.userId, skillId = m.skillId }).ToList(),
                 event_data = _orgEvents.GetAll().Where(m => m.dateEnd >= DateTime.Now).Select(m => new { eventId = m.eventId, eventDescription = m.eventDescription }).ToList(),
-                event_skills = db.OrgSkillRequirement.Select(es => new { eventId = es.eventId, skillId = es.skillId }).ToList(),
-                volunteer_history = db.VolunteersHistory.Where(vh => vh.userId == UserId).Select(vh => new { eventId = vh.eventId, attended = vh.attended }).ToList()
+                event_skills = db.OrgSkillRequirement.Select(es => new { eventId = es.eventId, skillId = es.skillId }).ToList()
+                //volunteer_history = db.VolunteersHistory.Where(vh => vh.userId == UserId).Select(vh => new { eventId = vh.eventId, attended = vh.attended }).ToList()
             };
 
             string flaskApiUrl = "http://127.0.0.1:5000/predict"; // Flask API URL

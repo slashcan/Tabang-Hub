@@ -186,5 +186,18 @@ namespace Tabang_Hub
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<sp_ListOfGc_Result>("sp_ListOfGc", userIdParameter);
         }
+    
+        public virtual int sp_RemoveVolunteer(Nullable<int> userId, Nullable<int> eventId)
+        {
+            var userIdParameter = userId.HasValue ?
+                new ObjectParameter("userId", userId) :
+                new ObjectParameter("userId", typeof(int));
+    
+            var eventIdParameter = eventId.HasValue ?
+                new ObjectParameter("eventId", eventId) :
+                new ObjectParameter("eventId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_RemoveVolunteer", userIdParameter, eventIdParameter);
+        }
     }
 }

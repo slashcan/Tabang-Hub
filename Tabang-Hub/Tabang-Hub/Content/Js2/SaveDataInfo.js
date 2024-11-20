@@ -19,13 +19,26 @@
                 // Display error message if phone number is already in use
                 phoneNumberError.textContent = response.message;
                 phoneNumberError.style.color = 'red';
+                scrollToFirstError();
             }
         },
         error: function (xhr, status, error) {
             phoneNumberError.textContent = 'There was an issue validating the phone number. Please try again.';
             phoneNumberError.style.color = 'red';
+            scrollToFirstError();
         }
     });
+}
+
+function scrollToFirstError() {
+    // Find the first error message with content
+    const errors = document.querySelectorAll('.error-message');
+    for (let error of errors) {
+        if (error.textContent.trim() !== '') {
+            error.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            break;
+        }
+    }
 }
 
 

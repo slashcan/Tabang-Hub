@@ -675,13 +675,12 @@ namespace Tabang_Hub.Repository
 
             return ErrorCode.Success;
         }
-       
+
         public async Task<RecruitmentResult> GetMatchedVolunteers(int eventId)
         {
             string flaskApiUrl = "http://127.0.0.1:5000/recruit"; // Flask API URL
             RecruitmentResult recruitmentResult = new RecruitmentResult();
             string errorMessage = null;
-
 
             // Get the target event's date range
             var targetEvent = _orgEvents.GetAll().FirstOrDefault(m => m.eventId == eventId);
@@ -707,7 +706,7 @@ namespace Tabang_Hub.Repository
             // Prepare the data to pass to Flask
             var datas = new
             {
-                user_info = _volunteerInfo.GetAll().Select(m => new { userId = m.userId, availability = m.availability}).ToList(),
+                user_info = _volunteerInfo.GetAll().Select(m => new { userId = m.userId, availability = m.availability }).ToList(),
                 // Retrieve only relevant user skills for volunteers
                 user_skills = availableVolunteers.Select(m => new { userId = m.userId, skillId = m.skillId, rating = m.rate }).ToList(),
 
@@ -715,10 +714,7 @@ namespace Tabang_Hub.Repository
                 event_data = _orgEvents.GetAll().Where(m => m.eventId == eventId).Select(m => new { eventId = m.eventId, eventDescription = m.eventDescription }).ToList(),
 
                 // Only pass skills required for the specific event
-                event_skills = db.OrgSkillRequirement.Where(es => es.eventId == eventId).Select(es => new { eventId = es.eventId, skillId = es.skillId }).ToList(),
-
-                // Include volunteer history for future use in model training
-                volunteer_history = _volunteersHistory.GetAll().Select(vh => new { eventId = vh.eventId, attended = vh.attended }).ToList()
+                event_skills = db.OrgSkillRequirement.Where(es => es.eventId == eventId).Select(es => new { eventId = es.eventId, skillId = es.skillId }).ToList()
             };
 
             using (var client = new HttpClient())
@@ -730,7 +726,7 @@ namespace Tabang_Hub.Repository
 
                     if (response.IsSuccessStatusCode)
                     {
-                        // Step 2: Deserialize Flask API response to a list of recommended events
+                        // Step 2: Deserialize Flask API response to a list of recommended volunteers
                         var jsonResponse = await response.Content.ReadAsStringAsync();
                         recruitmentResult = JsonConvert.DeserializeObject<RecruitmentResult>(jsonResponse);
                     }
@@ -747,6 +743,7 @@ namespace Tabang_Hub.Repository
 
             return recruitmentResult; // Return the list of recommended volunteers and any error message
         }
+
 
         public ErrorCode TrasferToHisotry1(int eventId, List<VolunteerRatingData> volunteerRatings, ref string errMsg)
         {

@@ -86,7 +86,7 @@
             <!-- Your home page content goes here -->
             <h2>Volunteer Page</h2>
         </div>
-        @if (Model.volunteersSkills.Count == 0)
+        @if (Model.volunteersSkills.Count() == 0)
         {
             <div class="popup-container" id="popup-container">
                 <!-- First Step: Personal Information -->
@@ -97,44 +97,44 @@
                     <p class="subtext">Please fill out your personal details</p>
                     <form id="personalInfoForm">
                         <div class="form-group">
-                            <input type="text" class="form-control" id="firstName" placeholder="First name" required oninput="validateTextOnly(this)" onblur="validateTextOnly(this)">
+                            <input value="@Model.volunteersInfo.Select(m => m.fName).FirstOrDefault()" type="text" class="form-control" id="firstName" placeholder="First name" required oninput="validateTextOnly(this)" onblur="validateTextOnly(this)">
                             <span class="error-message" id="firstNameError"></span>
                         </div>
                         <div class="form-group">
-                            <input type="text" class="form-control" id="lastName" placeholder="Last name" required oninput="validateTextOnly(this)" onblur="validateTextOnly(this)">
+                            <input value="@Model.volunteersInfo.Select(m => m.lName).FirstOrDefault()" type="text" class="form-control" id="lastName" placeholder="Last name" required oninput="validateTextOnly(this)" onblur="validateTextOnly(this)">
                             <span class="error-message" id="lastNameError"></span>
                         </div>
                         <div class="form-group">
                             <label for="birthday">Birthday</label>
-                            <input type="date" class="form-control" id="birthday" required oninput="validateBirthday(this)" onblur="validateBirthday(this)">
+                            <input value="@Model.volunteersInfo.Select(m => m.bDay.HasValue ? m.bDay.Value.ToString("yyyy-MM-dd") : "").FirstOrDefault()" type="date" class="form-control" id="birthday" required oninput="validateBirthday(this)" onblur="validateBirthday(this)">
                             <span class="error-message" id="birthdayError"></span>
                         </div>
                         <div class="form-group">
-                            <input type="tel" class="form-control" id="phoneNumber" placeholder="Phone Number" required oninput="validatePhoneNumber(this)" onblur="validatePhoneNumber(this)" maxlength="11">
+                            <input value="@Model.volunteersInfo.Select(m => m.phoneNum).FirstOrDefault()" type="tel" class="form-control" id="phoneNumber" placeholder="Phone Number" required oninput="validatePhoneNumber(this)" onblur="validatePhoneNumber(this)" maxlength="11">
                             <span class="error-message" id="phoneNumberError"></span>
                         </div>
                         <div class="form-group">
-                            <input type="text" class="form-control" id="street" placeholder="Street" required>
+                            <input value="@Model.volunteersInfo.Select(m => m.street).FirstOrDefault()" type="text" class="form-control" id="street" placeholder="Street" required>
                             <span class="error-message" id="streetError"></span>
                         </div>
                         <div class="form-group">
-                            <input type="text" class="form-control" id="city" placeholder="City" required oninput="validateTextOnly(this)" onblur="validateTextOnly(this)">
+                            <input value="@Model.volunteersInfo.Select(m => m.city).FirstOrDefault()" type="text" class="form-control" id="city" placeholder="City" required oninput="validateTextOnly(this)" onblur="validateTextOnly(this)">
                             <span class="error-message" id="cityError"></span>
                         </div>
                         <div class="form-group">
-                            <input type="text" class="form-control" id="province" placeholder="Province" required oninput="validateTextOnly(this)" onblur="validateTextOnly(this)">
+                            <input value="@Model.volunteersInfo.Select(m => m.province).FirstOrDefault()" type="text" class="form-control" id="province" placeholder="Province" required oninput="validateTextOnly(this)" onblur="validateTextOnly(this)">
                             <span class="error-message" id="provinceError"></span>
                         </div>
                         <div class="form-group">
-                            <input type="text" class="form-control" id="zipCode" placeholder="Zip Code" required oninput="validateZipCode(this)" onblur="validateZipCode(this)" maxlength="4">
+                            <input value="@Model.volunteersInfo.Select(m => m.zipCode).FirstOrDefault()" type="text" class="form-control" id="zipCode" placeholder="Zip Code" required oninput="validateZipCode(this)" onblur="validateZipCode(this)" maxlength="4">
                             <span class="error-message" id="zipCodeError"></span>
                         </div>
                         <div class="form-group">
                             <label for="availability">Availability</label>
                             <select class="form-control" id="availability" required oninput="validateForm()" onblur="validateForm()">
                                 <option value="">Select Availability</option>
-                                <option value="Full Time">Full Time</option>
-                                <option value="Part Time">Part Time</option>
+                                <option value="Full Time" @(Model.volunteersInfo.Select(m => m.availability).FirstOrDefault() == "Full Time" ? "selected" : "")>Full Time</option>
+                                <option value="Part Time" @(Model.volunteersInfo.Select(m => m.availability).FirstOrDefault() == "Part Time" ? "selected" : "")>Part Time</option>
                             </select>
                             <span class="error-message" id="availabilityError"></span>
                         </div>
@@ -142,8 +142,8 @@
                             <label for="gender">Gender</label>
                             <select class="form-control" id="gender" required oninput="validateForm()" onblur="validateForm()">
                                 <option value="">Select Gender</option>
-                                <option value="male">Male</option>
-                                <option value="female">Female</option>
+                                <option value="male" @(Model.volunteersInfo.Select(m => m.gender).FirstOrDefault()?.ToLower() == "male" ? "selected" : "")>Male</option>
+                                <option value="female" @(Model.volunteersInfo.Select(m => m.gender).FirstOrDefault()?.ToLower() == "female" ? "selected" : "")>Female</option>
                             </select>
                         </div>
                     </form>
@@ -151,8 +151,8 @@
                         <button type="button" class="btn btn-primary btn-lg btn-block btn-disabled" id="nextButton" onclick="nextStep()" disabled>Next</button>
                     </div>
                     @*<div class="step-indicator">
-                <span class="step-number">1</span> of 2
-            </div>*@
+                        <span class="step-number">1</span> of 2
+                    </div>*@
                 </div>
 
                 <!-- Second Step: Skill Selection -->
@@ -440,6 +440,17 @@
         <script src="~/Content/Js2/Template-js/click-scroll.js"></script>
         <script src="~/Content/Js2/Template-js/counter.js"></script>
         <script src="~/Content/Js2/Template-js/custom.js"></script>
+
+        <script>
+            // Set focus to the first input field when the popup is displayed
+            document.addEventListener("DOMContentLoaded", function () {
+                const firstInput = document.querySelector("#personalInfoForm input, #personalInfoForm select");
+                if (firstInput) {
+                    firstInput.focus();
+                }
+            });
+        </script>
+
 
         <script>
             function filterSkills() {

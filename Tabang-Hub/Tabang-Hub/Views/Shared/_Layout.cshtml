@@ -142,9 +142,6 @@
                         <div class="search-container m-auto">
                             <div class="input-wrapper d-flex">
                                 <input type="text" id="search-input" placeholder="Search event" class="form-control" oninput="filterSuggestions()" onfocus="showSuggestions()" onblur="hideSuggestions()">
-                                @*<button class="btn btn-primary" id="search-button">
-                                    <i class="fa fa-search"></i>
-                                </button>*@
                             </div>
 
                             <!-- Suggestion Item with Online Image -->
@@ -258,7 +255,9 @@
                         {
                             foreach (var pic in Model.picture)
                             {
-                                <img src="~/UserProfile/@pic.profilePath" alt="Profile">
+                                <a href="~/Volunteer/VolunteerProfile">
+                                    <img src="~/UserProfile/@pic.profilePath" alt="Profile">
+                                </a>
                             }
                         }
                         else
