@@ -101,9 +101,7 @@
     <Property Name="orgValidationId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="userId" Type="int" />
     <Property Name="idPicture1" Type="nvarchar" MaxLength="255" />
-    <Property Name="idNumber1" Type="nvarchar" MaxLength="255" />
     <Property Name="idPicture2" Type="nvarchar" MaxLength="255" />
-    <Property Name="idNumber2" Type="nvarchar" MaxLength="255" />
   </EntityType>
   <EntityType Name="ProfilePicture">
     <Key>

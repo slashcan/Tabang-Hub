@@ -106,9 +106,7 @@
           <Property Name="orgValidationId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="userId" Type="int" />
           <Property Name="idPicture1" Type="nvarchar" MaxLength="255" />
-          <Property Name="idNumber1" Type="nvarchar" MaxLength="255" />
           <Property Name="idPicture2" Type="nvarchar" MaxLength="255" />
-          <Property Name="idNumber2" Type="nvarchar" MaxLength="255" />
         </EntityType>
         <EntityType Name="ProfilePicture">
           <Key>
@@ -954,7 +952,7 @@ FROM [dbo].[vw_VolunteerSkills] AS [vw_VolunteerSkills]</DefiningQuery>
             <End Role="UserAccount" EntitySet="UserAccount" />
             <End Role="VolunteersHistory" EntitySet="VolunteersHistory" />
           </AssociationSet>
-        </EntityContainer>
+          </EntityContainer>
         <ComplexType Name="sp_GetAllMessage_Result">
           <Property Type="Int32" Name="groupChatId" Nullable="false" />
           <Property Type="Int32" Name="messageId" Nullable="false" />
@@ -1156,9 +1154,7 @@ FROM [dbo].[vw_VolunteerSkills] AS [vw_VolunteerSkills]</DefiningQuery>
           <Property Name="orgValidationId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="userId" Type="Int32" />
           <Property Name="idPicture1" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="idNumber1" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="idPicture2" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="idNumber2" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="UserAccount" Relationship="TabangHubModel.FK_OrgValidation_UserAccount" FromRole="OrgValidation" ToRole="UserAccount" />
         </EntityType>
         <EntityType Name="ProfilePicture">
@@ -1636,7 +1632,7 @@ FROM [dbo].[vw_VolunteerSkills] AS [vw_VolunteerSkills]</DefiningQuery>
             </Dependent>
           </ReferentialConstraint>
         </Association>
-      </Schema>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
@@ -1872,9 +1868,7 @@ FROM [dbo].[vw_VolunteerSkills] AS [vw_VolunteerSkills]</DefiningQuery>
           <EntitySetMapping Name="OrgValidation">
             <EntityTypeMapping TypeName="TabangHubModel.OrgValidation">
               <MappingFragment StoreEntitySet="OrgValidation">
-                <ScalarProperty Name="idNumber2" ColumnName="idNumber2" />
                 <ScalarProperty Name="idPicture2" ColumnName="idPicture2" />
-                <ScalarProperty Name="idNumber1" ColumnName="idNumber1" />
                 <ScalarProperty Name="idPicture1" ColumnName="idPicture1" />
                 <ScalarProperty Name="userId" ColumnName="userId" />
                 <ScalarProperty Name="orgValidationId" ColumnName="orgValidationId" />
@@ -2083,7 +2077,7 @@ FROM [dbo].[vw_VolunteerSkills] AS [vw_VolunteerSkills]</DefiningQuery>
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-        </EntityContainerMapping>
+          </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
   </edmx:Runtime>

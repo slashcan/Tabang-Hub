@@ -36,6 +36,7 @@
                                             <span class="input-group-text"><i class="fas fa-envelope"></i></span>
                                             <input type="email" class="form-control" id="email" name="email" placeholder="Enter Your Email" required>
                                         </div>
+                                        <small id="emailError" class="text-danger"></small> <!-- Error message for email -->
                                     </div>
                                     <div class="mb-3">
                                         <label for="orgName" class="form-label">Organization Name</label>
@@ -129,6 +130,21 @@
 </div>
 
 <script>
+
+    function validateGmail() {
+    const email = document.getElementById('email').value.trim();
+    const gmailRegex = /^[a-zA-Z0-9._%+-]+@@gmail\.com$/;
+    const emailError = document.getElementById('emailError');
+
+    if (!gmailRegex.test(email)) {
+        emailError.innerText = 'Only Gmail addresses are allowed.';
+        return false;
+    } else {
+        emailError.innerText = '';
+        return true;
+    }
+}
+
     // Password validation function
     function validatePassword() {
         const password = document.getElementById('password').value;
@@ -259,7 +275,8 @@
         const imageUpload1 = document.getElementById('imageUpload1').value;
         const imageUpload2 = document.getElementById('imageUpload2').value;
 
-        const isFormValid = isPasswordValid && isConfirmPasswordValid && email !== '' && orgName !== '' && imageUpload1 !== '' && imageUpload2 !== '';
+        const isEmailValid = validateGmail();
+        const isFormValid = isPasswordValid && isConfirmPasswordValid && isEmailValid && email !== '' && orgName !== '' && imageUpload1 !== '' && imageUpload2 !== '';
 
         document.getElementById('nextButton').disabled = !isFormValid;
     }
@@ -300,6 +317,12 @@
     document.getElementById('backButton').addEventListener('click', () => {
         document.getElementById('step1').style.display = 'block';
         document.getElementById('step2').style.display = 'none';
+    });
+
+    // Attach the email validation event listener
+    document.getElementById('email').addEventListener('input', () => {
+        validateGmail();
+        toggleNextButton();
     });
 
     function validateStep1() {

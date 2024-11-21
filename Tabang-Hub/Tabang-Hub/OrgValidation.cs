@@ -17,9 +17,7 @@ namespace Tabang_Hub
         public int orgValidationId { get; set; }
         public Nullable<int> userId { get; set; }
         public string idPicture1 { get; set; }
-        public string idNumber1 { get; set; }
         public string idPicture2 { get; set; }
-        public string idNumber2 { get; set; }
     
         public virtual UserAccount UserAccount { get; set; }
     }

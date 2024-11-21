@@ -359,9 +359,7 @@
     <Property Name="orgValidationId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="userId" Type="Int32" />
     <Property Name="idPicture1" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-    <Property Name="idNumber1" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
     <Property Name="idPicture2" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-    <Property Name="idNumber2" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
     <NavigationProperty Name="UserAccount" Relationship="TabangHubModel.FK_OrgValidation_UserAccount" FromRole="OrgValidation" ToRole="UserAccount" />
   </EntityType>
   <EntityType Name="ProfilePicture">

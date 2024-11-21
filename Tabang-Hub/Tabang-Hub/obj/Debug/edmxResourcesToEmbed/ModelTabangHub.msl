@@ -231,9 +231,7 @@
     <EntitySetMapping Name="OrgValidation">
       <EntityTypeMapping TypeName="TabangHubModel.OrgValidation">
         <MappingFragment StoreEntitySet="OrgValidation">
-          <ScalarProperty Name="idNumber2" ColumnName="idNumber2" />
           <ScalarProperty Name="idPicture2" ColumnName="idPicture2" />
-          <ScalarProperty Name="idNumber1" ColumnName="idNumber1" />
           <ScalarProperty Name="idPicture1" ColumnName="idPicture1" />
           <ScalarProperty Name="userId" ColumnName="userId" />
           <ScalarProperty Name="orgValidationId" ColumnName="orgValidationId" />
