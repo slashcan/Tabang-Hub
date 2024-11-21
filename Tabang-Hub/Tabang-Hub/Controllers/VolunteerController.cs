@@ -18,6 +18,7 @@ using System.Threading.Tasks;
 using RestSharp;
 using Tabang_Hub.Hubs;
 using Microsoft.AspNet.SignalR;
+using AuthorizeAttribute = System.Web.Mvc.AuthorizeAttribute;
 
 namespace Tabang_Hub.Controllers
 {
@@ -28,6 +29,7 @@ namespace Tabang_Hub.Controllers
         {
             return View();
         }
+        [Authorize]
         public async Task<ActionResult> VolunteerProfile()
         {
             var getUserAccount = db.UserAccount.Where(m => m.userId == UserId).ToList();
@@ -296,7 +298,7 @@ namespace Tabang_Hub.Controllers
 
             return Json(new { success = true, message = "Phone number is valid." });
         }
-
+        [Authorize]
         public async Task<ActionResult> EventDetails(int? eventId)
         {
             try
@@ -899,6 +901,7 @@ namespace Tabang_Hub.Controllers
 
             return View(listModel);
         }
+        [Authorize]
         public async Task<ActionResult> DonationHistory()
         {
 
@@ -931,6 +934,7 @@ namespace Tabang_Hub.Controllers
             };
             return View(listModel);
         }
+        [Authorize]
         public async Task<ActionResult> Participate(string section = null)
         {
             try
@@ -1051,6 +1055,7 @@ namespace Tabang_Hub.Controllers
                 return Json(new { success = false, message = "error message" });
             }
         }
+        [Authorize]
         public async Task<ActionResult> OrganizationProfile(int userId)
         {
             var userProfile = db.ProfilePicture.Where(m => m.userId == UserId).ToList();

@@ -23,6 +23,7 @@ namespace Tabang_Hub.Controllers
     public class PageController : BaseController
     {
         // GET: Page
+        [Authorize]
         public async Task<ActionResult> Index()
         {
             var user = _userManager.GetUserByEmail(User.Identity.Name);

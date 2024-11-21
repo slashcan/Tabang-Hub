@@ -671,7 +671,7 @@ namespace Tabang_Hub.Repository
 
         public async Task<RecruitmentResult> GetMatchedVolunteers(int eventId)
         {
-            string flaskApiUrl = "http://127.0.0.1:5000/recruit"; // Flask API URL
+            string flaskApiUrl = "https://tabangapi.as.r.appspot.com/recruit"; // Flask API URL
             RecruitmentResult recruitmentResult = new RecruitmentResult();
             string errorMessage = null;
 
@@ -778,6 +778,7 @@ namespace Tabang_Hub.Repository
         public ErrorCode SaveRating(int eventId, int attended, int userId, int skillId, int rating, ref string errMsg)
         {
             var skillId1 = GetSkillIdByEventIdAndUserId(eventId, userId);
+            skillId1.attended = attended;
             var ratings = new Rating()
             {
                 eventId = eventId,

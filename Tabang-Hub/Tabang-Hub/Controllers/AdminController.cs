@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Security;
 using Tabang_Hub.Repository;
 using Tabang_Hub.Utils;
 
@@ -13,6 +14,7 @@ namespace Tabang_Hub.Controllers
     public class AdminController : BaseController
     {
         // GET: Admin
+        [Authorize]
         public ActionResult Index()
         {
             var organization = _adminManager.GetOrganizationAccount();
@@ -71,7 +73,7 @@ namespace Tabang_Hub.Controllers
 
             return View(allEventsModel);
         }
-
+        [Authorize]
         public async Task<ActionResult> VolunteerDetails(int userId)
         {
             var getUserAccount = _organizationManager.GetUserByUserId(userId);
@@ -120,7 +122,7 @@ namespace Tabang_Hub.Controllers
 
             return View(listModel);
         }
-
+        [Authorize]
         public ActionResult OrgProfile(int userId)
         {
             var orgInfo = _organizationManager.GetOrgInfoByUserId(userId);
@@ -186,7 +188,7 @@ namespace Tabang_Hub.Controllers
                 return Json(new { success = false, message = ex.Message });
             }
         }
-
+        [Authorize]
         public ActionResult OrganizationAccounts()
         {
 
@@ -198,7 +200,7 @@ namespace Tabang_Hub.Controllers
             };
             return View(indexModel);
         }
-
+        [Authorize]
         public ActionResult UserDetails(int userId)
         {
             var getUserAccount = db.UserAccount.Where(m => m.userId == userId).ToList();
@@ -325,6 +327,7 @@ namespace Tabang_Hub.Controllers
                 return Json(new { success = false, message = ex.Message });
             }
         }
+        [Authorize]
         public ActionResult ManageSkill()
         {
             var skills = _adminManager.GetSkills();

@@ -10,6 +10,7 @@ namespace Tabang_Hub.Controllers
     public class MessageController : BaseController
     {
         // GET: Message
+        [Authorize]
         public ActionResult Message()
         {
             try

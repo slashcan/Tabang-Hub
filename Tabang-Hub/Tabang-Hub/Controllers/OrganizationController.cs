@@ -20,6 +20,7 @@ namespace Tabang_Hub.Controllers
     public class OrganizationController : BaseController
     {
         // GET: Organization
+        [Authorize]
         public ActionResult Index()
         {
             var orgInfo = _organizationManager.GetOrgInfoByUserId(UserId);
@@ -67,6 +68,7 @@ namespace Tabang_Hub.Controllers
             };
             return View(indexModel);
         }
+        [Authorize]
         public ActionResult OrgProfile()
         {
             var orgInfo = _organizationManager.GetOrgInfoByUserId(UserId);
@@ -144,6 +146,7 @@ namespace Tabang_Hub.Controllers
                 return Json(new { success = false, message = errMsg });
             }
         }
+        [Authorize]
         public ActionResult EventsList()
         {
             var lists = _organizationManager.ListOfEvents1(UserId);
@@ -259,6 +262,7 @@ namespace Tabang_Hub.Controllers
             TempData["Success"] = true;
             return RedirectToAction("EventsList");
         }
+        [Authorize]
         public async Task<ActionResult> Details(int id)
         {
             var events = _organizationManager.GetEventById(id);
@@ -694,6 +698,7 @@ namespace Tabang_Hub.Controllers
                 return Json(new { success = false, message = errMsg });
             }
         }
+        [Authorize]
         public async Task<ActionResult> VolunteerDetails(int userId, int? eventId = null)
         {
            var getUserAccount = _organizationManager.GetUserByUserId(userId);
@@ -744,6 +749,7 @@ namespace Tabang_Hub.Controllers
 
             return View(listModel);
         }
+        [Authorize]
         public ActionResult Reports()
         {
             var orgInfo = _organizationManager.GetOrgInfoByUserId(UserId);
@@ -770,6 +776,7 @@ namespace Tabang_Hub.Controllers
             };
             return View(indexModdel);
         }
+        [Authorize]
         public ActionResult History()
         {
             var orgInfo = _organizationManager.GetOrgInfoByUserId(UserId);
